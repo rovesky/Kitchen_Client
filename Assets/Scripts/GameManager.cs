@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour {
     protected AudioSource m_Audio;  // 声音源
 
     void Start () {
+        Debug.Log("GameManager Start!");
+
+        Application.targetFrameRate = 30;
 
         Instance = this;
 

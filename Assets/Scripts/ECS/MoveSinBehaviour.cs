@@ -10,24 +10,44 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    public class MoveSpeedSystem : ComponentSystem
+
+    public struct MoveSin : IComponentData
+    {
+        int a;
+    }
+
+    [RequiresEntityConversion]
+    public class MoveSinBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+    {  
+
+        // The MonoBehaviour data is converted to ComponentData on the entity.
+        // We are specifically transforming from a good editor representation of the data (Represented in degrees)
+        // To a good runtime representation (Represented in radians)
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+        {
+            var data = new MoveSin();
+            dstManager.AddComponentData(entity, data);
+        }
+    }
+
+    public class MoveSinSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
+           // Debug.Log("MoveSpeedSystem OnUpdate");
             // Entities.ForEach processes each set of ComponentData on the main thread. This is not the recommended
             // method for best performance. However, we start with it here to demonstrate the clearer separation
             // between ComponentSystem Update (logic) and ComponentData (data).
             // There is no update logic on the individual ComponentData.
-            Entities.ForEach((ref MoveSpeed moveSpeed, ref Translation translation) =>
+            Entities.ForEach((ref MoveSin moveSin, ref Translation translation) =>
             {
                 // 左右移动
                 float rx = Mathf.Sin(Time.time) * Time.deltaTime;
-
                 translation = new Translation()
                 {
                     Value = new float3(translation.Value.x + rx,
                                        translation.Value.y,
-                                       translation.Value.z - moveSpeed.SpeedPerSecond * Time.deltaTime)     };          
+                                       translation.Value.z)     };          
 
             });
         }

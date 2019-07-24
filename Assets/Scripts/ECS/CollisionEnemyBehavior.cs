@@ -11,8 +11,7 @@ namespace Assets.Scripts.ECS
 {
     [Serializable]
     public struct CollisionEnemy : IComponentData
-    {
-       // public int a;
+    {   
 
     }
 
@@ -38,29 +37,32 @@ namespace Assets.Scripts.ECS
     {
         BuildPhysicsWorld m_BuildPhysicsWorldSystem;
         StepPhysicsWorld m_StepPhysicsWorldSystem;
+     //   EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
 
-        EntityQuery ImpulseGroup;
+        //EntityQuery ImpulseGroup;
 
         protected override void OnCreate()
         {
             m_BuildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
             m_StepPhysicsWorldSystem = World.GetOrCreateSystem<StepPhysicsWorld>();
-            ImpulseGroup = GetEntityQuery(new EntityQueryDesc
-            {
-                All = new ComponentType[] { typeof(CollisionEnemy), }
-            });
+        //    m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            //ImpulseGroup = GetEntityQuery(new EntityQueryDesc
+            //{
+            //    All = new ComponentType[] { typeof(CollisionEnemy), }
+            //});
         }
 
-        [BurstCompile]
+       // [BurstCompile]
         struct CollisionEventImpulseJob : ITriggerEventsJob
         {
             [ReadOnly] public ComponentDataFromEntity<CollisionEnemy> ColliderEventImpulseGroup;
             public ComponentDataFromEntity<PhysicsVelocity> PhysicsVelocityGroup;
-            public ComponentDataFromEntity<LifeTime> LifeTimeGroup;
+            public ComponentDataFromEntity<EntityKiller> LifeTimeGroup;
+        //    public EntityCommandBuffer CommandBuffer;
 
             public void Execute(TriggerEvent triggerEvent)
             {
-                Debug.Log("TriggerEvent");
+             
                 Entity entityA = triggerEvent.Entities.EntityA;
                 Entity entityB = triggerEvent.Entities.EntityB;
 
@@ -83,22 +85,24 @@ namespace Assets.Scripts.ECS
                 var dynamicEntity = isBodyATrigger ? entityB : entityA;
 
                 //碰撞直接死亡
-                var component = LifeTimeGroup[triggerEntity];
-                component.Value = 0;
-                LifeTimeGroup[triggerEntity] = component;
+                //   CommandBuffer.DestroyEntity(triggerEntity);
 
-               
+                var component = LifeTimeGroup[triggerEntity];
+              //  Debug.Log($"TriggerEvent dead{component.TimeToDie}");
+                component.TimeToDie = 0;
+                LifeTimeGroup[triggerEntity] = component;
             }
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-           // Debug.Log("CollisionEnemySystem OnUpdate!");
+            // Debug.Log("CollisionEnemySystem OnUpdate!");
             JobHandle jobHandle = new CollisionEventImpulseJob
             {
                 ColliderEventImpulseGroup = GetComponentDataFromEntity<CollisionEnemy>(true),
                 PhysicsVelocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(),
-                LifeTimeGroup = GetComponentDataFromEntity<LifeTime>(),
+                LifeTimeGroup = GetComponentDataFromEntity<EntityKiller>(),
+           //     CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
             }.Schedule(m_StepPhysicsWorldSystem.Simulation,
                         ref m_BuildPhysicsWorldSystem.PhysicsWorld, inputDeps);
 
