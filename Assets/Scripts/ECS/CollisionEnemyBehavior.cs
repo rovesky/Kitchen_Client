@@ -9,24 +9,24 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [Serializable]
-    public struct CollisionEnemy : IComponentData
-    {   
+    //public struct Collision : IComponentData
+    //{
+    //    public bool IsDestroy;
 
-    }
+    //    public bool IsCollision;
+        
+    //}
 
-    [RequiresEntityConversion]
-    public class CollisionEnemyBehavior : MonoBehaviour, IConvertGameObjectToEntity
-    {
-        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-        {
-            if (enabled)
-            {
-                dstManager.AddComponentData(entity, new CollisionEnemy());
-            }
-        }
-    }
-
+    //public class CollisionBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+    //{
+    //    public bool IsDestroy;
+    //    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+    //    {
+    //        dstManager.AddComponentData(entity, new Collision() {
+    //            IsDestroy = IsDestroy,
+    //            IsCollision = false });
+    //    }
+    //}
 
 
     // This system applies an impulse to any dynamic that collides with a Repulsor.
@@ -37,74 +37,98 @@ namespace Assets.Scripts.ECS
     {
         BuildPhysicsWorld m_BuildPhysicsWorldSystem;
         StepPhysicsWorld m_StepPhysicsWorldSystem;
-     //   EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
-
-        //EntityQuery ImpulseGroup;
+        EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
 
         protected override void OnCreate()
         {
+
             m_BuildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
             m_StepPhysicsWorldSystem = World.GetOrCreateSystem<StepPhysicsWorld>();
-        //    m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-            //ImpulseGroup = GetEntityQuery(new EntityQueryDesc
-            //{
-            //    All = new ComponentType[] { typeof(CollisionEnemy), }
-            //});
+            m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+
         }
 
-       // [BurstCompile]
+        // [BurstCompile]
         struct CollisionEventImpulseJob : ITriggerEventsJob
         {
-            [ReadOnly] public ComponentDataFromEntity<CollisionEnemy> ColliderEventImpulseGroup;
+            public EntityCommandBuffer CommandBuffer;
             public ComponentDataFromEntity<PhysicsVelocity> PhysicsVelocityGroup;
-            public ComponentDataFromEntity<EntityKiller> LifeTimeGroup;
-        //    public EntityCommandBuffer CommandBuffer;
+            public ComponentDataFromEntity<PhysicsCollider> PhysicsColliderGroup;
+
+            public ComponentDataFromEntity<Life> LifeGroup;
+            public ComponentDataFromEntity<Attack> AttackGroup;
+            public ComponentDataFromEntity<CollisionDestroy> CollisionDestroyGroup;
 
             public void Execute(TriggerEvent triggerEvent)
             {
-             
+
                 Entity entityA = triggerEvent.Entities.EntityA;
                 Entity entityB = triggerEvent.Entities.EntityB;
 
-                bool isBodyATrigger = ColliderEventImpulseGroup.Exists(entityA);
-                bool isBodyBTrigger = ColliderEventImpulseGroup.Exists(entityB);
+                bool isBodyAAttacker = AttackGroup.Exists(entityA);
+                bool isBodyBAttacker = AttackGroup.Exists(entityB);
 
-                // Ignoring Triggers overlapping other Triggers
-                if (isBodyATrigger && isBodyBTrigger)
+                if (isBodyAAttacker && isBodyBAttacker)
                     return;
 
-                bool isBodyADynamic = PhysicsVelocityGroup.Exists(entityA);
-                bool isBodyBDynamic = PhysicsVelocityGroup.Exists(entityB);
+                bool isBodyALife = LifeGroup.Exists(entityA);
+                bool isBodyBLife = LifeGroup.Exists(entityB);
 
                 // Ignoring overlapping static bodies
-                if ((isBodyATrigger && !isBodyBDynamic) ||
-                    (isBodyBTrigger && !isBodyADynamic))
+                if ((isBodyAAttacker && !isBodyBLife) ||
+                    (isBodyBAttacker && !isBodyBLife))
                     return;
 
-                var triggerEntity = isBodyATrigger ? entityA : entityB;
-                var dynamicEntity = isBodyATrigger ? entityB : entityA;
+                var attckerEntity = isBodyAAttacker ? entityA : entityB;
+                var lifeEntity = isBodyALife ? entityA : entityB;
+                               
 
-                //碰撞直接死亡
-                //   CommandBuffer.DestroyEntity(triggerEntity);
+                //攻击方被删除
+                if (CollisionDestroyGroup.Exists(attckerEntity))
+                {
+                    if (CollisionDestroyGroup[attckerEntity].IsCollision)
+                        return;
 
-                var component = LifeTimeGroup[triggerEntity];
-              //  Debug.Log($"TriggerEvent dead{component.TimeToDie}");
-                component.TimeToDie = 0;
-                LifeTimeGroup[triggerEntity] = component;
+                    var attackComponent = CollisionDestroyGroup[attckerEntity];
+                     attackComponent.IsCollision = true;
+                    CollisionDestroyGroup[attckerEntity] = attackComponent;
+                    CommandBuffer.DestroyEntity(attckerEntity);
+                }
+
+                //攻击方损失生命
+                if (LifeGroup.Exists(attckerEntity))
+                {
+                    var attackerLife = LifeGroup[attckerEntity];
+                    attackerLife.lifeValue -= 1;
+                    LifeGroup[attckerEntity] = attackerLife;
+                }
+
+                if (AttackGroup.Exists(attckerEntity))
+                {
+                    //扣除生命
+                    var lifeComponent = LifeGroup[lifeEntity];
+                    lifeComponent.lifeValue -= AttackGroup[attckerEntity].Power;
+                    LifeGroup[lifeEntity] = lifeComponent;
+                    Debug.Log($"triggerEvent:{lifeComponent.lifeValue}");
+                } 
             }
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            // Debug.Log("CollisionEnemySystem OnUpdate!");
             JobHandle jobHandle = new CollisionEventImpulseJob
             {
-                ColliderEventImpulseGroup = GetComponentDataFromEntity<CollisionEnemy>(true),
+                CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
                 PhysicsVelocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(),
-                LifeTimeGroup = GetComponentDataFromEntity<EntityKiller>(),
-           //     CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
+                PhysicsColliderGroup = GetComponentDataFromEntity<PhysicsCollider>(),
+                CollisionDestroyGroup = GetComponentDataFromEntity<CollisionDestroy>(),
+                LifeGroup = GetComponentDataFromEntity<Life>(),
+                AttackGroup = GetComponentDataFromEntity<Attack>(),
+
             }.Schedule(m_StepPhysicsWorldSystem.Simulation,
                         ref m_BuildPhysicsWorldSystem.PhysicsWorld, inputDeps);
+
+            m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
 
             return jobHandle;
         }

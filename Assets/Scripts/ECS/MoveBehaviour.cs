@@ -1,12 +1,7 @@
-﻿using Unity.Physics.Systems;
-using Unity.Entities;
-using Unity.Mathematics;
+﻿using Unity.Entities;
+using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
-using RaycastHit = Unity.Physics.RaycastHit;
-using System.Collections.Generic;
-using System;
-using Unity.Physics;
 
 namespace Assets.Scripts.ECS
 {
