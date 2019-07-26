@@ -48,6 +48,7 @@ namespace Assets.Scripts.ECS
                     fire.rocketTimer -= Time.deltaTime;
                     if (fire.rocketTimer > 0)
                         return;
+
                     fire.rocketTimer = 0.1f;
 
                     if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))

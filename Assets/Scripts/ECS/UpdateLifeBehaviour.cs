@@ -13,7 +13,7 @@ namespace Assets.Scripts.ECS
 {
     public struct UpdateLife : IComponentData
     {
-        public Entity LifeText;
+        public int type;
     }
 
     [RequiresEntityConversion]
@@ -24,13 +24,10 @@ namespace Assets.Scripts.ECS
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
 
-            Debug.Log("Convert:" + LifeText.GetComponent<Text>().text);
+        //    Debug.Log("Convert:" + LifeText.GetComponent<Text>().text);
             dstManager.AddComponentData(
             entity,
-            new UpdateLife()
-            {
-                LifeText = conversionSystem.GetPrimaryEntity(LifeText.GetComponent<Text>()),
-            });
+            new UpdateLife());
         }
     }
 

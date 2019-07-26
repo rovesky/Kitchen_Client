@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ECS\AttackBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ECS\CollisionDestroyBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\CollisionEnemyBehavior.cs" />
     <Compile Include="Assets\Scripts\ECS\EntityKillerBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\FireBehaviour.cs" />
@@ -71,6 +70,8 @@
     <Compile Include="Assets\Scripts\ECS\MoveBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\MoveSinBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\PlayerControllerBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\TriggerDestroyBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\TriggerVolumeBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\UpdateLifeBehaviour.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyRenderer.cs" />
