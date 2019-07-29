@@ -1,137 +1,165 @@
-﻿//using System;
-//using Unity.Burst;
-//using Unity.Collections;
-//using Unity.Entities;
-//using Unity.Jobs;
-//using Unity.Physics;
-//using Unity.Physics.Systems;
-//using UnityEngine;
+﻿using System;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Entities;
+using Unity.Jobs;
+using Unity.Physics;
+using Unity.Physics.Systems;
+using UnityEngine;
 
-//namespace Assets.Scripts.ECS
-//{
-//    //public struct Collision : IComponentData
-//    //{
-//    //    public bool IsDestroy;
+namespace Assets.Scripts.ECS
+{
+    //public struct TriggerTimeoutFrame : IComponentData
+    //{
+    //    public int FrameCount;
 
-//    //    public bool IsCollision;
-        
-//    //}
+    //}
 
-//    //public class CollisionBehaviour : MonoBehaviour, IConvertGameObjectToEntity
-//    //{
-//    //    public bool IsDestroy;
-//    //    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-//    //    {
-//    //        dstManager.AddComponentData(entity, new Collision() {
-//    //            IsDestroy = IsDestroy,
-//    //            IsCollision = false });
-//    //    }
-//    //}
+    // This system applies an impulse to any dynamic that collides with a Repulsor.
+    // A Repulsor is defined by a PhysicsShape with the `Raise Collision Events` flag ticked and a
+    // CollisionEventImpulse behaviour added.
+    [UpdateAfter(typeof(EndFramePhysicsSystem))]
+    public class CollisionEnemySystem : JobComponentSystem
+    {
+        BuildPhysicsWorld m_BuildPhysicsWorldSystem;
+        StepPhysicsWorld m_StepPhysicsWorldSystem;
+        EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
+        NativeArray<int> m_TriggerEntitiesIndex;
+
+        protected override void OnCreate()
+        {
+
+            m_BuildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
+            m_StepPhysicsWorldSystem = World.GetOrCreateSystem<StepPhysicsWorld>();
+            m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+
+            m_TriggerEntitiesIndex = new NativeArray<int>(2, Allocator.Persistent);
+            m_TriggerEntitiesIndex[1] = 0;
+    
+        }
+
+        // [BurstCompile]
+        struct CollisionEventEnemyJob : ITriggerEventsJob
+        {
+            public EntityCommandBuffer CommandBuffer;
+            [ReadOnly] public ComponentDataFromEntity<PhysicsVelocity> PhysicsVelocityGroup;
+            [ReadOnly] public ComponentDataFromEntity<TriggerDestroy> DestroyGroup;
+
+            //public ComponentDataFromEntity<PhysicsCollider> PhysicsColliderGroup;
+
+            public ComponentDataFromEntity<Attack> AttackGroup;
+            public ComponentDataFromEntity<Damage> DamageGroup;
+           
+
+            //  public ComponentDataFromEntity<TriggerTimeoutFrame> TriggerTimeoutFrameGroup;
+            [NativeFixedLength(2)] public NativeArray<int> pCounter;
+       
+
+            public void Execute(TriggerEvent triggerEvent)
+            {
+                //  Debug.Log($"pCounter1[0]:{pCounter1[0]% 2},pCounter[0]:{pCounter[0]}!");
+                if (pCounter[1] % 2 == 0)
+                    return;
+                if (pCounter[0] > 0)
+                    return;
+
+                pCounter[0]++;
+                Entity entityA = triggerEvent.Entities.EntityA;
+                Entity entityB = triggerEvent.Entities.EntityB;
+
+          
+                bool isBodyAAttacker = AttackGroup.Exists(entityA);
+                bool isBodyBAttacker = AttackGroup.Exists(entityB);
+
+                bool isBodyADamage = DamageGroup.Exists(entityA);
+                bool isBodyBDamage = DamageGroup.Exists(entityB);
+
+                     
+                // ignore 
+                //if ((isBodyAAttacker && !isBodyBDamage) ||
+                //    (isBodyBAttacker && !isBodyADamage))
+                //    return;
+
+                if (DestroyGroup.Exists(entityA))
+                {
+                    CommandBuffer.DestroyEntity(entityA);
+                }
+                if (DestroyGroup.Exists(entityB))
+                {
+                    CommandBuffer.DestroyEntity(entityB);
+                }
 
 
-//    // This system applies an impulse to any dynamic that collides with a Repulsor.
-//    // A Repulsor is defined by a PhysicsShape with the `Raise Collision Events` flag ticked and a
-//    // CollisionEventImpulse behaviour added.
-//    [UpdateAfter(typeof(EndFramePhysicsSystem))]
-//    public class CollisionEnemySystem : JobComponentSystem
-//    {
-//        BuildPhysicsWorld m_BuildPhysicsWorldSystem;
-//        StepPhysicsWorld m_StepPhysicsWorldSystem;
-//        EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
+                if (isBodyAAttacker && isBodyBDamage)
+                {
+                    var damageComponent = DamageGroup[entityB];
+                    damageComponent.damage += AttackGroup[entityA].Power;
+                    DamageGroup[entityB] = damageComponent;
+                }
 
-//        protected override void OnCreate()
-//        {
+                if (isBodyBAttacker && isBodyADamage)
+                {
+                    var damageComponent = DamageGroup[entityA];
+                    damageComponent.damage += AttackGroup[entityB].Power;
+                    DamageGroup[entityA] = damageComponent;
+                }
+            }
+        }
 
-//            m_BuildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld>();
-//            m_StepPhysicsWorldSystem = World.GetOrCreateSystem<StepPhysicsWorld>();
-//            m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+      
 
-//        }
+        protected override void OnDestroy()
+        {
+            m_TriggerEntitiesIndex.Dispose();
 
-//        // [BurstCompile]
-//        struct CollisionEventImpulseJob : ITriggerEventsJob
-//        {
-//            public EntityCommandBuffer CommandBuffer;
-//            public ComponentDataFromEntity<PhysicsVelocity> PhysicsVelocityGroup;
-//            public ComponentDataFromEntity<PhysicsCollider> PhysicsColliderGroup;
+        }
 
-//            public ComponentDataFromEntity<Life> LifeGroup;
-//            public ComponentDataFromEntity<Attack> AttackGroup;
-//            public ComponentDataFromEntity<CollisionDestroy> CollisionDestroyGroup;
+        protected override JobHandle OnUpdate(JobHandle inputDeps)
+        {
+            m_TriggerEntitiesIndex[0] = 0;
+            m_TriggerEntitiesIndex[1]++;
 
-//            public void Execute(TriggerEvent triggerEvent)
-//            {
+        //    Debug.Log($" m_TriggerEntitiesIndex1[0]:{ m_TriggerEntitiesIndex1[0]}, m_TriggerEntitiesIndex[0]:{ m_TriggerEntitiesIndex[0]}!");
+            JobHandle jobCollisionEventEnemy = new CollisionEventEnemyJob
+            {
+                pCounter = m_TriggerEntitiesIndex,      
+                CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
+                PhysicsVelocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(true),
+                //PhysicsColliderGroup = GetComponentDataFromEntity<PhysicsCollider>(),
+                //     TriggerTimeoutFrameGroup = GetComponentDataFromEntity<TriggerTimeoutFrame>(),
+                DestroyGroup = GetComponentDataFromEntity<TriggerDestroy>(true),
+                DamageGroup = GetComponentDataFromEntity<Damage>(),        
+                AttackGroup = GetComponentDataFromEntity<Attack>(),
+          
 
-//                Entity entityA = triggerEvent.Entities.EntityA;
-//                Entity entityB = triggerEvent.Entities.EntityB;
+            }.Schedule(m_StepPhysicsWorldSystem.Simulation,
+                        ref m_BuildPhysicsWorldSystem.PhysicsWorld, inputDeps);
+            jobCollisionEventEnemy.Complete();
+          
+            return jobCollisionEventEnemy;
+        }
+    }
 
-//                bool isBodyAAttacker = AttackGroup.Exists(entityA);
-//                bool isBodyBAttacker = AttackGroup.Exists(entityB);
 
-//                if (isBodyAAttacker && isBodyBAttacker)
-//                    return;
+    //[UpdateAfter(typeof(EndFramePhysicsSystem))]
+    //public class UpdateTriggerTimeoutFrameSystem : ComponentSystem
+    //{
+    //    protected override void OnUpdate()
+    //    {
 
-//                bool isBodyALife = LifeGroup.Exists(entityA);
-//                bool isBodyBLife = LifeGroup.Exists(entityB);
+    //        Entities.ForEach((Entity entity, ref TriggerTimeoutFrame triggerTimeoutFrame) =>
+    //        {
+    //            Debug.Log($" triggerTimeoutFrame.FrameCount--:{triggerTimeoutFrame.FrameCount}");
+    //            triggerTimeoutFrame.FrameCount--;
+    //            if (triggerTimeoutFrame.FrameCount == 0)
+    //            {
+    //                Debug.Log($"RemoveComponent:TriggerTimeoutFrame!");
+    //                PostUpdateCommands.RemoveComponent<TriggerTimeoutFrame>(entity);
+    //            }
 
-//                // Ignoring overlapping static bodies
-//                if ((isBodyAAttacker && !isBodyBLife) ||
-//                    (isBodyBAttacker && !isBodyALife))
-//                    return;
+    //        });
 
-//                var attckerEntity = isBodyAAttacker ? entityA : entityB;
-//                var lifeEntity = isBodyALife ? entityA : entityB;
-                               
+    //    }
+    //}
 
-//                //攻击方被删除
-//                if (CollisionDestroyGroup.Exists(attckerEntity))
-//                {
-//                    if (CollisionDestroyGroup[attckerEntity].IsCollision)
-//                        return;
-
-//                    var attackComponent = CollisionDestroyGroup[attckerEntity];
-//                     attackComponent.IsCollision = true;
-//                    CollisionDestroyGroup[attckerEntity] = attackComponent;
-//                    CommandBuffer.DestroyEntity(attckerEntity);
-//                }
-
-//                //攻击方损失生命
-//                if (LifeGroup.Exists(attckerEntity))
-//                {
-//                    var attackerLife = LifeGroup[attckerEntity];
-//                    attackerLife.lifeValue -= 1;
-//                    LifeGroup[attckerEntity] = attackerLife;
-//                }
-
-//                if (AttackGroup.Exists(attckerEntity))
-//                {
-//                    //扣除生命
-//                    var lifeComponent = LifeGroup[lifeEntity];
-//                    lifeComponent.lifeValue -= AttackGroup[attckerEntity].Power;
-//                    LifeGroup[lifeEntity] = lifeComponent;
-//                    Debug.Log($"triggerEvent:{lifeComponent.lifeValue}");
-//                } 
-//            }
-//        }
-
-//        protected override JobHandle OnUpdate(JobHandle inputDeps)
-//        {
-//            JobHandle jobHandle = new CollisionEventImpulseJob
-//            {
-//                CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
-//                PhysicsVelocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(),
-//                PhysicsColliderGroup = GetComponentDataFromEntity<PhysicsCollider>(),
-//                CollisionDestroyGroup = GetComponentDataFromEntity<CollisionDestroy>(),
-//                LifeGroup = GetComponentDataFromEntity<Life>(),
-//                AttackGroup = GetComponentDataFromEntity<Attack>(),
-
-//            }.Schedule(m_StepPhysicsWorldSystem.Simulation,
-//                        ref m_BuildPhysicsWorldSystem.PhysicsWorld, inputDeps);
-
-//            m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
-
-//            return jobHandle;
-//        }
-//    }
-
-//}
+}

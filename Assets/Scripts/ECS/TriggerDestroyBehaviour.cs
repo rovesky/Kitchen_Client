@@ -4,60 +4,64 @@ using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine;
 
-public struct TriggerDestroy : IComponentData
-{     
-    public bool IsCollision;
-}
-
-public class TriggerDestroyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+namespace Assets.Scripts.ECS
 {
-    void OnEnable() { }
-
-    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+    public struct TriggerDestroy : IComponentData
     {
-        if (enabled)
-        {
-            dstManager.AddComponentData(entity, new TriggerDestroy() { IsCollision = false });
-        }
-    }
-}
-
-
-[UpdateBefore(typeof(BuildPhysicsWorld))]
-public class TriggerVolumeChangeMaterialSystem : ComponentSystem
-{
-    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
-    EntityQuery m_OverlappingGroup;
-
-    protected override void OnCreate()
-    {
-        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-        m_OverlappingGroup = GetEntityQuery(new EntityQueryDesc
-        {
-            All = new ComponentType[]
-            {
-                typeof(OverlappingTriggerVolume),
-                typeof(DestroyOverlappingTriggerVolume),
-            }
-        });
+        public bool IsCollision;
     }
 
-    [BurstCompile]
-    protected override void OnUpdate()
+    public class TriggerDestroyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
     {
-        var overlappingComponents = GetComponentDataFromEntity<OverlappingTriggerVolume>();
-        var TriggerDestroyComponents = GetComponentDataFromEntity<TriggerDestroy>(true);
+        void OnEnable() { }
 
-        using (var overlappingEntities = m_OverlappingGroup.ToEntityArray(Allocator.TempJob))
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            foreach (var entity in overlappingEntities)
+            if (enabled)
             {
-                var overlapComponent = overlappingComponents[entity];
-                if (overlapComponent.HasJustEntered)
-                {
-                     PostUpdateCommands.DestroyEntity(entity);                 
-                }
+               // dstManager.AddComponent(
+                dstManager.AddComponentData(entity, new TriggerDestroy() { IsCollision = false });
             }
         }
     }
+
+
+    //[UpdateBefore(typeof(BuildPhysicsWorld))]
+    //public class TriggerVolumeChangeMaterialSystem : ComponentSystem
+    //{
+    //    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
+    //    EntityQuery m_OverlappingGroup;
+
+    //    protected override void OnCreate()
+    //    {
+    //        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+    //        m_OverlappingGroup = GetEntityQuery(new EntityQueryDesc
+    //        {
+    //            All = new ComponentType[]
+    //            {
+    //                typeof(OverlappingTriggerVolume),
+    //                typeof(DestroyOverlappingTriggerVolume),
+    //            }
+    //        });
+    //    }
+
+    //    [BurstCompile]
+    //    protected override void OnUpdate()
+    //    {
+    //        var overlappingComponents = GetComponentDataFromEntity<OverlappingTriggerVolume>();
+    //        var TriggerDestroyComponents = GetComponentDataFromEntity<TriggerDestroy>(true);
+    //        //   var CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer();
+    //        using (var overlappingEntities = m_OverlappingGroup.ToEntityArray(Allocator.TempJob))
+    //        {
+    //            foreach (var entity in overlappingEntities)
+    //            {
+    //                var overlapComponent = overlappingComponents[entity];
+    //                if (overlapComponent.HasJustEntered && TriggerDestroyComponents.Exists(entity))
+    //                {
+    //                    PostUpdateCommands.DestroyEntity(entity);
+    //                    // CommandBuffer.DestroyEntity(entity);
+    //                }
+    //            }
+    //        }
+    //    }
 }
