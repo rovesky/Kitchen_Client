@@ -10,8 +10,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{12F44184-A422-5F27-22E6-507969043F15}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -63,18 +62,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\ECS\DamageBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ECS\CollisionEnemyBehavior.cs" />
     <Compile Include="Assets\Scripts\ECS\AttackBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\CollisionEnemyBehavior.cs" />
+    <Compile Include="Assets\Scripts\ECS\DamageBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\EnemyBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\EntityKillerBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\FireBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\LifeBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\MoveBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\MoveSinBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\MoveTargetBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\PlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\PlayerControllerBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\TriggerDestroyBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ECS\TriggerReduceLifeSystem.cs" />
-    <Compile Include="Assets\Scripts\ECS\TriggerVolumeBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\UpdateLifeBehaviour.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyRenderer.cs" />

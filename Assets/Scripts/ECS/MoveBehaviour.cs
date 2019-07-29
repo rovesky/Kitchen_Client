@@ -15,9 +15,7 @@ namespace Assets.Scripts.ECS
     public struct MoveComponent : IComponentData
     {
         public int Speed;
-
-        public Direction Direction;
-    }
+        public Direction Direction;    }
 
 
     public class MoveBehaviour : MonoBehaviour,  IConvertGameObjectToEntity

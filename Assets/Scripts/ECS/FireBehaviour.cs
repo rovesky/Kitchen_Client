@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics.Systems;
 using Unity.Transforms;
@@ -8,7 +9,8 @@ namespace Assets.Scripts.ECS
 {
     public struct FireRocket : IComponentData
     {
-        public Entity rocket;
+        public Entity rocket;    
+        public float  minRocketTimer;
         public float rocketTimer;
     }
 
@@ -16,7 +18,9 @@ namespace Assets.Scripts.ECS
     public class FireBehaviour : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
     {
         public GameObject bullet;
+        public float minRocketTimer;
 
+     //   public GameObject target;
         // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
         public void DeclareReferencedPrefabs(List<GameObject> gameObjects)
         {
@@ -25,22 +29,29 @@ namespace Assets.Scripts.ECS
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
+            //Entity entityTarget = Entity.Null;
+            //if (target != null)
+            //{
+            //    entityTarget = conversionSystem.GetPrimaryEntity(target);
+            //}
             dstManager.AddComponentData<FireRocket>(
                 entity,
                 new FireRocket()
                 {
                     rocket = conversionSystem.GetPrimaryEntity(bullet),
+              //      target = entityTarget,
+                    minRocketTimer = minRocketTimer,
                     rocketTimer = 0,
                 });
         }
     }
 
-    public class FireSystem : ComponentSystem
+    public class PlayerFireSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
             Entities.ForEach(
-                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
+                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire,ref Player player) =>
                 {
                     if (fire.rocket == null)
                         return;
@@ -49,7 +60,7 @@ namespace Assets.Scripts.ECS
                     if (fire.rocketTimer > 0)
                         return;
 
-                    fire.rocketTimer = 0.1f;
+                    fire.rocketTimer = fire.minRocketTimer;
 
                     if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
                     {
@@ -61,6 +72,39 @@ namespace Assets.Scripts.ECS
                         PostUpdateCommands.SetComponent(e, position);
                         PostUpdateCommands.SetComponent(e, rotation);
                     }
+                }
+            );
+        }
+    }
+
+
+    public class EnemyFireSystem : ComponentSystem
+    {
+
+        protected override void OnUpdate()
+        {
+
+            Entities.ForEach(
+                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire, ref Enemy enemy) =>
+                {
+                    if (fire.rocket == null)
+                        return;
+
+                    fire.rocketTimer -= Time.deltaTime;
+                    if (fire.rocketTimer > 0)
+                        return;
+
+                    fire.rocketTimer = fire.minRocketTimer;
+
+
+                    var e = PostUpdateCommands.Instantiate(fire.rocket);
+
+                    Translation position = new Translation() { Value = gunTransform.Position };
+                    Rotation rotation = new Rotation() { Value = gunRotation.Value };
+
+                    PostUpdateCommands.SetComponent(e, position);
+                    PostUpdateCommands.SetComponent(e, rotation);
+
                 }
             );
         }

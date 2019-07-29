@@ -5,78 +5,82 @@ using System;
 using UnityEngine;
 using Unity.Jobs;
 
-public struct EntityKiller : IComponentData
+namespace Assets.Scripts.ECS
 {
-    public int TimeToDie;
-}
-
-public class EntityKillerBehaviour : MonoBehaviour, IConvertGameObjectToEntity
-{
-    public int TimeToDie;
-
-    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+    public struct EntityKiller : IComponentData
     {
-        dstManager.AddComponentData<EntityKiller>(entity, new EntityKiller() { TimeToDie = TimeToDie });
-    }
-}
-
-public class EntityKillerSystem : ComponentSystem
-{
-    EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
-
-    protected override void OnCreate()
-    {
-        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        public int TimeToDie;
     }
 
-    //struct EntityKillerJob : IJobForEachWithEntity<EntityKiller>
-    //{
-    //    public EntityCommandBuffer CommandBuffer;
+    public class EntityKillerBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+    {
+        public int TimeToDie;
 
-    //    public void Execute(Entity entity, int index, ref EntityKiller killer)
-    //    {
-    //        if (killer.TimeToDie > 0)
-    //        {
-    //            CommandBuffer.SetComponent<EntityKiller>(entity, new EntityKiller() { TimeToDie = killer.TimeToDie - 1 });
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("DestroyEntity");
-    //            CommandBuffer.DestroyEntity(entity);
-    //        }
-    //    }
-    //}
-
-
-
-     protected override void OnUpdate()
-     {
-        EntityCommandBuffer CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer();
-
-        Entities.ForEach((Entity entity, ref EntityKiller killer) =>
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            if (killer.TimeToDie > 0)
-            {
-                killer.TimeToDie--;
-              //  CommandBuffer.SetComponent<EntityKiller>(entity, new EntityKiller() { TimeToDie = killer.TimeToDie - 1 });
-            }
-            else
-            {
-             //   Debug.Log("DestroyEntity");
-                CommandBuffer.DestroyEntity(entity);
-            }
-        });
+            dstManager.AddComponentData<EntityKiller>(entity, new EntityKiller() { TimeToDie = TimeToDie });
+        }
     }
 
-    //protected override JobHandle OnUpdate(JobHandle inputDeps)
-    //{
-    //    var job = new EntityKillerJob
-    //    {
-    //        CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer()
-    //    }.ScheduleSingle(this, inputDeps);
+    public class EntityKillerSystem : ComponentSystem
+    {
+        EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
 
-    //    m_EntityCommandBufferSystem.AddJobHandleForProducer(job);
+        protected override void OnCreate()
+        {
+            m_EntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        }
 
-    //    return job;
-    //}
+        //struct EntityKillerJob : IJobForEachWithEntity<EntityKiller>
+        //{
+        //    public EntityCommandBuffer CommandBuffer;
+
+        //    public void Execute(Entity entity, int index, ref EntityKiller killer)
+        //    {
+        //        if (killer.TimeToDie > 0)
+        //        {
+        //            CommandBuffer.SetComponent<EntityKiller>(entity, new EntityKiller() { TimeToDie = killer.TimeToDie - 1 });
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("DestroyEntity");
+        //            CommandBuffer.DestroyEntity(entity);
+        //        }
+        //    }
+        //}
+
+
+
+        protected override void OnUpdate()
+        {
+            EntityCommandBuffer CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer();
+       
+            Entities.ForEach((Entity entity, ref EntityKiller killer) =>
+            {
+                if (killer.TimeToDie > 0)
+                {
+                    killer.TimeToDie--;
+                    //  CommandBuffer.SetComponent<EntityKiller>(entity, new EntityKiller() { TimeToDie = killer.TimeToDie - 1 });
+                }
+                else
+                {
+                    //   Debug.Log("DestroyEntity");
+                    CommandBuffer.DestroyEntity(entity);
+                }
+            });
+        }
+
+        //protected override JobHandle OnUpdate(JobHandle inputDeps)
+        //{
+        //    var job = new EntityKillerJob
+        //    {
+        //        CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer()
+        //    }.ScheduleSingle(this, inputDeps);
+
+        //    m_EntityCommandBufferSystem.AddJobHandleForProducer(job);
+
+        //    return job;
+        //}
+    }
+
 }

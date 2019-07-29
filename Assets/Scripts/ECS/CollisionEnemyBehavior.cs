@@ -68,17 +68,6 @@ namespace Assets.Scripts.ECS
                 Entity entityB = triggerEvent.Entities.EntityB;
 
           
-                bool isBodyAAttacker = AttackGroup.Exists(entityA);
-                bool isBodyBAttacker = AttackGroup.Exists(entityB);
-
-                bool isBodyADamage = DamageGroup.Exists(entityA);
-                bool isBodyBDamage = DamageGroup.Exists(entityB);
-
-                     
-                // ignore 
-                //if ((isBodyAAttacker && !isBodyBDamage) ||
-                //    (isBodyBAttacker && !isBodyADamage))
-                //    return;
 
                 if (DestroyGroup.Exists(entityA))
                 {
@@ -88,6 +77,14 @@ namespace Assets.Scripts.ECS
                 {
                     CommandBuffer.DestroyEntity(entityB);
                 }
+
+
+
+                bool isBodyAAttacker = AttackGroup.Exists(entityA);
+                bool isBodyBAttacker = AttackGroup.Exists(entityB);
+
+                bool isBodyADamage = DamageGroup.Exists(entityA);
+                bool isBodyBDamage = DamageGroup.Exists(entityB);
 
 
                 if (isBodyAAttacker && isBodyBDamage)
