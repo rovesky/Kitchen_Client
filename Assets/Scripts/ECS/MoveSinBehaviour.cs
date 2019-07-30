@@ -10,11 +10,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-
-    public struct MoveSin : IComponentData
-    {
-        int a;
-    }
+    [Serializable]
+    public struct MoveSin : IComponentData{  }
 
     [RequiresEntityConversion]
     public class MoveSinBehaviour : MonoBehaviour, IConvertGameObjectToEntity
@@ -39,7 +36,7 @@ namespace Assets.Scripts.ECS
             // method for best performance. However, we start with it here to demonstrate the clearer separation
             // between ComponentSystem Update (logic) and ComponentData (data).
             // There is no update logic on the individual ComponentData.
-            Entities.ForEach((ref MoveSin moveSin, ref Translation translation) =>
+            Entities.WithAllReadOnly<MoveSin>().ForEach((ref Translation translation) =>
             {
                 // 左右移动
                 float rx = Mathf.Sin(Time.time) * Time.deltaTime;

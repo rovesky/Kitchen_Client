@@ -1,18 +1,16 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 using UnityEngine;
 
-public struct Player : IComponentData
-{
-    public bool a;
-}
+[Serializable]
+public struct Player : IComponentData {  }
 
 public class PlayerBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 {
 
-
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        dstManager.AddComponentData(entity, new Player() { a = false });
+        dstManager.AddComponentData(entity, new Player());
     }
 }
 

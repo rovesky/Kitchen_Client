@@ -1,18 +1,19 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 using UnityEngine;
 
-public struct Enemy : IComponentData
+namespace Assets.Scripts.ECS
 {
-    public bool a;
-}
+    [Serializable]
+    public struct Enemy : IComponentData { }
 
-public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
-{
-
-
-    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+    public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
     {
-        dstManager.AddComponentData(entity, new Enemy() { a = false });
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+        {
+            dstManager.AddComponentData(entity, new Enemy());
+        }
     }
-}
 
+
+}

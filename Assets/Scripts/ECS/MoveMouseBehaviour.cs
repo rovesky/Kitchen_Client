@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
@@ -7,15 +8,16 @@ using UnityEngine;
 // See CharacterControllerComponent for a 'proxy' based character controller also
 namespace Assets.Scripts.ECS
 {
-    public struct PlayerController : IComponentData
+
+    [Serializable]
+    public struct MoveMouse : IComponentData
     {
         public float MovementSpeed;
         public LayerMask InputMask; // 鼠标射线碰撞层
     }
 
-    public class PlayerControllerBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+    public class MoveMouseBehaviour : MonoBehaviour, IConvertGameObjectToEntity
     {
-
         public float MovementSpeed = 5;
         public LayerMask InputMask; // 鼠标射线碰撞层
 
@@ -25,7 +27,7 @@ namespace Assets.Scripts.ECS
         {
             if (enabled)
             {
-                var componentData = new PlayerController
+                var componentData = new MoveMouse
                 {
                     MovementSpeed = MovementSpeed,
                     InputMask = InputMask
@@ -37,13 +39,11 @@ namespace Assets.Scripts.ECS
     }
 
     [UpdateBefore(typeof(BuildPhysicsWorld))]
-    public class PlayerControllerSystem : ComponentSystem
+    public class MoveMouseSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
-            Entities.ForEach(
-                (ref PlayerController ccBodyComponentData,
-                ref Translation position) =>
+            Entities.ForEach((ref MoveMouse moveMouse,ref Translation position) =>
                 {
 
                     if (Input.GetMouseButton(0))
@@ -57,7 +57,7 @@ namespace Assets.Scripts.ECS
                         // 产生射线
                         //LayerMask mask =new LayerMask();
                         //mask.value = (int)Mathf.Pow(2.0f, (float)LayerMask.NameToLayer("plane"));
-                        bool iscast = Physics.Raycast(ray, out hitinfo, 1000, ccBodyComponentData.InputMask);
+                        bool iscast = Physics.Raycast(ray, out hitinfo, 1000, moveMouse.InputMask);
 
                         var targetPos = Vector3.zero;
                         if (iscast)
@@ -67,7 +67,7 @@ namespace Assets.Scripts.ECS
                         }
 
                         // 使用Vector3提供的MoveTowards函数，获得朝目标移动的位置
-                        Vector3 pos = Vector3.MoveTowards(position.Value, targetPos, ccBodyComponentData.MovementSpeed * Time.deltaTime);
+                        Vector3 pos = Vector3.MoveTowards(position.Value, targetPos, moveMouse.MovementSpeed * Time.deltaTime);
                         // 更新当前位置
                         position.Value = pos;
                     }

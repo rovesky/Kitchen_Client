@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
-using Unity.Physics;
-using Unity.Physics.Systems;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.ECS
 {
-    public struct UpdateLife : IComponentData
-    {
-        public int type;
-    }
+    [Serializable]
+    public struct UpdateLife : IComponentData { }
 
     [RequiresEntityConversion]
     public class UpdateLifeBehaviour : MonoBehaviour, IConvertGameObjectToEntity
@@ -23,8 +14,6 @@ namespace Assets.Scripts.ECS
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-
-        //    Debug.Log("Convert:" + LifeText.GetComponent<Text>().text);
             dstManager.AddComponentData(
             entity,
             new UpdateLife());
@@ -44,7 +33,7 @@ namespace Assets.Scripts.ECS
         {
             EntityCommandBuffer CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer();
 
-            Entities.ForEach((Entity entity, ref Life life,ref UpdateLife a) =>
+            Entities.WithAllReadOnly<UpdateLife>().ForEach((Entity entity, ref Life life) =>
             {
             //    var str = string.Format("生命 {0}", life.lifeValue);
               //  Debug.Log("updateLife:" + str);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics.Systems;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+    [Serializable]
     public struct FireRocket : IComponentData
     {
         public Entity rocket;    
@@ -20,7 +22,6 @@ namespace Assets.Scripts.ECS
         public GameObject bullet;
         public float minRocketTimer;
 
-     //   public GameObject target;
         // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
         public void DeclareReferencedPrefabs(List<GameObject> gameObjects)
         {
@@ -28,18 +29,12 @@ namespace Assets.Scripts.ECS
         }
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-        {
-            //Entity entityTarget = Entity.Null;
-            //if (target != null)
-            //{
-            //    entityTarget = conversionSystem.GetPrimaryEntity(target);
-            //}
-            dstManager.AddComponentData<FireRocket>(
+        {     
+            dstManager.AddComponentData(
                 entity,
                 new FireRocket()
                 {
-                    rocket = conversionSystem.GetPrimaryEntity(bullet),
-              //      target = entityTarget,
+                    rocket = conversionSystem.GetPrimaryEntity(bullet), 
                     minRocketTimer = minRocketTimer,
                     rocketTimer = 0,
                 });
@@ -50,8 +45,8 @@ namespace Assets.Scripts.ECS
     {
         protected override void OnUpdate()
         {
-            Entities.ForEach(
-                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire,ref Player player) =>
+            Entities.WithAllReadOnly<Player>().ForEach(
+                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
                     if (fire.rocket == null)
                         return;
@@ -84,8 +79,8 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {
 
-            Entities.ForEach(
-                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire, ref Enemy enemy) =>
+            Entities.WithAllReadOnly<Enemy>().ForEach(
+                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
                     if (fire.rocket == null)
                         return;
@@ -95,7 +90,6 @@ namespace Assets.Scripts.ECS
                         return;
 
                     fire.rocketTimer = fire.minRocketTimer;
-
 
                     var e = PostUpdateCommands.Instantiate(fire.rocket);
 

@@ -9,17 +9,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    //public struct TriggerTimeoutFrame : IComponentData
-    //{
-    //    public int FrameCount;
-
-    //}
-
+   
     // This system applies an impulse to any dynamic that collides with a Repulsor.
     // A Repulsor is defined by a PhysicsShape with the `Raise Collision Events` flag ticked and a
     // CollisionEventImpulse behaviour added.
     [UpdateAfter(typeof(EndFramePhysicsSystem))]
-    public class CollisionEnemySystem : JobComponentSystem
+    public class TriggerSystem : JobComponentSystem
     {
         BuildPhysicsWorld m_BuildPhysicsWorldSystem;
         StepPhysicsWorld m_StepPhysicsWorldSystem;
@@ -39,7 +34,7 @@ namespace Assets.Scripts.ECS
         }
 
         // [BurstCompile]
-        struct CollisionEventEnemyJob : ITriggerEventsJob
+        struct TriggerEventJob : ITriggerEventsJob
         {
             public EntityCommandBuffer CommandBuffer;
             [ReadOnly] public ComponentDataFromEntity<PhysicsVelocity> PhysicsVelocityGroup;
@@ -64,9 +59,9 @@ namespace Assets.Scripts.ECS
                     return;
 
                 pCounter[0]++;
+
                 Entity entityA = triggerEvent.Entities.EntityA;
                 Entity entityB = triggerEvent.Entities.EntityB;
-
           
 
                 if (DestroyGroup.Exists(entityA))
@@ -114,16 +109,15 @@ namespace Assets.Scripts.ECS
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             m_TriggerEntitiesIndex[0] = 0;
-            m_TriggerEntitiesIndex[1]++;
+            m_TriggerEntitiesIndex[1]++;           
 
         //    Debug.Log($" m_TriggerEntitiesIndex1[0]:{ m_TriggerEntitiesIndex1[0]}, m_TriggerEntitiesIndex[0]:{ m_TriggerEntitiesIndex[0]}!");
-            JobHandle jobCollisionEventEnemy = new CollisionEventEnemyJob
+            JobHandle jobCollisionEventEnemy = new TriggerEventJob
             {
                 pCounter = m_TriggerEntitiesIndex,      
                 CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
                 PhysicsVelocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(true),
-                //PhysicsColliderGroup = GetComponentDataFromEntity<PhysicsCollider>(),
-                //     TriggerTimeoutFrameGroup = GetComponentDataFromEntity<TriggerTimeoutFrame>(),
+
                 DestroyGroup = GetComponentDataFromEntity<TriggerDestroy>(true),
                 DamageGroup = GetComponentDataFromEntity<Damage>(),        
                 AttackGroup = GetComponentDataFromEntity<Attack>(),
@@ -136,27 +130,4 @@ namespace Assets.Scripts.ECS
             return jobCollisionEventEnemy;
         }
     }
-
-
-    //[UpdateAfter(typeof(EndFramePhysicsSystem))]
-    //public class UpdateTriggerTimeoutFrameSystem : ComponentSystem
-    //{
-    //    protected override void OnUpdate()
-    //    {
-
-    //        Entities.ForEach((Entity entity, ref TriggerTimeoutFrame triggerTimeoutFrame) =>
-    //        {
-    //            Debug.Log($" triggerTimeoutFrame.FrameCount--:{triggerTimeoutFrame.FrameCount}");
-    //            triggerTimeoutFrame.FrameCount--;
-    //            if (triggerTimeoutFrame.FrameCount == 0)
-    //            {
-    //                Debug.Log($"RemoveComponent:TriggerTimeoutFrame!");
-    //                PostUpdateCommands.RemoveComponent<TriggerTimeoutFrame>(entity);
-    //            }
-
-    //        });
-
-    //    }
-    //}
-
 }

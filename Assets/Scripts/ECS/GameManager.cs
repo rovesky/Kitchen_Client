@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
         var restart_button = m_canvas_gameover.transform.Find("Button_restart").GetComponent<Button>();  // 获取重新开始游戏按钮
         restart_button.onClick.AddListener(delegate ()  // 按钮事件回调
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // 重新开始当前关卡
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name,LoadSceneMode.Single);  // 重新开始当前关卡
         });
         m_canvas_gameover.gameObject.SetActive(false);  // 默认隐藏游戏失败UI
     }

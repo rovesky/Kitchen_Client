@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
@@ -12,24 +13,24 @@ namespace Assets.Scripts.ECS
         Left,
         Right
     }
-    public struct MoveComponent : IComponentData
+
+    [Serializable]
+    public struct MoveTranslation : IComponentData
     {
         public int Speed;
         public Direction Direction;    }
 
 
-    public class MoveBehaviour : MonoBehaviour,  IConvertGameObjectToEntity
+    public class MoveTranslationBehaviour : MonoBehaviour,  IConvertGameObjectToEntity
     {
         public int Speed;
-
         public Direction Direction;
-
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            dstManager.AddComponentData<MoveComponent>(
+            dstManager.AddComponentData(
                 entity,
-                new MoveComponent()
+                new MoveTranslation()
                 {
                     Speed = Speed,
                     Direction = Direction,
@@ -41,14 +42,14 @@ namespace Assets.Scripts.ECS
     #region System
     // update before physics gets going so that we dont have hazzard warnings
     [UpdateBefore(typeof(BuildPhysicsWorld))]
-    public class MoveSystem : ComponentSystem
+    public class MoveTranslationSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
             float dt = Time.fixedDeltaTime;
 
             Entities.ForEach(
-                (ref Translation position,   ref MoveComponent move) =>
+                (ref Translation position,   ref MoveTranslation move) =>
                 {
                     var value = position.Value;
                     if (move.Direction == Direction.Up)

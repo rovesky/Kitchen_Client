@@ -63,28 +63,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ECS\AttackBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ECS\CollisionEnemyBehavior.cs" />
     <Compile Include="Assets\Scripts\ECS\DamageBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\EnemyBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\EnemySpawn.cs" />
     <Compile Include="Assets\Scripts\ECS\EntityKillerBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\FireBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\GameManager.cs" />
     <Compile Include="Assets\Scripts\ECS\LifeBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ECS\MoveBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\MoveMouseBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\MoveSinBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\MoveTargetBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\MoveTranslationBehaviour.cs" />
     <Compile Include="Assets\Scripts\ECS\PlayerBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ECS\PlayerControllerBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\SpawnEntityBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\ECS\TriggerDestroyBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ECS\TriggerSystem.cs" />
     <Compile Include="Assets\Scripts\ECS\UpdateLifeBehaviour.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyRenderer.cs" />
     <Compile Include="Assets\Scripts\EnemyRocket.cs" />
     <Compile Include="Assets\Scripts\EnemySpawn.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Rocket.cs" />
     <Compile Include="Assets\Scripts\SuperEnemy.cs" />
-    <Compile Include="Assets\Scripts\TitleScreen.cs" />
     <Reference Include="Unity.Entities.Properties">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.Properties.dll</HintPath>
     </Reference>

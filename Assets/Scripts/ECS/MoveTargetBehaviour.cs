@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Physics.Systems;
@@ -7,8 +8,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
- 
-    public struct MoveTargetComponent : IComponentData
+
+    [Serializable]
+    public struct MoveTarget : IComponentData
     {
         public int Speed;      
     }
@@ -23,7 +25,7 @@ namespace Assets.Scripts.ECS
             {
                 dstManager.AddComponentData(
                     entity,
-                    new MoveTargetComponent()
+                    new MoveTarget()
                     {
                         Speed = Speed,
                     });
@@ -102,7 +104,7 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {
-            var PlayerEntities = PlayerGroup.ToEntityArray(Allocator.TempJob);
+            var PlayerEntities = PlayerGroup.ToEntityArray(Allocator.Persistent);
 
             if (PlayerEntities.Length == 0)
             {
@@ -110,7 +112,7 @@ namespace Assets.Scripts.ECS
                 return;
             }
 
-            Entities.ForEach((ref Translation position, ref Rotation rotation, ref MoveTargetComponent move) =>
+            Entities.ForEach((ref Translation position, ref Rotation rotation, ref MoveTarget move) =>
             {           
 
                 var target = PlayerEntities[0];

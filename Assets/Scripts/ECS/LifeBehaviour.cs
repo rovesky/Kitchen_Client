@@ -1,9 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Unity.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+
+    [Serializable]
     public struct Life : IComponentData
     {
         public int lifeValue;
@@ -38,7 +41,7 @@ namespace Assets.Scripts.ECS
                 damage.damage = 0;
                 if (life.lifeValue <= 0)
                 {
-                    Debug.Log($"DestroyEntity:{entity.Index},thread:{Thread.CurrentThread.ManagedThreadId}");
+                   // Debug.Log($"DestroyEntity:{entity.Index},thread:{Thread.CurrentThread.ManagedThreadId}");
                     CommandBuffer.DestroyEntity(entity);
                 }
             });
