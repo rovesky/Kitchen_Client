@@ -62,21 +62,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Components\AttackBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\DamageBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\EnemyBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\EntityKillerBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\FireBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\HealthBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\MoveMouseBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\MoveSinBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\MoveTargetBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\MoveTranslationBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\PlayerBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\SpawnEntityBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\SpawnPlayerBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\TriggerDestroyBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Components\UpdateHealthUIBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Behaviour\FireBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Behaviour\MoveMouseBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Behaviour\SpawnEnemyBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Behaviour\SpawnPlayerBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Components\AttackComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\DamageComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\EnemyComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\EntityKillerComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\HealthComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\MoveSinComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\MoveTargetComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\MoveTranslationComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\PlayerComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\TriggerDestroyComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\UpdateHealthUIComponent.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\Systems\EntityKillerSystem.cs" />

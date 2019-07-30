@@ -11,7 +11,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {
             Entities.ForEach(
-               (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnEntity spawn) =>
+               (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnEnemy spawn) =>
                {
                    if (spawn.entity == null)
                        return;
@@ -20,7 +20,7 @@ namespace Assets.Scripts.ECS
                    if (spawn.spawnTimer > 0)
                        return;
 
-                   spawn.spawnTimer = UnityEngine.Random.Range(spawn.spawnIntervalMin, spawn.spawnIntervalMax);
+                   spawn.spawnTimer = Random.Range(spawn.spawnIntervalMin, spawn.spawnIntervalMax);
 
                    var e = PostUpdateCommands.Instantiate(spawn.entity);
 
@@ -29,6 +29,23 @@ namespace Assets.Scripts.ECS
 
                    PostUpdateCommands.SetComponent(e, position);
                    PostUpdateCommands.SetComponent(e, rotation);
+
+                   PostUpdateCommands.AddComponent(e, new Enemy());
+                   PostUpdateCommands.AddComponent(e, new Damage());
+                   PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
+                   PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1, Direction = Direction.Down });
+
+
+                   if (spawn.enemyType == EnemyType.Normal)
+                   {
+                       PostUpdateCommands.AddComponent(e, new Health() { Value = 100 });
+                       PostUpdateCommands.AddComponent(e, new MoveSin() );
+                  
+                   }
+                   else
+                   {
+                       PostUpdateCommands.AddComponent(e, new Health() { Value = 500 });                   
+                   }
 
                }
            );

@@ -34,6 +34,12 @@ namespace Assets.Scripts.ECS
 
                         PostUpdateCommands.SetComponent(e, position);
                         PostUpdateCommands.SetComponent(e, rotation);
+
+                        PostUpdateCommands.AddComponent(e, new TriggerDestroy());
+                        PostUpdateCommands.AddComponent(e, new Attack() { Power = 20 });
+                        PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 5,Direction = Direction.Up });
+                        PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 50 });
+
                     }
                 }
             );
@@ -67,6 +73,10 @@ namespace Assets.Scripts.ECS
                     PostUpdateCommands.SetComponent(e, position);
                     PostUpdateCommands.SetComponent(e, rotation);
 
+                    PostUpdateCommands.AddComponent(e, new TriggerDestroy());
+                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
+                    PostUpdateCommands.AddComponent(e, new MoveTarget() { Speed = 3});
+                    PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 100 });
                 }
             );
         }
