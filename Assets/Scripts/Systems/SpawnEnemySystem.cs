@@ -8,6 +8,14 @@ namespace Assets.Scripts.ECS
     public class SpawnEnemySystem : ComponentSystem
     {
 
+        private Entity rocket;
+
+        protected override void OnCreate()
+        {
+            var prefab = Resources.Load("Prefabs/EnemyRocket") as GameObject;
+            rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);
+        }
+
         protected override void OnUpdate()
         {
             Entities.ForEach(
@@ -34,19 +42,23 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
                    PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1, Direction = Direction.Down });
-
-
+                   
                    if (spawn.enemyType == EnemyType.Normal)
                    {
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 100 });
                        PostUpdateCommands.AddComponent(e, new MoveSin() );
                   
                    }
-                   else
+                   else if(spawn.enemyType == EnemyType.Super)
                    {
-                       PostUpdateCommands.AddComponent(e, new Health() { Value = 500 });                   
+                       PostUpdateCommands.AddComponent(e, new Health() { Value = 500 });
+                       PostUpdateCommands.AddComponent(e, new FireRocket()
+                       {
+                           Rocket = rocket,
+                           FireCooldown = 2f,
+                           RocketTimer = 0,
+                       });
                    }
-
                }
            );
         }

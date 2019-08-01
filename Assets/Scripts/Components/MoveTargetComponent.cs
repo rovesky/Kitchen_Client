@@ -11,7 +11,7 @@ namespace Assets.Scripts.ECS
     [Serializable]
     public struct MoveTarget : IComponentData
     {
-        public int Speed;      
+        public float Speed;      
     }
 
 }

@@ -61,8 +61,7 @@ namespace Assets.Scripts.ECS
                 pCounter[0]++;
 
                 Entity entityA = triggerEvent.Entities.EntityA;
-                Entity entityB = triggerEvent.Entities.EntityB;
-          
+                Entity entityB = triggerEvent.Entities.EntityB;          
 
                 if (DestroyGroup.Exists(entityA))
                 {
@@ -72,9 +71,7 @@ namespace Assets.Scripts.ECS
                 {
                     CommandBuffer.DestroyEntity(entityB);
                 }
-
-
-
+                               
                 bool isBodyAAttacker = AttackGroup.Exists(entityA);
                 bool isBodyBAttacker = AttackGroup.Exists(entityB);
 
@@ -96,14 +93,11 @@ namespace Assets.Scripts.ECS
                     DamageGroup[entityA] = damageComponent;
                 }
             }
-        }
-
-      
+        }             
 
         protected override void OnDestroy()
         {
             m_TriggerEntitiesIndex.Dispose();
-
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)

@@ -38,7 +38,7 @@ namespace Assets.Scripts.ECS
                     }
 
                     // 使用Vector3提供的MoveTowards函数，获得朝目标移动的位置
-                    Vector3 pos = Vector3.MoveTowards(position.Value, targetPos, moveMouse.MovementSpeed * Time.deltaTime);
+                    Vector3 pos = Vector3.MoveTowards(position.Value, targetPos, moveMouse.Speed * Time.deltaTime);
                     // 更新当前位置
                     position.Value = pos;
                 }

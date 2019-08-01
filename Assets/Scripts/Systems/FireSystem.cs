@@ -16,18 +16,18 @@ namespace Assets.Scripts.ECS
             Entities.WithAllReadOnly<Player>().ForEach(
                 (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
-                    if (fire.rocket == null)
+                    if (fire.Rocket == null)
                         return;
 
-                    fire.rocketTimer -= Time.deltaTime;
-                    if (fire.rocketTimer > 0)
+                    fire.RocketTimer -= Time.deltaTime;
+                    if (fire.RocketTimer > 0)
                         return;
 
-                    fire.rocketTimer = fire.minRocketTimer;
+                    fire.RocketTimer = fire.FireCooldown;
 
                     if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
                     {
-                        var e = PostUpdateCommands.Instantiate(fire.rocket);
+                        var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
                         Translation position = new Translation() { Value = gunTransform.Position };
                         Rotation rotation = new Rotation() { Value = gunRotation.Value };
@@ -56,16 +56,16 @@ namespace Assets.Scripts.ECS
             Entities.WithAllReadOnly<Enemy>().ForEach(
                 (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
-                    if (fire.rocket == null)
+                    if (fire.Rocket == null)
                         return;
 
-                    fire.rocketTimer -= Time.deltaTime;
-                    if (fire.rocketTimer > 0)
+                    fire.RocketTimer -= Time.deltaTime;
+                    if (fire.RocketTimer > 0)
                         return;
 
-                    fire.rocketTimer = fire.minRocketTimer;
+                    fire.RocketTimer = fire.FireCooldown;
 
-                    var e = PostUpdateCommands.Instantiate(fire.rocket);
+                    var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
                     Translation position = new Translation() { Value = gunTransform.Position };
                     Rotation rotation = new Rotation() { Value = gunRotation.Value };

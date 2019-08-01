@@ -5,29 +5,20 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    //public class ConversionRocektSystem : GameObjectConversionSystem
-    //{
-    //    protected override void OnUpdate()
-    //    {
-    //        Entities.ForEach((FireBehaviour behaviour) => {
-    //        //    behaviour.DeclareReferencedPrefabs(this.)
-    //            behaviour.Convert(GetPrimaryEntity(behaviour), DstEntityManager, this); });
-
-    //    }
-    //}
-
+    
     public class SpawnPlayerSystem : ComponentSystem
     {
-      //  private GameObjectConversionSystem gameObjectConversionSystem;
+        private Entity rocket;       
 
         protected override void OnCreate()
         {
-        //    gameObjectConversionSystem = World.GetOrCreateSystem<GameObjectConversionSystem>();
+            var prefab = Resources.Load("Prefabs/Rocket") as GameObject;
+            rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);       
         }
 
         protected override void OnUpdate()
         {
-            Debug.Log($"SpawnPlayerSystem OnUpdate!");
+
             Entities.ForEach(
                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnPlayer spawn) =>
                {
@@ -47,23 +38,21 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 10000 });
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Health() { Value = 3 });
+                   PostUpdateCommands.AddComponent(e, new Score() { ScoreValue = 0,MaxScoreValue = 0});
                    PostUpdateCommands.AddComponent(e, new UpdateHealthUI());
-                 
 
-                   //var prefab = (GameObject)Resources.Load("Prefabs/Rocket");
-                   //var rocket = GetPrimaryEntity(prefab);
-
-                   //Debug.Log($"prefab:{prefab},rocket:{rocket}");
-                   //PostUpdateCommands.AddComponent(e, new FireRocket()
-                   //{
-                   //    rocket = rocket,
-                   //    minRocketTimer = 0.1f,
-                   //    rocketTimer = 0,
-                   //});
-
-                   //  PostUpdateCommands.AddComponent(e, new PhysicsBody());
-               }
-           );
+                   PostUpdateCommands.AddComponent(e, new FireRocket()
+                   {
+                       Rocket = rocket,
+                       FireCooldown = 0.1f,
+                       RocketTimer = 0,
+                   });
+                   PostUpdateCommands.AddComponent(e, new MoveMouse()
+                   {
+                       Speed = 5,
+                       InputMask = 1<<LayerMask.NameToLayer("plane")
+                   });
+               });
         }
     }
 }

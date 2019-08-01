@@ -62,19 +62,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Behaviour\FireBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\MoveMouseBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnEnemyBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnPlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Components\AttackComponent.cs" />
     <Compile Include="Assets\Scripts\Components\DamageComponent.cs" />
     <Compile Include="Assets\Scripts\Components\EnemyComponent.cs" />
     <Compile Include="Assets\Scripts\Components\EntityKillerComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\FireComponent.cs" />
     <Compile Include="Assets\Scripts\Components\HealthComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\MoveMouseComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveSinComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveTargetComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveTranslationComponent.cs" />
     <Compile Include="Assets\Scripts\Components\PlayerComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\ScoreComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\SpawnEnemyComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\SpawnPlayerComponent.cs" />
     <Compile Include="Assets\Scripts\Components\TriggerDestroyComponent.cs" />
     <Compile Include="Assets\Scripts\Components\UpdateHealthUIComponent.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />

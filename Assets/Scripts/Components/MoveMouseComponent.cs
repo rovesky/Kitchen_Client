@@ -4,21 +4,14 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
+
 namespace Assets.Scripts.ECS
 {
-    public enum Direction
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
-
     [Serializable]
-    public struct MoveTranslation : IComponentData
+    public struct MoveMouse : IComponentData
     {
         public float Speed;
-        public Direction Direction;
-    }
+        public LayerMask InputMask; // 鼠标射线碰撞层
+    }     
 
 }
