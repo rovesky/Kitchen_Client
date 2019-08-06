@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Behaviour\KillOutofRenderBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnEnemyBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnPlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Components\AttackComponent.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Assets\Scripts\Components\EntityKillerComponent.cs" />
     <Compile Include="Assets\Scripts\Components\FireComponent.cs" />
     <Compile Include="Assets\Scripts\Components\HealthComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\KillOutofRenderComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveMouseComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveSinComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveTargetComponent.cs" />
@@ -80,11 +82,35 @@
     <Compile Include="Assets\Scripts\Components\SpawnPlayerComponent.cs" />
     <Compile Include="Assets\Scripts\Components\TriggerDestroyComponent.cs" />
     <Compile Include="Assets\Scripts\Components\UpdateHealthUIComponent.cs" />
+    <Compile Include="Assets\Scripts\Core\ConfigVars.cs" />
+    <Compile Include="Assets\Scripts\Core\GameDebug.cs" />
+    <Compile Include="Assets\Scripts\Core\GameStatistics.cs" />
+    <Compile Include="Assets\Scripts\Core\LevelManager.cs" />
+    <Compile Include="Assets\Scripts\Core\SimpleBundleManager.cs" />
+    <Compile Include="Assets\Scripts\Entity\GameWorld.cs" />
+    <Compile Include="Assets\Scripts\Entity\SceneEntity.cs" />
+    <Compile Include="Assets\Scripts\Main\ClientGameLoop.cs" />
+    <Compile Include="Assets\Scripts\Main\Game.cs" />
+    <Compile Include="Assets\Scripts\Main\GameConfiguration.cs" />
+    <Compile Include="Assets\Scripts\Main\GameNetworkEvents.cs" />
+    <Compile Include="Assets\Scripts\Main\PlayerSettings.cs" />
+    <Compile Include="Assets\Scripts\Main\ServerGameLoop.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\DataComponentSerializers.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\NetworkReader.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\NetworkWriter.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedComponent.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntity.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityCollection.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityFactory.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityModuleClient.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityModuleServer.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityRegistry.cs" />
     <Compile Include="Assets\Scripts\Systems\EntityKillerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\KillOutofRenderSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveMouseSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveTargetSystem.cs" />
@@ -93,6 +119,7 @@
     <Compile Include="Assets\Scripts\Systems\SpawnPlayerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\TriggerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateHealthUISystem.cs" />
+    <Compile Include="Assets\Scripts\Utils\WeakAssetReference.cs" />
     <Reference Include="Unity.Jobs">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Jobs.dll</HintPath>
     </Reference>
@@ -101,9 +128,6 @@
     </Reference>
     <Reference Include="Unity.Collections">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Physics">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
@@ -114,17 +138,11 @@
     <Reference Include="Unity.Rendering.Hybrid">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Rendering.Hybrid.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Physics.Hybrid">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.Hybrid.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Properties">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Properties.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Physics.Editor">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Properties.Reflection">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Properties.Reflection.dll</HintPath>
@@ -688,6 +706,10 @@
       <Project>{0FEBA913-E846-41D5-0C26-5E64F8C2C17C}</Project>
       <Name>Unity.Scenes.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Physics.csproj">
+      <Project>{7A0C9D81-109A-C43E-DDBA-2252D822C745}</Project>
+      <Name>Unity.Physics</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Extensions.csproj">
       <Project>{883A36DF-8CB4-979F-F6CD-8576D4669C47}</Project>
       <Name>Unity.Mathematics.Extensions</Name>
@@ -696,6 +718,10 @@
       <Project>{B110F3A6-6FB5-81B8-C12E-B368848A85FF}</Project>
       <Name>Unity.Mathematics.Extensions.Hybrid</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Physics.Hybrid.csproj">
+      <Project>{385A1794-92B4-38BD-489A-B731DB646A65}</Project>
+      <Name>Unity.Physics.Hybrid</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Entities.BuildUtils.csproj">
       <Project>{39BE974C-2076-8974-258C-5E2F45C72DDC}</Project>
       <Name>Unity.Entities.BuildUtils</Name>
@@ -703,6 +729,10 @@
     <ProjectReference Include="Unity.Entities.Hybrid.csproj">
       <Project>{F1EC6112-6356-910C-21FB-7C0243EEC9C5}</Project>
       <Name>Unity.Entities.Hybrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Physics.Editor.csproj">
+      <Project>{16B19B64-BECB-85CF-430C-E6601D33F878}</Project>
+      <Name>Unity.Physics.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Entities.csproj">
       <Project>{49E386F0-A903-0653-5A1C-BBB031F8B7DA}</Project>

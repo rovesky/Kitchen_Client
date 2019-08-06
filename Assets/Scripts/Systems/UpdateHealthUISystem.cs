@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
@@ -6,6 +7,7 @@ namespace Assets.Scripts.ECS
     {
         protected override void OnUpdate()
         {
+          //  Debug.Log($"UpdateHealthUISystem OnUpdate");
             Entities.WithAllReadOnly<UpdateHealthUI>().ForEach((Entity entity, ref Health health, ref Score score) =>
             {
                 GameManager.Instance.ChangeLife(health.Value);

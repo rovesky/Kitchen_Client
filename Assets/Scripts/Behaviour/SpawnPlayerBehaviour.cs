@@ -13,11 +13,25 @@ namespace Assets.Scripts.ECS
     
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
+
+            //var entities = conversionSystem.GetEntities(prefabs);
+            //foreach(var e in entities)
+            //{
+            //    Debug.Log($"SpawnPlayerBehaviour,prefabs {e.Index}");
+            //}
+
             dstManager.AddComponentData(entity, new SpawnPlayer()
             {
                 entity = conversionSystem.GetPrimaryEntity(prefabs),
                 isSpawned = false,
             });
+
+            
+
+            //if (dstManager.HasComponent<Transform>(entity))
+            //{
+            //    Debug.Log("SpawnPlayerBehaviour has Transform");
+            //}
         }
 
         public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)

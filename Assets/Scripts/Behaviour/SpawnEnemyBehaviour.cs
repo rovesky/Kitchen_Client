@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-  
 
     public class SpawnEnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs
     {
@@ -17,10 +16,13 @@ namespace Assets.Scripts.ECS
         public EnemyType enemyType = EnemyType.Normal;
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-        {
+        {      
+            var entityPrefabs = conversionSystem.GetPrimaryEntity(prefabs);
+           // ConvertToEntity.InjectOriginalComponents(dstManager, entityPrefabs, prefabs.transform);
+
             dstManager.AddComponentData<SpawnEnemy>(entity, new SpawnEnemy()
-            {
-                entity = conversionSystem.GetPrimaryEntity(prefabs),
+            {      
+                entity = entityPrefabs,
                 spawnIntervalMin = spawnIntervalMin,
                 spawnIntervalMax = spawnIntervalMax,
                 spawnTimer = spawnTimer,
@@ -33,5 +35,4 @@ namespace Assets.Scripts.ECS
             referencedPrefabs.Add(prefabs);
         }
     }
-   
 }

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\ProcessModel.cs" />
+    <Compile Include="Assets\Scripts\ReplicatedEntity\Editor\ReplicatedEntityEditor.cs" />
     <Reference Include="Unity.Jobs">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Jobs.dll</HintPath>
     </Reference>
@@ -71,9 +72,6 @@
     </Reference>
     <Reference Include="Unity.Collections">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Physics">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
@@ -84,17 +82,11 @@
     <Reference Include="Unity.Rendering.Hybrid">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Rendering.Hybrid.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Physics.Hybrid">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.Hybrid.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Properties">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Properties.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Physics.Editor">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Properties.Reflection">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Properties.Reflection.dll</HintPath>
@@ -692,6 +684,10 @@
       <Project>{0FEBA913-E846-41D5-0C26-5E64F8C2C17C}</Project>
       <Name>Unity.Scenes.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Physics.csproj">
+      <Project>{7A0C9D81-109A-C43E-DDBA-2252D822C745}</Project>
+      <Name>Unity.Physics</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Extensions.csproj">
       <Project>{883A36DF-8CB4-979F-F6CD-8576D4669C47}</Project>
       <Name>Unity.Mathematics.Extensions</Name>
@@ -700,6 +696,10 @@
       <Project>{B110F3A6-6FB5-81B8-C12E-B368848A85FF}</Project>
       <Name>Unity.Mathematics.Extensions.Hybrid</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Physics.Hybrid.csproj">
+      <Project>{385A1794-92B4-38BD-489A-B731DB646A65}</Project>
+      <Name>Unity.Physics.Hybrid</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Entities.BuildUtils.csproj">
       <Project>{39BE974C-2076-8974-258C-5E2F45C72DDC}</Project>
       <Name>Unity.Entities.BuildUtils</Name>
@@ -707,6 +707,10 @@
     <ProjectReference Include="Unity.Entities.Hybrid.csproj">
       <Project>{F1EC6112-6356-910C-21FB-7C0243EEC9C5}</Project>
       <Name>Unity.Entities.Hybrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Physics.Editor.csproj">
+      <Project>{16B19B64-BECB-85CF-430C-E6601D33F878}</Project>
+      <Name>Unity.Physics.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Entities.csproj">
       <Project>{49E386F0-A903-0653-5A1C-BBB031F8B7DA}</Project>

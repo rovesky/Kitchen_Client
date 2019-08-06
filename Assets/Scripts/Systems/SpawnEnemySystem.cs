@@ -14,6 +14,12 @@ namespace Assets.Scripts.ECS
         {
             var prefab = Resources.Load("Prefabs/EnemyRocket") as GameObject;
             rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);
+
+
+            //if (EntityManager.HasComponent<Renderer>(rocket))
+            //{
+            //    Debug.Log($"create enemy: {rocket},has Renderer!");
+            //}
         }
 
         protected override void OnUpdate()
@@ -29,8 +35,12 @@ namespace Assets.Scripts.ECS
                        return;
 
                    spawn.spawnTimer = Random.Range(spawn.spawnIntervalMin, spawn.spawnIntervalMax);
-
                    var e = PostUpdateCommands.Instantiate(spawn.entity);
+
+                   if (EntityManager.HasComponent<MeshRenderer>(spawn.entity))
+                   {
+                       Debug.Log($"create enemy: {spawn.entity},has Renderer!");
+                   }
 
                    Translation position = new Translation() { Value = gunTransform.Position };
                    Rotation rotation = new Rotation() { Value = Quaternion.identity };
@@ -42,6 +52,9 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
                    PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1, Direction = Direction.Down });
+
+                   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
+
                    
                    if (spawn.enemyType == EnemyType.Normal)
                    {

@@ -1,15 +1,12 @@
-﻿using System;
-using Unity.Burst;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Physics;
 using Unity.Physics.Systems;
-using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-   
+
     // This system applies an impulse to any dynamic that collides with a Repulsor.
     // A Repulsor is defined by a PhysicsShape with the `Raise Collision Events` flag ticked and a
     // CollisionEventImpulse behaviour added.

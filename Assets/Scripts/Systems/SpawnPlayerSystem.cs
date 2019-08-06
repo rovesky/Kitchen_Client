@@ -13,7 +13,22 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {
             var prefab = Resources.Load("Prefabs/Rocket") as GameObject;
-            rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);       
+            rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);
+            //  rocket = GameObjectConversionUtility.g(prefab, World.Active);
+
+           // ConvertToEntity.InjectOriginalComponents(World.Active, EntityManager, prefab.transform);
+            if (EntityManager.HasComponent<Transform>(rocket))
+            {
+                Debug.Log($"create player: {rocket},has Transform!");
+            }
+
+            //var components = prefab.GetComponents<Component>();
+
+            //for (var i = 0; i != components.Length; i++)
+            //{
+            //    var com = components[i];
+            //    Debug.Log($"rocket components:{com.GetType().Name}");
+            //}
         }
 
         protected override void OnUpdate()

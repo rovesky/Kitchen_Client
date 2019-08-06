@@ -37,7 +37,7 @@ namespace Unity.Entities
             }
         }
         
-        static void InjectOriginalComponents(EntityManager entityManager, Entity entity, Transform transform)
+        public  static void InjectOriginalComponents(EntityManager entityManager, Entity entity, Transform transform)
         {
             foreach (var com in transform.GetComponents<Component>())
             {
