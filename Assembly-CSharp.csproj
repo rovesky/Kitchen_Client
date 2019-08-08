@@ -88,11 +88,11 @@
     <Compile Include="Assets\Scripts\Core\LevelManager.cs" />
     <Compile Include="Assets\Scripts\Core\SimpleBundleManager.cs" />
     <Compile Include="Assets\Scripts\Entity\GameWorld.cs" />
-    <Compile Include="Assets\Scripts\Entity\SceneEntity.cs" />
     <Compile Include="Assets\Scripts\Main\ClientGameLoop.cs" />
     <Compile Include="Assets\Scripts\Main\Game.cs" />
     <Compile Include="Assets\Scripts\Main\GameConfiguration.cs" />
     <Compile Include="Assets\Scripts\Main\GameNetworkEvents.cs" />
+    <Compile Include="Assets\Scripts\Main\GameTime.cs" />
     <Compile Include="Assets\Scripts\Main\PlayerSettings.cs" />
     <Compile Include="Assets\Scripts\Main\ServerGameLoop.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />

@@ -1,14 +1,14 @@
-﻿using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
-using UnityEngine;
+﻿//using unityeditor;
+//using unityeditor.experimental.scenemanagement;
+//using unityengine;
 
-[CustomEditor(typeof(ReplicatedEntity))]
-public class ReplicatedEntityEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        var replicatedEntity = target as ReplicatedEntity;
-        GUILayout.Label("GUID:" + replicatedEntity.Value.assetGuid.GetGuidStr());
-    }
-}
+//[customeditor(typeof(replicatedentity))]
+//public class replicatedentityeditor : editor
+//{
+//    public override void oninspectorgui()
+//    {
+//        base.oninspectorgui();
+//        var replicatedentity = target as replicatedentity;
+//        guilayout.label("guid:" + replicatedentity.value.assetguid.getguidstr());
+//    }
+//}
