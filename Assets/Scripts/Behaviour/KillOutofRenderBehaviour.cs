@@ -8,14 +8,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    public class KillOutofRenderBehaviour : MonoBehaviour//, IConvertGameObjectToEntity
+    public class KillOutofRenderBehaviour : MonoBehaviour, IReceiveEntity
     {
         private Renderer m_renderer;
         private bool m_isActiv = false;
-        //  private Entity entity;
-        // private EntityManager dstManager;
-
-        public bool IsKill = false;
+        private Entity _entity = Entity.Null;
 
         private void OnEnable()
         {
@@ -51,13 +48,19 @@ namespace Assets.Scripts.ECS
 
         void Update()
         {
-            Debug.Log($"KillOutofRenderBehaviour Update {this.m_renderer.isVisible}");
-            if (m_isActiv && !this.m_renderer.isVisible)  // 如果移动到屏幕外
+            //Debug.Log($"KillOutofRenderBehaviour Update {this.m_renderer.isVisible}");
+            if (m_isActiv && !this.m_renderer.isVisible && _entity!= Entity.Null)  // 如果移动到屏幕外
             {
-                IsKill = true;
-                Debug.Log($"SetComponentData,KillOutofRender:{IsKill}");
+                World.Active.EntityManager.SetComponentData(_entity, new KillOutofRender() { IsRenderEnable = false });
+             
+              //  Debug.Log($"SetComponentData,KillOutofRender:{IsKill}");
                 //  dstManager.SetComponentData(entity, new KillOutofRender() { IsRenderEnable = false });
             }
+        }
+
+        public void SetReceivedEntity(Entity entity)
+        {
+            _entity = entity;
         }
 
         //public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)

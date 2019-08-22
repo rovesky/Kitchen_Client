@@ -8,7 +8,6 @@ namespace Assets.Scripts.ECS
     public struct SpawnPlayer : IComponentData
     {
         public Entity entity;
-        public bool isSpawned;
     }
 
 }

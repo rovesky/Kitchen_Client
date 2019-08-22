@@ -114,8 +114,6 @@
     <Compile Include="Assets\Scripts\Systems\EntityKillerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\InitEnemySystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\InitPlayerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\KillOutofRenderSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveMouseSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />

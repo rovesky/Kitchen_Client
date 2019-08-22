@@ -36,27 +36,23 @@ namespace Assets.Scripts.ECS
 
                    var go = Object.Instantiate(enemyPrefab);
                    var e = go.GetComponent<EntityTracker>().EntityToTrack;
-                   //   var e = PostUpdateCommands.Instantiate(spawn.entity);
+                  // var e = PostUpdateCommands.Instantiate(spawn.entity);
 
                    Translation position = new Translation() { Value = gunTransform.Position };
+                   Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
                    Debug.Log($"Spawn enemy on position:[{position.Value.x},{position.Value.y},{position.Value.z}]");
-                   Rotation rotation = new Rotation() { Value = Quaternion.identity };
+
 
                    PostUpdateCommands.SetComponent(e, position);
                    PostUpdateCommands.SetComponent(e, rotation);
-
-                  // PostUpdateCommands.AddComponent(e, position);
-                  // PostUpdateCommands.AddComponent(e, rotation);
 
                    PostUpdateCommands.AddComponent(e, new Enemy());
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
                    PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1, Direction = Direction.Down });
-
-                   //    PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
-                   PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 500 });
-
+                   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
+              
                    if (spawn.enemyType == EnemyType.Normal)
                    {
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 100 });

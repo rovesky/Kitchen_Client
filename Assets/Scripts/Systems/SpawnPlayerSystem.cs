@@ -8,50 +8,21 @@ namespace Assets.Scripts.ECS
     
     public class SpawnPlayerSystem : ComponentSystem
     {
-        private GameObject rocketPrefab;
-       // private GameObject playerPrefab;
         private Entity rocket;
 
         protected override void OnCreate()
         {
-            rocketPrefab = Resources.Load("Prefabs/Rocket") as GameObject;
-           // playerPrefab = Resources.Load("Prefabs/Player2") as GameObject;
-
-            //   ConvertToEntity.ConvertHierarchy(rocketPrefab);
-         //   rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(World.Active, rocketPrefab);
-            //   rocket = ConvertToEntity.ConvertAndInjectOriginal(rocketPrefab);
-
-             rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(rocketPrefab, World.Active);
-            //  rocket = GameObjectConversionUtility.g(prefab, World.Active);
-
-            // ConvertToEntity.InjectOriginalComponents(World.Active, EntityManager, prefab.transform);
-          
+            var rocketPrefab = Resources.Load("Prefabs/Rocket") as GameObject;
+            rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(rocketPrefab, World.Active);
         }
 
         protected override void OnUpdate()
         {
 
             Entities.ForEach(
-               (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnPlayer spawn) =>
+               (Entity entity,ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnPlayer spawn) =>
                {
-                   if (spawn.isSpawned)
-                       return;
-
-                   spawn.isSpawned = true;
-
-
-                  // var playerObject = Object.Instantiate(playerPrefab);
-
-                   //var gameObjectEntity = playerObject.GetComponent<GameObjectEntity>();
-                   //if (gameObjectEntity == null)
-                   //    GameObjectEntity.AddToEntityManager(EntityManager, playerObject);
-
-                   //var e = gameObjectEntity.Entity;
-
-                   //     var e = ConvertToEntity.ConvertAndInjectOriginal(playerObject);
-
-                   //     Object.Destroy(playerObject);
-
+                   //创建Player
                    var e = PostUpdateCommands.Instantiate(spawn.entity);
                    Translation position = new Translation() { Value = gunTransform.Position };
                    Rotation rotation = new Rotation() { Value = gunRotation.Value };
@@ -76,6 +47,9 @@ namespace Assets.Scripts.ECS
                        Speed = 5,
                        InputMask = 1 << LayerMask.NameToLayer("plane")
                    });
+
+                   //移除SpawnPlayer
+                   PostUpdateCommands.RemoveComponent(entity,typeof(SpawnPlayer));
                });
         }
     }
