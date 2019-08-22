@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if !NET_TINY
 using System.Collections.ObjectModel;
+#endif
 using System.Reflection;
 
 namespace Unity.Entities
@@ -348,7 +350,7 @@ namespace Unity.Entities
         {
             CheckGetOrCreateSystem();
 
-            return (T) GetExistingSystemInternal(typeof(T));
+            return (T)GetExistingSystemInternal(typeof(T));
         }
 
         public ComponentSystemBase GetExistingSystem(Type type)

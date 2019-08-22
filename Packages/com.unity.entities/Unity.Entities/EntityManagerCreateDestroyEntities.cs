@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
@@ -10,7 +11,7 @@ namespace Unity.Entities
         // ----------------------------------------------------------------------------------------------------------
         // PUBLIC
         // ----------------------------------------------------------------------------------------------------------
-        
+
         /// <summary>
         /// Creates an entity having the specified archetype.
         /// </summary>
@@ -29,7 +30,8 @@ namespace Unity.Entities
         {
             Entity entity;
             BeforeStructuralChange();
-            EntityManagerCreateDestroyEntitiesUtility.CreateEntities(archetype.Archetype, &entity, 1, EntityComponentStore, ManagedComponentStore);
+            EntityComponentStore->CreateEntities(archetype.Archetype, &entity, 1);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
             return entity;
         }
 
@@ -56,12 +58,30 @@ namespace Unity.Entities
         {
             BeforeStructuralChange();
             Entity entity;
-            EntityManagerCreateDestroyEntitiesUtility.CreateEntities(
-                GetEntityOnlyArchetype().Archetype, &entity, 1,
-                EntityComponentStore, ManagedComponentStore);
+            EntityComponentStore->CreateEntities(GetEntityOnlyArchetype().Archetype, &entity, 1);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
             return entity;
         }
         
+        /// <summary>
+        /// Creates a set of entities of the specified archetype.
+        /// </summary>
+        /// <remarks>Fills the [NativeArray](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.html)
+        /// object assigned to the `entities` parameter with the Entity objects of the created entities. Each entity
+        /// has the components specified by the <see cref="EntityArchetype"/> object assigned
+        /// to the `archetype` parameter. The EntityManager adds these entities to the <see cref="World"/> entity list. Use the
+        /// Entity objects in the array for further processing, such as setting the component values.</remarks>
+        /// <param name="archetype">The archetype defining the structure for the new entities.</param>
+        /// <param name="entities">An array to hold the Entity objects needed to access the new entities.
+        /// The length of the array determines how many entities are created.</param>
+        public void CreateEntity(EntityArchetype archetype, NativeArray<Entity> entities)
+        {
+            BeforeStructuralChange();
+            EntityComponentStore->CreateEntities(archetype.Archetype, (Entity*) entities.GetUnsafePtr(),
+                entities.Length);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
+        }
+
         /// <summary>
         /// Destroy all entities having a common set of component types.
         /// </summary>
@@ -118,7 +138,7 @@ namespace Unity.Entities
         {
             DestroyEntityInternal(&entity, 1);
         }
-        
+
         /// <summary>
         /// Clones an entity.
         /// </summary>
@@ -163,25 +183,6 @@ namespace Unity.Entities
         {
             InstantiateInternal(srcEntity, (Entity*) outputEntities.GetUnsafePtr(), outputEntities.Length);
         }
-        
-        /// <summary>
-        /// Creates a set of entities of the specified archetype.
-        /// </summary>
-        /// <remarks>Fills the [NativeArray](https://docs.unity3d.com/ScriptReference/Unity.Collections.NativeArray_1.html)
-        /// object assigned to the `entities` parameter with the Entity objects of the created entities. Each entity
-        /// has the components specified by the <see cref="EntityArchetype"/> object assigned
-        /// to the `archetype` parameter. The EntityManager adds these entities to the <see cref="World"/> entity list. Use the
-        /// Entity objects in the array for further processing, such as setting the component values.</remarks>
-        /// <param name="archetype">The archetype defining the structure for the new entities.</param>
-        /// <param name="entities">An array to hold the Entity objects needed to access the new entities.
-        /// The length of the array determines how many entities are created.</param>
-        public void CreateEntity(EntityArchetype archetype, NativeArray<Entity> entities)
-        {
-            BeforeStructuralChange();
-            EntityManagerCreateDestroyEntitiesUtility.CreateEntities(archetype.Archetype,
-                (Entity*) entities.GetUnsafePtr(), entities.Length,
-                EntityComponentStore, ManagedComponentStore);
-        }
 
         /// <summary>
         /// Creates a set of chunks containing the specified number of entities having the specified archetype.
@@ -198,14 +199,14 @@ namespace Unity.Entities
         /// <param name="chunks">An empty array to receive the created chunks.</param>
         /// <param name="entityCount">The number of entities to create.</param>
         public void CreateChunk(EntityArchetype archetype, NativeArray<ArchetypeChunk> chunks, int entityCount)
-        {;
+        {
             BeforeStructuralChange();
-            
-            EntityManagerCreateDestroyEntitiesUtility.CreateChunks(archetype.Archetype,
-                (ArchetypeChunk*) chunks.GetUnsafePtr(), entityCount,
-                EntityComponentStore, ManagedComponentStore);
+
+            EntityComponentStore->CreateChunks(archetype.Archetype, (ArchetypeChunk*) chunks.GetUnsafePtr(),
+                entityCount);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
         }
-        
+
 
         // ----------------------------------------------------------------------------------------------------------
         // INTERNAL
@@ -215,28 +216,43 @@ namespace Unity.Entities
         {
             BeforeStructuralChange();
             EntityComponentStore->AssertCanDestroy(entities, count);
-            EntityManagerCreateDestroyEntitiesUtility.DestroyEntities(entities, count, EntityComponentStore, ManagedComponentStore);
+            EntityComponentStore->DestroyEntities(entities, count);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
         }
-        
+
         internal void InstantiateInternal(Entity srcEntity, Entity* outputEntities, int count)
         {
             BeforeStructuralChange();
             EntityComponentStore->AssertEntitiesExist(&srcEntity, 1);
-            EntityManagerCreateDestroyEntitiesUtility.InstantiateEntities(srcEntity, outputEntities, count,
-                EntityComponentStore, ManagedComponentStore);
+            EntityComponentStore->InstantiateEntities(srcEntity, outputEntities, count);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
         }
- 
-        internal void DestroyEntity(MatchingArchetypeList archetypeList, EntityQueryFilter filter)
+
+        [BurstCompile]
+        struct DestroyChunks : IJob
+        {
+            [NativeDisableUnsafePtrRestriction]
+            public EntityComponentStore* EntityComponentStore;
+            public NativeArray<ArchetypeChunk> Chunks;
+
+            public void Execute()
+            {
+                EntityComponentStore->DestroyEntities(Chunks); 
+            }
+        }
+
+        internal void DestroyEntity(UnsafeMatchingArchetypePtrList archetypeList, EntityQueryFilter filter)
         {
             Profiler.BeginSample("DestroyEntity(EntityQuery entityQueryFilter)");
 
             Profiler.BeginSample("GetAllMatchingChunks");
             var jobHandle = new JobHandle();
+            // @TODO: Missing EntityQuery.SyncFilter
             using (var chunks = ComponentChunkIterator.CreateArchetypeChunkArray(archetypeList, Allocator.TempJob, out jobHandle, ref filter))
             {
                 jobHandle.Complete();
                 Profiler.EndSample();
-                
+
                 if (chunks.Length != 0)
                 {
                     BeforeStructuralChange();
@@ -246,8 +262,13 @@ namespace Unity.Entities
                     EntityComponentStore->AssertWillDestroyAllInLinkedEntityGroup(chunks, GetArchetypeChunkBufferType<LinkedEntityGroup>(false));
                     Profiler.EndSample();
 
+                    // #todo @macton DestroyEntities should support IJobChunk. But internal writes need to be handled.
                     Profiler.BeginSample("DeleteChunks");
-                    EntityManagerCreateDestroyEntitiesUtility.DestroyEntities(chunks, EntityComponentStore, ManagedComponentStore);
+                    new DestroyChunks { EntityComponentStore = EntityComponentStore, Chunks = chunks }.Run();
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Managed Playback");
+                    ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
                     Profiler.EndSample();
                 }
             }

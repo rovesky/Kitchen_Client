@@ -11,7 +11,7 @@
 //    public EntityManager entityManager;
 //    public Entity entity;
 //    public IEntityReferenceSerializer refSerializer;
-//    public int tick;
+//    public int Tick;
 //}
 
 //public interface IPredictedDataBase

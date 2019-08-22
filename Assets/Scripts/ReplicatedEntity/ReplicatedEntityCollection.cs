@@ -22,21 +22,21 @@
         
 //#if UNITY_EDITOR     
         
-//        public bool VerifyPrediction(int sampleIndex, int tick)
+//        public bool VerifyPrediction(int sampleIndex, int Tick)
 //        {
 //            foreach (var predictedDataHandler in predictedArray)
 //            {
-//                if (!predictedDataHandler.VerifyPrediction(sampleIndex, tick))
+//                if (!predictedDataHandler.VerifyPrediction(sampleIndex, Tick))
 //                    return false;
 //            }
 //            return true;
 //        }
 
-//        public bool HasState(int tick)
+//        public bool HasState(int Tick)
 //        {
 //            foreach (var predictedDataHandler in predictedArray)
 //            {
-//                if (predictedDataHandler.HasServerState(tick))
+//                if (predictedDataHandler.HasServerState(Tick))
 //                    return true;
 //            }
 //            return false;
@@ -225,7 +225,7 @@
 //    {
 //        var data = m_replicatedData[id];
         
-//        GameDebug.Assert(data.lastServerUpdate < serverTick, "Failed to apply snapshot. Wrong tick order. entityId:{0} snapshot tick:{1} last server tick:{2}", id, serverTick, data.lastServerUpdate);
+//        GameDebug.Assert(data.lastServerUpdate < serverTick, "Failed to apply snapshot. Wrong Tick order. entityId:{0} snapshot Tick:{1} last server Tick:{2}", id, serverTick, data.lastServerUpdate);
 //        data.lastServerUpdate = serverTick;
 
 //        GameDebug.Assert(data.serializableArray != null, "Failed to apply snapshot. Serializablearray is null");
@@ -282,7 +282,7 @@
 //        }
 //    }
     
-//    public void Interpolate(GameTime time)
+//    public void Interpolate(GameTick time)
 //    {
 //        for (int i = 0; i < m_replicatedData.Count; i++)
 //        {
@@ -445,14 +445,14 @@
 //    }
 
     
-//    public void FinalizedStateHistory(int tick, int lastServerTick, ref UserCommand command)
+//    public void FinalizedStateHistory(int Tick, int lastServerTick, ref UserCommand command)
 //    {
 //        if (!SampleHistory)
 //            return;
 
 //        var sampleIndex = (historyFirstIndex + historyCount) % hitstoryTicks.Length;
 
-//        hitstoryTicks[sampleIndex] = tick;
+//        hitstoryTicks[sampleIndex] = Tick;
 //        historyCommands[sampleIndex] = command;
 //        hitstoryLastServerTick[sampleIndex] = lastServerTick;
 
@@ -467,11 +467,11 @@
 //        return (historyFirstIndex + historyCount) % hitstoryTicks.Length;
 //    }
 
-//    public int FindSampleIndexForTick(int tick)
+//    public int FindSampleIndexForTick(int Tick)
 //    {
 //        for (int i = 0; i < hitstoryTicks.Length; i++)
 //        {
-//            if (hitstoryTicks[i] == tick)
+//            if (hitstoryTicks[i] == Tick)
 //                return i;
 //        }
 

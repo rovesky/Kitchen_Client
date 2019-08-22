@@ -69,11 +69,11 @@
 //            var world = GameWorld.s_Worlds[0];
 
 //            // Number of ticks in world since last frame.
-//            ticks = world.worldTime.tick - m_LastWorldTick;
+//            ticks = world.WorldTick.Tick - m_LastWorldTick;
 //            int l = Time.frameCount % m_TicksPerFrame[0].Length;
-//            m_TicksPerFrame[0][l] = 1000.0f * world.worldTime.tickInterval * ticks;
-//            m_LastWorldTick = world.worldTime.tick;
-//            double lastTickTime = world.nextTickTime - world.worldTime.tickInterval;
+//            m_TicksPerFrame[0][l] = 1000.0f * world.WorldTick.TickInterval * ticks;
+//            m_LastWorldTick = world.WorldTick.Tick;
+//            double lastTickTime = world.nextTickTime - world.WorldTick.TickInterval;
 //            m_TicksPerFrame[1][l] = (float)(1000.0 * (Game.frameTime - lastTickTime));
 //        }
 
@@ -197,7 +197,7 @@
 //        if (GameWorld.s_Worlds.Count > 0)
 //        {
 //            var world = GameWorld.s_Worlds[0];
-//            DebugOverlay.Write(0, y + 8, "Tick: {0:##.#}", 1000.0f * world.worldTime.tickInterval);
+//            DebugOverlay.Write(0, y + 8, "Tick: {0:##.#}", 1000.0f * world.WorldTick.TickInterval);
 //        }
 //    }
 

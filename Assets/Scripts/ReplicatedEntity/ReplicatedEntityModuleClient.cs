@@ -35,7 +35,7 @@
 //    public void ProcessEntitySpawn(int servertick, int id, ushort typeId)
 //    {
 //        if (m_showInfo.IntValue > 0)
-//            GameDebug.Log("ProcessEntitySpawns. Server tick:" + servertick + " id:" + id + " typeid:" + typeId);
+//            GameDebug.Log("ProcessEntitySpawns. Server Tick:" + servertick + " id:" + id + " typeid:" + typeId);
         
 //        // If this is a replicated entity from the scene it only needs to be registered (not instantiated)
 //        if(id < m_world.SceneEntities.Count)
@@ -111,7 +111,7 @@
 //    public void ProcessEntityDespawns(int serverTime, List<int> despawns)
 //    {
 //        if (m_showInfo.IntValue > 0)
-//            GameDebug.Log("ProcessEntityDespawns. Server tick:" + serverTime + " ids:" + string.Join(",", despawns));
+//            GameDebug.Log("ProcessEntityDespawns. Server Tick:" + serverTime + " ids:" + string.Join(",", despawns));
 
 //        foreach(var id in despawns)
 //        {
@@ -133,7 +133,7 @@
 //        m_entityCollection.Rollback();
 //    }
     
-//    public void Interpolate(GameTime time)
+//    public void Interpolate(GameTick time)
 //    {
 //        m_entityCollection.Interpolate(time);
 //    }
@@ -186,14 +186,14 @@
 //        m_entityCollection.StorePredictedState(predictedTick, finalTick);
 //    }
 
-//    public void FinalizedStateHistory(int tick, int lastServerTick, ref UserCommand command)
+//    public void FinalizedStateHistory(int Tick, int lastServerTick, ref UserCommand command)
 //    {
-//        m_entityCollection.FinalizedStateHistory(tick, lastServerTick, ref command);
+//        m_entityCollection.FinalizedStateHistory(Tick, lastServerTick, ref command);
 //    }
 
-//    public int FindSampleIndexForTick(int tick)
+//    public int FindSampleIndexForTick(int Tick)
 //    {
-//        return m_entityCollection.FindSampleIndexForTick(tick);
+//        return m_entityCollection.FindSampleIndexForTick(Tick);
 //    }
 
 //    public bool IsPredicted(int entityIndex)

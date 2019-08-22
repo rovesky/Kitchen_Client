@@ -55,30 +55,30 @@
 //public interface IReplicatedSerializer
 //{
 //    void Serialize(ref NetworkWriter writer);
-//    void Deserialize(ref NetworkReader reader, int tick);
+//    void Deserialize(ref NetworkReader reader, int Tick);
 //}
 
 //public interface IPredictedSerializer
 //{
 //    void Serialize(ref NetworkWriter writer);
-//    void Deserialize(ref NetworkReader reader, int tick);
+//    void Deserialize(ref NetworkReader reader, int Tick);
 //    void Rollback();
         
 //#if UNITY_EDITOR
 //    Entity GetEntity();
-//    bool HasServerState(int tick);
-//    object GetServerState(int tick);
+//    bool HasServerState(int Tick);
+//    object GetServerState(int Tick);
 //    void StorePredictedState(int sampleIndex, int predictionIndex);
 //    object GetPredictedState(int sampleIndex, int predictionIndex);
-//    bool VerifyPrediction(int sampleIndex, int tick);
+//    bool VerifyPrediction(int sampleIndex, int Tick);
 //#endif
 //}
 
 //public interface IInterpolatedSerializer 
 //{
 //    void Serialize(ref NetworkWriter writer);
-//    void Deserialize(ref NetworkReader reader, int tick);
-//    void Interpolate(GameTime time);
+//    void Deserialize(ref NetworkReader reader, int Tick);
+//    void Interpolate(GameTick time);
 //}
 
 //    class ReplicatedComponentSerializer<T> : IReplicatedSerializer 
@@ -100,10 +100,10 @@
 //             state.Serialize(ref context, ref writer);
 //         }
          
-//         public void Deserialize(ref NetworkReader reader, int tick)
+//         public void Deserialize(ref NetworkReader reader, int Tick)
 //         {
 //             var state = context.entityManager.GetComponentData<T>(context.entity);
-//             context.tick = tick;
+//             context.Tick = Tick;
 //             state.Deserialize(ref context, ref reader);
 //             context.entityManager.SetComponentData(context.entity, state);
 //         }
@@ -145,17 +145,17 @@
 //            state.Serialize(ref context, ref writer);
 //        }
     
-//        public void Deserialize(ref NetworkReader reader, int tick)
+//        public void Deserialize(ref NetworkReader reader, int Tick)
 //        {
-//            context.tick = tick;
+//            context.Tick = Tick;
 //            m_lastServerState.Deserialize(ref context, ref reader);
             
 //    #if UNITY_EDITOR
 //            if (ReplicatedEntityCollection.SampleHistory)
 //            {
-//                var index = serverStateTicks.GetIndex((uint)tick);
+//                var index = serverStateTicks.GetIndex((uint)Tick);
 //                if(index == -1)                
-//                    index = serverStateTicks.Register((uint)tick);
+//                    index = serverStateTicks.Register((uint)Tick);
 //                serverStates[index] = m_lastServerState;
 //            }
 //    #endif          
@@ -174,18 +174,18 @@
 //            return context.entity;
 //        }
     
-//        public object GetServerState(int tick)
+//        public object GetServerState(int Tick)
 //        {
-//            var index = serverStateTicks.GetIndex((uint)tick);
+//            var index = serverStateTicks.GetIndex((uint)Tick);
 //            if (index == -1)
 //                return null;
     
 //            return serverStates[index];
 //        }
     
-//        public bool HasServerState(int tick)
+//        public bool HasServerState(int Tick)
 //        {
-//            var index = serverStateTicks.GetIndex((uint)tick);
+//            var index = serverStateTicks.GetIndex((uint)Tick);
 //            return index != -1;
 //        }
     
@@ -212,9 +212,9 @@
 //            return predictedStates[index];
 //        }
     
-//        public bool VerifyPrediction(int sampleIndex, int tick)
+//        public bool VerifyPrediction(int sampleIndex, int Tick)
 //        {
-//            var serverIndex = serverStateTicks.GetIndex((uint)tick);
+//            var serverIndex = serverStateTicks.GetIndex((uint)Tick);
 //            if (serverIndex == -1)
 //                return true;
     
@@ -245,15 +245,15 @@
 //            state.Serialize(ref context, ref writer);
 //        }
     
-//        public void Deserialize(ref NetworkReader reader, int tick)
+//        public void Deserialize(ref NetworkReader reader, int Tick)
 //        {
-//            context.tick = tick;
+//            context.Tick = Tick;
 //            var state = new T();
 //            state.Deserialize(ref context, ref reader);
-//            stateHistory.Add(tick, state);
+//            stateHistory.Add(Tick, state);
 //        }
     
-//        public void Interpolate(GameTime interpTime)
+//        public void Interpolate(GameTick interpTime)
 //        {
     
 //            T state = new T();
@@ -262,7 +262,7 @@
 //            {
 //                int lowIndex = 0, highIndex = 0;
 //                float interpVal = 0;
-//                var interpValid = stateHistory.GetStates(interpTime.tick, interpTime.TickDurationAsFraction, ref lowIndex, ref highIndex, ref interpVal);
+//                var interpValid = stateHistory.GetStates(interpTime.Tick, interpTime.TickDurationAsFraction, ref lowIndex, ref highIndex, ref interpVal);
                 
 //                if (interpValid)
 //                {

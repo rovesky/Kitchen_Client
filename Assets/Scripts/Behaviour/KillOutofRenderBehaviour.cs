@@ -12,21 +12,25 @@ namespace Assets.Scripts.ECS
     {
         private Renderer m_renderer;
         private bool m_isActiv = false;
-        private Entity entity;
-        private EntityManager dstManager;
+        //  private Entity entity;
+        // private EntityManager dstManager;
+
+        public bool IsKill = false;
 
         private void OnEnable()
         {
-            Debug.Log($"KillOutofRenderBehaviour OnEnable");
+           Debug.Log($"KillOutofRenderBehaviour OnEnable");
         }
 
         void Start()
         {
-            Debug.Log($"KillOutofRenderBehaviour start");
-            m_renderer = this.GetComponent<Renderer>(); // 获得模型渲染组件
+           
+            m_renderer = this.GetComponent<MeshRenderer>(); // 获得模型渲染组件
+
+            Debug.Log($"KillOutofRenderBehaviour start begin{m_renderer}");
             if (m_renderer == null)
             {
-                var rs = this.GetComponentsInChildren<Renderer>();
+                var rs = this.GetComponentsInChildren<MeshRenderer>();
                 foreach (var render in rs)
                 {
                     if (!render.name.StartsWith("col"))
@@ -36,6 +40,7 @@ namespace Assets.Scripts.ECS
                     }
                 }
             }
+            Debug.Log($"KillOutofRenderBehaviour start end{m_renderer}");
         }
 
         void OnBecameVisible()  // 当模型进入屏幕
@@ -46,24 +51,25 @@ namespace Assets.Scripts.ECS
 
         void Update()
         {
-            Debug.Log($"KillOutofRenderBehaviour Update");
+            Debug.Log($"KillOutofRenderBehaviour Update {this.m_renderer.isVisible}");
             if (m_isActiv && !this.m_renderer.isVisible)  // 如果移动到屏幕外
             {
-                Debug.Log($"SetComponentData,KillOutofRender:{entity.Index}");
-                dstManager.SetComponentData(entity, new KillOutofRender() { IsRenderEnable = false });
+                IsKill = true;
+                Debug.Log($"SetComponentData,KillOutofRender:{IsKill}");
+                //  dstManager.SetComponentData(entity, new KillOutofRender() { IsRenderEnable = false });
             }
         }
 
-        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-        {
-            Debug.Log($"KillOutofRenderBehaviour Convert");
-            this.entity = entity;
-            this.dstManager = dstManager;
+        //public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+        //{
+        //    Debug.Log($"KillOutofRenderBehaviour Convert");
+        //    this.entity = entity;
+        //    this.dstManager = dstManager;
 
-            dstManager.AddComponentData<KillOutofRender>(entity, new KillOutofRender()
-            {
-                IsRenderEnable = true,
-            });
-        }
+        //    dstManager.AddComponentData<KillOutofRender>(entity, new KillOutofRender()
+        //    {
+        //        IsRenderEnable = true,
+        //    });
+        //}
     }
 }

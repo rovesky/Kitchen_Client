@@ -9,17 +9,14 @@ namespace Assets.Scripts.ECS
     {
 
         private Entity rocket;
+        private GameObject enemyPrefab;
 
         protected override void OnCreate()
         {
-            var prefab = Resources.Load("Prefabs/EnemyRocket") as GameObject;
+            var prefab = Resources.Load("Prefabs/EnemyRocket") as GameObject;       
             rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);
 
-
-            //if (EntityManager.HasComponent<Renderer>(rocket))
-            //{
-            //    Debug.Log($"create enemy: {rocket},has Renderer!");
-            //}
+            enemyPrefab = Resources.Load("Prefabs/Enemy1") as GameObject;
         }
 
         protected override void OnUpdate()
@@ -27,6 +24,7 @@ namespace Assets.Scripts.ECS
             Entities.ForEach(
                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnEnemy spawn) =>
                {
+
                    if (spawn.entity == null)
                        return;
 
@@ -35,34 +33,37 @@ namespace Assets.Scripts.ECS
                        return;
 
                    spawn.spawnTimer = Random.Range(spawn.spawnIntervalMin, spawn.spawnIntervalMax);
-                   var e = PostUpdateCommands.Instantiate(spawn.entity);
 
-                   if (EntityManager.HasComponent<MeshRenderer>(spawn.entity))
-                   {
-                       Debug.Log($"create enemy: {spawn.entity},has Renderer!");
-                   }
+                   var go = Object.Instantiate(enemyPrefab);
+                   var e = go.GetComponent<EntityTracker>().EntityToTrack;
+                   //   var e = PostUpdateCommands.Instantiate(spawn.entity);
 
                    Translation position = new Translation() { Value = gunTransform.Position };
+
+                   Debug.Log($"Spawn enemy on position:[{position.Value.x},{position.Value.y},{position.Value.z}]");
                    Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
                    PostUpdateCommands.SetComponent(e, position);
                    PostUpdateCommands.SetComponent(e, rotation);
+
+                  // PostUpdateCommands.AddComponent(e, position);
+                  // PostUpdateCommands.AddComponent(e, rotation);
 
                    PostUpdateCommands.AddComponent(e, new Enemy());
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
                    PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1, Direction = Direction.Down });
 
-                   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
+                   //    PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
+                   PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 500 });
 
-                   
                    if (spawn.enemyType == EnemyType.Normal)
                    {
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 100 });
-                       PostUpdateCommands.AddComponent(e, new MoveSin() );
-                  
+                       PostUpdateCommands.AddComponent(e, new MoveSin());
+
                    }
-                   else if(spawn.enemyType == EnemyType.Super)
+                   else if (spawn.enemyType == EnemyType.Super)
                    {
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 500 });
                        PostUpdateCommands.AddComponent(e, new FireRocket()

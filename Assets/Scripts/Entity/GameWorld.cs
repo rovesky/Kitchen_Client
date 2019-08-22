@@ -46,7 +46,10 @@ namespace FootStone.ECS
         // TODO (petera) this is kind of ugly. But very useful to look at worlds from outside for stats purposes...
         public static List<GameWorld> s_Worlds = new List<GameWorld>();
 
-        public GameTime worldTime;
+        public GameTick WorldTick {
+            get => _worldTick;
+            set => _worldTick = value; 
+        }
 
         public int lastServerTick;
 
@@ -78,11 +81,11 @@ namespace FootStone.ECS
             GameDebug.Assert(World.Active != null, "There is no active world");
             m_ECSWorld = World.Active;
 
-            m_EntityManager = m_ECSWorld.GetOrCreateSystem<EntityManager>();
+            m_EntityManager = m_ECSWorld.EntityManager;
 
             GameDebug.Assert(m_EntityManager.IsCreated);
 
-            worldTime.tickRate = 60;
+            _worldTick.TickRate = 60;
 
             nextTickTime = Game.frameTime;
 
@@ -311,6 +314,7 @@ namespace FootStone.ECS
         static ConfigVar gameobjectHierarchy;
 
         float m_frameDuration;
+        private GameTick _worldTick;
     }
 
 }

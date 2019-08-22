@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
 namespace Unity.Entities
@@ -68,7 +69,8 @@ namespace Unity.Entities
 
             ComponentJobSafetyManager->CompleteReadAndWriteDependency(typeIndex);
 
-            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex, EntityComponentStore->GlobalSystemVersion);
+            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex,
+                EntityComponentStore->GlobalSystemVersion);
             UnsafeUtility.CopyStructureToPtr(ref componentData, ptr);
         }
 
@@ -144,7 +146,11 @@ namespace Unity.Entities
         public T GetComponentObject<T>(Entity entity)
         {
             var componentType = ComponentType.ReadWrite<T>();
-
+            return GetComponentObject<T>(entity, componentType);
+        }
+        
+        public T GetComponentObject<T>(Entity entity, ComponentType componentType)
+        {
             EntityComponentStore->AssertEntityHasComponent(entity, componentType.TypeIndex);
 
             Chunk* chunk;
@@ -152,7 +158,7 @@ namespace Unity.Entities
             EntityComponentStore->GetChunk(entity, out chunk, out chunkIndex);
             return (T) ManagedComponentStore.GetManagedObject(chunk, componentType, chunkIndex);
         }
-        
+
         /// <summary>
         /// Sets the shared component of an entity.
         /// </summary>
@@ -177,9 +183,40 @@ namespace Unity.Entities
             EntityComponentStore->AssertEntityHasComponent(entity, typeIndex);
 
             var newSharedComponentDataIndex = m_ManagedComponentStore.InsertSharedComponent(componentData);
-            EntityManagerChangeArchetypeUtility.SetSharedComponentDataIndex(entity, typeIndex, newSharedComponentDataIndex,
-                EntityComponentStore, ManagedComponentStore);
-            m_ManagedComponentStore.RemoveReference(newSharedComponentDataIndex);
+            EntityComponentStore->SetSharedComponentDataIndex(entity, typeIndex, newSharedComponentDataIndex);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
+            ManagedComponentStore.RemoveReference(newSharedComponentDataIndex);
+        }
+
+        /// <summary>
+        /// Sets the shared component of all entities in the query.
+        /// </summary>
+        /// <remarks>
+        /// The component data stays in the same chunk, the internal shared component data indices will be adjusted.
+        ///
+        /// **Important:** This function creates a sync point, which means that the EntityManager waits for all
+        /// currently running Jobs to complete before setting the component and no additional Jobs can start before
+        /// the function is finished. A sync point can cause a drop in performance because the ECS framework may not
+        /// be able to make use of the processing power of all available cores.
+        /// </remarks>
+        /// <param name="entity">The entity</param>
+        /// <param name="componentData">A shared component object containing the values to set.</param>
+        /// <typeparam name="T">The shared component type.</typeparam>
+        public void SetSharedComponentData<T>(EntityQuery query, T componentData) where T : struct, ISharedComponentData
+        {
+            using (var chunks = query.CreateArchetypeChunkArray(Allocator.TempJob))
+            {
+                if (chunks.Length == 0)
+                    return;
+
+                BeforeStructuralChange();
+
+                var type = ComponentType.ReadWrite<T>();
+                RemoveComponent(chunks, type);
+
+                int sharedComponentIndex = ManagedComponentStore.InsertSharedComponent(componentData);
+                AddSharedComponentData(chunks, sharedComponentIndex, type);
+            }
         }
         
         /// <summary>
@@ -195,6 +232,14 @@ namespace Unity.Entities
 
             var sharedComponentIndex = EntityComponentStore->GetSharedComponentDataIndex(entity, typeIndex);
             return m_ManagedComponentStore.GetSharedComponentData<T>(sharedComponentIndex);
+        }
+
+        public int GetSharedComponentDataIndex<T>(Entity entity) where T : struct, ISharedComponentData
+        {
+            var typeIndex = TypeManager.GetTypeIndex<T>();
+            EntityComponentStore->AssertEntityHasComponent(entity, typeIndex);
+
+            return EntityComponentStore->GetSharedComponentDataIndex(entity, typeIndex);
         }
 
         /// <summary>
@@ -253,8 +298,8 @@ namespace Unity.Entities
             where T : struct, ISharedComponentData
         {
             m_ManagedComponentStore.GetAllUniqueSharedComponents(sharedComponentValues, sharedComponentIndices);
-        }        
-        
+        }
+
         /// <summary>
         /// Gets the dynamic buffer of an entity.
         /// </summary>
@@ -276,7 +321,8 @@ namespace Unity.Entities
             ComponentJobSafetyManager->CompleteReadAndWriteDependency(typeIndex);
 
             BufferHeader* header =
-                (BufferHeader*) EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex, EntityComponentStore->GlobalSystemVersion);
+                (BufferHeader*) EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex,
+                    EntityComponentStore->GlobalSystemVersion);
 
             int internalCapacity = TypeManager.GetTypeInfo(typeIndex).BufferCapacity;
 
@@ -286,8 +332,8 @@ namespace Unity.Entities
 #else
             return new DynamicBuffer<T>(header, internalCapacity);
 #endif
-        }        
-        
+        }
+
         /// <summary>
         /// Swaps the components of two entities.
         /// </summary>
@@ -311,7 +357,7 @@ namespace Unity.Entities
             ChunkDataUtility.SwapComponents(leftChunk.m_Chunk, leftIndex, rightChunk.m_Chunk, rightIndex, 1,
                 GlobalSystemVersion, GlobalSystemVersion);
         }
-        
+
         /// <summary>
         /// Gets the chunk in which the specified entity is stored.
         /// </summary>
@@ -334,18 +380,21 @@ namespace Unity.Entities
             var archetype = EntityComponentStore->GetArchetype(entity);
             return archetype->TypesCount - 1;
         }
-        
+
         // ----------------------------------------------------------------------------------------------------------
         // INTERNAL
         // ----------------------------------------------------------------------------------------------------------
-        
-        internal void SetSharedComponentDataBoxed(Entity entity, int typeIndex, object componentData)
+
+        internal void SetSharedComponentDataBoxedDefaultMustBeNull(Entity entity, int typeIndex, object componentData)
         {
-            var hashCode = TypeManager.GetHashCode(componentData, typeIndex);
-            SetSharedComponentDataBoxed(entity, typeIndex, hashCode, componentData);
+            var hashCode = 0;
+            if (componentData != null)
+                hashCode = TypeManager.GetHashCode(componentData, typeIndex);
+            
+            SetSharedComponentDataBoxedDefaultMustBeNull(entity, typeIndex, hashCode, componentData);
         }
 
-        internal void SetSharedComponentDataBoxed(Entity entity, int typeIndex, int hashCode, object componentData)
+        internal void SetSharedComponentDataBoxedDefaultMustBeNull(Entity entity, int typeIndex, int hashCode, object componentData)
         {
             BeforeStructuralChange();
 
@@ -356,13 +405,11 @@ namespace Unity.Entities
                 newSharedComponentDataIndex = m_ManagedComponentStore.InsertSharedComponentAssumeNonDefault(typeIndex,
                     hashCode, componentData);
 
-            EntityManagerChangeArchetypeUtility.SetSharedComponentDataIndex(entity, typeIndex,
-                newSharedComponentDataIndex,
-                EntityComponentStore, ManagedComponentStore);
-            
-            m_ManagedComponentStore.RemoveReference(newSharedComponentDataIndex);
+            EntityComponentStore->SetSharedComponentDataIndex(entity, typeIndex, newSharedComponentDataIndex);
+            ManagedComponentStore.Playback(ref EntityComponentStore->ManagedChangesTracker);
+            ManagedComponentStore.RemoveReference(newSharedComponentDataIndex);
         }
-        
+
         internal void SetComponentObject(Entity entity, ComponentType componentType, object componentObject)
         {
             EntityComponentStore->AssertEntityHasComponent(entity, componentType.TypeIndex);
@@ -372,7 +419,7 @@ namespace Unity.Entities
             EntityComponentStore->GetChunk(entity, out chunk, out chunkIndex);
             ManagedComponentStore.SetManagedObject(chunk, componentType, chunkIndex, componentObject);
         }
-        
+
         internal ComponentDataFromEntity<T> GetComponentDataFromEntity<T>(bool isReadOnly = false)
             where T : struct, IComponentData
         {
@@ -408,7 +455,7 @@ namespace Unity.Entities
             return new BufferFromEntity<T>(typeIndex, EntityComponentStore, isReadOnly);
 #endif
         }
-        
+
         internal void SetComponentDataRaw(Entity entity, int typeIndex, void* data, int size)
         {
             EntityComponentStore->AssertEntityHasComponent(entity, typeIndex);
@@ -421,7 +468,8 @@ namespace Unity.Entities
                     $"SetComponentData<{TypeManager.GetType(typeIndex)}> can not be called with a zero sized component and must have same size as sizeof(T).");
 #endif
 
-            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex, EntityComponentStore->GlobalSystemVersion);
+            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex,
+                EntityComponentStore->GlobalSystemVersion);
             UnsafeUtility.MemCpy(ptr, data, size);
         }
 
@@ -438,7 +486,8 @@ namespace Unity.Entities
 #endif
 
 
-            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex, EntityComponentStore->GlobalSystemVersion);
+            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex,
+                EntityComponentStore->GlobalSystemVersion);
             return ptr;
         }
 
@@ -466,20 +515,21 @@ namespace Unity.Entities
             var sharedComponentIndex = EntityComponentStore->GetSharedComponentDataIndex(entity, typeIndex);
             return m_ManagedComponentStore.GetSharedComponentDataBoxed(sharedComponentIndex, typeIndex);
         }
-        
+
         internal void SetBufferRaw(Entity entity, int componentTypeIndex, BufferHeader* tempBuffer, int sizeInChunk)
         {
             EntityComponentStore->AssertEntityHasComponent(entity, componentTypeIndex);
 
             ComponentJobSafetyManager->CompleteReadAndWriteDependency(componentTypeIndex);
 
-            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, componentTypeIndex, EntityComponentStore->GlobalSystemVersion);
+            var ptr = EntityComponentStore->GetComponentDataWithTypeRW(entity, componentTypeIndex,
+                EntityComponentStore->GlobalSystemVersion);
 
             BufferHeader.Destroy((BufferHeader*) ptr);
 
             UnsafeUtility.MemCpy(ptr, tempBuffer, sizeInChunk);
         }
-        
+
         internal void* GetBufferRawRW(Entity entity, int typeIndex)
         {
             EntityComponentStore->AssertEntityHasComponent(entity, typeIndex);
@@ -487,7 +537,8 @@ namespace Unity.Entities
             ComponentJobSafetyManager->CompleteReadAndWriteDependency(typeIndex);
 
             BufferHeader* header =
-                (BufferHeader*) EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex, EntityComponentStore->GlobalSystemVersion);
+                (BufferHeader*) EntityComponentStore->GetComponentDataWithTypeRW(entity, typeIndex,
+                    EntityComponentStore->GlobalSystemVersion);
 
             return BufferHeader.GetElementPointer(header);
         }
@@ -513,6 +564,5 @@ namespace Unity.Entities
 
             return header->Length;
         }
-
     }
 }

@@ -221,13 +221,13 @@ namespace Unity.Entities.Tests
 			var archetype = m_Manager.CreateArchetype(typeof(EcsTestData), typeof(EcsTestData2));
 
 			var entity = m_Manager.CreateEntity(archetype);
-			Assert.AreEqual(0, subtractiveArch.CalculateLength());
+			Assert.AreEqual(0, subtractiveArch.CalculateEntityCount());
 
 			m_Manager.RemoveComponent<EcsTestData>(entity);
-            Assert.AreEqual(1, subtractiveArch.CalculateLength());
+            Assert.AreEqual(1, subtractiveArch.CalculateEntityCount());
 
 			m_Manager.AddComponentData<EcsTestData>(entity, new EcsTestData());
-            Assert.AreEqual(0, subtractiveArch.CalculateLength());
+            Assert.AreEqual(0, subtractiveArch.CalculateEntityCount());
 		}
 
 
@@ -521,6 +521,44 @@ namespace Unity.Entities.Tests
         }
 
         [Test]
+        public void SetArchetypeWithSharedComponentWorks()
+        {
+            var entity = m_Manager.CreateEntity();
+
+            m_Manager.AddComponentData(entity, new EcsTestData(1));
+            m_Manager.AddComponentData(entity, new EcsTestData2(2));
+            m_Manager.AddSharedComponentData(entity, new EcsTestSharedComp(3));
+            m_Manager.AddSharedComponentData(entity, new EcsTestSharedComp3(4));
+            var newArchetype = m_Manager.CreateArchetype(typeof(EcsTestData2), typeof(EcsTestData3), typeof(EcsTestSharedComp3), typeof(EcsTestSharedComp2));
+            
+            m_Manager.SetArchetype(entity, newArchetype);
+            Assert.AreEqual(newArchetype, m_Manager.GetChunk(entity).Archetype);
+            
+            Assert.AreEqual(2, m_Manager.GetComponentData<EcsTestData2>(entity).value0);
+            Assert.AreEqual(0, m_Manager.GetComponentData<EcsTestData3>(entity).value0);
+            Assert.AreEqual(0, m_Manager.GetSharedComponentData<EcsTestSharedComp2>(entity).value0);
+            Assert.AreEqual(4, m_Manager.GetSharedComponentData<EcsTestSharedComp3>(entity).value0);
+        }
+        
+        [Test]
+        public void SetArchetypeRemovingStateComponentThrows()
+        {
+            var entity = m_Manager.CreateEntity(typeof(EcsTestData), typeof(EcsState1));
+            Assert.Throws<ArgumentException>(() => m_Manager.SetArchetype(entity, m_Manager.CreateArchetype(typeof(EcsTestData))));
+            Assert.Throws<ArgumentException>(() => m_Manager.SetArchetype(entity, m_Manager.CreateArchetype()));
+            Assert.Throws<ArgumentException>(() => m_Manager.SetArchetype(entity, m_Manager.CreateArchetype(typeof(EcsStateTag1))));
+        }
+        
+        [Test]
+        public void SetArchetypeAddingStateComponent()
+        {
+            var entity = m_Manager.CreateEntity(typeof(EcsTestData), typeof(EcsState1));
+            var newArchetype = m_Manager.CreateArchetype(typeof(EcsState1), typeof(EcsStateTag1));
+            m_Manager.SetArchetype(entity, newArchetype);
+            Assert.AreEqual(newArchetype, m_Manager.GetChunk(entity).Archetype);
+        }
+        
+        [Test]
         public void AddComponentTagTwiceWithEntityArray()
         {
             var entities = new NativeArray<Entity>(3, Allocator.TempJob);
@@ -535,6 +573,45 @@ namespace Unity.Entities.Tests
             Assert.IsTrue(m_Manager.HasComponent<EcsTestTag>(entities[1]));
             Assert.IsTrue(m_Manager.HasComponent<EcsTestTag>(entities[2]));
             
+            entities.Dispose();
+        }
+
+        [Test]
+        public void AddComponentTagWithDuplicateEntities()
+        {
+            var entities = new NativeArray<Entity>(2, Allocator.TempJob);
+            var e = m_Manager.CreateEntity();
+            entities[0] = e;
+            entities[1] = e;
+
+            m_Manager.AddComponent(entities, typeof(EcsTestTag));
+
+            Assert.IsTrue(m_Manager.HasComponent<EcsTestTag>(e));
+
+            entities.Dispose();
+        }
+
+        [Test]
+        public void AddComponentTagWithMultipleDuplicateEntities()
+        {
+            var entities = new NativeArray<Entity>(5, Allocator.TempJob);
+            var e1 = m_Manager.CreateEntity();
+            var e2 = m_Manager.CreateEntity();
+            var e3 = m_Manager.CreateEntity();
+
+            // e1 and e2 have duplicates, e3 is unique.
+            entities[0] = e1;
+            entities[1] = e2;
+            entities[2] = e1;
+            entities[3] = e3;
+            entities[4] = e2;
+
+            m_Manager.AddComponent(entities, typeof(EcsTestTag));
+
+            Assert.IsTrue(m_Manager.HasComponent<EcsTestTag>(e1));
+            Assert.IsTrue(m_Manager.HasComponent<EcsTestTag>(e2));
+            Assert.IsTrue(m_Manager.HasComponent<EcsTestTag>(e3));
+
             entities.Dispose();
         }
 
@@ -596,11 +673,11 @@ namespace Unity.Entities.Tests
             Assert.Throws<ArgumentException>(() => m_Manager.DestroyEntity(query));
             // Just double checking that its a precondition & no leaking state
             Assert.Throws<ArgumentException>(() => m_Manager.DestroyEntity(query));
-            Assert.AreEqual(2, m_Manager.UniversalQuery.CalculateLength());
+            Assert.AreEqual(2, m_Manager.UniversalQuery.CalculateEntityCount());
             
             // And after failed destroy, correct destroys do work
             m_Manager.DestroyEntity(m_Manager.UniversalQuery);
-            Assert.AreEqual(0, m_Manager.UniversalQuery.CalculateLength());
+            Assert.AreEqual(0, m_Manager.UniversalQuery.CalculateEntityCount());
         }
 	}
 }

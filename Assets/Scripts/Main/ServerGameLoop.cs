@@ -7,19 +7,19 @@
 
 //public class ServerGameWorld : ISnapshotGenerator, IClientCommandProcessor
 //{
-//    public int WorldTick { get { return m_GameWorld.worldTime.tick; } }
+//    public int WorldTick { get { return m_GameWorld.WorldTick.Tick; } }
 //    public int TickRate
 //    {
 //        get
 //        {
-//            return m_GameWorld.worldTime.tickRate;
+//            return m_GameWorld.WorldTick.TickRate;
 //        }
 //        set
 //        {
-//            m_GameWorld.worldTime.tickRate = value;
+//            m_GameWorld.WorldTick.TickRate = value;
 //        }
 //    }
-//    public float TickInterval { get { return m_GameWorld.worldTime.tickInterval; } }
+//    public float TickInterval { get { return m_GameWorld.WorldTick.TickInterval; } }
 
 //    public ServerGameWorld(GameWorld world, NetworkServer networkServer, Dictionary<int, ServerGameLoop.ClientInfo> clients, ChatSystemServer m_ChatSystem, BundledResourceManager resourceSystem)
 //    {
@@ -114,7 +114,7 @@
 //        charControl.requestedCharacterType = settings.characterType;
 //    }
 
-//    public void ProcessCommand(int connectionId, int tick, ref NetworkReader data)
+//    public void ProcessCommand(int connectionId, int Tick, ref NetworkReader data)
 //    {
 //        ServerGameLoop.ClientInfo client;
 //        if (!m_Clients.TryGetValue(connectionId, out client))
@@ -127,10 +127,10 @@
 //                entityManager = m_GameWorld.GetEntityManager(),
 //                entity = Entity.Null,
 //                refSerializer = null,
-//                tick = tick
+//                Tick = Tick
 //            };
                 
-//            if (tick == m_GameWorld.worldTime.tick)
+//            if (Tick == m_GameWorld.WorldTick.Tick)
 //                client.latestCommand.Deserialize(ref serializeContext, ref data);
 
 //            // Pass on command to controlled entity
@@ -165,19 +165,19 @@
 //    {
 //        Profiler.BeginSample("ServerGameWorld.ServerTickUpdate()");
 
-//        m_GameWorld.worldTime.tick++;
-//        m_GameWorld.worldTime.tickDuration = m_GameWorld.worldTime.tickInterval;
-//        m_GameWorld.frameDuration = m_GameWorld.worldTime.tickInterval;
+//        m_GameWorld.WorldTick.Tick++;
+//        m_GameWorld.WorldTick.tickDuration = m_GameWorld.WorldTick.TickInterval;
+//        m_GameWorld.frameDuration = m_GameWorld.WorldTick.TickInterval;
 
 //        Profiler.BeginSample("HandleClientCommands");
 
 //        // This call backs into ProcessCommand
-//        m_NetworkServer.HandleClientCommands(m_GameWorld.worldTime.tick, this);
+//        m_NetworkServer.HandleClientCommands(m_GameWorld.WorldTick.Tick, this);
 
 //        Profiler.EndSample();
 
-//        GameTime gameTime = new GameTime(m_GameWorld.worldTime.tickRate);
-//        gameTime.SetTime(m_GameWorld.worldTime.tick, m_GameWorld.worldTime.tickInterval);
+//        GameTick gameTime = new GameTick(m_GameWorld.WorldTick.TickRate);
+//        gameTime.SetTick(m_GameWorld.WorldTick.Tick, m_GameWorld.WorldTick.TickInterval);
 
 //        // Handle spawn requests. All creation of game entities should happen in this phase        
 //        m_CharacterModule.HandleSpawnRequests();
@@ -237,7 +237,7 @@
 //        Profiler.EndSample();
 //    }
 
-//    // This is called every render frame where an tick update has been performed
+//    // This is called every render frame where an Tick update has been performed
 //    public void LateUpdate()
 //    {
 //        m_CharacterModule.AttachmentUpdate();
@@ -587,7 +587,7 @@
 //        //
 //        // If running as headless we nudge the Application.targetFramerate back and forth
 //        // around the actual framerate -- always trying to have a remaining time of half a frame
-//        // The goal is to have the while loop above tick exactly 1 time
+//        // The goal is to have the while loop above Tick exactly 1 time
 //        //
 //        // The reason for using targetFramerate is to allow Unity to sleep between frames
 //        // reducing cpu usage on server.

@@ -24,17 +24,17 @@ namespace Assets.Scripts.ECS
                     // 将屏幕位置转为射线
                     Ray ray = Camera.main.ScreenPointToRay(ms);
                     // 用来记录射线碰撞信息
-                    RaycastHit hitinfo;
+                    RaycastHit hitInfo;
                     // 产生射线
                     //LayerMask mask =new LayerMask();
                     //mask.value = (int)Mathf.Pow(2.0f, (float)LayerMask.NameToLayer("plane"));
-                    bool iscast = Physics.Raycast(ray, out hitinfo, 1000, moveMouse.InputMask);
+                    bool isCast = Physics.Raycast(ray, out hitInfo, 1000, moveMouse.InputMask);
 
                     var targetPos = Vector3.zero;
-                    if (iscast)
+                    if (isCast)
                     {
                         // 如果射中目标,记录射线碰撞点
-                        targetPos = hitinfo.point;
+                        targetPos = hitInfo.point;
                     }
 
                     // 使用Vector3提供的MoveTowards函数，获得朝目标移动的位置

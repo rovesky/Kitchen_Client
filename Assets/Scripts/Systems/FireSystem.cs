@@ -14,7 +14,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {
             Entities.WithAllReadOnly<Player>().ForEach(
-                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
+                (ref Translation gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
                     if (fire.Rocket == null)
                         return;
@@ -29,7 +29,7 @@ namespace Assets.Scripts.ECS
                     {
                         var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
-                        Translation position = new Translation() { Value = gunTransform.Position };
+                        Translation position = new Translation() { Value = gunTransform.Value };
                         Rotation rotation = new Rotation() { Value = gunRotation.Value };
 
                         PostUpdateCommands.SetComponent(e, position);

@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Entities.Tests;
@@ -143,79 +144,79 @@ namespace Unity.Entities.Tests
         [Test]
         public void TestAlignUp_Align0ToPow2()
         {
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 1));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 2));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 4));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 8));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 16));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 32));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 64));
-            Assert.AreEqual(0, TypeManager.AlignUp(0, 128));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 1));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 2));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 4));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 8));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 16));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 32));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 64));
+            Assert.AreEqual(0, CollectionHelper.Align(0, 128));
         }
         
         [Test]
         public void TestAlignUp_AlignMultipleOfAlignment()
         {
-            Assert.AreEqual(2, TypeManager.AlignUp(2, 1));
-            Assert.AreEqual(4, TypeManager.AlignUp(4, 2));
-            Assert.AreEqual(8, TypeManager.AlignUp(8, 4));
-            Assert.AreEqual(16, TypeManager.AlignUp(16, 8));
-            Assert.AreEqual(32, TypeManager.AlignUp(32, 16));
-            Assert.AreEqual(64, TypeManager.AlignUp(64, 32));
-            Assert.AreEqual(128, TypeManager.AlignUp(128, 64));
-            Assert.AreEqual(256, TypeManager.AlignUp(256, 128));
+            Assert.AreEqual(2, CollectionHelper.Align(2, 1));
+            Assert.AreEqual(4, CollectionHelper.Align(4, 2));
+            Assert.AreEqual(8, CollectionHelper.Align(8, 4));
+            Assert.AreEqual(16, CollectionHelper.Align(16, 8));
+            Assert.AreEqual(32, CollectionHelper.Align(32, 16));
+            Assert.AreEqual(64, CollectionHelper.Align(64, 32));
+            Assert.AreEqual(128, CollectionHelper.Align(128, 64));
+            Assert.AreEqual(256, CollectionHelper.Align(256, 128));
         }
         
         [Test]
         public void TestAlignUp_Align1ToPow2()
         {
-            Assert.AreEqual(1, TypeManager.AlignUp(1, 1));
-            Assert.AreEqual(2, TypeManager.AlignUp(1, 2));
-            Assert.AreEqual(4, TypeManager.AlignUp(1, 4));
-            Assert.AreEqual(8, TypeManager.AlignUp(1, 8));
-            Assert.AreEqual(16, TypeManager.AlignUp(1, 16));
-            Assert.AreEqual(32, TypeManager.AlignUp(1, 32));
-            Assert.AreEqual(64, TypeManager.AlignUp(1, 64));
-            Assert.AreEqual(128, TypeManager.AlignUp(1, 128));
+            Assert.AreEqual(1, CollectionHelper.Align(1, 1));
+            Assert.AreEqual(2, CollectionHelper.Align(1, 2));
+            Assert.AreEqual(4, CollectionHelper.Align(1, 4));
+            Assert.AreEqual(8, CollectionHelper.Align(1, 8));
+            Assert.AreEqual(16, CollectionHelper.Align(1, 16));
+            Assert.AreEqual(32, CollectionHelper.Align(1, 32));
+            Assert.AreEqual(64, CollectionHelper.Align(1, 64));
+            Assert.AreEqual(128, CollectionHelper.Align(1, 128));
         }
         
         [Test]
         public void TestAlignUp_Align3ToPow2()
         {
-            Assert.AreEqual(3, TypeManager.AlignUp(3, 1));
-            Assert.AreEqual(4, TypeManager.AlignUp(3, 2));
-            Assert.AreEqual(4, TypeManager.AlignUp(3, 4));
-            Assert.AreEqual(8, TypeManager.AlignUp(3, 8));
-            Assert.AreEqual(16, TypeManager.AlignUp(3, 16));
-            Assert.AreEqual(32, TypeManager.AlignUp(3, 32));
-            Assert.AreEqual(64, TypeManager.AlignUp(3, 64));
-            Assert.AreEqual(128, TypeManager.AlignUp(3, 128));
+            Assert.AreEqual(3, CollectionHelper.Align(3, 1));
+            Assert.AreEqual(4, CollectionHelper.Align(3, 2));
+            Assert.AreEqual(4, CollectionHelper.Align(3, 4));
+            Assert.AreEqual(8, CollectionHelper.Align(3, 8));
+            Assert.AreEqual(16, CollectionHelper.Align(3, 16));
+            Assert.AreEqual(32, CollectionHelper.Align(3, 32));
+            Assert.AreEqual(64, CollectionHelper.Align(3, 64));
+            Assert.AreEqual(128, CollectionHelper.Align(3, 128));
         }
         
         [Test]
         public void TestAlignUp_Align15ToPow2()
         {
-            Assert.AreEqual(15, TypeManager.AlignUp(15, 1));
-            Assert.AreEqual(16, TypeManager.AlignUp(15, 2));
-            Assert.AreEqual(16, TypeManager.AlignUp(15, 4));
-            Assert.AreEqual(16, TypeManager.AlignUp(15, 8));
-            Assert.AreEqual(16, TypeManager.AlignUp(15, 16));
-            Assert.AreEqual(32, TypeManager.AlignUp(15, 32));
-            Assert.AreEqual(64, TypeManager.AlignUp(15, 64));
-            Assert.AreEqual(128, TypeManager.AlignUp(15, 128));
+            Assert.AreEqual(15, CollectionHelper.Align(15, 1));
+            Assert.AreEqual(16, CollectionHelper.Align(15, 2));
+            Assert.AreEqual(16, CollectionHelper.Align(15, 4));
+            Assert.AreEqual(16, CollectionHelper.Align(15, 8));
+            Assert.AreEqual(16, CollectionHelper.Align(15, 16));
+            Assert.AreEqual(32, CollectionHelper.Align(15, 32));
+            Assert.AreEqual(64, CollectionHelper.Align(15, 64));
+            Assert.AreEqual(128, CollectionHelper.Align(15, 128));
         }
         
         [Test]
         public void TestAlignUp_Align63ToPow2()
         {
-            Assert.AreEqual(63, TypeManager.AlignUp(63, 1));
-            Assert.AreEqual(64, TypeManager.AlignUp(63, 2));
-            Assert.AreEqual(64, TypeManager.AlignUp(63, 4));
-            Assert.AreEqual(64, TypeManager.AlignUp(63, 8));
-            Assert.AreEqual(64, TypeManager.AlignUp(63, 16));
-            Assert.AreEqual(64, TypeManager.AlignUp(63, 32));
-            Assert.AreEqual(64, TypeManager.AlignUp(63, 64));
-            Assert.AreEqual(128, TypeManager.AlignUp(63, 128));
+            Assert.AreEqual(63, CollectionHelper.Align(63, 1));
+            Assert.AreEqual(64, CollectionHelper.Align(63, 2));
+            Assert.AreEqual(64, CollectionHelper.Align(63, 4));
+            Assert.AreEqual(64, CollectionHelper.Align(63, 8));
+            Assert.AreEqual(64, CollectionHelper.Align(63, 16));
+            Assert.AreEqual(64, CollectionHelper.Align(63, 32));
+            Assert.AreEqual(64, CollectionHelper.Align(63, 64));
+            Assert.AreEqual(128, CollectionHelper.Align(63, 128));
         }
         
         [Test]
@@ -223,7 +224,7 @@ namespace Unity.Entities.Tests
         {
             for (int value = 0; value < 512; ++value)
             {
-                Assert.AreEqual(value, TypeManager.AlignUp(value, 0));
+                Assert.AreEqual(value, CollectionHelper.Align(value, 0));
             }
         }
 
@@ -297,7 +298,7 @@ namespace Unity.Entities.Tests
         public void ManagedFieldLayoutWorks()
         {
             var t  = TypeManager.GetTypeInfo<EcsStringSharedComponent>();
-            var layout = t.FastEqualityTypeInfo;
+            var layout = TypeManager.GetFastEqualityTypeInfo(t);
             Assert.IsNull(layout.Layouts);
             Assert.IsNotNull(layout.GetHashFn);
             Assert.IsNotNull(layout.EqualFn);
@@ -306,28 +307,28 @@ namespace Unity.Entities.Tests
 
         [TestCase(typeof(UnityEngine.Transform))]
         [TestCase(typeof(TypeManagerTests))]
-        public void BuildComponentType_WithClass_WhenUnityEngineComponentTypeIsNull_ThrowsArgumentException(Type type)
+        public void BuildComponentType_WithClass_WhenUnityEngineObjectTypeIsNull_ThrowsArgumentException(Type type)
         {
-            var componentType = TypeManager.UnityEngineComponentType;
-            TypeManager.UnityEngineComponentType = null;
+            var componentType = TypeManager.UnityEngineObjectType;
+            TypeManager.UnityEngineObjectType = null;
             try
             {
                 Assert.That(
                     () => TypeManager.BuildComponentType(type),
-                    Throws.ArgumentException.With.Message.Matches($"\\bregister\\b.*\\b{nameof(TypeManager.UnityEngineComponentType)}\\b")
+                    Throws.ArgumentException.With.Message.Matches($"\\bregister\\b.*\\b{nameof(TypeManager.UnityEngineObjectType)}\\b")
                 );
             }
             finally
             {
-                TypeManager.UnityEngineComponentType = componentType;
+                TypeManager.UnityEngineObjectType = componentType;
             }
         }
 
         [Test]
-        public void BuildComponentType_WithNonComponent_WhenUnityEngineComponentTypeIsCorrect_ThrowsArgumentException()
+        public void BuildComponentType_WithNonComponent_WhenUnityEngineObjectTypeIsCorrect_ThrowsArgumentException()
         {
-            var componentType = TypeManager.UnityEngineComponentType;
-            TypeManager.UnityEngineComponentType = typeof(UnityEngine.Component);
+            var componentType = TypeManager.UnityEngineObjectType;
+            TypeManager.UnityEngineObjectType = typeof(UnityEngine.Component);
             try
             {
                 var type = typeof(TypeManagerTests);
@@ -338,22 +339,22 @@ namespace Unity.Entities.Tests
             }
             finally
             {
-                TypeManager.UnityEngineComponentType = componentType;
+                TypeManager.UnityEngineObjectType = componentType;
             }
         }
 
         [Test]
-        public void BuildComponentType_WithComponent_WhenUnityEngineComponentTypeIsCorrect_DoesNotThrowException()
+        public void BuildComponentType_WithComponent_WhenUnityEngineObjectTypeIsCorrect_DoesNotThrowException()
         {
-            var componentType = TypeManager.UnityEngineComponentType;
-            TypeManager.UnityEngineComponentType = typeof(UnityEngine.Component);
+            var componentType = TypeManager.UnityEngineObjectType;
+            TypeManager.UnityEngineObjectType = typeof(UnityEngine.Component);
             try
             {
                 TypeManager.BuildComponentType(typeof(UnityEngine.Transform));
             }
             finally
             {
-                TypeManager.UnityEngineComponentType = componentType;
+                TypeManager.UnityEngineObjectType = componentType;
             }
         }
 
@@ -362,9 +363,9 @@ namespace Unity.Entities.Tests
         [TestCase(typeof(InterfaceShared))]
         [TestCase(typeof(ClassShared))]
         [TestCase(typeof(UnityEngine.Transform))]
-        public void RegisterUnityEngineComponentType_WithWrongType_ThrowsArgumentException(Type type)
+        public void RegisterUnityEngineObjectType_WithWrongType_ThrowsArgumentException(Type type)
         {
-            Assert.Throws<ArgumentException>(() => TypeManager.RegisterUnityEngineComponentType(type));
+            Assert.Throws<ArgumentException>(() => TypeManager.RegisterUnityEngineObjectType(type));
         }
 
         [Test]
