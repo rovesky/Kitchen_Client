@@ -1,31 +1,36 @@
 ﻿using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public interface IReceiveEntity
+namespace Assets.Scripts.ECS
 {
-    void SetReceivedEntity(Entity entity);
-}
-
-public struct SentEntity : IComponentData { }
-
-public class EntitySender : MonoBehaviour, IConvertGameObjectToEntity
-{
-    public GameObject[] EntityReceivers;
-
-    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+    public interface IReceiveEntity
     {
-        dstManager.AddComponentData(entity, new SentEntity() { });
-        foreach( var EntityReceiver in EntityReceivers)
+        void SetReceivedEntity(Entity entity);
+    }
+
+    public struct SentEntity : IComponentData
+    {
+    }
+
+    public class EntitySender : MonoBehaviour, IConvertGameObjectToEntity
+    {
+        public GameObject[] EntityReceivers;
+
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            var potentialReceivers = EntityReceiver.GetComponents<MonoBehaviour>();
-            foreach (var potentialReceiver in potentialReceivers)
+            dstManager.AddComponentData(entity, new SentEntity() { });
+            foreach (var EntityReceiver in EntityReceivers)
             {
-                if (potentialReceiver is IReceiveEntity receiver)
+                var potentialReceivers = EntityReceiver.GetComponents<MonoBehaviour>();
+                foreach (var potentialReceiver in potentialReceivers)
                 {
-                    receiver.SetReceivedEntity(entity);
+                    if (potentialReceiver is IReceiveEntity receiver)
+                    {
+                        receiver.SetReceivedEntity(entity);
+                    }
                 }
             }
         }
     }
+
 }

@@ -62,11 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Behaviour\CheckVisibleBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\EntitySender.cs" />
     <Compile Include="Assets\Scripts\Behaviour\EntityTracker.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\InitEnemyBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\KillOutofRenderBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\PlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnEnemyBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnPlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Components\AttackComponent.cs" />
@@ -111,6 +109,7 @@
     <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityModuleClient.cs" />
     <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityModuleServer.cs" />
     <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityRegistry.cs" />
+    <Compile Include="Assets\Scripts\Systems\CheckVisibleSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\EntityKillerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />

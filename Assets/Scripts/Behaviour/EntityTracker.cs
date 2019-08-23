@@ -4,38 +4,43 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
-public class EntityTracker : MonoBehaviour, IReceiveEntity
+namespace Assets.Scripts.ECS
 {
-    public Entity EntityToTrack = Entity.Null;
-    public void SetReceivedEntity(Entity entity)
+    public class EntityTracker : MonoBehaviour, IReceiveEntity
     {
-        EntityToTrack = entity;
-    }
+        public Entity EntityToTrack = Entity.Null;
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        if (EntityToTrack != Entity.Null)
+        public void SetReceivedEntity(Entity entity)
         {
-            try
-            {
-                var em = World.Active.EntityManager;
-
-                transform.position = em.GetComponentData<Translation>(EntityToTrack).Value;
-                transform.rotation = em.GetComponentData<Rotation>(EntityToTrack).Value;
-
-              //  Debug.Log("EntityTracker!");
-            }
-            catch
-            {
-               // Debug.LogError("EntityTracker catch!");
-                // Dirty way to check for an Entity that no longer exists.
-                EntityToTrack = Entity.Null;
-
-                Destroy(this.gameObject);
-            }
+            EntityToTrack = entity;
         }
 
-       
+        // Update is called once per frame
+        void LateUpdate()
+        {
+            if (EntityToTrack != Entity.Null)
+            {
+                try
+                {
+                    var em = World.Active.EntityManager;
+
+                    transform.position = em.GetComponentData<Translation>(EntityToTrack).Value;
+                    transform.rotation = em.GetComponentData<Rotation>(EntityToTrack).Value;
+
+                    //  Debug.Log("EntityTracker!");
+                }
+                catch
+                {
+                    // Debug.LogError("EntityTracker catch!");
+                    // Dirty way to check for an Entity that no longer exists.
+                    EntityToTrack = Entity.Null;
+
+                    Destroy(this.gameObject);
+                }
+            }
+
+
+        }
     }
+
 }

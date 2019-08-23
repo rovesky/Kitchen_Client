@@ -15,7 +15,7 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {
-            Entities.WithAllReadOnly<Enemy>().ForEach((Entity entity,ref KillOutofRender killOutofRender)  =>
+            Entities.ForEach((Entity entity,ref KillOutofRender killOutofRender)  =>
             {
                 if (!killOutofRender.IsRenderEnable)
                 {

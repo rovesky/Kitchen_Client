@@ -9,14 +9,16 @@ namespace Assets.Scripts.ECS
     {
 
         private Entity rocket;
-        private GameObject enemyPrefab;
+        private GameObject enemy1Prefab;
+        private GameObject enemy2Prefab;
 
         protected override void OnCreate()
         {
             var prefab = Resources.Load("Prefabs/EnemyRocket") as GameObject;       
             rocket = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, World.Active);
 
-            enemyPrefab = Resources.Load("Prefabs/Enemy1") as GameObject;
+            enemy1Prefab = Resources.Load("Prefabs/Enemy1") as GameObject;
+            enemy2Prefab = Resources.Load("Prefabs/Enemy3") as GameObject;
         }
 
         protected override void OnUpdate()
@@ -24,7 +26,6 @@ namespace Assets.Scripts.ECS
             Entities.ForEach(
                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnEnemy spawn) =>
                {
-
                    if (spawn.entity == null)
                        return;
 
@@ -33,7 +34,8 @@ namespace Assets.Scripts.ECS
                        return;
 
                    spawn.spawnTimer = Random.Range(spawn.spawnIntervalMin, spawn.spawnIntervalMax);
-
+                
+                   var enemyPrefab = spawn.enemyType == EnemyType.Normal? enemy1Prefab:enemy2Prefab;
                    var go = Object.Instantiate(enemyPrefab);
                    var e = go.GetComponent<EntityTracker>().EntityToTrack;
                   // var e = PostUpdateCommands.Instantiate(spawn.entity);
@@ -50,17 +52,19 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Enemy());
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
-                   PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1, Direction = Direction.Down });
                    PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
               
                    if (spawn.enemyType == EnemyType.Normal)
                    {
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 100 });
                        PostUpdateCommands.AddComponent(e, new MoveSin());
+                       PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 1f, Direction = Direction.Down });
 
                    }
                    else if (spawn.enemyType == EnemyType.Super)
                    {
+                       PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 0.5f, Direction = Direction.Down });
+
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 500 });
                        PostUpdateCommands.AddComponent(e, new FireRocket()
                        {
@@ -69,8 +73,7 @@ namespace Assets.Scripts.ECS
                            RocketTimer = 0,
                        });
                    }
-               }
-           );
+               });
         }
     }
 }

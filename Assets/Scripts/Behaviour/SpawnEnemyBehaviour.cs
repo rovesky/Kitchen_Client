@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Entities;
-using Unity.Transforms;
 using UnityEngine;
 
 namespace Assets.Scripts.ECS
@@ -16,12 +14,10 @@ namespace Assets.Scripts.ECS
         public EnemyType enemyType = EnemyType.Normal;
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-        {      
+        {
             var entityPrefabs = conversionSystem.GetPrimaryEntity(prefabs);
-           // ConvertToEntity.InjectOriginalComponents(dstManager, entityPrefabs, prefabs.transform);
-
             dstManager.AddComponentData<SpawnEnemy>(entity, new SpawnEnemy()
-            {      
+            {
                 entity = entityPrefabs,
                 spawnIntervalMin = spawnIntervalMin,
                 spawnIntervalMax = spawnIntervalMax,

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -11,6 +6,15 @@ namespace Assets.Scripts.ECS
 {
     public class PlayerFireSystem : ComponentSystem
     {
+
+     
+        private GameObject rocketPrefab;
+
+        protected override void OnCreate()
+        {
+            rocketPrefab = Resources.Load("Prefabs/Rocket") as GameObject;
+        }
+
         protected override void OnUpdate()
         {
             Entities.WithAllReadOnly<Player>().ForEach(
@@ -27,7 +31,9 @@ namespace Assets.Scripts.ECS
 
                     if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
                     {
-                        var e = PostUpdateCommands.Instantiate(fire.Rocket);
+                        var go = Object.Instantiate(rocketPrefab);
+                        var e = go.GetComponent<EntityTracker>().EntityToTrack;
+                      //  var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
                         Translation position = new Translation() { Value = gunTransform.Value };
                         Rotation rotation = new Rotation() { Value = gunRotation.Value };
@@ -38,8 +44,7 @@ namespace Assets.Scripts.ECS
                         PostUpdateCommands.AddComponent(e, new TriggerDestroy());
                         PostUpdateCommands.AddComponent(e, new Attack() { Power = 20 });
                         PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 5,Direction = Direction.Up });
-                        PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 50 });
-
+                        PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
                     }
                 }
             );
