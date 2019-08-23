@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Components\MoveTargetComponent.cs" />
     <Compile Include="Assets\Scripts\Components\MoveTranslationComponent.cs" />
     <Compile Include="Assets\Scripts\Components\PlayerComponent.cs" />
+    <Compile Include="Assets\Scripts\Components\RocketComponent.cs" />
     <Compile Include="Assets\Scripts\Components\ScoreComponent.cs" />
     <Compile Include="Assets\Scripts\Components\SpawnEnemyComponent.cs" />
     <Compile Include="Assets\Scripts\Components\SpawnPlayerComponent.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveTargetSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveTranslationSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\RayCastSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SpawnEnemySystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SpawnPlayerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\TriggerSystem.cs" />

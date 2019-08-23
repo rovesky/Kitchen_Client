@@ -52,7 +52,7 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Enemy());
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
-                   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
+                   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsVisible = true });
               
                    if (spawn.enemyType == EnemyType.Normal)
                    {

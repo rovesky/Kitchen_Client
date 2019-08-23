@@ -6,7 +6,6 @@ namespace Assets.Scripts.ECS
 {
     public class PlayerFireSystem : ComponentSystem
     {
-
      
         private GameObject rocketPrefab;
 
@@ -20,8 +19,8 @@ namespace Assets.Scripts.ECS
             Entities.WithAllReadOnly<Player>().ForEach(
                 (ref Translation gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
-                    if (fire.Rocket == null)
-                        return;
+                    //if (fire.Rocket == null)
+                    //    return;
 
                     fire.RocketTimer -= Time.deltaTime;
                     if (fire.RocketTimer > 0)
@@ -42,9 +41,11 @@ namespace Assets.Scripts.ECS
                         PostUpdateCommands.SetComponent(e, rotation);
 
                         PostUpdateCommands.AddComponent(e, new TriggerDestroy());
+
+                        PostUpdateCommands.AddComponent(e, new Rocket() {Type = RocketType.Player} );
                         PostUpdateCommands.AddComponent(e, new Attack() { Power = 20 });
                         PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 5,Direction = Direction.Up });
-                        PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsRenderEnable = true });
+                        PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsVisible = true });
                     }
                 }
             );
@@ -54,6 +55,12 @@ namespace Assets.Scripts.ECS
 
     public class EnemyFireSystem : ComponentSystem
     {
+        private GameObject rocketPrefab;
+
+        protected override void OnCreate()
+        {
+            rocketPrefab = Resources.Load("Prefabs/Rocket1") as GameObject;
+        }
 
         protected override void OnUpdate()
         {
@@ -61,8 +68,8 @@ namespace Assets.Scripts.ECS
             Entities.WithAllReadOnly<Enemy>().ForEach(
                 (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
-                    if (fire.Rocket == null)
-                        return;
+                   // if (fire.Rocket == null)
+                      //  return;
 
                     fire.RocketTimer -= Time.deltaTime;
                     if (fire.RocketTimer > 0)
@@ -70,7 +77,11 @@ namespace Assets.Scripts.ECS
 
                     fire.RocketTimer = fire.FireCooldown;
 
-                    var e = PostUpdateCommands.Instantiate(fire.Rocket);
+                    Debug.Log("Enemy Fire");
+
+                    var go = Object.Instantiate(rocketPrefab);
+                    var e = go.GetComponent<EntityTracker>().EntityToTrack;
+                   // var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
                     Translation position = new Translation() { Value = gunTransform.Position };
                     Rotation rotation = new Rotation() { Value = gunRotation.Value };
@@ -78,10 +89,11 @@ namespace Assets.Scripts.ECS
                     PostUpdateCommands.SetComponent(e, position);
                     PostUpdateCommands.SetComponent(e, rotation);
 
+                    PostUpdateCommands.AddComponent(e, new Rocket(){Type = RocketType.Enemy});
                     PostUpdateCommands.AddComponent(e, new TriggerDestroy());
                     PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
                     PostUpdateCommands.AddComponent(e, new MoveTarget() { Speed = 3});
-                    PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 100 });
+                  //  PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 100 });
                 }
             );
         }

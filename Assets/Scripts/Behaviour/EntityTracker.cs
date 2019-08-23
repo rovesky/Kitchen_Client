@@ -38,9 +38,6 @@ namespace Assets.Scripts.ECS
                     Destroy(this.gameObject);
                 }
             }
-
-
         }
     }
-
 }

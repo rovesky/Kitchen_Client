@@ -49,6 +49,7 @@ namespace Assets.Scripts.ECS
 
             public void Execute(TriggerEvent triggerEvent)
             {
+                return;
                 //  Debug.Log($"pCounter1[0]:{pCounter1[0]% 2},pCounter[0]:{pCounter[0]}!");
                 if (pCounter[1] % 2 == 0)
                     return;

@@ -16,13 +16,13 @@ namespace Assets.Scripts.ECS
 
         private void OnEnable()
         {
-           Debug.Log($"CheckVisibleBehaviour OnEnable");
+         //  Debug.Log($"CheckVisibleBehaviour OnEnable");
         }
 
         void Start()
         {
             _renderer = this.GetComponent<MeshRenderer>(); // 获得模型渲染组件
-            Debug.Log($"CheckVisibleBehaviour start begin{_renderer}");
+           // Debug.Log($"CheckVisibleBehaviour start begin{_renderer}");
             if (_renderer == null)
             {
                 var rs = this.GetComponentsInChildren<MeshRenderer>();
@@ -35,12 +35,12 @@ namespace Assets.Scripts.ECS
                     }
                 }
             }
-            Debug.Log($"CheckVisibleBehaviour start end{_renderer}");
+           // Debug.Log($"CheckVisibleBehaviour start end{_renderer}");
         }
 
         void OnBecameVisible()  // 当模型进入屏幕
         {
-            Debug.Log($"CheckVisibleBehaviour OnBecameVisible");
+        //    Debug.Log($"CheckVisibleBehaviour OnBecameVisible");
             isActive = true;
         }
 
@@ -52,7 +52,7 @@ namespace Assets.Scripts.ECS
 
         public void SetReceivedEntity(Entity entity)
         {
-            Debug.Log($"CheckVisibleBehaviour SetReceivedEntity：{entity}");
+           // Debug.Log($"CheckVisibleBehaviour SetReceivedEntity：{entity}");
             this.entity = entity;
         }
     }

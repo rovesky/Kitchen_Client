@@ -7,9 +7,15 @@ using Unity.Entities;
 
 namespace Assets.Scripts.ECS
 {
-    [Serializable]
-    public struct KillOutofRender : IComponentData
+    public enum RocketType
     {
-        public bool IsVisible;
+        Player,
+        Enemy
+    }
+
+    [Serializable]
+    public struct Rocket : IComponentData
+    {
+        public RocketType Type;
     }
 }

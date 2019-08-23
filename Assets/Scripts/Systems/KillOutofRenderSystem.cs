@@ -17,7 +17,7 @@ namespace Assets.Scripts.ECS
         {
             Entities.ForEach((Entity entity,ref KillOutofRender killOutofRender)  =>
             {
-                if (!killOutofRender.IsRenderEnable)
+                if (!killOutofRender.IsVisible)
                 {
                     PostUpdateCommands.DestroyEntity(entity);
                 }

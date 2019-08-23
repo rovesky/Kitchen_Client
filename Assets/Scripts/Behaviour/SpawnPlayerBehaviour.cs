@@ -11,14 +11,11 @@ namespace Assets.Scripts.ECS
     {
         public GameObject prefabs;
     
-        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-        {
-
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) =>
             dstManager.AddComponentData(entity, new SpawnPlayer()
             {
                 entity = conversionSystem.GetPrimaryEntity(prefabs),
             });
-        }
 
         public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
         {

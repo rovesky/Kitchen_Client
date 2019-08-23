@@ -30,18 +30,18 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {
-            var PlayerEntities = PlayerGroup.ToEntityArray(Allocator.Persistent);
+            var playerEntities = PlayerGroup.ToEntityArray(Allocator.Persistent);
 
-            if (PlayerEntities.Length == 0)
+            if (playerEntities.Length == 0)
             {
-                PlayerEntities.Dispose();
+                playerEntities.Dispose();
                 return;
             }
 
             Entities.ForEach((ref Translation position, ref Rotation rotation, ref MoveTarget move) =>
             {
 
-                var target = PlayerEntities[0];
+                var target = playerEntities[0];
 
                 var targetPos = EntityManager.GetComponentData<Translation>(target);
                 var targetRotation = EntityManager.GetComponentData<Rotation>(target);
@@ -60,7 +60,7 @@ namespace Assets.Scripts.ECS
                     Value = Quaternion.LookRotation(relativePos)
                 };
             });
-            PlayerEntities.Dispose();
+            playerEntities.Dispose();
         }
     }
 }
