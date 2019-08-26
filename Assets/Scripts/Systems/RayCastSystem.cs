@@ -7,15 +7,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-   // [UpdateAfter(typeof(BeginSimulationEntityCommandBufferSystem))]
+ 
     [UpdateBefore(typeof(HealthSystem))]
     public class RayCastSystem : ComponentSystem
     {
-        private void DoCollide(Entity entityA, ref Translation position, ref PhysicsCollider collider, float distance)
+        private void DoCollide(Entity entityA,ref LocalToWorld localToWorld, ref Translation position, ref PhysicsCollider collider, float distance)
         {
             ref PhysicsWorld world = ref World.Active.GetExistingSystem<BuildPhysicsWorld>().PhysicsWorld;
             float3 rayStart = position.Value;
-            float3 rayEnd = rayStart + (float3) distance * Vector3.forward;
+            float3 rayEnd = rayStart + (float3)distance * localToWorld.Forward;
 
             var rayInput = new RaycastInput
             {
@@ -29,8 +29,7 @@ namespace Assets.Scripts.ECS
 
             if (!hit)
                 return;
-
-         //   Debug.LogWarning($"raycast:{rayHit.RigidBodyIndex},{rayHit.SurfaceNormal}");
+        
             var entityB = world.Bodies[rayHit.RigidBodyIndex].Entity;
           
 
@@ -54,27 +53,29 @@ namespace Assets.Scripts.ECS
                 damageComponent.Value += EntityManager.GetComponentData<Attack>(entityB).Power;
                 EntityManager.SetComponentData(entityA, damageComponent);
             }
-
+          //  Debug.Log($"raycast:{rayHit.RigidBodyIndex},{Time.time}");
         }
 
         protected override void OnUpdate()
         {
             Entities.ForEach((Entity entityA,
+                ref LocalToWorld localToWorld,
                 ref Translation position,
                 ref PhysicsCollider collider,
                 ref Rocket rocket) =>
             {
-                float distance = rocket.Type == RocketType.Player ? 0.7f : -0.2f;
-                DoCollide(entityA,ref position,ref collider, distance);
+                float distance = (rocket.Type == RocketType.Player) ? -0.3f : -0.2f;
+                DoCollide(entityA,ref localToWorld,ref position,ref collider, distance);
             });
 
 
             Entities.ForEach((Entity entityA,
+                ref LocalToWorld localToWorld,
                 ref Translation position,
                 ref PhysicsCollider collider,
                 ref Player player) =>
             {
-                DoCollide(entityA, ref position, ref collider, 0.5f);
+                DoCollide(entityA, ref localToWorld, ref position, ref collider, -0.2f);
             });
         }
     }

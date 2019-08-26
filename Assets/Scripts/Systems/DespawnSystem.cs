@@ -17,6 +17,7 @@ namespace Assets.Scripts.ECS
             {
                 if(despawn.Frame <=0)
                     EntityManager.DestroyEntity(entity);
+
                 despawn.Frame--;
             });
         }

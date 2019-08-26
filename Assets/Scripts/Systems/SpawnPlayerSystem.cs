@@ -32,7 +32,7 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Player());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 10000 });
                    PostUpdateCommands.AddComponent(e, new Damage());
-                   PostUpdateCommands.AddComponent(e, new Health() { Value = 3 });
+                   PostUpdateCommands.AddComponent(e, new Health() { Value = 30 });
                    PostUpdateCommands.AddComponent(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
                    PostUpdateCommands.AddComponent(e, new UpdateUI());
 

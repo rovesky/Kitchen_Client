@@ -18,10 +18,6 @@ namespace Assets.Scripts.ECS
                 {
                     if (!EntityManager.HasComponent<Despawn>(behaviour.entity))
                         EntityManager.AddComponentData(behaviour.entity, new Despawn() { Frame = 0 });
-
-                    //   Debug.Log("CheckVisibleSystem true");
-                    //EntityManager.AddComponentData(behaviour.entity,
-                    //    new KillOutofRender());
                 }
             });
         }

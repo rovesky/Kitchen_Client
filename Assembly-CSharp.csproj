@@ -120,7 +120,6 @@
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\KillOutofRenderSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveMouseSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveRotationSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />

@@ -25,7 +25,8 @@ namespace Assets.Scripts.ECS
 
                 if (health.Value <= 0)
                 {
-                    Debug.Log($"ExlosionSystem :{health.Value},{prefabEntity}");
+                    if (health.Value < 0)
+                        Debug.LogWarning($"ExlosionSystem :{health.Value},{prefabEntity}");
               //      var e = PostUpdateCommands.Instantiate(prefabEntity);
 
                 //    Translation position = new Translation() { Value = gunTransform.Value };

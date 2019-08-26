@@ -13,7 +13,10 @@ namespace Assets.Scripts.ECS
             if (health.Value <= 0)
             {
                 if (!EntityManager.HasComponent<Despawn>(entity))
-                    EntityManager.AddComponentData(entity, new Despawn() {Frame = 1});
+                {
+                 //   Debug.Log($"new Despawn,{Time.time}");
+                    EntityManager.AddComponentData(entity, new Despawn() {Frame = frame });
+                }
             }
         }
 
