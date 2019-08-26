@@ -19,9 +19,9 @@ namespace Assets.Scripts.ECS
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
             dstManager.AddComponentData(entity, new SentEntity() { });
-            foreach (var EntityReceiver in EntityReceivers)
+            foreach (var entityReceiver in EntityReceivers)
             {
-                var potentialReceivers = EntityReceiver.GetComponents<MonoBehaviour>();
+                var potentialReceivers = entityReceiver.GetComponents<MonoBehaviour>();
                 foreach (var potentialReceiver in potentialReceivers)
                 {
                     if (potentialReceiver is IReceiveEntity receiver)

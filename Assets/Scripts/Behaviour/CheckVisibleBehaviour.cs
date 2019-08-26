@@ -28,8 +28,7 @@ namespace Assets.Scripts.ECS
                 var rs = this.GetComponentsInChildren<MeshRenderer>();
                 foreach (var render in rs)
                 {
-                    if (!render.name.StartsWith("col"))
-                    {
+                    if (!render.name.StartsWith("col")){
                         _renderer = render;
                         break;
                     }

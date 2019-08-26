@@ -11,8 +11,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-
-    [UpdateBefore(typeof(BuildPhysicsWorld))]
+    
+    [UpdateInGroup(typeof(TransformSystemGroup))]
     public class MoveTargetSystem : ComponentSystem
     {
         public EntityQuery PlayerGroup;
@@ -54,6 +54,8 @@ namespace Assets.Scripts.ECS
                 };
 
                 Vector3 relativePos = position.Value - targetPos.Value;
+
+               // if(relativePos != Vector3.zero)
 
                 rotation = new Rotation()
                 {

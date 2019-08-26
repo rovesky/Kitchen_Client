@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class SpawnPlayerSystem : ComponentSystem
     {
         private Entity rocket;
@@ -34,7 +34,7 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Health() { Value = 3 });
                    PostUpdateCommands.AddComponent(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
-                   PostUpdateCommands.AddComponent(e, new UpdateHealthUI());
+                   PostUpdateCommands.AddComponent(e, new UpdateUI());
 
                    PostUpdateCommands.AddComponent(e, new FireRocket()
                    {

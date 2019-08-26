@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [UpdateBefore(typeof(BuildPhysicsWorld))]
+    [UpdateInGroup(typeof(TransformSystemGroup))]
     public class MoveMouseSystem : ComponentSystem
     {
         protected override void OnUpdate()

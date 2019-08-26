@@ -13,7 +13,7 @@ namespace Assets.Scripts.ECS
     [Serializable]
     public struct SpawnEnemy : IComponentData
     {
-        public Entity entity;
+     //   public Entity entity;
 
         public EnemyType enemyType;
 

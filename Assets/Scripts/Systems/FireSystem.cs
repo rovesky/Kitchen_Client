@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace Assets.Scripts.ECS
 {
     public class PlayerFireSystem : ComponentSystem
     {
-     
+
         private GameObject rocketPrefab;
 
         protected override void OnCreate()
@@ -32,20 +33,20 @@ namespace Assets.Scripts.ECS
                     {
                         var go = Object.Instantiate(rocketPrefab);
                         var e = go.GetComponent<EntityTracker>().EntityToTrack;
-                      //  var e = PostUpdateCommands.Instantiate(fire.Rocket);
+                        //  var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
-                        Translation position = new Translation() { Value = gunTransform.Value };
-                        Rotation rotation = new Rotation() { Value = gunRotation.Value };
+                        Translation position = new Translation() {Value = gunTransform.Value};
+                        Rotation rotation = new Rotation() {Value = gunRotation.Value};
 
                         PostUpdateCommands.SetComponent(e, position);
                         PostUpdateCommands.SetComponent(e, rotation);
 
-                        PostUpdateCommands.AddComponent(e, new TriggerDestroy());
-
-                        PostUpdateCommands.AddComponent(e, new Rocket() {Type = RocketType.Player} );
-                        PostUpdateCommands.AddComponent(e, new Attack() { Power = 20 });
-                        PostUpdateCommands.AddComponent(e, new MoveTranslation() { Speed = 5,Direction = Direction.Up });
-                        PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsVisible = true });
+                        PostUpdateCommands.AddComponent(e, new Health(){Value = 1});
+                        PostUpdateCommands.AddComponent(e, new Damage() );
+                        PostUpdateCommands.AddComponent(e, new Rocket() {Type = RocketType.Player});
+                        PostUpdateCommands.AddComponent(e, new Attack() {Power = 20});
+                        PostUpdateCommands.AddComponent(e, new MoveTranslation() {Speed = 6, Direction = Direction.Up});
+                        PostUpdateCommands.AddComponent(e, new KillOutofRender() {IsVisible = true});
                     }
                 }
             );
@@ -56,46 +57,63 @@ namespace Assets.Scripts.ECS
     public class EnemyFireSystem : ComponentSystem
     {
         private GameObject rocketPrefab;
+        private EntityQuery playerGroup;
 
         protected override void OnCreate()
         {
             rocketPrefab = Resources.Load("Prefabs/Rocket1") as GameObject;
+            playerGroup = GetEntityQuery(new EntityQueryDesc
+            {
+                All = new ComponentType[]
+                {
+                    typeof(Player),
+                }
+            });
         }
 
         protected override void OnUpdate()
         {
+         
+            var playerEntities = playerGroup.ToEntityArray(Allocator.Persistent);
+            if (playerEntities.Length > 0)
+            {
+                Entities.WithAllReadOnly<Enemy>().ForEach(
+                    (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
+                    {
 
-            Entities.WithAllReadOnly<Enemy>().ForEach(
-                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
-                {
-                   // if (fire.Rocket == null)
-                      //  return;
+                        fire.RocketTimer -= Time.deltaTime;
+                        if (fire.RocketTimer > 0)
+                            return;
 
-                    fire.RocketTimer -= Time.deltaTime;
-                    if (fire.RocketTimer > 0)
-                        return;
+                        fire.RocketTimer = fire.FireCooldown;
+          
+                        var go = Object.Instantiate(rocketPrefab);
+                        var e = go.GetComponent<EntityTracker>().EntityToTrack;
+                        // var e = PostUpdateCommands.Instantiate(fire.Rocket);
 
-                    fire.RocketTimer = fire.FireCooldown;
+                        Translation position = new Translation() {Value = gunTransform.Position};
 
-                    Debug.Log("Enemy Fire");
+                        var targetPos = EntityManager.GetComponentData<Translation>(playerEntities[0]);
+                        Rotation rotation = new Rotation()
+                            {Value = Quaternion.LookRotation(-(targetPos.Value - position.Value))};
 
-                    var go = Object.Instantiate(rocketPrefab);
-                    var e = go.GetComponent<EntityTracker>().EntityToTrack;
-                   // var e = PostUpdateCommands.Instantiate(fire.Rocket);
+                        PostUpdateCommands.SetComponent(e, position);
+                        PostUpdateCommands.SetComponent(e, rotation);
 
-                    Translation position = new Translation() { Value = gunTransform.Position };
-                    Rotation rotation = new Rotation() { Value = gunRotation.Value };
+                      
+                        PostUpdateCommands.AddComponent(e, new Rocket() {Type = RocketType.Enemy});
+                  
+                        PostUpdateCommands.AddComponent(e, new Attack() {Power = 1});
+                        PostUpdateCommands.AddComponent(e, new Health() { Value = 1 });
+                        PostUpdateCommands.AddComponent(e, new Damage());
 
-                    PostUpdateCommands.SetComponent(e, position);
-                    PostUpdateCommands.SetComponent(e, rotation);
+                        PostUpdateCommands.AddComponent(e, new MoveRotation() { Speed = 3});
+                        PostUpdateCommands.AddComponent(e, new KillOutofRender() {IsVisible = true});
+                    }
+                );
+            }
 
-                    PostUpdateCommands.AddComponent(e, new Rocket(){Type = RocketType.Enemy});
-                    PostUpdateCommands.AddComponent(e, new TriggerDestroy());
-                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
-                    PostUpdateCommands.AddComponent(e, new MoveTarget() { Speed = 3});
-                  //  PostUpdateCommands.AddComponent(e, new EntityKiller() { TimeToDie = 100 });
-                }
-            );
+            playerEntities.Dispose();
         }
     }
 }

@@ -5,5 +5,8 @@ using UnityEngine;
 namespace Assets.Scripts.ECS
 {
     [Serializable]
-    public struct UpdateHealthUI : IComponentData { }
+    public struct Despawn : IComponentData
+    {
+        public int Frame;
+    }
 }

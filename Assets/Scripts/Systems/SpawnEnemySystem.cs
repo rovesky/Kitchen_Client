@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class SpawnEnemySystem : ComponentSystem
     {
 
@@ -26,8 +26,8 @@ namespace Assets.Scripts.ECS
             Entities.ForEach(
                (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref SpawnEnemy spawn) =>
                {
-                   if (spawn.entity == null)
-                       return;
+                   //if (spawn.entity == null)
+                   //    return;
 
                    spawn.spawnTimer -= Time.deltaTime;
                    if (spawn.spawnTimer > 0)

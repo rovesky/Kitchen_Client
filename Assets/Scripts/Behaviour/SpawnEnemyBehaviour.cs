@@ -18,7 +18,7 @@ namespace Assets.Scripts.ECS
             var entityPrefabs = conversionSystem.GetPrimaryEntity(prefabs);
             dstManager.AddComponentData<SpawnEnemy>(entity, new SpawnEnemy()
             {
-                entity = entityPrefabs,
+          //      entity = entityPrefabs,
                 spawnIntervalMin = spawnIntervalMin,
                 spawnIntervalMax = spawnIntervalMax,
                 spawnTimer = spawnTimer,

@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [UpdateBefore(typeof(BuildPhysicsWorld))]
+    [UpdateInGroup(typeof(TransformSystemGroup))]
     public class MoveTranslationSystem : ComponentSystem
     {
         protected override void OnUpdate()

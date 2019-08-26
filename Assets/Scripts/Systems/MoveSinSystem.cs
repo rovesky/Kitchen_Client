@@ -12,6 +12,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+
+    [UpdateInGroup(typeof(TransformSystemGroup))]
     public class MoveSinSystem : ComponentSystem
     {
         protected override void OnUpdate()

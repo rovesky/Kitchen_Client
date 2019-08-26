@@ -16,7 +16,7 @@ namespace Assets.Scripts.ECS
             {
                 if (behaviour.InVisible())
                 {
-                    Debug.Log("CheckVisibleSystem true");
+                 //   Debug.Log("CheckVisibleSystem true");
                     EntityManager.SetComponentData(behaviour.entity,
                         new KillOutofRender() {IsVisible = false});
                 }

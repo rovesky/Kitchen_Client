@@ -1,4 +1,4 @@
-﻿using Unity.Collections;
+﻿/*using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Physics;
@@ -27,7 +27,7 @@ namespace Assets.Scripts.ECS
 
             m_TriggerEntitiesIndex = new NativeArray<int>(2, Allocator.Persistent);
             m_TriggerEntitiesIndex[1] = 0;
-    
+
         }
 
         // [BurstCompile]
@@ -41,11 +41,11 @@ namespace Assets.Scripts.ECS
 
             public ComponentDataFromEntity<Attack> AttackGroup;
             public ComponentDataFromEntity<Damage> DamageGroup;
-           
+
 
             //  public ComponentDataFromEntity<TriggerTimeoutFrame> TriggerTimeoutFrameGroup;
             [NativeFixedLength(2)] public NativeArray<int> pCounter;
-       
+
 
             public void Execute(TriggerEvent triggerEvent)
             {
@@ -59,7 +59,7 @@ namespace Assets.Scripts.ECS
                 pCounter[0]++;
 
                 Entity entityA = triggerEvent.Entities.EntityA;
-                Entity entityB = triggerEvent.Entities.EntityB;          
+                Entity entityB = triggerEvent.Entities.EntityB;
 
                 if (DestroyGroup.Exists(entityA))
                 {
@@ -69,7 +69,7 @@ namespace Assets.Scripts.ECS
                 {
                     CommandBuffer.DestroyEntity(entityB);
                 }
-                               
+
                 bool isBodyAAttacker = AttackGroup.Exists(entityA);
                 bool isBodyBAttacker = AttackGroup.Exists(entityB);
 
@@ -91,7 +91,7 @@ namespace Assets.Scripts.ECS
                     DamageGroup[entityA] = damageComponent;
                 }
             }
-        }             
+        }
 
         protected override void OnDestroy()
         {
@@ -101,25 +101,26 @@ namespace Assets.Scripts.ECS
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             m_TriggerEntitiesIndex[0] = 0;
-            m_TriggerEntitiesIndex[1]++;           
+            m_TriggerEntitiesIndex[1]++;
 
-        //    Debug.Log($" m_TriggerEntitiesIndex1[0]:{ m_TriggerEntitiesIndex1[0]}, m_TriggerEntitiesIndex[0]:{ m_TriggerEntitiesIndex[0]}!");
+            //    Debug.Log($" m_TriggerEntitiesIndex1[0]:{ m_TriggerEntitiesIndex1[0]}, m_TriggerEntitiesIndex[0]:{ m_TriggerEntitiesIndex[0]}!");
             JobHandle jobCollisionEventEnemy = new TriggerEventJob
             {
-                pCounter = m_TriggerEntitiesIndex,      
+                pCounter = m_TriggerEntitiesIndex,
                 CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
                 PhysicsVelocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(true),
 
                 DestroyGroup = GetComponentDataFromEntity<TriggerDestroy>(true),
-                DamageGroup = GetComponentDataFromEntity<Damage>(),        
+                DamageGroup = GetComponentDataFromEntity<Damage>(),
                 AttackGroup = GetComponentDataFromEntity<Attack>(),
-          
+
 
             }.Schedule(m_StepPhysicsWorldSystem.Simulation,
                         ref m_BuildPhysicsWorldSystem.PhysicsWorld, inputDeps);
             jobCollisionEventEnemy.Complete();
-          
+
             return jobCollisionEventEnemy;
         }
     }
 }
+*/
