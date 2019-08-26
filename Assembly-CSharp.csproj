@@ -67,11 +67,13 @@
     <Compile Include="Assets\Scripts\Behaviour\EntityTracker.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnEnemyBehaviour.cs" />
     <Compile Include="Assets\Scripts\Behaviour\SpawnPlayerBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Behaviour\TimeToKill.cs" />
     <Compile Include="Assets\Scripts\Components\Attack.cs" />
     <Compile Include="Assets\Scripts\Components\Damage.cs" />
     <Compile Include="Assets\Scripts\Components\Despawn.cs" />
     <Compile Include="Assets\Scripts\Components\Enemy.cs" />
     <Compile Include="Assets\Scripts\Components\EntityKiller.cs" />
+    <Compile Include="Assets\Scripts\Components\Explosion.cs" />
     <Compile Include="Assets\Scripts\Components\Fire.cs" />
     <Compile Include="Assets\Scripts\Components\Health.cs" />
     <Compile Include="Assets\Scripts\Components\KillOutofRender.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Assets\Scripts\Systems\CheckVisibleSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\DespawnSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\EntityKillerSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\KillOutofRenderSystem.cs" />

@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Assets.Scripts.Components;
+using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -43,12 +44,13 @@ namespace Assets.Scripts.ECS
                    Translation position = new Translation() { Value = gunTransform.Position };
                    Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
-                   Debug.Log($"Spawn enemy on position:[{position.Value.x},{position.Value.y},{position.Value.z}]");
+            //       Debug.Log($"Spawn enemy on position:[{position.Value.x},{position.Value.y},{position.Value.z}]");
 
 
                    PostUpdateCommands.SetComponent(e, position);
                    PostUpdateCommands.SetComponent(e, rotation);
 
+                   PostUpdateCommands.AddComponent(e, new Explosion());
                    PostUpdateCommands.AddComponent(e, new Enemy());
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });

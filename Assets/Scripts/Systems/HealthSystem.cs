@@ -24,7 +24,7 @@ namespace Assets.Scripts.ECS
                 damage.Value = 0;
                 if (health.Value <= 0)
                 {
-                    EntityManager.DestroyEntity(entity);
+                    EntityManager.AddComponentData(entity, new Despawn() { Frame = 0 });
                 }
             });
         }
