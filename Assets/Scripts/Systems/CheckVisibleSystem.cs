@@ -16,9 +16,12 @@ namespace Assets.Scripts.ECS
             {
                 if (behaviour.InVisible())
                 {
-                 //   Debug.Log("CheckVisibleSystem true");
-                    EntityManager.SetComponentData(behaviour.entity,
-                        new KillOutofRender() {IsVisible = false});
+                    if (!EntityManager.HasComponent<Despawn>(behaviour.entity))
+                        EntityManager.AddComponentData(behaviour.entity, new Despawn() { Frame = 0 });
+
+                    //   Debug.Log("CheckVisibleSystem true");
+                    //EntityManager.AddComponentData(behaviour.entity,
+                    //    new KillOutofRender());
                 }
             });
         }

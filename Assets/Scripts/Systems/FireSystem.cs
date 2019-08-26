@@ -20,9 +20,7 @@ namespace Assets.Scripts.ECS
             Entities.WithAllReadOnly<Player>().ForEach(
                 (ref Translation gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
-                    //if (fire.Rocket == null)
-                    //    return;
-
+              
                     fire.RocketTimer -= Time.deltaTime;
                     if (fire.RocketTimer > 0)
                         return;
@@ -41,12 +39,12 @@ namespace Assets.Scripts.ECS
                         PostUpdateCommands.SetComponent(e, position);
                         PostUpdateCommands.SetComponent(e, rotation);
 
+                        PostUpdateCommands.AddComponent(e, new Rocket() { Type = RocketType.Player });
                         PostUpdateCommands.AddComponent(e, new Health(){Value = 1});
                         PostUpdateCommands.AddComponent(e, new Damage() );
-                        PostUpdateCommands.AddComponent(e, new Rocket() {Type = RocketType.Player});
                         PostUpdateCommands.AddComponent(e, new Attack() {Power = 20});
                         PostUpdateCommands.AddComponent(e, new MoveTranslation() {Speed = 6, Direction = Direction.Up});
-                        PostUpdateCommands.AddComponent(e, new KillOutofRender() {IsVisible = true});
+              
                     }
                 }
             );
@@ -108,7 +106,7 @@ namespace Assets.Scripts.ECS
                         PostUpdateCommands.AddComponent(e, new Damage());
 
                         PostUpdateCommands.AddComponent(e, new MoveRotation() { Speed = 3});
-                        PostUpdateCommands.AddComponent(e, new KillOutofRender() {IsVisible = true});
+                     //   PostUpdateCommands.AddComponent(e, new KillOutofRender() {IsVisible = true});
                     }
                 );
             }

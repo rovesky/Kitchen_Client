@@ -50,12 +50,13 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.SetComponent(e, position);
                    PostUpdateCommands.SetComponent(e, rotation);
 
-                   PostUpdateCommands.AddComponent(e, new Explosion());
+                
                    PostUpdateCommands.AddComponent(e, new Enemy());
                    PostUpdateCommands.AddComponent(e, new Damage());
                    PostUpdateCommands.AddComponent(e, new Attack() { Power = 1 });
-                   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsVisible = true });
-              
+                   PostUpdateCommands.AddComponent(e, new Explosion());
+                   //   PostUpdateCommands.AddComponent(e, new KillOutofRender() { IsVisible = true });
+
                    if (spawn.enemyType == EnemyType.Normal)
                    {
                        PostUpdateCommands.AddComponent(e, new Health() { Value = 100 });

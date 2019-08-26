@@ -30,9 +30,8 @@ namespace Assets.Scripts.ECS
             if (!hit)
                 return;
 
-            Debug.LogWarning($"raycast:{rayHit.RigidBodyIndex},{rayHit.SurfaceNormal}");
+         //   Debug.LogWarning($"raycast:{rayHit.RigidBodyIndex},{rayHit.SurfaceNormal}");
             var entityB = world.Bodies[rayHit.RigidBodyIndex].Entity;
-
           
 
             bool isBodyAAttacker = EntityManager.HasComponent<Attack>(entityA);
@@ -56,15 +55,6 @@ namespace Assets.Scripts.ECS
                 EntityManager.SetComponentData(entityA, damageComponent);
             }
 
-            //if (EntityManager.HasComponent<TriggerDestroy>(entityA))
-            //{
-            //    EntityManager.DestroyEntity(entityA);
-            //}
-
-            //if (EntityManager.HasComponent<TriggerDestroy>(entityB))
-            //{
-            //    EntityManager.DestroyEntity(entityB);
-            //}
         }
 
         protected override void OnUpdate()
@@ -74,7 +64,7 @@ namespace Assets.Scripts.ECS
                 ref PhysicsCollider collider,
                 ref Rocket rocket) =>
             {
-                float distance = rocket.Type == RocketType.Player ? 0.3f : -0.2f;
+                float distance = rocket.Type == RocketType.Player ? 0.7f : -0.2f;
                 DoCollide(entityA,ref position,ref collider, distance);
             });
 
