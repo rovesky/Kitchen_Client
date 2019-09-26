@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+
+   [DisableAutoCreation]
     public class InputSystem : ComponentSystem
     {
         protected override void OnUpdate()

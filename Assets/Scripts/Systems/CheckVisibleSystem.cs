@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+    [UpdateInGroup(typeof(MySimulationSystemGroup))]
     public class CheckVisibleSystem : ComponentSystem
     {
         protected override void OnUpdate()

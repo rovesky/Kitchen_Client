@@ -115,7 +115,6 @@
     <Compile Include="Assets\Scripts\ReplicatedEntity\ReplicatedEntityRegistry.cs" />
     <Compile Include="Assets\Scripts\Systems\CheckVisibleSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\DespawnSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\EntityKillerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
@@ -125,11 +124,11 @@
     <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveTargetSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveTranslationSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\MySimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\RayCastSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\ResetWorldSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SpawnEnemySystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SpawnPlayerSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\TriggerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>

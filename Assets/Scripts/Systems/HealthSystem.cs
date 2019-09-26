@@ -3,6 +3,7 @@ using Unity.Entities;
 
 namespace Assets.Scripts.ECS
 {
+    [DisableAutoCreation]
     public class HealthSystem : ComponentSystem
     {
 

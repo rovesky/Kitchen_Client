@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
- 
-    [UpdateBefore(typeof(HealthSystem))]
+
+    [DisableAutoCreation]
     public class RayCastSystem : ComponentSystem
     {
         private void DoCollide(Entity entityA,ref LocalToWorld localToWorld, ref Translation position, ref PhysicsCollider collider, float distance)

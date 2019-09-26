@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+    [DisableAutoCreation]
     public class PlayerFireSystem : ComponentSystem
     {
-
         private GameObject rocketPrefab;
 
         protected override void OnCreate()
@@ -51,7 +51,7 @@ namespace Assets.Scripts.ECS
         }
     }
 
-
+    [DisableAutoCreation]
     public class EnemyFireSystem : ComponentSystem
     {
         private GameObject rocketPrefab;
@@ -78,7 +78,6 @@ namespace Assets.Scripts.ECS
                 Entities.WithAllReadOnly<Enemy>().ForEach(
                     (ref LocalToWorld gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
                     {
-
                         fire.RocketTimer -= Time.deltaTime;
                         if (fire.RocketTimer > 0)
                             return;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [UpdateAfter(typeof(HealthSystem))]
+    [DisableAutoCreation]
     public class ExlosionSystem : ComponentSystem
     {
 
