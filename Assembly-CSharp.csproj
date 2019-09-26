@@ -72,11 +72,9 @@
     <Compile Include="Assets\Scripts\Components\Damage.cs" />
     <Compile Include="Assets\Scripts\Components\Despawn.cs" />
     <Compile Include="Assets\Scripts\Components\Enemy.cs" />
-    <Compile Include="Assets\Scripts\Components\EntityKiller.cs" />
     <Compile Include="Assets\Scripts\Components\Explosion.cs" />
     <Compile Include="Assets\Scripts\Components\Fire.cs" />
     <Compile Include="Assets\Scripts\Components\Health.cs" />
-    <Compile Include="Assets\Scripts\Components\KillOutofRender.cs" />
     <Compile Include="Assets\Scripts\Components\MoveMouse.cs" />
     <Compile Include="Assets\Scripts\Components\MoveRotation.cs" />
     <Compile Include="Assets\Scripts\Components\MoveSin.cs" />
@@ -89,6 +87,7 @@
     <Compile Include="Assets\Scripts\Components\SpawnPlayer.cs" />
     <Compile Include="Assets\Scripts\Components\TriggerDestroy.cs" />
     <Compile Include="Assets\Scripts\Components\UpdateUI.cs" />
+    <Compile Include="Assets\Scripts\Components\UserCommand.cs" />
     <Compile Include="Assets\Scripts\Core\ConfigVars.cs" />
     <Compile Include="Assets\Scripts\Core\GameDebug.cs" />
     <Compile Include="Assets\Scripts\Core\GameStatistics.cs" />
@@ -120,6 +119,7 @@
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\InputSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveMouseSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveRotationSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />
@@ -131,7 +131,7 @@
     <Compile Include="Assets\Scripts\Systems\SpawnPlayerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\TriggerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
-    <Compile Include="Assets\Scripts\Utils\WeakAssetReference.cs" />
+    <None Include="Assets\Scripts\新建文本文档.txt" />
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
     </Reference>
@@ -350,6 +350,18 @@
     </Reference>
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Share">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/Share.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Networking.Transport">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/Unity.Networking.Transport.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>

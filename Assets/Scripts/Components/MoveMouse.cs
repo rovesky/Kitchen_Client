@@ -11,7 +11,7 @@ namespace Assets.Scripts.ECS
     public struct MoveMouse : IComponentData
     {
         public float Speed;
-        public LayerMask InputMask; // 鼠标射线碰撞层
+       
     }     
 
 }

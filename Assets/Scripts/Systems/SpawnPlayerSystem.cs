@@ -44,7 +44,13 @@ namespace Assets.Scripts.ECS
                    });
                    PostUpdateCommands.AddComponent(e, new MoveMouse()
                    {
-                       Speed = 5,
+                       Speed = 5,                    
+                   });
+
+                   PostUpdateCommands.AddComponent(e, new UserCommand()
+                   {
+                       renderTick = 0,
+                       targetPos = Vector3.zero,
                        InputMask = 1 << LayerMask.NameToLayer("plane")
                    });
 
