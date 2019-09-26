@@ -11,16 +11,16 @@ using UnityEngine;
 namespace Assets.Scripts.ECS
 {
     [UpdateInGroup(typeof(TransformSystemGroup))]
-    public class MoveMouseSystem : ComponentSystem
+    public class MovePositionSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
-            Entities.ForEach((ref MoveMouse moveMouse,ref UserCommand userCommand, ref Translation position) =>
+            Entities.ForEach((ref MovePosition moveMouse,ref PlayerCommand playerCommand, ref Translation position) =>
             {
-                if (userCommand.buttons.IsSet(UserCommand.Button.PrimaryFire))
+                if (playerCommand.buttons.IsSet(PlayerCommand.Button.Move))
                 {                  
                     // 使用Vector3提供的MoveTowards函数，获得朝目标移动的位置
-                    Vector3 pos = Vector3.MoveTowards(position.Value, userCommand.targetPos, moveMouse.Speed * Time.deltaTime);
+                    Vector3 pos = Vector3.MoveTowards(position.Value, playerCommand.targetPos, moveMouse.Speed * Time.deltaTime);
                     // 更新当前位置
                     position.Value = pos;
                 }

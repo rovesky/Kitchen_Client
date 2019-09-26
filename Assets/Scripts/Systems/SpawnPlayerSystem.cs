@@ -42,12 +42,12 @@ namespace Assets.Scripts.ECS
                        FireCooldown = 0.1f,
                        RocketTimer = 0,
                    });
-                   PostUpdateCommands.AddComponent(e, new MoveMouse()
+                   PostUpdateCommands.AddComponent(e, new MovePosition()
                    {
                        Speed = 5,                    
                    });
 
-                   PostUpdateCommands.AddComponent(e, new UserCommand()
+                   PostUpdateCommands.AddComponent(e, new PlayerCommand()
                    {
                        renderTick = 0,
                        targetPos = Vector3.zero,

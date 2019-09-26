@@ -10,9 +10,8 @@ using UnityEngine;
 namespace Assets.Scripts.ECS
 {
     [Serializable]
-    public struct MoveRotation : IComponentData
+    public struct MoveForward : IComponentData
     {
-    //    public bool IsInited;
         public float Speed;      
     }
 

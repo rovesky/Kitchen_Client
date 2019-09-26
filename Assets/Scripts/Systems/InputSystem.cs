@@ -12,11 +12,14 @@ namespace Assets.Scripts.ECS
     {
         protected override void OnUpdate()
         {
-            Entities.WithAllReadOnly<Player>().ForEach((Entity entity,ref UserCommand userCommand) =>
+            Entities.WithAllReadOnly<Player>().ForEach((Entity entity,ref PlayerCommand userCommand) =>
             {
-                userCommand.buttons.Or(UserCommand.Button.PrimaryFire, Input.GetMouseButton(0));
+                userCommand.Reset();
 
-                if (Input.GetMouseButton(0))
+                userCommand.buttons.Or(PlayerCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
+                userCommand.buttons.Or(PlayerCommand.Button.Move,  Input.GetMouseButton(0));
+
+                if (userCommand.buttons.IsSet(PlayerCommand.Button.Move))
                 {
                     // 获得鼠标屏幕位置
                     Vector3 ms = Input.mousePosition;

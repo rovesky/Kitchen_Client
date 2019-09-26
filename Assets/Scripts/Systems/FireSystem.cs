@@ -18,7 +18,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {
             Entities.WithAllReadOnly<Player>().ForEach(
-                (ref Translation gunTransform, ref Rotation gunRotation, ref FireRocket fire) =>
+                (ref Translation gunTransform,ref PlayerCommand command, ref Rotation gunRotation, ref FireRocket fire) =>
                 {
               
                     fire.RocketTimer -= Time.deltaTime;
@@ -27,7 +27,7 @@ namespace Assets.Scripts.ECS
 
                     fire.RocketTimer = fire.FireCooldown;
 
-                    if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+                    if (command.buttons.IsSet(PlayerCommand.Button.PrimaryFire))
                     {
                         var go = Object.Instantiate(rocketPrefab);
                         var e = go.GetComponent<EntityTracker>().EntityToTrack;
@@ -105,7 +105,7 @@ namespace Assets.Scripts.ECS
                         PostUpdateCommands.AddComponent(e, new Health() { Value = 1 });
                         PostUpdateCommands.AddComponent(e, new Damage());
 
-                        PostUpdateCommands.AddComponent(e, new MoveRotation() { Speed = 3});
+                        PostUpdateCommands.AddComponent(e, new MoveForward() { Speed = 3});
                      //   PostUpdateCommands.AddComponent(e, new KillOutofRender() {IsVisible = true});
                     }
                 );

@@ -4,17 +4,13 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-
-
-
-
     [Serializable]
-    public struct UserCommand : IComponentData
+    public struct PlayerCommand : IComponentData
     {
         public enum Button : uint
         {
             None = 0,
-            Jump = 1 << 0,
+            Move = 1 << 0,
             Boost = 1 << 1,
             PrimaryFire = 1 << 2,
             SecondaryFire = 1 << 3,
@@ -58,6 +54,14 @@ namespace Assets.Scripts.ECS
         public Vector3 targetPos;
         // 鼠标射线碰撞层
         public LayerMask InputMask;
+
+
+        public void Reset()
+        {
+            renderTick = 0;
+            buttons.flags = 0;
+            targetPos = Vector3.zero;
+        }
     }
 
 }

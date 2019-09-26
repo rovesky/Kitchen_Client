@@ -8,10 +8,9 @@ using UnityEngine;
 namespace Assets.Scripts.ECS
 {
     [Serializable]
-    public struct MoveMouse : IComponentData
+    public struct MovePosition : IComponentData
     {
-        public float Speed;
-       
+        public float Speed;       
     }     
 
 }

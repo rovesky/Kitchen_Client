@@ -14,12 +14,12 @@ namespace Assets.Scripts.ECS
 {
 
     [UpdateInGroup(typeof(TransformSystemGroup))]
-    public class MoveRotationSystem : ComponentSystem
+    public class MoveForwardSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
 
-            Entities.ForEach((ref LocalToWorld lw, ref Translation position, ref MoveRotation move) =>
+            Entities.ForEach((ref LocalToWorld lw, ref Translation position, ref MoveForward move) =>
             {
                 position = new Translation()
                 {
