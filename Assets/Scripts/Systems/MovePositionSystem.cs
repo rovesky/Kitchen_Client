@@ -17,7 +17,7 @@ namespace Assets.Scripts.ECS
         {
             Entities.ForEach((ref MovePosition moveMouse,ref PlayerCommand playerCommand, ref Translation position) =>
             {
-                if (playerCommand.buttons.IsSet(PlayerCommand.Button.Move))
+                if (playerCommand.isBack && playerCommand.buttons.IsSet(PlayerCommand.Button.Move))
                 {                  
                     // 使用Vector3提供的MoveTowards函数，获得朝目标移动的位置
                     Vector3 pos = Vector3.MoveTowards(position.Value, playerCommand.targetPos, moveMouse.Speed * Time.deltaTime);

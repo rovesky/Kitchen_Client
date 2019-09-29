@@ -27,7 +27,7 @@ namespace Assets.Scripts.ECS
 
                     fire.RocketTimer = fire.FireCooldown;
 
-                    if (command.buttons.IsSet(PlayerCommand.Button.PrimaryFire))
+                    if (command.isBack && command.buttons.IsSet(PlayerCommand.Button.PrimaryFire))
                     {
                         var go = Object.Instantiate(rocketPrefab);
                         var e = go.GetComponent<EntityTracker>().EntityToTrack;

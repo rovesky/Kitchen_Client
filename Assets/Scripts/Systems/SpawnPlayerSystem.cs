@@ -50,8 +50,8 @@ namespace Assets.Scripts.ECS
                    PostUpdateCommands.AddComponent(e, new PlayerCommand()
                    {
                        renderTick = 0,
-                       targetPos = Vector3.zero,
-                       InputMask = 1 << LayerMask.NameToLayer("plane")
+                       targetPos = Vector3.zero
+                      
                    });
 
                    //移除SpawnPlayer

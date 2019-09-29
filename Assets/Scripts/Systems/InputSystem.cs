@@ -12,15 +12,26 @@ namespace Assets.Scripts.ECS
    [DisableAutoCreation]
     public class InputSystem : ComponentSystem
     {
+        // 鼠标射线碰撞层
+        public LayerMask InputMask;
+        protected override void OnCreate()
+        {
+            InputMask = 1 << LayerMask.NameToLayer("plane");
+            base.OnCreate();
+        }
+
         protected override void OnUpdate()
         {
             Entities.WithAllReadOnly<Player>().ForEach((Entity entity,ref PlayerCommand userCommand) =>
             {
                 userCommand.Reset();
-
+                //是否开火
                 userCommand.buttons.Or(PlayerCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
+
+                //是否移动
                 userCommand.buttons.Or(PlayerCommand.Button.Move,  Input.GetMouseButton(0));
 
+                //获取点击位置
                 if (userCommand.buttons.IsSet(PlayerCommand.Button.Move))
                 {
                     // 获得鼠标屏幕位置
@@ -32,7 +43,7 @@ namespace Assets.Scripts.ECS
                     // 产生射线
                     //LayerMask mask =new LayerMask();
                     //mask.value = (int)Mathf.Pow(2.0f, (float)LayerMask.NameToLayer("plane"));
-                    bool isCast = Physics.Raycast(ray, out hitInfo, 1000, userCommand.InputMask);
+                    bool isCast = Physics.Raycast(ray, out hitInfo, 1000, InputMask);
 
                     var targetPos = Vector3.zero;
                     if (isCast)
@@ -41,6 +52,8 @@ namespace Assets.Scripts.ECS
                         targetPos = hitInfo.point;
                     }
                     userCommand.targetPos = targetPos;
+
+                    FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
                 }
 
             });

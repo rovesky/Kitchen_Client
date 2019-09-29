@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Unity.Entities;
 using UnityEngine;
 
@@ -52,8 +53,8 @@ namespace Assets.Scripts.ECS
         public int renderTick;
         public ButtonBitField buttons;
         public Vector3 targetPos;
-        // 鼠标射线碰撞层
-        public LayerMask InputMask;
+        public bool isBack;
+     
 
 
         public void Reset()
@@ -61,6 +62,33 @@ namespace Assets.Scripts.ECS
             renderTick = 0;
             buttons.flags = 0;
             targetPos = Vector3.zero;
+            isBack = false;
+        }
+
+        public byte[] ToData()
+        {
+            MemoryStream memStream = new MemoryStream(100);
+            BinaryWriter writer = new BinaryWriter(memStream);
+
+            writer.Write(renderTick);
+            writer.Write(buttons.flags);
+            writer.Write(targetPos.x);
+            writer.Write(targetPos.y);
+            writer.Write(targetPos.z);
+
+            return memStream.ToArray();
+        }
+
+        public void FromData(byte[] data)
+        {
+            var memStream = new MemoryStream(data);
+            var reader = new BinaryReader(memStream);
+
+            renderTick = reader.ReadInt32();
+            buttons.flags = reader.ReadUInt32();
+            targetPos.x = reader.ReadSingle();
+            targetPos.y = reader.ReadSingle();
+            targetPos.z = reader.ReadSingle();           
         }
     }
 
