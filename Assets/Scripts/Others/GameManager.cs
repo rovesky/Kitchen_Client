@@ -14,8 +14,7 @@ public class GameManager : MonoBehaviour {
     public Text m_text_score;  // 得分UI文字
     public Text m_text_best;  // 最高分UI文字
     public Text m_text_life;  // 生命UI文字
-
-    
+    private Text m_text_rtt;
     public AudioClip m_musicClip;  // 背景音乐
     protected AudioSource m_Audio;  // 声音源
 
@@ -35,9 +34,10 @@ public class GameManager : MonoBehaviour {
         m_text_score = m_canvas_main.transform.Find("Text_score").GetComponent<Text>();  // 获得Ui控件
         m_text_best = m_canvas_main.transform.Find("Text_best").GetComponent<Text>();
         m_text_life = m_canvas_main.transform.Find("Text_life").GetComponent<Text>();
-      //  m_text_score.text = string.Format("分数  {0}", m_score); // 初始化UI分数
-      //  m_text_best.text = string.Format("最高分 {0}", m_hiscore); // 初始化UI最高分
-    
+        m_text_rtt = m_canvas_main.transform.Find("Text_rtt").GetComponent<Text>();
+        //  m_text_score.text = string.Format("分数  {0}", m_score); // 初始化UI分数
+        //  m_text_best.text = string.Format("最高分 {0}", m_hiscore); // 初始化UI最高分
+
         var restart_button = m_canvas_gameover.transform.Find("Button_restart").GetComponent<Button>();  // 获取重新开始游戏按钮
         restart_button.onClick.AddListener(delegate ()  // 按钮事件回调
         {
@@ -65,5 +65,12 @@ public class GameManager : MonoBehaviour {
         {
             m_canvas_gameover.gameObject.SetActive(true); // 如果生命为0，显示游戏失败UI
         }
+    }
+
+    // 改变RTT UI显示
+    public void UpdateRtt(double rtt)
+    {
+        m_text_rtt.text = "RTT:"+rtt.ToString("#.000"); 
+      
     }
 }

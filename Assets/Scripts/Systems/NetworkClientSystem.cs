@@ -50,6 +50,15 @@ namespace Assets.Scripts.ECS
             kcpClient = new KcpClient(this);
 
         }
+
+        protected override void OnDestroy()
+        {
+            connections.Clear();
+            if (kcpClient != null)
+            {
+                kcpClient.Shutdown();
+            }
+        }
         protected override void OnUpdate()
         {
             Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref PlayerCommand command) =>
@@ -75,8 +84,12 @@ namespace Assets.Scripts.ECS
                                  PostUpdateCommands.SetComponent(entity, recvBuffer);
                                  recvBuffer = default;
                              }
+
+                             GameManager.Instance.UpdateRtt(connection.RTT);
                          }
                      }
+
+                    
 
                      //    }
                  });
