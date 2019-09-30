@@ -122,6 +122,7 @@
     <Compile Include="Assets\Scripts\Systems\SpawnEnemySystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SpawnPlayerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
+    <None Include="Assets\Scripts\新建文本文档.txt" />
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
     </Reference>
@@ -389,20 +390,20 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Burst.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Buffers">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Buffers.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Memory.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Networking.Transport">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -760,6 +761,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="FootStone.TankShared.csproj">
+      <Project>{86BE3A39-CC1E-2C31-A16A-A9B1BAF8FB25}</Project>
+      <Name>FootStone.TankShared</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Collections.csproj">
       <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
       <Name>Unity.Collections</Name>

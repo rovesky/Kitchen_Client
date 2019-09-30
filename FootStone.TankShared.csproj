@@ -11,10 +11,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{EDC410AF-8EA9-A46A-59A6-62C44F121C77}</ProjectGuid>
+    <ProjectGuid>{86BE3A39-CC1E-2C31-A16A-A9B1BAF8FB25}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>FootStone.Utils</AssemblyName>
+    <AssemblyName>FootStone.TankShared</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -49,6 +49,8 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
+    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2019.2.0f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -60,9 +62,100 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="D:\work\ECS\TankDemo\Share\com.footstone.shared\Utils\FSLog.cs" />
-    <Compile Include="D:\work\ECS\TankDemo\Share\com.footstone.shared\Utils\NetStatics.cs" />
-    <None Include="D:\work\ECS\TankDemo\Share\com.footstone.shared\Utils\FootStone.Utils.asmdef" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Behaviour\CheckVisibleBehaviour.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Behaviour\EntitySender.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Behaviour\EntityTracker.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Behaviour\SpawnEnemyBehaviour.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Behaviour\SpawnPlayerBehaviour.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Behaviour\TimeToKill.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Battle\Attack.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Battle\Damage.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Battle\Fire.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Battle\Health.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Entity\Enemy.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Entity\Player.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Entity\Rocket.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Lifecycle\Despawn.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Lifecycle\SpawnEnemy.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Lifecycle\SpawnPlayer.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Move\MoveForward.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Move\MovePosition.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Move\MoveSin.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Move\MoveTarget.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Move\MoveTranslation.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\PlayerCommand.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Presetation\Explosion.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Presetation\UpdateUI.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\Score.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Components\TriggerDestroy.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\ConfigVars.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\GameDebug.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\GameStatistics.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\LevelManager.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\SimpleBundleManager.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Entity\GameTick.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Entity\GameWorld.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\ClientGameLoop.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\Game.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\GameConfiguration.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\GameNetworkEvents.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\PlayerSettings.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\ServerGameLoop.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Others\GameManager.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Others\TitleScreen.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\CheckVisibleSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\DespawnSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\ExlosionSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\FireSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\HealthSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\InputSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveForwardSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MovePositionSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveSinSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveTargetSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveTranslationSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MySimulationSystemGroup.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\NetworkClientSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\NetworkServerSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\RayCastSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\ResetWorldSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\SpawnEnemySystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\SpawnPlayerSystem.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\UpdateUISystem.cs" />
+    <None Include="Packages\com.footstone.tankshared\FootStone.TankShared\FootStone.TankShared.asmdef" />
+    <Reference Include="Unity.Entities">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Entities.Hybrid">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.Hybrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Entities.Properties">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.Properties.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Entities.StaticTypeRegistry">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.StaticTypeRegistry.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Extensions">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Physics">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Physics.Hybrid">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.Hybrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Transforms">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Transforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Transforms.Hybrid">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Transforms.Hybrid.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
@@ -262,19 +355,19 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="System.Buffers">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Buffers.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Memory.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Networking.Transport">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/Unity.Networking.Transport.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -621,6 +714,16 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Unity.Collections.csproj">
+      <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
+      <Name>Unity.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="FootStone.KcpTransport.csproj">
+      <Project>{E443916D-9AE3-E5C6-D54E-F84F1685BF93}</Project>
+      <Name>FootStone.KcpTransport</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
