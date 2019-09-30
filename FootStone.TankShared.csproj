@@ -108,7 +108,6 @@
     <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveSinSystem.cs" />
     <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveTargetSystem.cs" />
     <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveTranslationSystem.cs" />
-    <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\NetworkServerSystem.cs" />
     <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\RayCastSystem.cs" />
     <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\ResetWorldSystem.cs" />
     <Compile Include="D:\work\ECS\TankDemo\Packages\com.footstone.tankshared\FootStone.TankShared\Systems\SpawnEnemySystem.cs" />
