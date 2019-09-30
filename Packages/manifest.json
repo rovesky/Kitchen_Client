@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.footstone.kcptransport": "file:./../../Share/com.footstone.kcptransport",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.burst": "1.1.2",

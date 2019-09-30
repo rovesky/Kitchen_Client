@@ -101,13 +101,6 @@
     <Compile Include="Assets\Scripts\Main\GameNetworkEvents.cs" />
     <Compile Include="Assets\Scripts\Main\PlayerSettings.cs" />
     <Compile Include="Assets\Scripts\Main\ServerGameLoop.cs" />
-    <Compile Include="Assets\Scripts\Network\Kcp\IKcpInterface.cs" />
-    <Compile Include="Assets\Scripts\Network\Kcp\Kcp.cs" />
-    <Compile Include="Assets\Scripts\Network\Kcp\KcpSegment.cs" />
-    <Compile Include="Assets\Scripts\Network\UdpSocket\KcpConnection.cs" />
-    <Compile Include="Assets\Scripts\Network\UdpSocket\KcpTransport.cs" />
-    <Compile Include="Assets\Scripts\Network\Utils\FSLog.cs" />
-    <Compile Include="Assets\Scripts\Network\Utils\NetStatics.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\Systems\CheckVisibleSystem.cs" />
@@ -345,20 +338,20 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="System.Buffers">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Networking.Transport">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/Unity.Networking.Transport.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Networking.Transport">
+      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -787,6 +780,10 @@
     <ProjectReference Include="Unity.Transforms.Hybrid.csproj">
       <Project>{86EC3AD1-D6D8-37D9-F2AE-DE6001AD81E3}</Project>
       <Name>Unity.Transforms.Hybrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="FootStone.KcpTransport.csproj">
+      <Project>{E443916D-9AE3-E5C6-D54E-F84F1685BF93}</Project>
+      <Name>FootStone.KcpTransport</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

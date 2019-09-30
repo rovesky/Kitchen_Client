@@ -11,10 +11,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{F4350E2A-E02C-B68C-DAE8-125F76561EB1}</ProjectGuid>
+    <ProjectGuid>{EDC410AF-8EA9-A46A-59A6-62C44F121C77}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Unity.Rendering.Hybrid</AssemblyName>
+    <AssemblyName>FootStone.Utils</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -49,8 +49,6 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
-    <UnityProjectType>Game:1</UnityProjectType>
-    <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2019.2.0f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -62,40 +60,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\CullingStatsDrawer.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\FreezeStaticLODObjects.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\FrozenRenderSceneTagProxy.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\FrozenStaticRendererSystem.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\FrustumPlanes.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\HLOD.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\HLODGroupConversion.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\HLODGroupSectionSplitConversion.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\InstancedRenderMeshBatchGroup.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LightComponent.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LightConversion.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LightCookieProxy.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LightSystem.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LODGroupConversion.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LODGroupExtensions.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\LodRequirementsUpdateSystem.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\MeshLODComponent.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\MeshRendererConversion.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\RemoveLocalBounds.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\RenderBoundsComponent.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\RenderBoundsUpdateSystem.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\RenderMeshFlippedWindingTagProxy.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\RenderMeshProxy.cs" />
-    <Compile Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\RenderMeshSystemV2.cs" />
-    <None Include="Packages\com.unity.rendering.hybrid\Unity.Rendering.Hybrid\Unity.Rendering.Hybrid.asmdef" />
-    <Reference Include="Unity.Burst">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Jobs">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Jobs.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
-    </Reference>
+    <Compile Include="D:\work\ECS\TankDemo\Share\com.footstone.shared\Utils\FSLog.cs" />
+    <Compile Include="D:\work\ECS\TankDemo\Share\com.footstone.shared\Utils\NetStatics.cs" />
+    <None Include="D:\work\ECS\TankDemo\Share\com.footstone.shared\Utils\FootStone.Utils.asmdef" />
     <Reference Include="UnityEditor.UI">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
@@ -294,20 +261,20 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Networking.Transport">
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/Unity.Networking.Transport.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Buffers">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Networking.Transport">
-      <HintPath>D:/work/ECS/TankDemo/Share/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
+      <HintPath>D:/work/ECS/TankDemo/Client/Assets/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -654,36 +621,6 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Unity.Entities.csproj">
-      <Project>{49E386F0-A903-0653-5A1C-BBB031F8B7DA}</Project>
-      <Name>Unity.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Entities.Hybrid.csproj">
-      <Project>{F1EC6112-6356-910C-21FB-7C0243EEC9C5}</Project>
-      <Name>Unity.Entities.Hybrid</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Transforms.csproj">
-      <Project>{74A5D6F7-3135-6EA9-B5D6-0CCDD25C89A8}</Project>
-      <Name>Unity.Transforms</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Transforms.Hybrid.csproj">
-      <Project>{86EC3AD1-D6D8-37D9-F2AE-DE6001AD81E3}</Project>
-      <Name>Unity.Transforms.Hybrid</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Collections.csproj">
-      <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
-      <Name>Unity.Collections</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Mathematics.Extensions.csproj">
-      <Project>{883A36DF-8CB4-979F-F6CD-8576D4669C47}</Project>
-      <Name>Unity.Mathematics.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Mathematics.Extensions.Hybrid.csproj">
-      <Project>{B110F3A6-6FB5-81B8-C12E-B368848A85FF}</Project>
-      <Name>Unity.Mathematics.Extensions.Hybrid</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

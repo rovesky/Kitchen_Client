@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Scenes.Hybrid", "Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Mathematics.Extensions", "Unity.Mathematics.Extensions.csproj", "{883A36DF-8CB4-979F-F6CD-8576D4669C47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootStone.KcpTransport", "FootStone.KcpTransport.csproj", "{E443916D-9AE3-E5C6-D54E-F84F1685BF93}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Entities.Editor.Tests", "Unity.Entities.Editor.Tests.csproj", "{A2339E77-AD89-6DEE-1A15-14D0761D32D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Entities.Properties.PerformanceTests", "Unity.Entities.Properties.PerformanceTests.csproj", "{0C88969A-313C-11D4-F276-033A4D740F65}"
@@ -143,6 +145,10 @@ Global
 		{883A36DF-8CB4-979F-F6CD-8576D4669C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{883A36DF-8CB4-979F-F6CD-8576D4669C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{883A36DF-8CB4-979F-F6CD-8576D4669C47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E443916D-9AE3-E5C6-D54E-F84F1685BF93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E443916D-9AE3-E5C6-D54E-F84F1685BF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E443916D-9AE3-E5C6-D54E-F84F1685BF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E443916D-9AE3-E5C6-D54E-F84F1685BF93}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2339E77-AD89-6DEE-1A15-14D0761D32D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2339E77-AD89-6DEE-1A15-14D0761D32D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2339E77-AD89-6DEE-1A15-14D0761D32D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
