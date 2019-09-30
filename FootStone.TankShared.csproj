@@ -101,27 +101,20 @@
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\GameNetworkEvents.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\PlayerSettings.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\ServerGameLoop.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Others\GameManager.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Others\TitleScreen.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\CheckVisibleSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\DespawnSystem.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\ExlosionSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\FireSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\HealthSystem.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\InputSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveForwardSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MovePositionSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveSinSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveTargetSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MoveTranslationSystem.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\MySimulationSystemGroup.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\NetworkClientSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\NetworkServerSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\RayCastSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\ResetWorldSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\SpawnEnemySystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\SpawnPlayerSystem.cs" />
-    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Systems\UpdateUISystem.cs" />
     <None Include="Packages\com.footstone.tankshared\FootStone.TankShared\FootStone.TankShared.asmdef" />
     <Reference Include="Unity.Entities">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>

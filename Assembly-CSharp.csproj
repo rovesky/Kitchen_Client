@@ -62,67 +62,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Behaviour\CheckVisibleBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\EntitySender.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\EntityTracker.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\SpawnEnemyBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\SpawnPlayerBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Behaviour\TimeToKill.cs" />
-    <Compile Include="Assets\Scripts\Components\Battle\Attack.cs" />
-    <Compile Include="Assets\Scripts\Components\Battle\Damage.cs" />
-    <Compile Include="Assets\Scripts\Components\Battle\Fire.cs" />
-    <Compile Include="Assets\Scripts\Components\Battle\Health.cs" />
-    <Compile Include="Assets\Scripts\Components\Entity\Enemy.cs" />
-    <Compile Include="Assets\Scripts\Components\Entity\Player.cs" />
-    <Compile Include="Assets\Scripts\Components\Entity\Rocket.cs" />
-    <Compile Include="Assets\Scripts\Components\Lifecycle\Despawn.cs" />
-    <Compile Include="Assets\Scripts\Components\Lifecycle\SpawnEnemy.cs" />
-    <Compile Include="Assets\Scripts\Components\Lifecycle\SpawnPlayer.cs" />
-    <Compile Include="Assets\Scripts\Components\Move\MoveForward.cs" />
-    <Compile Include="Assets\Scripts\Components\Move\MovePosition.cs" />
-    <Compile Include="Assets\Scripts\Components\Move\MoveSin.cs" />
-    <Compile Include="Assets\Scripts\Components\Move\MoveTarget.cs" />
-    <Compile Include="Assets\Scripts\Components\Move\MoveTranslation.cs" />
-    <Compile Include="Assets\Scripts\Components\PlayerCommand.cs" />
-    <Compile Include="Assets\Scripts\Components\Presetation\Explosion.cs" />
-    <Compile Include="Assets\Scripts\Components\Presetation\UpdateUI.cs" />
-    <Compile Include="Assets\Scripts\Components\Score.cs" />
-    <Compile Include="Assets\Scripts\Components\TriggerDestroy.cs" />
-    <Compile Include="Assets\Scripts\Core\ConfigVars.cs" />
-    <Compile Include="Assets\Scripts\Core\GameDebug.cs" />
-    <Compile Include="Assets\Scripts\Core\GameStatistics.cs" />
-    <Compile Include="Assets\Scripts\Core\LevelManager.cs" />
-    <Compile Include="Assets\Scripts\Core\SimpleBundleManager.cs" />
-    <Compile Include="Assets\Scripts\Entity\GameTick.cs" />
-    <Compile Include="Assets\Scripts\Entity\GameWorld.cs" />
-    <Compile Include="Assets\Scripts\Main\ClientGameLoop.cs" />
-    <Compile Include="Assets\Scripts\Main\Game.cs" />
-    <Compile Include="Assets\Scripts\Main\GameConfiguration.cs" />
-    <Compile Include="Assets\Scripts\Main\GameNetworkEvents.cs" />
-    <Compile Include="Assets\Scripts\Main\PlayerSettings.cs" />
-    <Compile Include="Assets\Scripts\Main\ServerGameLoop.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
-    <Compile Include="Assets\Scripts\Systems\CheckVisibleSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\DespawnSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\FireSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\HealthSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\InputSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\MoveForwardSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\MovePositionSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\MoveSinSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\MoveTargetSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\MoveTranslationSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\MySimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\NetworkClientSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\NetworkServerSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\RayCastSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\ResetWorldSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\SpawnEnemySystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\SpawnPlayerSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
-    <None Include="Assets\Scripts\新建文本文档.txt" />
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
     </Reference>

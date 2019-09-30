@@ -22,7 +22,7 @@ namespace Assets.Scripts.ECS
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<RayCastSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<HealthSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());         
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkServerSystem>());
 
