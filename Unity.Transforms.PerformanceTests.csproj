@@ -67,9 +67,6 @@
     <Reference Include="Unity.PerformanceTesting">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.PerformanceTesting.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Collections">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
     </Reference>
@@ -653,6 +650,10 @@
     <ProjectReference Include="Unity.Entities.Tests.csproj">
       <Project>{4AF85B6B-02CC-795A-D58D-382FDC6D500A}</Project>
       <Name>Unity.Entities.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Collections.csproj">
+      <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
+      <Name>Unity.Collections</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

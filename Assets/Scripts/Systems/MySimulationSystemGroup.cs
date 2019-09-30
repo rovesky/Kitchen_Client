@@ -8,7 +8,7 @@ using Unity.Entities;
 namespace Assets.Scripts.ECS
 {
     [UnityEngine.ExecuteAlways]
-    public class MySimulationSystemGroup : ComponentSystemGroup
+    public class ClientSimulationSystemGroup : ComponentSystemGroup
     {
         protected override void OnCreate()
         {

@@ -1,11 +1,6 @@
 ﻿using FootStone.Kcp;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
@@ -67,8 +62,7 @@ namespace Assets.Scripts.ECS
                      {
                          conId = kcpClient.Connect("192.168.0.128", 1001);
                      }
-                     //   else
-                     //   {
+      
                      var connection = kcpClient.GetConnection(conId);
                      if (connection != null)
                      {
@@ -88,10 +82,6 @@ namespace Assets.Scripts.ECS
                              GameManager.Instance.UpdateRtt(connection.RTT);
                          }
                      }
-
-                    
-
-                     //    }
                  });
         }
     }

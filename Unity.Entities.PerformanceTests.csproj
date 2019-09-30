@@ -89,9 +89,6 @@
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Collections">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
     </Reference>
@@ -658,6 +655,10 @@
     <ProjectReference Include="Unity.Entities.csproj">
       <Project>{49E386F0-A903-0653-5A1C-BBB031F8B7DA}</Project>
       <Name>Unity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Collections.csproj">
+      <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
+      <Name>Unity.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Entities.Properties.csproj">
       <Project>{A8A85422-8DE1-31A5-8999-12F7656787BA}</Project>

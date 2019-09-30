@@ -47,16 +47,16 @@ namespace FootStone.ECS
         public static List<GameWorld> s_Worlds = new List<GameWorld>();
 
         public GameTick WorldTick {
-            get => _worldTick;
-            set => _worldTick = value; 
+            get => worldTick;
+            set => worldTick = value; 
         }
 
         public int lastServerTick;
 
-        public float frameDuration
+        public float FrameDuration
         {
-            get { return m_frameDuration; }
-            set { m_frameDuration = value; }
+            get { return frameDuration; }
+            set { frameDuration = value; }
         }
 
 
@@ -72,31 +72,31 @@ namespace FootStone.ECS
         {
             GameDebug.Log("GameWorld " + name + " initializing");
 
-            if (gameobjectHierarchy.IntValue == 1)
-            {
-                m_sceneRoot = new GameObject(name);
-                GameObject.DontDestroyOnLoad(m_sceneRoot);
-            }
+            //if (gameobjectHierarchy.IntValue == 1)
+            //{
+            //    m_sceneRoot = new GameObject(name);
+            //    GameObject.DontDestroyOnLoad(m_sceneRoot);
+            //}
 
             GameDebug.Assert(World.Active != null, "There is no active world");
-            m_ECSWorld = World.Active;
+            ecsWorld = World.Active;
 
-            m_EntityManager = m_ECSWorld.EntityManager;
+            m_EntityManager = ecsWorld.EntityManager;
 
             GameDebug.Assert(m_EntityManager.IsCreated);
 
-            _worldTick.TickRate = 60;
+            worldTick.TickRate = 60;
 
             nextTickTime = Game.frameTime;
 
             s_Worlds.Add(this);
 
-            m_destroyDespawningSystem = m_ECSWorld.CreateSystem<DestroyDespawning>();
+            m_destroyDespawningSystem = ecsWorld.CreateSystem<DestroyDespawning>();
         }
 
         public void Shutdown()
         {
-            GameDebug.Log("GameWorld " + m_ECSWorld.Name + " shutting down");
+            GameDebug.Log("GameWorld " + ecsWorld.Name + " shutting down");
 
             foreach (var entity in m_dynamicEntities)
             {
@@ -144,7 +144,7 @@ namespace FootStone.ECS
 
         public World GetECSWorld()
         {
-            return m_ECSWorld;
+            return ecsWorld;
         }
 
         public T Spawn<T>(GameObject prefab) where T : Component
@@ -298,8 +298,10 @@ namespace FootStone.ECS
             return gameObjectEntity != null ? gameObjectEntity.Entity : Entity.Null;
         }
 
+
+
         EntityManager m_EntityManager;
-        World m_ECSWorld;
+        World ecsWorld;
 
         GameObject m_sceneRoot;
 
@@ -310,11 +312,8 @@ namespace FootStone.ECS
         List<GameObject> m_DespawnRequests = new List<GameObject>(32);
         List<Entity> m_DespawnEntityRequests = new List<Entity>(32);
 
-        [ConfigVar(Name = "gameobjecthierarchy", Description = "Should gameobject be organized in a gameobject hierarchy", DefaultValue = "0")]
-        static ConfigVar gameobjectHierarchy;
-
-        float m_frameDuration;
-        private GameTick _worldTick;
+        float frameDuration;
+        private GameTick worldTick;
     }
 
 }

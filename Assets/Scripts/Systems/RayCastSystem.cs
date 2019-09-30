@@ -64,7 +64,7 @@ namespace Assets.Scripts.ECS
                 ref PhysicsCollider collider,
                 ref Rocket rocket) =>
             {
-                float distance = (rocket.Type == RocketType.Player) ? -0.3f : -0.2f;
+                float distance = (rocket.Type == RocketType.Player) ? -0.4f : -0.3f;
                 DoCollide(entityA,ref localToWorld,ref position,ref collider, distance);
             });
 
@@ -75,7 +75,7 @@ namespace Assets.Scripts.ECS
                 ref PhysicsCollider collider,
                 ref Player player) =>
             {
-                DoCollide(entityA, ref localToWorld, ref position, ref collider, -0.2f);
+                DoCollide(entityA, ref localToWorld, ref position, ref collider, -0.6f);
             });
         }
     }

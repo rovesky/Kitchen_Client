@@ -40,9 +40,8 @@ namespace Assets.Scripts.ECS
                     Ray ray = Camera.main.ScreenPointToRay(ms);
                     // 用来记录射线碰撞信息
                     RaycastHit hitInfo;
-                    // 产生射线
-                    //LayerMask mask =new LayerMask();
-                    //mask.value = (int)Mathf.Pow(2.0f, (float)LayerMask.NameToLayer("plane"));
+
+                    // 产生射线                 
                     bool isCast = Physics.Raycast(ray, out hitInfo, 1000, InputMask);
 
                     var targetPos = Vector3.zero;
@@ -53,7 +52,7 @@ namespace Assets.Scripts.ECS
                     }
                     userCommand.targetPos = targetPos;
 
-                    FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
+                 //   FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
                 }
 
             });
