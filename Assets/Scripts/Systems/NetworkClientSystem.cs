@@ -1,4 +1,5 @@
 ﻿using FootStone.Kcp;
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 
@@ -20,6 +21,8 @@ namespace Assets.Scripts.ECS
             FSLog.Info($"client connection created:{connection.Id}");
             conId = connection.Id;
             connections.Add(connection.Id);
+
+         
 
             connection.Recv += (inSequence, buffer) =>
             {
@@ -44,10 +47,14 @@ namespace Assets.Scripts.ECS
             base.OnCreate();
             kcpClient = new KcpClient(this);
 
+            FSLog.Info($"NetworkClientSystem OnCreate");
+          
+          //  FSLog.Info($"OnCreate {conId}");
         }
 
         protected override void OnDestroy()
         {
+            FSLog.Info($"OnDestroy {conId}");
             connections.Clear();
             if (kcpClient != null)
             {
@@ -56,33 +63,57 @@ namespace Assets.Scripts.ECS
         }
         protected override void OnUpdate()
         {
-            Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref PlayerCommand command) =>
-                 {
-                     if (connections.Count == 0 && conId < 0)
-                     {
-                         conId = kcpClient.Connect("192.168.0.128", 1001);
-                     }
-      
-                     var connection = kcpClient.GetConnection(conId);
-                     if (connection != null)
-                     {
-                         kcpClient.Update();
+            Entities.ForEach((Entity entity, ref SpawnPlayer spawn) =>
+            {
+              //  FSLog.Info($"EntityManager.AddBuffer<PlayerId>(entity");
+                if (!spawn.spawned)
+                {
+                    EntityManager.AddBuffer<PlayerId>(entity);
+                    var buffer = EntityManager.GetBuffer<PlayerId>(entity);
+                    buffer.Add(new PlayerId() { playerId = 0 });
+                    spawn.spawned = true;
+                }
+            });
 
-                         if (connection.IsConnected)
-                         {
-                             byte[] data = command.ToData();
-                             kcpClient.SendData(conId, data, data.Length);
+            //  FSLog.Info($"Update {conId}");
+            if (connections.Count == 0 && conId < 0)
+            {
+                FSLog.Info($"client connection to 192.168.0.128:1001");
+                try
+                {
+                    conId = kcpClient.Connect("127.0.0.1", 1001);
+                }
+                catch(Exception e)
+                {
+                    FSLog.Error(e);
+                }
+            }
+        
+            var connection = kcpClient.GetConnection(conId);
+            if (connection != null)
+            {
+              //  FSLog.Info($"kcpClient.Update()");
+                kcpClient.Update();
+               
+                Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref PlayerCommand command) =>
+                {
+                  //  FSLog.Info($"WithAllReadOnly<Player>()");
+                    if (connection.IsConnected)
+                    {
+                        byte[] data = command.ToData();
+                        kcpClient.SendData(conId, data, data.Length);
 
-                             if (recvBuffer.isBack)
-                             {
-                                 PostUpdateCommands.SetComponent(entity, recvBuffer);
-                                 recvBuffer = default;
-                             }
+                        if (recvBuffer.isBack)
+                        {
+                            PostUpdateCommands.SetComponent(entity, recvBuffer);
+                            recvBuffer = default;
+                        }
 
-                             GameManager.Instance.UpdateRtt(connection.RTT);
-                         }
-                     }
-                 });
+                        GameManager.Instance.UpdateRtt(connection.RTT);
+                    }
+
+                });
+            }
         }
     }
 }

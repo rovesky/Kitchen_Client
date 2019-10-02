@@ -15,8 +15,9 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<InputSystem>());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
-          
-         
+
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnPlayerSystem>());
+
             m_systemsToUpdate.Add(World.GetOrCreateSystem<PlayerFireSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<EnemyFireSystem>());
 

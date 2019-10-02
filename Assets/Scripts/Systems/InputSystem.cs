@@ -25,6 +25,7 @@ namespace Assets.Scripts.ECS
             Entities.WithAllReadOnly<Player>().ForEach((Entity entity,ref PlayerCommand userCommand) =>
             {
                 userCommand.Reset();
+                userCommand.isBack = true;
                 //是否开火
                 userCommand.buttons.Or(PlayerCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
 
