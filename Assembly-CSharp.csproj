@@ -62,12 +62,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Components\Snapshot.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
+    <Compile Include="Assets\Scripts\Systems\ClientSimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\InputSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\MySimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\NetworkClientSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\ReadSnapshotSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>

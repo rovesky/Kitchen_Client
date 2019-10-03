@@ -1,6 +1,7 @@
 ﻿using FootStone.Kcp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Unity.Entities;
 
 namespace Assets.Scripts.ECS
@@ -16,22 +17,30 @@ namespace Assets.Scripts.ECS
         private PlayerCommand recvBuffer = default;
 
 
-        public void OnConnect(KcpConnection connection)
+        public unsafe void OnConnect(KcpConnection connection)
         {
             FSLog.Info($"client connection created:{connection.Id}");
             conId = connection.Id;
             connections.Add(connection.Id);
 
-         
-
             connection.Recv += (inSequence, buffer) =>
-            {
-                //  var recMsg = Encoding.UTF8.GetString(buffer);
-                FSLog.Debug($"[{inSequence}] client recv data");
-                recvBuffer.FromData(buffer);
-                recvBuffer.renderTick = (int)inSequence;
-                recvBuffer.isBack = true;
+            {          
+               //FSLog.Info($"[{inSequence}] client recv data:{buffer.Length}");
 
+                var snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotTick>());
+
+                if (snapShotQuery.CalculateEntityCount() > 0)
+                {
+                    var snapShot = snapShotQuery.GetSingleton<SnapshotTick>();
+                    snapShot.length = buffer.Length;
+                    using (UnmanagedMemoryStream tempUMS = new UnmanagedMemoryStream((byte*)snapShot.data,
+                        buffer.Length, buffer.Length,FileAccess.Write))
+                    {
+                        tempUMS.Write(buffer, 0, buffer.Length);                       
+                    }
+
+                    snapShotQuery.SetSingleton(snapShot);
+                }
             };
         }
 
@@ -63,17 +72,17 @@ namespace Assets.Scripts.ECS
         }
         protected override void OnUpdate()
         {
-            Entities.ForEach((Entity entity, ref SpawnPlayer spawn) =>
-            {
-              //  FSLog.Info($"EntityManager.AddBuffer<PlayerId>(entity");
-                if (!spawn.spawned)
-                {
-                    EntityManager.AddBuffer<PlayerId>(entity);
-                    var buffer = EntityManager.GetBuffer<PlayerId>(entity);
-                    buffer.Add(new PlayerId() { playerId = 0 });
-                    spawn.spawned = true;
-                }
-            });
+            //Entities.ForEach((Entity entity, ref SpawnPlayer spawn) =>
+            //{
+            //  //  FSLog.Info($"EntityManager.AddBuffer<PlayerId>(entity");
+            //    if (!spawn.spawned)
+            //    {
+            //        EntityManager.AddBuffer<PlayerId>(entity);
+            //        var buffer = EntityManager.GetBuffer<PlayerId>(entity);
+            //        buffer.Add(new PlayerId() { playerId = 0 });
+            //        spawn.spawned = true;
+            //    }
+            //});
 
             //  FSLog.Info($"Update {conId}");
             if (connections.Count == 0 && conId < 0)
@@ -92,22 +101,25 @@ namespace Assets.Scripts.ECS
             var connection = kcpClient.GetConnection(conId);
             if (connection != null)
             {
-              //  FSLog.Info($"kcpClient.Update()");
+            //    FSLog.Info($"kcpClient.Update()");
                 kcpClient.Update();
-               
-                Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref PlayerCommand command) =>
+
+
+                return;
+                //      Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref PlayerCommand command) =>
+                Entities.ForEach((Entity entity, ref PlayerCommand command) =>
                 {
                   //  FSLog.Info($"WithAllReadOnly<Player>()");
                     if (connection.IsConnected)
                     {
                         byte[] data = command.ToData();
-                        kcpClient.SendData(conId, data, data.Length);
+                        kcpClient.SendData(connection.Id, data, data.Length);
 
-                        if (recvBuffer.isBack)
-                        {
-                            PostUpdateCommands.SetComponent(entity, recvBuffer);
-                            recvBuffer = default;
-                        }
+                        //if (recvBuffer.isBack)
+                        //{
+                        //    PostUpdateCommands.SetComponent(entity, recvBuffer);
+                        //    recvBuffer = default;
+                        //}
 
                         GameManager.Instance.UpdateRtt(connection.RTT);
                     }
