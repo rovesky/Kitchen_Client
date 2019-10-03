@@ -45,34 +45,36 @@ namespace Assets.Scripts.ECS
             }
         }
 
-        protected  override void OnUpdate()
+        protected override void OnUpdate()
         {
 
-          //  FSLog.Info($" ReadSnapshotSystem OnUpdate!");
+            //  FSLog.Info($" ReadSnapshotSystem OnUpdate!");
             //添加player到队列
-            Entities.WithAllReadOnly<Player>().ForEach((Entity entity,ref Player player) =>
+            Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref Player player) =>
             {
                 if (!entities.ContainsKey(player.id))
                 {
                     entities[player.id] = entity;
                 }
             });
-         
-            if (snapShotQuery.CalculateEntityCount() == 0 )
+
+            if (snapShotQuery.CalculateEntityCount() == 0)
                 return;
-          //  FSLog.Info($" ReadSnapshotSystem OnUpdate2!");
+            //  FSLog.Info($" ReadSnapshotSystem OnUpdate2!");
 
             var snapshot = snapShotQuery.GetSingleton<SnapshotTick>();
             if (snapshot.length == 0)
                 return;
 
-            FSLog.Info($" begin reader:{snapshot.length}!");
+            //   FSLog.Info($" begin reader:{snapshot.length}!");
             //var reader = new NetworkReader(snapshot.data, null);
 
             var stream = new UnmanagedMemoryStream((byte*)snapshot.data, snapshot.length);
             var reader = new BinaryReader(stream);
 
             snapshot.tick = reader.ReadUInt32();
+
+            //玩家
             var playerCount = reader.ReadInt32();
 
             List<int> spawnPlayer = new List<int>();
@@ -81,7 +83,7 @@ namespace Assets.Scripts.ECS
                 var playerId = reader.ReadInt32();
                 //    var pos = reader.ReadVector3Q();
                 float3 pos;
-                pos.x= reader.ReadSingle();
+                pos.x = reader.ReadSingle();
                 pos.y = reader.ReadSingle();
                 pos.z = reader.ReadSingle();
 
@@ -131,6 +133,62 @@ namespace Assets.Scripts.ECS
                         spawn.spawned = true;
                     }
                 });
+            }
+
+            //敌人
+            var enemyCount = reader.ReadInt32();
+
+            List<int> spawnEnemy = new List<int>();
+            for (int i = 0; i < enemyCount; ++i)
+            {
+                var enemyId = reader.ReadInt32();
+                var enemyType = (EnemyType)reader.ReadByte();
+                float3 pos;
+                pos.x = reader.ReadSingle();
+                pos.y = reader.ReadSingle();
+                pos.z = reader.ReadSingle();
+
+                var health = reader.ReadInt32();
+                var attack = reader.ReadInt32();
+
+                float fireCooldown = default;
+                float rocketTimer = default;
+                if (enemyType == EnemyType.Super)
+                {
+                    fireCooldown = reader.ReadSingle();
+                    rocketTimer = reader.ReadSingle();
+                }
+
+                if (!entities.ContainsKey(enemyId))
+                {
+                    FSLog.Info($" spwan enemy ({enemyId});");
+                    spawnEnemy.Add(enemyId);
+                }
+                else
+                {
+                    var enity = entities[enemyId];
+
+                    var translation = EntityManager.GetComponentData<Translation>(enity);
+                    translation.Value = pos;
+                    EntityManager.SetComponentData(enity, translation);
+
+                    var healthC = EntityManager.GetComponentData<Health>(enity);
+                    healthC.Value = health;
+                    EntityManager.SetComponentData(enity, healthC);
+
+                    var attackC = EntityManager.GetComponentData<Attack>(enity);
+                    attackC.Power = attack;
+                    EntityManager.SetComponentData(enity, attackC);
+
+                    if (enemyType == EnemyType.Super)
+                    {
+                        var fireRocketC = EntityManager.GetComponentData<FireRocket>(enity);
+                        fireRocketC.FireCooldown = fireCooldown;
+                        fireRocketC.RocketTimer = rocketTimer;
+                        EntityManager.SetComponentData(enity, fireRocketC);
+
+                    }
+                }
             }
         }
     }
