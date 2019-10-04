@@ -17,9 +17,8 @@ namespace Assets.Scripts.ECS
         private Dictionary<int,Entity> entities = new Dictionary<int, Entity>();  
 
         private EntityQuery snapShotQuery;
-        private EntityQuery spawnEnemyQuery;
-        private EntityQuery spawnPlayerQuery;
-
+        private EntityQuery spawnEntitiesyQuery;
+     
         protected override void OnCreate()
         {
             snapShotQuery = GetEntityQuery(ComponentType.ReadOnly<SnapshotTick>());
@@ -31,8 +30,8 @@ namespace Assets.Scripts.ECS
                 data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
             });
 
-            spawnEnemyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEnemyClient>());
-            spawnPlayerQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnPlayerClient>());
+            spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
+          //  spawnPlayerQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnPlayerClient>());
         }
     
         protected override void OnDestroy()
@@ -62,17 +61,14 @@ namespace Assets.Scripts.ECS
 
             Dictionary<int, int> snapshotEntites = new Dictionary<int, int>();
 
+            var spawnEntitiesBuffer = EntityManager.GetBuffer<EntityBuffer>(spawnEntitiesyQuery.GetSingletonEntity());
 
             //玩家
-            var playerCount = reader.ReadInt32();
-            var spawnPlayerBuffer = EntityManager.GetBuffer<PlayerClientBuffer>(spawnPlayerQuery.GetSingletonEntity());
-
+            var playerCount = reader.ReadInt32();          
             for (int i = 0; i < playerCount; ++i)
             {
                 var playerId = reader.ReadInt32();
-
-                snapshotEntites.Add(playerId, 0);
-
+           
                 float3 pos;
                 pos.x = reader.ReadSingle();
                 pos.y = reader.ReadSingle();
@@ -82,9 +78,10 @@ namespace Assets.Scripts.ECS
                 var score = reader.ReadInt32();
                 var maxScore = reader.ReadInt32();
 
+                snapshotEntites.Add(playerId, 0);
                 if (!entities.ContainsKey(playerId))
                 {      
-                    spawnPlayerBuffer.Add(new PlayerClientBuffer() { id = playerId, pos = pos });
+                    spawnEntitiesBuffer.Add(new EntityBuffer() { id = playerId, pos = pos ,type = EntityType.Player});
                 }
                 else
                 {
@@ -106,9 +103,7 @@ namespace Assets.Scripts.ECS
             }          
 
             //敌人
-            var enemyCount = reader.ReadInt32();
-            var spawnEnemyBuffer = EntityManager.GetBuffer<EnemyBuffer>(spawnEnemyQuery.GetSingletonEntity());
-
+            var enemyCount = reader.ReadInt32();         
             for (int i = 0; i < enemyCount; ++i)
             {
                 //decode
@@ -134,9 +129,9 @@ namespace Assets.Scripts.ECS
                 if (!entities.ContainsKey(enemyId))
                 {
                     //  FSLog.Info($" spwan enemy ({enemyId});"); 
-                    spawnEnemyBuffer.Add(new EnemyBuffer() {
+                    spawnEntitiesBuffer.Add(new EntityBuffer() {
                         id = enemyId,
-                        type = enemyType,
+                        type = enemyType == EnemyType.Normal?EntityType.Enemy1:EntityType.Enemy2,
                         pos = pos
                     });
                 }
@@ -167,6 +162,75 @@ namespace Assets.Scripts.ECS
                 }
             }
 
+            //rocket
+            var rocketCount = reader.ReadInt32();      
+            for (int i = 0; i < rocketCount; ++i)
+            {
+                //decode
+                var rocketId = reader.ReadInt32();
+                var rocketType = (RocketType)reader.ReadByte();
+                float3 pos;
+                pos.x = reader.ReadSingle();
+                pos.y = reader.ReadSingle();
+                pos.z = reader.ReadSingle();
+
+                quaternion rotation = new quaternion(
+                     reader.ReadSingle(),
+                     reader.ReadSingle(),
+                     reader.ReadSingle(),
+                     reader.ReadSingle());
+
+
+                var health = reader.ReadInt32();
+                var attack = reader.ReadInt32();
+                float speed = reader.ReadSingle();
+
+                Direction dir;
+                if(rocketType == RocketType.Player)
+                {
+                    dir = (Direction)reader.ReadByte();
+                }
+               
+
+                snapshotEntites.Add(rocketId, 0);
+                if (!entities.ContainsKey(rocketId))
+                {
+                 //   FSLog.Info($"rocketType:{rocketType}");
+                    spawnEntitiesBuffer.Add(new EntityBuffer()
+                    {
+                        id = rocketId,
+                        type = rocketType == RocketType.Player ? EntityType.RocketPlayer : EntityType.RocketEnemy,
+                        pos = pos,
+                        rotation = rotation
+                    });
+                }
+                else
+                {
+                    //if(rocketType == RocketType.Player)
+                    //{
+                    //    FSLog.Info($"update rocekt pos:({pos.x},{pos.y},{pos.z})");
+                    //}
+                    var enity = entities[rocketId];
+                    var translation = EntityManager.GetComponentData<Translation>(enity);
+                    translation.Value = pos;
+                    EntityManager.SetComponentData(enity, translation);
+
+                    var rotationC = EntityManager.GetComponentData<Rotation>(enity);
+                    rotationC.Value = rotation;
+                    EntityManager.SetComponentData(enity, rotationC);
+
+                    var healthC = EntityManager.GetComponentData<Health>(enity);
+                    healthC.Value = health;
+                    EntityManager.SetComponentData(enity, healthC);
+
+                    var attackC = EntityManager.GetComponentData<Attack>(enity);
+                    attackC.Power = attack;
+                    EntityManager.SetComponentData(enity, attackC);
+                 
+                }
+            }
+
+
             //remove entity
             List<int> removed = new List<int>();
             foreach (var key in entities.Keys)
@@ -194,6 +258,3 @@ namespace Assets.Scripts.ECS
         }
     }
 }
-
-
-

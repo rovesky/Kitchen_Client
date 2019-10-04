@@ -12,8 +12,7 @@ namespace Assets.Scripts.ECS
         private EntityQuery playerCommandQuery;
 
         protected override void OnCreate()
-        {
-          
+        {          
             base.OnCreate();
             InputMask = 1 << LayerMask.NameToLayer("plane");
 

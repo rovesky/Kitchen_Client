@@ -17,8 +17,10 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnPlayerClientSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEnemyClientSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEntitiesClientSystem>());
+
+        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnPlayerClientSystem>());
+        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEnemyClientSystem>());
 
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<PlayerFireSystem>());
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<EnemyFireSystem>());
@@ -26,7 +28,7 @@ namespace Assets.Scripts.ECS
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<RayCastSystem>());
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<HealthSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
-       //     m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
 
 
 

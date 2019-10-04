@@ -14,7 +14,7 @@ namespace Assets.Scripts.ECS
         private int conId = -1;
         private List<int> connections = new List<int>();
 
-        private PlayerCommand recvBuffer = default;
+       // private PlayerCommand recvBuffer = default;
         private EntityQuery playerCommandQuery;
 
         public unsafe void OnConnect(KcpConnection connection)

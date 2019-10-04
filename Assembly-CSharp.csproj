@@ -63,8 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Components\Snapshot.cs" />
-    <Compile Include="Assets\Scripts\Components\SpawEnemyClient.cs" />
-    <Compile Include="Assets\Scripts\Components\SpawPlayerClient.cs" />
+    <Compile Include="Assets\Scripts\Components\SpawEntitiesClient.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\Systems\ClientSimulationSystemGroup.cs" />
@@ -72,8 +71,7 @@
     <Compile Include="Assets\Scripts\Systems\InputSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\NetworkClientSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\ReadSnapshotSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\SpawnEnemyClientSystem.cs" />
-    <Compile Include="Assets\Scripts\Systems\SpawnPlayerClientSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\SpawnEntitiesClientSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
