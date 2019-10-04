@@ -15,10 +15,9 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<InputSystem>());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
-
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnPlayerSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnPlayerClientSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEnemyClientSystem>());
 
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<PlayerFireSystem>());
@@ -26,10 +25,11 @@ namespace Assets.Scripts.ECS
 
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<RayCastSystem>());
             //  m_systemsToUpdate.Add(World.GetOrCreateSystem<HealthSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());        
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
+       //     m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
 
-    
-           
+
+
         }
 
         public override void SortSystemUpdateList()

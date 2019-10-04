@@ -15,7 +15,7 @@ namespace Assets.Scripts.ECS
         private List<int> connections = new List<int>();
 
         private PlayerCommand recvBuffer = default;
-
+        private EntityQuery playerCommandQuery;
 
         public unsafe void OnConnect(KcpConnection connection)
         {
@@ -57,8 +57,8 @@ namespace Assets.Scripts.ECS
             kcpClient = new KcpClient(this);
 
             FSLog.Info($"NetworkClientSystem OnCreate");
-          
-          //  FSLog.Info($"OnCreate {conId}");
+            playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<PlayerCommand>());
+
         }
 
         protected override void OnDestroy()
@@ -71,20 +71,8 @@ namespace Assets.Scripts.ECS
             }
         }
         protected override void OnUpdate()
-        {
-            //Entities.ForEach((Entity entity, ref SpawnPlayer spawn) =>
-            //{
-            //  //  FSLog.Info($"EntityManager.AddBuffer<PlayerId>(entity");
-            //    if (!spawn.spawned)
-            //    {
-            //        EntityManager.AddBuffer<PlayerId>(entity);
-            //        var buffer = EntityManager.GetBuffer<PlayerId>(entity);
-            //        buffer.Add(new PlayerId() { playerId = 0 });
-            //        spawn.spawned = true;
-            //    }
-            //});
-
-            //  FSLog.Info($"Update {conId}");
+        {          
+             //  FSLog.Info($"Update {conId}");
             if (connections.Count == 0 && conId < 0)
             {
                 FSLog.Info($"client connection to 192.168.0.128:1001");
@@ -104,27 +92,14 @@ namespace Assets.Scripts.ECS
             //    FSLog.Info($"kcpClient.Update()");
                 kcpClient.Update();
 
-
-                return;
-                //      Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref PlayerCommand command) =>
-                Entities.ForEach((Entity entity, ref PlayerCommand command) =>
+                if (connection.IsConnected)
                 {
-                  //  FSLog.Info($"WithAllReadOnly<Player>()");
-                    if (connection.IsConnected)
-                    {
-                        byte[] data = command.ToData();
-                        kcpClient.SendData(connection.Id, data, data.Length);
+                    var userCommand = playerCommandQuery.GetSingleton<PlayerCommand>();
+                    byte[] data = userCommand.ToData();
+                    kcpClient.SendData(connection.Id, data, data.Length);    
 
-                        //if (recvBuffer.isBack)
-                        //{
-                        //    PostUpdateCommands.SetComponent(entity, recvBuffer);
-                        //    recvBuffer = default;
-                        //}
-
-                        GameManager.Instance.UpdateRtt(connection.RTT);
-                    }
-
-                });
+                    GameManager.Instance.UpdateRtt(connection.RTT);
+                }          
             }
         }
     }

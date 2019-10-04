@@ -18,26 +18,23 @@ namespace Assets.Scripts.ECS
 
         private EntityQuery snapShotQuery;
         private EntityQuery spawnEnemyQuery;
+        private EntityQuery spawnPlayerQuery;
 
-        protected  override void OnCreate()
+        protected override void OnCreate()
         {
             snapShotQuery = GetEntityQuery(ComponentType.ReadOnly<SnapshotTick>());
-
-           // if (snapShotQuery.CalculateEntityCount() == 0)
-          //  {
-                EntityManager.CreateEntity(typeof(SnapshotTick));
-                snapShotQuery.SetSingleton(new SnapshotTick()
-                {
-                    tick = 0,
-                    length = 0,
-                    data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
-                });
-
-                FSLog.Debug("Snapshot create!");
-            // }
+            EntityManager.CreateEntity(typeof(SnapshotTick));
+            snapShotQuery.SetSingleton(new SnapshotTick()
+            {
+                tick = 0,
+                length = 0,
+                data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
+            });
 
             spawnEnemyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEnemyClient>());
+            spawnPlayerQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnPlayerClient>());
         }
+    
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -50,19 +47,7 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {
-
-            //  FSLog.Info($" ReadSnapshotSystem OnUpdate!");
-            //添加player到队列
-            Entities.WithAllReadOnly<Player>().ForEach((Entity entity, ref Player player) =>
-            {
-                if (!entities.ContainsKey(player.id))
-                {
-                    entities[player.id] = entity;
-                }
-            });
-
-
-
+                       
             if (snapShotQuery.CalculateEntityCount() == 0)
                 return;
         
@@ -70,25 +55,24 @@ namespace Assets.Scripts.ECS
             if (snapshot.length == 0)
                 return;
 
-            //   FSLog.Info($" begin reader:{snapshot.length}!");
-            //var reader = new NetworkReader(snapshot.data, null);
-
             var stream = new UnmanagedMemoryStream((byte*)snapshot.data, snapshot.length);
             var reader = new BinaryReader(stream);
 
             snapshot.tick = reader.ReadUInt32();
 
             Dictionary<int, int> snapshotEntites = new Dictionary<int, int>();
+
+
             //玩家
             var playerCount = reader.ReadInt32();
+            var spawnPlayerBuffer = EntityManager.GetBuffer<PlayerClientBuffer>(spawnPlayerQuery.GetSingletonEntity());
 
-            List<int> spawnPlayer = new List<int>();
             for (int i = 0; i < playerCount; ++i)
             {
                 var playerId = reader.ReadInt32();
 
                 snapshotEntites.Add(playerId, 0);
-                //    var pos = reader.ReadVector3Q();
+
                 float3 pos;
                 pos.x = reader.ReadSingle();
                 pos.y = reader.ReadSingle();
@@ -99,9 +83,8 @@ namespace Assets.Scripts.ECS
                 var maxScore = reader.ReadInt32();
 
                 if (!entities.ContainsKey(playerId))
-                {
-                    FSLog.Info($" spwan.Add({playerId});");
-                    spawnPlayer.Add(playerId);
+                {      
+                    spawnPlayerBuffer.Add(new PlayerClientBuffer() { id = playerId, pos = pos });
                 }
                 else
                 {
@@ -120,27 +103,7 @@ namespace Assets.Scripts.ECS
                     scoreC.MaxScoreValue = maxScore;
                     EntityManager.SetComponentData(enity, scoreC);
                 }
-            }
-
-            if (spawnPlayer.Count > 0)
-            {
-                Entities.ForEach((Entity entity, ref SpawnPlayer spawn) =>
-                {
-                    FSLog.Info($"SpawnPlayer begin");
-                    if (!spawn.spawn)
-                    {
-                        EntityManager.AddBuffer<PlayerBuffer>(entity);
-                        var buffer = EntityManager.GetBuffer<PlayerBuffer>(entity);
-
-                        foreach (var id in spawnPlayer)
-                        {
-                            buffer.Add(new PlayerBuffer() { playerId = id });
-                        }
-                        FSLog.Info($"SpawnPlayer end");
-                        spawn.spawn = true;
-                    }
-                });
-            }
+            }          
 
             //敌人
             var enemyCount = reader.ReadInt32();
@@ -148,9 +111,8 @@ namespace Assets.Scripts.ECS
 
             for (int i = 0; i < enemyCount; ++i)
             {
-                var enemyId = reader.ReadInt32();
-
-                snapshotEntites.Add(enemyId, 0);
+                //decode
+                var enemyId = reader.ReadInt32(); 
                 var enemyType = (EnemyType)reader.ReadByte();
                 float3 pos;
                 pos.x = reader.ReadSingle();
@@ -168,6 +130,7 @@ namespace Assets.Scripts.ECS
                     rocketTimer = reader.ReadSingle();
                 }
 
+                snapshotEntites.Add(enemyId, 0);
                 if (!entities.ContainsKey(enemyId))
                 {
                     //  FSLog.Info($" spwan enemy ({enemyId});"); 
@@ -178,10 +141,9 @@ namespace Assets.Scripts.ECS
                     });
                 }
                 else
-                {              
+                {         
 
                     var enity = entities[enemyId];
-
                     var translation = EntityManager.GetComponentData<Translation>(enity);
                     translation.Value = pos;
                     EntityManager.SetComponentData(enity, translation);
@@ -205,7 +167,7 @@ namespace Assets.Scripts.ECS
                 }
             }
 
-
+            //remove entity
             List<int> removed = new List<int>();
             foreach (var key in entities.Keys)
             {
@@ -222,8 +184,6 @@ namespace Assets.Scripts.ECS
             {
                 entities.Remove(key);
             }
-
-
         }
 
         public void AddEntity(int id, Entity e)
@@ -234,5 +194,6 @@ namespace Assets.Scripts.ECS
         }
     }
 }
+
 
 
