@@ -35,6 +35,7 @@ namespace Assets.Scripts.ECS
             m_Audio.loop = true;
             m_Audio.Play();
 
+            m_canvas_gameover.gameObject.SetActive(false);  // 默认隐藏游戏失败UI
 
             m_text_score = m_canvas_main.transform.Find("Text_score").GetComponent<Text>();  // 获得Ui控件
             m_text_best = m_canvas_main.transform.Find("Text_best").GetComponent<Text>();
@@ -46,13 +47,13 @@ namespace Assets.Scripts.ECS
             var restart_button = m_canvas_gameover.transform.Find("Button_restart").GetComponent<Button>();  // 获取重新开始游戏按钮
             restart_button.onClick.AddListener(delegate ()  // 按钮事件回调
             {
-            //  World.Active.Dispose();
-            //  DefaultTinyWorldInitialization.InitializeWorld("Default");
+                //  World.Active.Dispose();
+                //  DefaultTinyWorldInitialization.InitializeWorld("Default");
 
-            World.Active.GetOrCreateSystem<ResetWorldSystem>().IsReset = true;
+                //     World.Active.GetOrCreateSystem<ResetWorldSystem>().IsReset = true;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // 重新开始当前关卡
-        });
-            m_canvas_gameover.gameObject.SetActive(false);  // 默认隐藏游戏失败UI
+            });
+        
         }
 
         // 增加分数

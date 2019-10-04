@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [UpdateInGroup(typeof(PresentationSystemGroup))]
+    //[UpdateInGroup(typeof(PresentationSystemGroup))]
+    [DisableAutoCreation]
     public class UpdateHealthUISystem : ComponentSystem
     {
         protected override void OnUpdate()
