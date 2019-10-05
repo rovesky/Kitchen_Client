@@ -64,12 +64,16 @@ namespace Assets.Scripts.ECS
         protected override void OnDestroy()
         {
             FSLog.Info($"OnDestroy {conId}");
-            connections.Clear();
-            if (kcpClient != null)
+            foreach (var id in connections.ToArray())
             {
-                kcpClient.Shutdown();
+                kcpClient.Disconnect(id);
             }
+
+            connections.Clear();
+            kcpClient.Shutdown();            
         }
+
+
         protected override void OnUpdate()
         {          
              //  FSLog.Info($"Update {conId}");
