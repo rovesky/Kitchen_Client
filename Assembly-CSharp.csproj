@@ -62,7 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Components\Snapshot.cs" />
     <Compile Include="Assets\Scripts\Components\SpawEntitiesClient.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
@@ -73,20 +72,11 @@
     <Compile Include="Assets\Scripts\Systems\ReadSnapshotSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SpawnEntitiesClientSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\UpdateUISystem.cs" />
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VSCode.Editor">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.Properties">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.Properties.dll</HintPath>
@@ -118,6 +108,9 @@
     <Reference Include="Unity.Mathematics.Extensions">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Mathematics.Extensions.Hybrid">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.Extensions.Hybrid.dll</HintPath>
     </Reference>
@@ -129,6 +122,9 @@
     </Reference>
     <Reference Include="Unity.Entities.BuildUtils">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.BuildUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.Hybrid">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Entities.Hybrid.dll</HintPath>
@@ -159,6 +155,9 @@
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Transforms.Hybrid">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Transforms.Hybrid.dll</HintPath>
@@ -340,20 +339,20 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Burst.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Buffers">
       <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory">
       <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Memory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Networking.Transport">
       <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/2019.2.0f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
