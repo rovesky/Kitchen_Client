@@ -66,19 +66,19 @@ namespace Assets.Scripts.ECS
                 Entity e = Entity.Null;
                 if (entityBuffer.type == EntityType.Enemy1)
                 {
-                    e = SpawnEnemyUtil.SpwanEnemy(EntityManager, enemy1Prefab, EnemyType.Normal,
+                    e = SpawnEntityUtil.SpwanEnemy(EntityManager, enemy1Prefab, EnemyType.Normal,
                          entityBuffer.pos, rocketEnemy);
                     EntityManager.AddComponentData(e, new Explosion());
                 }
                 else if (entityBuffer.type == EntityType.Enemy2)
                 {
-                    e = SpawnEnemyUtil.SpwanEnemy(EntityManager, enemy2Prefab, EnemyType.Super,
+                    e = SpawnEntityUtil.SpwanEnemy(EntityManager, enemy2Prefab, EnemyType.Super,
                       entityBuffer.pos, rocketEnemy);
                     EntityManager.AddComponentData(e, new Explosion());
                 }
                 else if (entityBuffer.type == EntityType.Player)
                 {
-                    e = SpawnEnemyUtil.SpwanPlayer(EntityManager, entityBuffer.id, player,
+                    e = SpawnEntityUtil.SpwanPlayer(EntityManager, entityBuffer.id, player,
                            entityBuffer.pos, rocketPlayer);
 
                     EntityManager.AddComponentData(e, new Explosion());
@@ -94,7 +94,7 @@ namespace Assets.Scripts.ECS
 
                     EntityManager.SetComponentData(e, position);
                     EntityManager.SetComponentData(e, rotation);
-                    EntityManager.AddComponentData(e, new Rocket() { id = e.Index, Type = RocketType.Player });
+                    EntityManager.AddComponentData(e, new Rocket() { id = entityBuffer.id, Type = RocketType.Player });
                     EntityManager.AddComponentData(e, new Health() { Value = 1 });
                     EntityManager.AddComponentData(e, new Damage());
                     EntityManager.AddComponentData(e, new Attack() { Power = 20 });
@@ -109,7 +109,7 @@ namespace Assets.Scripts.ECS
 
                     EntityManager.SetComponentData(e, position);
                     EntityManager.SetComponentData(e, rotation);
-                    EntityManager.AddComponentData(e, new Rocket() { id = e.Index, Type = RocketType.Enemy });
+                    EntityManager.AddComponentData(e, new Rocket() { id = entityBuffer.id, Type = RocketType.Enemy });
                     EntityManager.AddComponentData(e, new Attack() { Power = 1 });
                     EntityManager.AddComponentData(e, new Health() { Value = 1 });
                     EntityManager.AddComponentData(e, new Damage());

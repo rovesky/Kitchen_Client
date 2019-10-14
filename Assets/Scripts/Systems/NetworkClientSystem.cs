@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 
 namespace Assets.Scripts.ECS
@@ -16,6 +18,7 @@ namespace Assets.Scripts.ECS
 
        // private PlayerCommand recvBuffer = default;
         private EntityQuery playerCommandQuery;
+        private EntityQuery snapShotQuery;
 
         public unsafe void OnConnect(KcpConnection connection)
         {
@@ -26,20 +29,21 @@ namespace Assets.Scripts.ECS
             connection.Recv += (inSequence, buffer) =>
             {          
                //FSLog.Info($"[{inSequence}] client recv data:{buffer.Length}");
-
-                var snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotTick>());
-
+               
                 if (snapShotQuery.CalculateEntityCount() > 0)
                 {
-                    var snapShot = snapShotQuery.GetSingleton<SnapshotTick>();
+                    var snapShot = new SnapshotTick();
+                    snapShot.data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent);
                     snapShot.length = buffer.Length;
+
                     using (UnmanagedMemoryStream tempUMS = new UnmanagedMemoryStream((byte*)snapShot.data,
                         buffer.Length, buffer.Length,FileAccess.Write))
                     {
                         tempUMS.Write(buffer, 0, buffer.Length);                       
                     }
 
-                    snapShotQuery.SetSingleton(snapShot);
+                    var snapShotBuffer = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity());
+                    snapShotBuffer.Add(snapShot);                 
                 }
             };
         }
@@ -58,7 +62,7 @@ namespace Assets.Scripts.ECS
 
             FSLog.Info($"NetworkClientSystem OnCreate");
             playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<PlayerCommand>());
-
+            snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<Snapshot>());
         }
 
         protected override void OnDestroy()

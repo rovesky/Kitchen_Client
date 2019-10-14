@@ -1,13 +1,10 @@
-﻿using Assets.Scripts.Components;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
@@ -21,38 +18,54 @@ namespace Assets.Scripts.ECS
      
         protected override void OnCreate()
         {
-            snapShotQuery = GetEntityQuery(ComponentType.ReadOnly<SnapshotTick>());
-            EntityManager.CreateEntity(typeof(SnapshotTick));
-            snapShotQuery.SetSingleton(new SnapshotTick()
-            {
-                tick = 0,
-                length = 0,
-                data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
-            });
+            snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<Snapshot>());
 
-            spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
-          //  spawnPlayerQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnPlayerClient>());
+            if (snapShotQuery.CalculateEntityCount() == 0)
+            {
+                var entity = EntityManager.CreateEntity(typeof(Snapshot));
+                snapShotQuery.SetSingleton(new Snapshot());
+                EntityManager.AddBuffer<SnapshotTick>(entity);  
+                FSLog.Debug("Snapshot create!");
+            }        
+
+            spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());      
         }
-    
-        protected override void OnDestroy()
+
+        protected unsafe override void OnDestroy()
         {
-            base.OnDestroy();
             if (snapShotQuery.CalculateEntityCount() > 0)
             {
-                var snapshotTick = snapShotQuery.GetSingleton<SnapshotTick>();
-                UnsafeUtility.Free(snapshotTick.data, Allocator.Persistent);
+                var entity = snapShotQuery.GetSingletonEntity();
+                var buffer = EntityManager.GetBuffer<SnapshotTick>(entity);
+
+                if (buffer.Length == 0)
+                    return;
+
+                var array = buffer.AsNativeArray();
+                for (int i = 0; i < array.Length; ++i)
+                {
+                    UnsafeUtility.Free(array[i].data, Allocator.Persistent);
+                }
+                buffer.Clear();
+                FSLog.Debug("Snapshot destroy!");
             }
         }
 
         protected override void OnUpdate()
-        {
-                       
+        {                       
             if (snapShotQuery.CalculateEntityCount() == 0)
                 return;
-        
-            var snapshot = snapShotQuery.GetSingleton<SnapshotTick>();
-            if (snapshot.length == 0)
+
+            var buffer = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity());
+
+            FSLog.Info($"snapshot buffer length:{buffer.Length}");
+            if (buffer.Length == 0)
                 return;
+
+            var snapshot = buffer[0];
+
+            //remove first buffer snapshotTick
+            buffer.RemoveAt(0);
 
             var stream = new UnmanagedMemoryStream((byte*)snapshot.data, snapshot.length);
             var reader = new BinaryReader(stream);
