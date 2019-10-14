@@ -93,6 +93,7 @@
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\GameStatistics.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\LevelManager.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Core\SimpleBundleManager.cs" />
+    <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Entity\FSComponentSystem.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Entity\GameTick.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Entity\GameWorld.cs" />
     <Compile Include="Packages\com.footstone.tankshared\FootStone.TankShared\Main\ClientGameLoop.cs" />
@@ -367,9 +368,6 @@
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Networking.Transport">
-      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/Unity.Networking.Transport.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
@@ -728,6 +726,10 @@
     <ProjectReference Include="FootStone.KcpTransport.csproj">
       <Project>{E443916D-9AE3-E5C6-D54E-F84F1685BF93}</Project>
       <Name>FootStone.KcpTransport</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Networking.Transport.csproj">
+      <Project>{BB0BEC2E-9189-CA55-1660-230F4E026D90}</Project>
+      <Name>Unity.Networking.Transport</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

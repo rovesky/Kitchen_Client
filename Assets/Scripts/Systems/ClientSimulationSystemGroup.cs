@@ -18,14 +18,28 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEntitiesClientSystem>());
-       
+
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());        
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
         }
 
         public override void SortSystemUpdateList()
         {
-           
+
+        }
+    }
+
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    public class LateClientSimulationSystemGroup : ComponentSystemGroup
+    {
+        protected override void OnCreate()
+        {
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<DespawnSystem>());
+        }
+
+        public override void SortSystemUpdateList()
+        {
+
         }
     }
 }

@@ -16,7 +16,6 @@ namespace Assets.Scripts.ECS
         private int conId = -1;
         private List<int> connections = new List<int>();
 
-       // private PlayerCommand recvBuffer = default;
         private EntityQuery playerCommandQuery;
         private EntityQuery snapShotQuery;
 
@@ -27,23 +26,25 @@ namespace Assets.Scripts.ECS
             connections.Add(connection.Id);
 
             connection.Recv += (inSequence, buffer) =>
-            {          
-               //FSLog.Info($"[{inSequence}] client recv data:{buffer.Length}");
-               
+            {
+                //FSLog.Info($"[{inSequence}] client recv data:{buffer.Length}");
+
                 if (snapShotQuery.CalculateEntityCount() > 0)
                 {
                     var snapShot = new SnapshotTick();
                     snapShot.data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent);
+
+                    //   var snapShot = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity())[0];
                     snapShot.length = buffer.Length;
 
                     using (UnmanagedMemoryStream tempUMS = new UnmanagedMemoryStream((byte*)snapShot.data,
-                        buffer.Length, buffer.Length,FileAccess.Write))
+                        buffer.Length, buffer.Length, FileAccess.Write))
                     {
-                        tempUMS.Write(buffer, 0, buffer.Length);                       
+                        tempUMS.Write(buffer, 0, buffer.Length);
                     }
 
                     var snapShotBuffer = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity());
-                    snapShotBuffer.Add(snapShot);                 
+                    snapShotBuffer.Add(snapShot);
                 }
             };
         }
@@ -86,7 +87,7 @@ namespace Assets.Scripts.ECS
                 FSLog.Info($"client connection to 192.168.0.128:1001");
                 try
                 {
-                    conId = kcpClient.Connect("127.0.0.1", 1001);
+                    conId = kcpClient.Connect("192.168.0.128", 1001);
                 }
                 catch(Exception e)
                 {

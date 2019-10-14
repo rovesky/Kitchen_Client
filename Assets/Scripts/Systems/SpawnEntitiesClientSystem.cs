@@ -26,7 +26,7 @@ namespace Assets.Scripts.ECS
             spawnEntitiesQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
             var entity = EntityManager.CreateEntity(typeof(SpawnEntitiesClient));
             spawnEntitiesQuery.SetSingleton(new SpawnEntitiesClient());
-            EntityManager.AddBuffer<EntityBuffer>(entity);
+            EntityManager.AddBuffer<SpawnEntityBuffer>(entity);
 
             readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
  
@@ -51,7 +51,7 @@ namespace Assets.Scripts.ECS
         {
             var entity = spawnEntitiesQuery.GetSingletonEntity();
 
-            var buffer = EntityManager.GetBuffer<EntityBuffer>(entity);
+            var buffer = EntityManager.GetBuffer<SpawnEntityBuffer>(entity);
             if (buffer.Length == 0)
                 return;
 

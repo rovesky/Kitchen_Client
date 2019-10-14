@@ -14,7 +14,7 @@ namespace Assets.Scripts.ECS
     }
 
     [InternalBufferCapacity(128)]
-    public struct EntityBuffer : IBufferElementData
+    public struct SpawnEntityBuffer : IBufferElementData
     {
         public int id;
         public EntityType type;

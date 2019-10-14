@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -24,7 +25,7 @@ namespace Assets.Scripts.ECS
             {
                 var entity = EntityManager.CreateEntity(typeof(Snapshot));
                 snapShotQuery.SetSingleton(new Snapshot());
-                EntityManager.AddBuffer<SnapshotTick>(entity);  
+                var buffer =  EntityManager.AddBuffer<SnapshotTick>(entity);               
                 FSLog.Debug("Snapshot create!");
             }        
 
@@ -37,18 +38,22 @@ namespace Assets.Scripts.ECS
             {
                 var entity = snapShotQuery.GetSingletonEntity();
                 var buffer = EntityManager.GetBuffer<SnapshotTick>(entity);
-
-                if (buffer.Length == 0)
-                    return;
-
-                var array = buffer.AsNativeArray();
-                for (int i = 0; i < array.Length; ++i)
-                {
-                    UnsafeUtility.Free(array[i].data, Allocator.Persistent);
-                }
-                buffer.Clear();
+                ClearBuffer(ref buffer);
                 FSLog.Debug("Snapshot destroy!");
             }
+        }
+
+        private void ClearBuffer(ref DynamicBuffer<SnapshotTick> buffer)
+        {
+
+            var array = buffer.ToNativeArray(Allocator.Temp);
+            buffer.Clear();
+            for (int i = 0; i < array.Length; ++i)
+            {
+                UnsafeUtility.Free(array[i].data, Allocator.Persistent);
+            }          
+            array.Dispose();
+            
         }
 
         protected override void OnUpdate()
@@ -58,15 +63,16 @@ namespace Assets.Scripts.ECS
 
             var buffer = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity());
 
-            FSLog.Info($"snapshot buffer length:{buffer.Length}");
+           // FSLog.Info($"snapshot buffer length:{buffer.Length}");
             if (buffer.Length == 0)
                 return;
 
-            var snapshot = buffer[0];
+            var array = buffer.ToNativeArray(Allocator.Temp);
+            buffer.Clear();
 
-            //remove first buffer snapshotTick
-            buffer.RemoveAt(0);
-
+            var snapshot = array[array.Length-1];
+           
+          //  FSLog.Info($"snapshot buffer length:{snapshot.length}");
             var stream = new UnmanagedMemoryStream((byte*)snapshot.data, snapshot.length);
             var reader = new BinaryReader(stream);
 
@@ -74,7 +80,7 @@ namespace Assets.Scripts.ECS
 
             Dictionary<int, int> snapshotEntites = new Dictionary<int, int>();
 
-            var spawnEntitiesBuffer = EntityManager.GetBuffer<EntityBuffer>(spawnEntitiesyQuery.GetSingletonEntity());
+            var spawnEntitiesBuffer = EntityManager.GetBuffer<SpawnEntityBuffer>(spawnEntitiesyQuery.GetSingletonEntity());
 
             //玩家
             var playerCount = reader.ReadInt32();          
@@ -94,7 +100,7 @@ namespace Assets.Scripts.ECS
                 snapshotEntites.Add(playerId, 0);
                 if (!entities.ContainsKey(playerId))
                 {      
-                    spawnEntitiesBuffer.Add(new EntityBuffer() { id = playerId, pos = pos ,type = EntityType.Player});
+                    spawnEntitiesBuffer.Add(new SpawnEntityBuffer() { id = playerId, pos = pos ,type = EntityType.Player});
                 }
                 else
                 {
@@ -142,7 +148,7 @@ namespace Assets.Scripts.ECS
                 if (!entities.ContainsKey(enemyId))
                 {
                     //  FSLog.Info($" spwan enemy ({enemyId});"); 
-                    spawnEntitiesBuffer.Add(new EntityBuffer() {
+                    spawnEntitiesBuffer.Add(new SpawnEntityBuffer() {
                         id = enemyId,
                         type = enemyType == EnemyType.Normal?EntityType.Enemy1:EntityType.Enemy2,
                         pos = pos
@@ -209,7 +215,7 @@ namespace Assets.Scripts.ECS
                 if (!entities.ContainsKey(rocketId))
                 {
                  //   FSLog.Info($"rocketType:{rocketType}");
-                    spawnEntitiesBuffer.Add(new EntityBuffer()
+                    spawnEntitiesBuffer.Add(new SpawnEntityBuffer()
                     {
                         id = rocketId,
                         type = rocketType == RocketType.Player ? EntityType.RocketPlayer : EntityType.RocketEnemy,
@@ -260,7 +266,15 @@ namespace Assets.Scripts.ECS
             foreach(var key in removed)
             {
                 entities.Remove(key);
-            }
+            }                
+
+                
+            for (int i = 0; i < array.Length; ++i)
+            {
+                UnsafeUtility.Free(array[i].data, Allocator.Persistent);
+            }          
+            array.Dispose();
+
         }
 
         public void AddEntity(int id, Entity e)

@@ -1,11 +1,12 @@
-﻿using Unity.Entities;
+﻿using FootStone.ECS;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
 
     [DisableAutoCreation]
-    public class InputSystem : ComponentSystem
+    public class InputSystem : FSComponentSystem
     {
         // 鼠标射线碰撞层
         public LayerMask InputMask;
