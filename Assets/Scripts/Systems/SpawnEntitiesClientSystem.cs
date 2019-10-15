@@ -34,7 +34,7 @@ namespace Assets.Scripts.ECS
                 Resources.Load("Prefabs/EnemyRocket") as GameObject, World.Active);
 
             rocketPlayer = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-            Resources.Load("Prefabs/Rocket") as GameObject, World.Active);
+                Resources.Load("Prefabs/PlayerRocket") as GameObject, World.Active);
 
 
             enemy1Prefab = Resources.Load("Prefabs/Enemy1") as GameObject;
@@ -87,7 +87,7 @@ namespace Assets.Scripts.ECS
                 else if (entityBuffer.type == EntityType.RocketPlayer)
                 {
                    // FSLog.Info($"rocketType create:{entityBuffer.type}");
-                    e = EntityManager.Instantiate(rocketEnemy);
+                    e = EntityManager.Instantiate(rocketPlayer);
 
                     Translation position = new Translation() { Value = entityBuffer.pos };
                     Rotation rotation = new Rotation() { Value = entityBuffer.rotation };
