@@ -104,10 +104,11 @@ namespace Assets.Scripts.ECS
                 else
                 {
                     var enity = entities[playerId];
-
-                    var translation = EntityManager.GetComponentData<Translation>(enity);
-                    translation.Value = pos;
-                    EntityManager.SetComponentData(enity, translation);
+                    
+                    var predictData = EntityManager.GetComponentData<PlayerPredictData>(enity);
+                    predictData.pos = pos;
+                    EntityManager.SetComponentData(enity, predictData);
+                 
 
                     var healthC = EntityManager.GetComponentData<Health>(enity);
                     healthC.Value = health;

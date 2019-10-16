@@ -83,6 +83,7 @@ namespace Assets.Scripts.ECS
 
                     EntityManager.AddComponentData(e, new Explosion());
                     EntityManager.AddComponentData(e, new UpdateUI());
+                    EntityManager.AddComponentData(e, new PlayerPredictData());
                 }
                 else if (entityBuffer.type == EntityType.RocketPlayer)
                 {

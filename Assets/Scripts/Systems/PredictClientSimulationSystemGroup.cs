@@ -5,10 +5,78 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+    public class NoSortComponentSystemGroup : ComponentSystemGroup
+    {
+        public override void SortSystemUpdateList()
+        {
+
+        }
+    }
+
+    [UnityEngine.ExecuteAlways]
+    public class SpawnSystemGroup : NoSortComponentSystemGroup
+    {
+     
+        protected override void OnCreate()
+        {
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEntitiesClientSystem>());
+        }
+    }
+
+    [UnityEngine.ExecuteAlways]
+    public class DespawnSystemGroup : NoSortComponentSystemGroup
+    {
+     
+        protected override void OnCreate()
+        {
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<DespawnSystem>());
+        }
+    }
+
+
+    [UnityEngine.ExecuteAlways]
+    public class PresentationSystemGroup : NoSortComponentSystemGroup
+    {      
+
+        protected override void OnCreate()
+        {            
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
+
+        }
+    }
+
+    //[UnityEngine.ExecuteAlways]
+    //public class MoveSystemGroup : NoSortComponentSystemGroup
+    //{
+
+    //    protected override void OnCreate()
+    //    {
+    //        m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveForwardSystem>());
+    //        m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveSinSystem>());
+    //        m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>());
+    //        m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveTargetSystem>());
+    //        m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveTranslationSystem>());
+    //    }
+    //}
+
+
+    [UnityEngine.ExecuteAlways]
+    public class PredictSystemGroup : NoSortComponentSystemGroup
+    {
+
+        protected override void OnCreate()
+        { 
+            m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>()); 
+        }
+    }
+
     [UnityEngine.ExecuteAlways]
     public class PredictClientSimulationSystemGroup : ComponentSystemGroup
     {
@@ -34,21 +102,11 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEntitiesClientSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnSystemGroup>());
 
-         //   m_systemsToUpdate.Add(World.GetOrCreateSystemE<SpawnEnemySystem>());
-       //     m_systemsToUpdate.Add(World.GetOrCreateSystemE<SpawnPlayerServerSystem>());
-
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<PlayerFireSystem>());
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<EnemyFireSystem>());
-
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveForwardSystem>());
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveSinSystem>());
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>());
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveTargetSystem>());
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<MoveTranslationSystem>());
-    
-            //m_systemsToUpdate.Add(World.GetOrCreateSystemE<RayCastSystem>());         
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<PredictSystemGroup>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<PresentationSystemGroup>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<DespawnSystemGroup>());            
         }
 
         public override void SortSystemUpdateList()
@@ -60,7 +118,7 @@ namespace Assets.Scripts.ECS
         {
             if (snapShotQuery.CalculateEntityCount() == 0)
                 return;
-            var serverTick = snapShotQuery.GetSingleton<SnapshotFromServer>().tick;
+            serverTick = snapShotQuery.GetSingleton<SnapshotFromServer>().tick;
 
 
             float frameDuration = lastFrameTime != 0 ? (float)(Game.frameTime - lastFrameTime) : 0;
@@ -157,24 +215,62 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {
             HandleTime();
-            base.OnUpdate();
+
+            gameWorld.GameTick = renderTime; 
+
+            World.GetExistingSystem<InputSystem>().Update();
+            World.GetExistingSystem<NetworkClientSystem>().Update();
+            World.GetExistingSystem<ReadSnapshotSystem>().Update();
+            World.GetExistingSystem<SpawnSystemGroup>().Update();
+
+            gameWorld.GameTick = predictedTime;
+
+            if (IsPredictionAllowed())
+            {
+                // ROLLBACK. All predicted entities (with the ServerEntity component) are rolled back to last server state 
+                gameWorld.GameTick.SetTick(serverTick, predictedTime.TickInterval);
+                PredictionRollback();
+
+
+                // PREDICT PREVIOUS TICKS. Replay every tick *after* the last tick we have from server up to the last stored command we have
+                for (var tick = serverTick + 1; tick <predictedTime.Tick; tick++)
+                {
+                    gameWorld.GameTick.SetTick(tick, predictedTime.TickInterval);
+                  //  m_PlayerModule.RetrieveCommand(gameWorld.Tick);
+                    PredictionUpdate();
+                }
+
+                // PREDICT CURRENT TICK. Update current tick using duration of current tick
+                gameWorld.GameTick = predictedTime;
+           //     m_PlayerModule.RetrieveCommand(gameWorld.Tick);
+                // Dont update systems with close to zero time. 
+                if (gameWorld.TickDuration > 0.008f)
+                {
+                    PredictionUpdate();
+                }            
+            }
+
+            World.GetExistingSystem<PresentationSystemGroup>().Update();
+
+            gameWorld.GameTick = renderTime;
+            World.GetExistingSystem<DespawnSystemGroup>().Update();
+        }
+
+        private void PredictionUpdate()
+        {
+        //    World.GetExistingSystem<MovePositionSystem>().Update();
+        }
+
+        private void PredictionRollback()
+        {
+          
+        }
+
+        private bool IsPredictionAllowed()
+        {
+            return true;
         }
     }
 
-    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
-    public class LatePredictClientSimulationSystemGroup : ComponentSystemGroup
-    {
-        protected override void OnCreate()
-        {
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
-
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<DespawnSystem>());
-        }
-
-        public override void SortSystemUpdateList()
-        {
-
-        }
-    }
+ 
 }
