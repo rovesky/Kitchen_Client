@@ -86,7 +86,7 @@ namespace Assets.Scripts.ECS
                 }
                 else if (entityBuffer.type == EntityType.RocketPlayer)
                 {
-                   // FSLog.Info($"rocketType create:{entityBuffer.type}");
+                    // FSLog.Info($"rocketType create:{entityBuffer.type}");
                     e = EntityManager.Instantiate(rocketPlayer);
 
                     Translation position = new Translation() { Value = entityBuffer.pos };
@@ -105,7 +105,7 @@ namespace Assets.Scripts.ECS
                     e = EntityManager.Instantiate(rocketEnemy);
 
                     Translation position = new Translation() { Value = entityBuffer.pos };
-                    Rotation rotation = new Rotation()     { Value = entityBuffer.rotation };
+                    Rotation rotation = new Rotation() { Value = entityBuffer.rotation };
 
                     EntityManager.SetComponentData(e, position);
                     EntityManager.SetComponentData(e, rotation);

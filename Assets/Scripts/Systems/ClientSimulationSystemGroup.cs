@@ -7,6 +7,7 @@ using Unity.Entities;
 
 namespace Assets.Scripts.ECS
 {
+    [DisableAutoCreation]
     [UnityEngine.ExecuteAlways]
     public class ClientSimulationSystemGroup : ComponentSystemGroup
     {
@@ -29,6 +30,7 @@ namespace Assets.Scripts.ECS
         }
     }
 
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     public class LateClientSimulationSystemGroup : ComponentSystemGroup
     {

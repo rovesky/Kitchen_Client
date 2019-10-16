@@ -31,7 +31,7 @@ namespace Assets.Scripts.ECS
             var userCommand = playerCommandQuery.GetSingleton<PlayerCommand>();
 
             userCommand.Reset();
-            userCommand.isBack = true;
+          //  userCommand.isBack = true;
             //是否开火
             userCommand.buttons.Or(PlayerCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
 

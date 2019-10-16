@@ -31,20 +31,16 @@ namespace Assets.Scripts.ECS
 
                 if (snapShotQuery.CalculateEntityCount() > 0)
                 {
-                    var snapShot = new SnapshotTick();
-                    snapShot.data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent);
-
-                    //   var snapShot = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity())[0];
+                    var snapShot = snapShotQuery.GetSingleton<SnapshotFromServer>();
                     snapShot.length = buffer.Length;
 
                     using (UnmanagedMemoryStream tempUMS = new UnmanagedMemoryStream((byte*)snapShot.data,
-                        buffer.Length, buffer.Length, FileAccess.Write))
+                        buffer.Length, buffer.Length, FileAccess.ReadWrite))
                     {
-                        tempUMS.Write(buffer, 0, buffer.Length);
+                        tempUMS.Write(buffer, 0, buffer.Length);                      
                     }
 
-                    var snapShotBuffer = EntityManager.GetBuffer<SnapshotTick>(snapShotQuery.GetSingletonEntity());
-                    snapShotBuffer.Add(snapShot);
+                    snapShotQuery.SetSingleton(snapShot);
                 }
             };
         }
@@ -63,7 +59,7 @@ namespace Assets.Scripts.ECS
 
             FSLog.Info($"NetworkClientSystem OnCreate");
             playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<PlayerCommand>());
-            snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<Snapshot>());
+            snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotFromServer>());
         }
 
         protected override void OnDestroy()
