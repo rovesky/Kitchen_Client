@@ -12,6 +12,11 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>());
+
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
         }
     }
 
@@ -38,7 +43,7 @@ namespace Assets.Scripts.ECS
             var predictTime = clientTick.predict;
             var renderTime = clientTick.render;
 
-            if (IsPredictionAllowed())
+            if (IsPredictionAllowed(predictTime,serverTick))
             {
                 // ROLLBACK. All predicted entities (with the ServerEntity component) are rolled back to last server state 
                 worldTime.tick.SetTick(serverTick, predictTime.TickInterval);
@@ -78,8 +83,20 @@ namespace Assets.Scripts.ECS
 
         }
 
-        private bool IsPredictionAllowed()
+        private bool IsPredictionAllowed(GameTick predictTime,uint serverTick)
         {
+            if (predictTime.Tick <= serverTick)
+            {
+                FSLog.Warning("No predict! Predict time not ahead of server tick! ");
+                return false;
+            }
+
+            if (!inputSystem.HasCommands(serverTick + 1, predictTime.Tick))
+            {
+                FSLog.Warning("No predict! No commands available. " );
+                return false;
+            }
+
             return true;
         }
     }

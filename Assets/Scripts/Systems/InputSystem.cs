@@ -13,7 +13,7 @@ namespace Assets.Scripts.ECS
         private LayerMask InputMask;
   
         private UserCommand userCommand = UserCommand.defaultCommand;
-        private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(32);
+        private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
         private Entity localEntity;
         private NetworkClientSystem networkClient;
 
@@ -112,7 +112,13 @@ namespace Assets.Scripts.ECS
                 //   FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
             }
         }
-    
+
+        public bool HasCommands(uint firstTick, uint lastTick)
+        {
+            var hasCommands = commandBuffer.FirstTick() <= firstTick &&
+                      commandBuffer.LastTick() >= lastTick;
+            return hasCommands;
+        }
 
         public void SampleInput(uint renderTick)
         {

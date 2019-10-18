@@ -28,6 +28,21 @@ namespace Assets.Scripts.ECS
 
     [ExecuteAlways]
     [DisableAutoCreation]
+    public class MoveSystemGroup : NoSortComponentSystemGroup
+    {
+        protected override void OnCreate()
+        {
+            //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
+        }
+    }
+
+
+    [ExecuteAlways]
+    [DisableAutoCreation]
     public class PresentationSystemGroup : NoSortComponentSystemGroup
     {      
         protected override void OnCreate()
@@ -81,10 +96,12 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<InputSystem>());          
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnSystemGroup>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnSystemGroup>()); 
 
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetPredictTimeSystem>());
+           
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<PredictSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSystemGroup>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<PresentationSystemGroup>());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetRenderTimeSystem>());
