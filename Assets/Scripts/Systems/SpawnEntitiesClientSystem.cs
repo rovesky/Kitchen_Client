@@ -81,6 +81,8 @@ namespace Assets.Scripts.ECS
                     e = SpawnEntityUtil.SpwanPlayer(EntityManager, entityBuffer.id, player,
                            entityBuffer.pos, rocketPlayer);
 
+                    EntityManager.AddComponentData(e, new LocalPlayer());
+                    EntityManager.AddComponentData(e, new UserCommand());
                     EntityManager.AddComponentData(e, new Explosion());
                     EntityManager.AddComponentData(e, new UpdateUI());
                     EntityManager.AddComponentData(e, new PlayerPredictData());

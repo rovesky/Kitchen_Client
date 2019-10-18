@@ -12,60 +12,46 @@ namespace Assets.Scripts.ECS
     [DisableAutoCreation]
     public unsafe class ReadSnapshotSystem : ComponentSystem
     {
-        private Dictionary<int,Entity> entities = new Dictionary<int, Entity>();  
-
-        private EntityQuery snapShotQuery;
+        private Dictionary<int,Entity> entities = new Dictionary<int, Entity>();
         private EntityQuery spawnEntitiesyQuery;
-     
+
         protected override void OnCreate()
         {
-            snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotFromServer>());
 
-            if (snapShotQuery.CalculateEntityCount() == 0)
+            EntityManager.CreateEntity(typeof(SnapshotFromServer));
+            SetSingleton(new SnapshotFromServer()
             {
-                var entity = EntityManager.CreateEntity(typeof(SnapshotFromServer));
-                snapShotQuery.SetSingleton(new SnapshotFromServer()
-                {
-                    tick = 0,
-                    length = 0,
-                    data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
-                });
-                //   var buffer =  EntityManager.AddBuffer<SnapshotTick>(entity);               
-                FSLog.Debug("Snapshot create!");
-            }      
+                tick = 0,
+                length = 0,
+                data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
+            });
+            FSLog.Debug("Snapshot create!");
 
-            spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());      
+
+            spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
         }
 
         protected unsafe override void OnDestroy()
         {
-            if (snapShotQuery.CalculateEntityCount() > 0)
-            {
-                var snapshot = snapShotQuery.GetSingleton<SnapshotFromServer>();
-                UnsafeUtility.Free(snapshot.data, Allocator.Persistent);         
-                FSLog.Debug("Snapshot destroy!");
-            }
+            var snapshot = GetSingleton<SnapshotFromServer>();
+            UnsafeUtility.Free(snapshot.data, Allocator.Persistent);
+            FSLog.Debug("Snapshot destroy!");
         }
 
         private void ClearBuffer(ref DynamicBuffer<SnapshotTick> buffer)
         {
-
             var array = buffer.ToNativeArray(Allocator.Temp);
             buffer.Clear();
             for (int i = 0; i < array.Length; ++i)
             {
                 UnsafeUtility.Free(array[i].data, Allocator.Persistent);
             }          
-            array.Dispose();
-            
+            array.Dispose();            
         }
 
         protected override void OnUpdate()
-        {                       
-            if (snapShotQuery.CalculateEntityCount() == 0)
-                return;       
-
-            var snapshot = snapShotQuery.GetSingleton<SnapshotFromServer>();
+        {                        
+            var snapshot = GetSingleton<SnapshotFromServer>();
 
             if (snapshot.length == 0)
                 return;
@@ -75,7 +61,7 @@ namespace Assets.Scripts.ECS
             var reader = new BinaryReader(stream);
 
             snapshot.tick = reader.ReadUInt32();
-            snapShotQuery.SetSingleton(snapshot);
+            SetSingleton(snapshot);
           //  FSLog.Info($" snapshot.tick:{ snapshot.tick}");
             Dictionary<int, int> snapshotEntites = new Dictionary<int, int>();
 
@@ -86,7 +72,8 @@ namespace Assets.Scripts.ECS
             for (int i = 0; i < playerCount; ++i)
             {
                 var playerId = reader.ReadInt32();
-           
+                var sessionId = reader.ReadInt32();
+
                 float3 pos;
                 pos.x = reader.ReadSingle();
                 pos.y = reader.ReadSingle();

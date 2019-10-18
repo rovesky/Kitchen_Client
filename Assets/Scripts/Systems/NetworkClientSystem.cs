@@ -14,6 +14,7 @@ namespace Assets.Scripts.ECS
     {
         private KcpClient kcpClient;
         private int conId = -1;
+        private uint sessionId = 0;
         private List<int> connections = new List<int>();
 
         private EntityQuery playerCommandQuery;
@@ -23,6 +24,7 @@ namespace Assets.Scripts.ECS
         {
             FSLog.Info($"client connection created:{connection.Id}");
             conId = connection.Id;
+            sessionId = connection.SessionId;
             connections.Add(connection.Id);
 
             connection.Recv += (inSequence, buffer) =>
@@ -58,7 +60,7 @@ namespace Assets.Scripts.ECS
             kcpClient = new KcpClient(this);
 
             FSLog.Info($"NetworkClientSystem OnCreate");
-            playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<PlayerCommand>());
+            playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<UserCommand>());
             snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotFromServer>());
         }
 
@@ -72,6 +74,11 @@ namespace Assets.Scripts.ECS
 
             connections.Clear();
             kcpClient.Shutdown();            
+        }
+
+        public bool IsSession(uint sessionId)
+        {
+            return this.sessionId == sessionId;
         }
 
 
@@ -97,14 +104,24 @@ namespace Assets.Scripts.ECS
             //    FSLog.Info($"kcpClient.Update()");
                 kcpClient.Update();
 
-                if (connection.IsConnected)
-                {
-                    var userCommand = playerCommandQuery.GetSingleton<PlayerCommand>();
-                    byte[] data = userCommand.ToData();
-                    kcpClient.SendData(connection.Id, data, data.Length);    
+                //if (connection.IsConnected)
+                //{
+                //    var userCommand = playerCommandQuery.GetSingleton<UserCommand>();
+                //    byte[] data = userCommand.ToData();
+                //    kcpClient.SendData(connection.Id, data, data.Length);    
 
-                    GameManager.Instance.UpdateRtt(connection.RTT);
-                }          
+                 GameManager.Instance.UpdateRtt(connection.RTT);
+                //}          
+            }
+        }
+
+
+        public void SendCommand(byte[] data)
+        {
+            var connection = kcpClient.GetConnection(conId);
+            if (connection != null && connection.IsConnected)
+            {
+                kcpClient.SendData(connection.Id, data, data.Length);
             }
         }
     }
