@@ -90,7 +90,7 @@ namespace Assets.Scripts.ECS
                 FSLog.Info($"client connection to 192.168.0.128:1001");
                 try
                 {
-                    conId = kcpClient.Connect("192.168.0.128", 1001);
+                    conId = kcpClient.Connect("127.0.0.1", 1001);
                 }
                 catch(Exception e)
                 {

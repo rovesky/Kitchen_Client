@@ -49,7 +49,7 @@ namespace Assets.Scripts.ECS
 
             // Adjust time to be synchronized with server
             uint preferredBufferedCommandCount = 2;
-            uint preferredTick = serverTick + (uint)((120 / 1000.0f) * worldTime.tick.TickRate) + preferredBufferedCommandCount;
+            uint preferredTick = serverTick + (uint)((120 / 1000.0f) * worldTime.gameTick.TickRate) + preferredBufferedCommandCount;
 
             FSLog.Info($"serverTick:{serverTick},predictTick:{clientTickTime.predict.Tick}," +
                 $"renderTick:{clientTickTime.render.Tick},preferredTick:{preferredTick}");

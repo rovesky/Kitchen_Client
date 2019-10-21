@@ -10,8 +10,7 @@ namespace Assets.Scripts.ECS
     public class InputSystem : FSComponentSystem
     {
         // 鼠标射线碰撞层
-        private LayerMask InputMask;
-  
+        private LayerMask InputMask;  
         private UserCommand userCommand = UserCommand.defaultCommand;
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
         private Entity localEntity;
@@ -36,50 +35,8 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {
-            /**
-            var userCommand = GetSingleton<UserCommand>();
-
-            userCommand.Reset();
-            //  userCommand.isBack = true;
-            //是否开火
-            userCommand.buttons.Or(UserCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
-
-            //是否移动
-            userCommand.buttons.Or(UserCommand.Button.Move, Input.GetMouseButton(0));
-
-            //获取点击位置
-            if (userCommand.buttons.IsSet(UserCommand.Button.Move))
-            {
-                // 获得鼠标屏幕位置
-                Vector3 ms = Input.mousePosition;
-                // 将屏幕位置转为射线
-                Ray ray = Camera.main.ScreenPointToRay(ms);
-                // 用来记录射线碰撞信息
-                RaycastHit hitInfo;
-
-                // 产生射线                 
-                bool isCast = Physics.Raycast(ray, out hitInfo, 1000, InputMask);
-
-                var targetPos = Vector3.zero;
-                if (isCast)
-                {
-                    // 如果射中目标,记录射线碰撞点
-                    targetPos = hitInfo.point;
-                }
-                userCommand.targetPos = targetPos;
-
-                //   FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
-            }
-
-            SetSingleton(userCommand);
-            **/
-
-            var query = GetEntityQuery(typeof(LocalPlayer));
-            if (query.CalculateEntityCount() > 0) {
-                var entities = query.ToEntityArray(Unity.Collections.Allocator.Persistent);
-                localEntity = entities[0];
-                entities.Dispose();
-            }
+           
+       
         }
 
         private void InputToCommand()
@@ -146,12 +103,15 @@ namespace Assets.Scripts.ECS
 
         public void RetrieveCommand(uint tick)
         {
-            if (localEntity == default)
+            var query = GetEntityQuery(typeof(LocalPlayer));
+            if (query.CalculateEntityCount() == 0)
                 return;
 
-            var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity);
+            var entities = query.ToEntityArray(Unity.Collections.Allocator.Persistent);
+            localEntity = entities[0];
+            entities.Dispose();
 
-            var command = UserCommand.defaultCommand;
+            var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity); 
             var found = commandBuffer.TryGetValue((int)tick, ref userCommand);
             GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
 

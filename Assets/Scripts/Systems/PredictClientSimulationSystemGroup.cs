@@ -36,7 +36,7 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
+         //   m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
         }
     }
 
@@ -47,7 +47,7 @@ namespace Assets.Scripts.ECS
     {      
         protected override void OnCreate()
         {            
-        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
         }
@@ -62,7 +62,7 @@ namespace Assets.Scripts.ECS
         {
 
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.tick = GetSingleton<ClientTickTime>().render;
+            worldTime.gameTick = GetSingleton<ClientTickTime>().render;
             SetSingleton(worldTime);
         }
     }
@@ -74,7 +74,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {            
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.tick = GetSingleton<ClientTickTime>().predict;
+            worldTime.gameTick = GetSingleton<ClientTickTime>().predict;
             SetSingleton(worldTime);
         }
     }  
@@ -89,11 +89,10 @@ namespace Assets.Scripts.ECS
             FSLog.Info("PredictClientSimulationSystemGroup OnCreate");
             GameWorld.Active = new GameWorld();
             m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
-
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<HandleTimeSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetRenderTimeSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<InputSystem>());          
+         //   m_systemsToUpdate.Add(World.GetOrCreateSystem<InputSystem>());          
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnSystemGroup>()); 
@@ -101,7 +100,7 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetPredictTimeSystem>());
            
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<PredictSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSystemGroup>());
+          //  m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSystemGroup>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<PresentationSystemGroup>());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetRenderTimeSystem>());

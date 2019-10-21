@@ -69,12 +69,22 @@ namespace Assets.Scripts.ECS
                     e = SpawnEntityUtil.SpwanEnemy(EntityManager, enemy1Prefab, EnemyType.Normal,
                          entityBuffer.pos, rocketEnemy);
                     EntityManager.AddComponentData(e, new Explosion());
+                    EntityManager.AddComponentData(e, new EntityPredictData()
+                    {
+                        position = entityBuffer.pos,
+                        rotation = Quaternion.identity
+                    });
                 }
                 else if (entityBuffer.type == EntityType.Enemy2)
                 {
                     e = SpawnEntityUtil.SpwanEnemy(EntityManager, enemy2Prefab, EnemyType.Super,
                       entityBuffer.pos, rocketEnemy);
                     EntityManager.AddComponentData(e, new Explosion());
+                    EntityManager.AddComponentData(e, new EntityPredictData()
+                    {
+                        position = entityBuffer.pos,
+                        rotation = Quaternion.identity
+                    });
                 }
                 else if (entityBuffer.type == EntityType.Player)
                 {
@@ -85,7 +95,13 @@ namespace Assets.Scripts.ECS
                     EntityManager.AddComponentData(e, new UserCommand());
                     EntityManager.AddComponentData(e, new Explosion());
                     EntityManager.AddComponentData(e, new UpdateUI());
-                    EntityManager.AddComponentData(e, new PlayerPredictData());
+                    var rotation = Quaternion.identity;
+                    rotation.eulerAngles = new Vector3(0, -180, 0);
+                    EntityManager.AddComponentData(e, new EntityPredictData(){
+                        position = entityBuffer.pos,
+                        rotation = rotation
+
+                    });
                 }
                 else if (entityBuffer.type == EntityType.RocketPlayer)
                 {
@@ -101,7 +117,13 @@ namespace Assets.Scripts.ECS
                     EntityManager.AddComponentData(e, new Health() { Value = 1 });
                     EntityManager.AddComponentData(e, new Damage());
                     EntityManager.AddComponentData(e, new Attack() { Power = 20 });
-                    EntityManager.AddComponentData(e, new MoveTranslation() { Speed = 6, Direction = Direction.Up });
+                    EntityManager.AddComponentData(e, new MoveForward() { Speed = 6 });
+
+                    PostUpdateCommands.AddComponent(e, new EntityPredictData()
+                    {
+                        position = position.Value,
+                        rotation = rotation.Value
+                    });
                 }
                 else if (entityBuffer.type == EntityType.RocketEnemy)
                 {
@@ -117,6 +139,11 @@ namespace Assets.Scripts.ECS
                     EntityManager.AddComponentData(e, new Health() { Value = 1 });
                     EntityManager.AddComponentData(e, new Damage());
                     EntityManager.AddComponentData(e, new MoveForward() { Speed = 3 });
+                    PostUpdateCommands.AddComponent(e, new EntityPredictData()
+                    {
+                        position = position.Value,
+                        rotation = rotation.Value
+                    });
                 }
 
                 readSnapshotSystem.AddEntity(entityBuffer.id, e);

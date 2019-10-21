@@ -16,7 +16,7 @@ namespace Assets.Scripts.ECS
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
+            //   m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
         }
     }
 
@@ -46,7 +46,7 @@ namespace Assets.Scripts.ECS
             if (IsPredictionAllowed(predictTime,serverTick))
             {
                 // ROLLBACK. All predicted entities (with the ServerEntity component) are rolled back to last server state 
-                worldTime.tick.SetTick(serverTick, predictTime.TickInterval);
+                worldTime.SetTick(serverTick, predictTime.TickInterval);
                 SetSingleton(worldTime);
 
                 PredictionRollback();
@@ -54,19 +54,19 @@ namespace Assets.Scripts.ECS
                 // PREDICT PREVIOUS TICKS. Replay every tick *after* the last tick we have from server up to the last stored command we have
                 for (var tick = serverTick + 1; tick < predictTime.Tick; tick++)
                 {
-                    worldTime.tick.SetTick(tick, predictTime.TickInterval);
+                    worldTime.SetTick(tick, predictTime.TickInterval);
                     SetSingleton(worldTime);
 
-                    inputSystem.RetrieveCommand(worldTime.tick.Tick);
+                    inputSystem.RetrieveCommand(worldTime.Tick);
                     PredictionUpdate();
                 }
 
                 // PREDICT CURRENT TICK. Update current tick using duration of current tick
-                worldTime.tick = predictTime;
+                worldTime.SetTick(predictTime);
                 SetSingleton(worldTime);
                 //     m_PlayerModule.RetrieveCommand(gameWorld.Tick);
                 // Dont update systems with close to zero time. 
-                if (worldTime.tick.TickDuration > 0.008f)
+                if (worldTime.TickDuration > 0.008f)
                 {
                     PredictionUpdate();
                 }

@@ -92,8 +92,8 @@ namespace Assets.Scripts.ECS
                 {
                     var enity = entities[playerId];
                     
-                    var predictData = EntityManager.GetComponentData<PlayerPredictData>(enity);
-                    predictData.pos = pos;
+                    var predictData = EntityManager.GetComponentData<EntityPredictData>(enity);
+                    predictData.position = pos;
                     EntityManager.SetComponentData(enity, predictData);
                  
 
@@ -145,9 +145,9 @@ namespace Assets.Scripts.ECS
                 {         
 
                     var enity = entities[enemyId];
-                    var translation = EntityManager.GetComponentData<Translation>(enity);
-                    translation.Value = pos;
-                    EntityManager.SetComponentData(enity, translation);
+                    var predictData = EntityManager.GetComponentData<EntityPredictData>(enity);
+                    predictData.position = pos;
+                    EntityManager.SetComponentData(enity, predictData);
 
                     var healthC = EntityManager.GetComponentData<Health>(enity);
                     healthC.Value = health;
@@ -191,11 +191,11 @@ namespace Assets.Scripts.ECS
                 var attack = reader.ReadInt32();
                 float speed = reader.ReadSingle();
 
-                Direction dir;
-                if(rocketType == RocketType.Player)
-                {
-                    dir = (Direction)reader.ReadByte();
-                }
+                //Direction dir;
+                //if(rocketType == RocketType.Player)
+                //{
+                //    dir = (Direction)reader.ReadByte();
+                //}
                
 
                 snapshotEntites.Add(rocketId, 0);
@@ -217,13 +217,19 @@ namespace Assets.Scripts.ECS
                     //    FSLog.Info($"update rocekt pos:({pos.x},{pos.y},{pos.z})");
                     //}
                     var enity = entities[rocketId];
-                    var translation = EntityManager.GetComponentData<Translation>(enity);
-                    translation.Value = pos;
-                    EntityManager.SetComponentData(enity, translation);
 
-                    var rotationC = EntityManager.GetComponentData<Rotation>(enity);
-                    rotationC.Value = rotation;
-                    EntityManager.SetComponentData(enity, rotationC);
+                    var predictData = EntityManager.GetComponentData<EntityPredictData>(enity);
+                    predictData.position = pos;
+                    predictData.rotation = rotation;
+                    EntityManager.SetComponentData(enity, predictData);
+
+                    //var translation = EntityManager.GetComponentData<Translation>(enity);
+                    //translation.Value = pos;
+                    //EntityManager.SetComponentData(enity, translation);
+
+                    //var rotationC = EntityManager.GetComponentData<Rotation>(enity);
+                    //rotationC.Value = rotation;
+                    //EntityManager.SetComponentData(enity, rotationC);
 
                     var healthC = EntityManager.GetComponentData<Health>(enity);
                     healthC.Value = health;

@@ -64,12 +64,10 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Components\ClientTickTime.cs" />
     <Compile Include="Assets\Scripts\Components\LocalPlayer.cs" />
-    <Compile Include="Assets\Scripts\Components\PlayerPredictData.cs" />
     <Compile Include="Assets\Scripts\Components\SnapshotFromServer.cs" />
     <Compile Include="Assets\Scripts\Components\SpawEntitiesClient.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\Others\TitleScreen.cs" />
-    <Compile Include="Assets\Scripts\Systems\ApplyPresentationSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\ClientSimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HandleTimeSystem.cs" />
