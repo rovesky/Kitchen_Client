@@ -6,6 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
@@ -18,15 +19,20 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {
 
-            EntityManager.CreateEntity(typeof(SnapshotFromServer));
+            var snapshotEntity = EntityManager.CreateEntity(typeof(SnapshotFromServer));
             SetSingleton(new SnapshotFromServer()
             {
                 tick = 0,
                 length = 0,
+                time = 0,
+                rtt = 0,
+                lastAcknowlegdedCommandTime = 0,
                 data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
             });
-            FSLog.Debug("Snapshot create!");
 
+          //  EntityManager.AddBuffer<SnapshotTick>(snapshotEntity);
+            
+            FSLog.Debug("Snapshot create!");         
 
             spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
         }
@@ -51,18 +57,16 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {                        
-            var snapshot = GetSingleton<SnapshotFromServer>();
-
-            if (snapshot.length == 0)
+     
+            var snapshotFromServer = GetSingleton<SnapshotFromServer>();
+            if (snapshotFromServer.length == 0)
                 return;
 
-          //  FSLog.Info($"snapshot buffer length:{snapshot.length}");
-            var stream = new UnmanagedMemoryStream((byte*)snapshot.data, snapshot.length);
+            var stream = new UnmanagedMemoryStream((byte*)snapshotFromServer.data, snapshotFromServer.length);
             var reader = new BinaryReader(stream);
 
-            snapshot.tick = reader.ReadUInt32();
-            SetSingleton(snapshot);
-          //  FSLog.Info($" snapshot.tick:{ snapshot.tick}");
+            snapshotFromServer.tick = reader.ReadUInt32();      
+          //  FSLog.Info($"recv snapshot.tick:{ snapshotFromServer.tick}");
             Dictionary<int, int> snapshotEntites = new Dictionary<int, int>();
 
             var spawnEntitiesBuffer = EntityManager.GetBuffer<SpawnEntityBuffer>(spawnEntitiesyQuery.GetSingletonEntity());
@@ -85,17 +89,21 @@ namespace Assets.Scripts.ECS
 
                 snapshotEntites.Add(playerId, 0);
                 if (!entities.ContainsKey(playerId))
-                {      
-                    spawnEntitiesBuffer.Add(new SpawnEntityBuffer() { id = playerId, pos = pos ,type = EntityType.Player});
+                {
+                    spawnEntitiesBuffer.Add(new SpawnEntityBuffer() { id = playerId, pos = pos, type = EntityType.Player });
                 }
                 else
                 {
                     var enity = entities[playerId];
-                    
-                    var predictData = EntityManager.GetComponentData<EntityPredictData>(enity);
-                    predictData.position = pos;
-                    EntityManager.SetComponentData(enity, predictData);
-                 
+
+                    //var predictData = EntityManager.GetComponentData<EntityPredictData>(enity);
+                    //predictData.position = pos;
+                    //EntityManager.SetComponentData(enity, predictData);   
+
+                    snapshotFromServer.predictData.position = pos;
+                    var rotation = Quaternion.identity;
+                    rotation.eulerAngles = new Vector3(0, -180, 0);
+                    snapshotFromServer.predictData.rotation = rotation;
 
                     var healthC = EntityManager.GetComponentData<Health>(enity);
                     healthC.Value = health;
@@ -259,12 +267,15 @@ namespace Assets.Scripts.ECS
             foreach(var key in removed)
             {
                 entities.Remove(key);
-            }                
+            }
 
-                
+            SetSingleton(snapshotFromServer);
+
+           // UnsafeUtility.Free(snapshot.data, Allocator.Persistent);
+        
             //for (int i = 0; i < array.Length; ++i)
             //{
-            //    UnsafeUtility.Free(array[i].data, Allocator.Persistent);
+            //    
             //}          
             //array.Dispose();
 

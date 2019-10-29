@@ -1,5 +1,4 @@
-﻿using System;
-using FootStone.ECS;
+﻿using FootStone.ECS;
 using Unity.Entities;
 using UnityEngine;
 
@@ -10,17 +9,17 @@ namespace Assets.Scripts.ECS
     public class InputSystem : FSComponentSystem
     {
         // 鼠标射线碰撞层
-        private LayerMask InputMask;  
+        private LayerMask InputMask;
         private UserCommand userCommand = UserCommand.defaultCommand;
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
         private Entity localEntity;
-        private NetworkClientSystem networkClient;
+        private NetworkClientNewSystem networkClient;
 
         protected override void OnCreate()
-        {          
+        {
             base.OnCreate();
             InputMask = 1 << LayerMask.NameToLayer("plane");
-  
+
             EntityManager.CreateEntity(typeof(UserCommand));
             SetSingleton(new UserCommand()
             {
@@ -29,14 +28,14 @@ namespace Assets.Scripts.ECS
                 targetPos = Vector3.zero
             });
 
-            networkClient = World.GetExistingSystem<NetworkClientSystem>();
-            
+            networkClient = World.GetExistingSystem<NetworkClientNewSystem>();
+
         }
 
         protected override void OnUpdate()
         {
-           
-       
+
+
         }
 
         private void InputToCommand()
@@ -111,24 +110,30 @@ namespace Assets.Scripts.ECS
             localEntity = entities[0];
             entities.Dispose();
 
-            var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity); 
+            var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity);
             var found = commandBuffer.TryGetValue((int)tick, ref userCommand);
-            GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
+            //   GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
 
-            EntityManager.SetComponentData(localEntity, userCommand);
+            if (found)
+                EntityManager.SetComponentData(localEntity, userCommand);
         }
 
-        public  void SendCommand(uint tick)
+        public void SendCommand(uint tick)
         {
             var command = UserCommand.defaultCommand;
             var commandValid = commandBuffer.TryGetValue((int)tick, ref command);
             if (commandValid)
             {
-                networkClient.SendCommand(command.ToData());
+              //  FSLog.Info($"send command:{command.renderTick},{command.checkTick}");
+                //  +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
+                networkClient.QueueCommand(tick, (ref NetworkWriter writer) =>
+                 {
+                     command.Serialize(ref writer);
+                 });
             }
         }
 
-        public  void ResetInput()
+        public void ResetInput()
         {
             userCommand.Reset();
             InputToCommand();

@@ -82,29 +82,78 @@ namespace Assets.Scripts.ECS
 
     [ExecuteAlways]
     public class PredictClientSimulationSystemGroup : NoSortComponentSystemGroup
-    {       
-            
+    {
+        private NetworkClientNewSystem networkSystem;
+        private HandleTimeSystem handleTimeSystem;
+        private SetRenderTimeSystem setRenderTimeSystem;
+        private ReadSnapshotSystem readSnapshotSystem;
+        private SpawnSystemGroup spawnSystemGroup;
+        private SetPredictTimeSystem setPredictTimeSystem;
+        private PredictSystem predictSystem;
+        private PresentationSystemGroup presentationSystemGroup;
+        private DespawnSystemGroup despawnSystemGroup;
+
         protected override void OnCreate()
         {
             FSLog.Info("PredictClientSimulationSystemGroup OnCreate");
+            ConfigVar.Init();
             GameWorld.Active = new GameWorld();
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<NetworkClientSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<HandleTimeSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetRenderTimeSystem>());
+          
+            networkSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
+            m_systemsToUpdate.Add(networkSystem);
 
-         //   m_systemsToUpdate.Add(World.GetOrCreateSystem<InputSystem>());          
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<ReadSnapshotSystem>());
+            readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
+            m_systemsToUpdate.Add(readSnapshotSystem);
+            
+            handleTimeSystem = World.GetOrCreateSystemE<HandleTimeSystem>();
+            m_systemsToUpdate.Add(handleTimeSystem);         
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnSystemGroup>()); 
+            setRenderTimeSystem = World.GetOrCreateSystemE<SetRenderTimeSystem>();
+            m_systemsToUpdate.Add(setRenderTimeSystem);
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetPredictTimeSystem>());
-           
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<PredictSystem>());
-          //  m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSystemGroup>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<PresentationSystemGroup>());
+            spawnSystemGroup = World.GetOrCreateSystem<SpawnSystemGroup>();
+            m_systemsToUpdate.Add(spawnSystemGroup);
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<SetRenderTimeSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<DespawnSystemGroup>());            
-        }         
-    } 
+            setPredictTimeSystem = World.GetOrCreateSystemE<SetPredictTimeSystem>();
+            m_systemsToUpdate.Add(setPredictTimeSystem);
+
+            predictSystem = World.GetOrCreateSystemE<PredictSystem>();
+            m_systemsToUpdate.Add(predictSystem);
+
+            presentationSystemGroup = World.GetOrCreateSystem<PresentationSystemGroup>();
+            m_systemsToUpdate.Add(presentationSystemGroup);
+
+            despawnSystemGroup = World.GetOrCreateSystem<DespawnSystemGroup>();
+            m_systemsToUpdate.Add(despawnSystemGroup);            
+        }
+
+        protected override void OnUpdate()
+        {
+            networkSystem.Update();
+
+            if (networkSystem.IsConnected)
+            {
+            //    readSnapshotSystem.Update();
+
+                handleTimeSystem.Update();
+              
+                setRenderTimeSystem.Update();
+
+                spawnSystemGroup.Update();
+
+                setPredictTimeSystem.Update();
+
+                predictSystem.Update();
+
+                presentationSystemGroup.Update();
+
+                setRenderTimeSystem.Update();
+
+                despawnSystemGroup.Update();
+            }
+
+            networkSystem.SendData();
+
+        }
+    }
 }

@@ -10,15 +10,15 @@ namespace Assets.Scripts.ECS
 {
 
     [DisableAutoCreation]
-    public class NetworkClientSystem : ComponentSystem, INetworkCallbacks
+    public class NetworkClientSystem : ComponentSystem, FootStone.Kcp.INetworkCallbacks
     {
         private KcpClient kcpClient;
         private int conId = -1;
         private uint sessionId = 0;
         private List<int> connections = new List<int>();
 
-        private EntityQuery playerCommandQuery;
-        private EntityQuery snapShotQuery;
+  
+        private WorldTimeSystem worldTimeSystem;
 
         public unsafe void OnConnect(KcpConnection connection)
         {
@@ -29,21 +29,17 @@ namespace Assets.Scripts.ECS
 
             connection.Recv += (inSequence, buffer) =>
             {
-                //FSLog.Info($"[{inSequence}] client recv data:{buffer.Length}");
-
-                if (snapShotQuery.CalculateEntityCount() > 0)
+                //  FSLog.Info($"[{inSequence}] client recv data:{buffer.Length}");            
+                var snapShot = GetSingleton<SnapshotFromServer>();
+              
+                snapShot.length = buffer.Length;
+                snapShot.time = worldTimeSystem.GetCurrentTime();
+                using (UnmanagedMemoryStream tempUMS = new UnmanagedMemoryStream((byte*)snapShot.data,
+                    buffer.Length, buffer.Length, FileAccess.ReadWrite))
                 {
-                    var snapShot = snapShotQuery.GetSingleton<SnapshotFromServer>();
-                    snapShot.length = buffer.Length;
-
-                    using (UnmanagedMemoryStream tempUMS = new UnmanagedMemoryStream((byte*)snapShot.data,
-                        buffer.Length, buffer.Length, FileAccess.ReadWrite))
-                    {
-                        tempUMS.Write(buffer, 0, buffer.Length);                      
-                    }
-
-                    snapShotQuery.SetSingleton(snapShot);
-                }
+                    tempUMS.Write(buffer, 0, buffer.Length);
+                }             
+                SetSingleton(snapShot);            
             };
         }
 
@@ -60,8 +56,10 @@ namespace Assets.Scripts.ECS
             kcpClient = new KcpClient(this);
 
             FSLog.Info($"NetworkClientSystem OnCreate");
-            playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<UserCommand>());
-            snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotFromServer>());
+          //  playerCommandQuery = GetEntityQuery(ComponentType.ReadWrite<UserCommand>());
+          //  snapShotQuery = GetEntityQuery(ComponentType.ReadWrite<SnapshotFromServer>());
+
+            worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
         }
 
         protected override void OnDestroy()
@@ -101,20 +99,21 @@ namespace Assets.Scripts.ECS
             var connection = kcpClient.GetConnection(conId);
             if (connection != null)
             {
-            //    FSLog.Info($"kcpClient.Update()");
+                //    FSLog.Info($"kcpClient.Update()");
                 kcpClient.Update();
-
-                //if (connection.IsConnected)
-                //{
-                //    var userCommand = playerCommandQuery.GetSingleton<UserCommand>();
-                //    byte[] data = userCommand.ToData();
-                //    kcpClient.SendData(connection.Id, data, data.Length);    
-
-                 GameManager.Instance.UpdateRtt(connection.RTT);
-                //}          
+                GameManager.Instance.UpdateRtt(connection.RTT);
             }
         }
 
+        public double getRTT()
+        {
+            var connection = kcpClient.GetConnection(conId);
+            if (connection != null)
+            {
+                return connection.RTT;                        
+            }
+            return 0;
+        }
 
         public void SendCommand(byte[] data)
         {
@@ -123,6 +122,14 @@ namespace Assets.Scripts.ECS
             {
                 kcpClient.SendData(connection.Id, data, data.Length);
             }
+        }
+
+        public bool IsConnected()
+        {
+            var connection = kcpClient.GetConnection(conId);
+            if (connection != null && connection.IsConnected)
+                return true;
+            return false;
         }
     }
 }

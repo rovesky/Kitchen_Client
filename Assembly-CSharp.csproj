@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Systems\ExlosionSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\HandleTimeSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\InputSystem.cs" />
+    <Compile Include="Assets\Scripts\Systems\NetworkClientNewSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\NetworkClientSystem.cs" />
     <Compile Include="Assets\Scripts\Systems\PredictClientSimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\PredictSystem.cs" />

@@ -16,6 +16,8 @@ namespace Assets.Scripts.ECS
         private double lastFrameTime = 0;
         private float frameTimeScale = 1.0f;
         private InputSystem inputSystem;
+        private WorldTimeSystem worldTimeSystem;
+        private NetworkClientSystem networkClientSystem;
 
         protected override void OnCreate()
         {          
@@ -27,11 +29,16 @@ namespace Assets.Scripts.ECS
             });
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
+            worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
+
+            networkClientSystem = World.GetOrCreateSystem<NetworkClientSystem>();
         }
 
         protected override void OnUpdate()
-        {         
-            var serverTick = GetSingleton<SnapshotFromServer>().tick;
+        {
+
+            var snapshot = GetSingleton<SnapshotFromServer>();
+            var serverTick = snapshot.tick;      
             var clientTickTime = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
 
@@ -48,41 +55,44 @@ namespace Assets.Scripts.ECS
             clientTickTime.predict.AddDuration(deltaPredictedTime);
 
             // Adjust time to be synchronized with server
-            uint preferredBufferedCommandCount = 2;
-            uint preferredTick = serverTick + (uint)((120 / 1000.0f) * worldTime.gameTick.TickRate) + preferredBufferedCommandCount;
+            uint preferredBufferedCommandCount = 3;
 
-            FSLog.Info($"serverTick:{serverTick},predictTick:{clientTickTime.predict.Tick}," +
-                $"renderTick:{clientTickTime.render.Tick},preferredTick:{preferredTick}");
+        //    long time = worldTimeSystem.GetCurrentTime() - snapshot.time;
+         //   FSLog.Info($"rtt:{snapshot.rtt},time:{snapshot.time} ");
+            uint preferredTick = serverTick +
+                (uint)((snapshot.rtt + snapshot.time) / 1000.0f * worldTime.gameTick.TickRate) +             
+                preferredBufferedCommandCount;
 
+     
             bool resetTime = false;
             if (!resetTime && clientTickTime.predict.Tick < preferredTick - 3)
             {
-                FSLog.Info($"Client predictTime hard catchup ... ");
+                FSLog.Warning($"Client predictTime hard catchup ... ");
                 resetTime = true;
             }
 
             if (!resetTime && clientTickTime.predict.Tick > preferredTick + 6)
             {
-                FSLog.Info($"Client predictTime hard slowdown ... ");
+                FSLog.Warning($"Client predictTime hard slowdown ... ");
                 resetTime = true;
             }
 
             frameTimeScale = 1.0f;
             if (resetTime)
             {
-                FSLog.Info(string.Format("CATCHUP ({0} -> {1})", clientTickTime.predict.Tick, preferredTick));
+                FSLog.Warning(string.Format("CATCHUP ({0} -> {1} ：{2})", clientTickTime.predict.Tick, preferredTick, serverTick));
                 // m_NetworkStatistics.notifyHardCatchup = true;
                 //  m_GameWorld.nextTickTime = Game.frameTime;             
                 clientTickTime.predict.SetTick(preferredTick, 0);
             }
             else
             {
-                //int bufferedCommands = m_NetworkClient.lastAcknowlegdedCommandTime - serverTick;
-                //if (bufferedCommands < preferredBufferedCommandCount)
-                //    frameTimeScale = 1.01f;
+                int bufferedCommands = snapshot.lastAcknowlegdedCommandTime - (int)serverTick;
+                if (bufferedCommands < preferredBufferedCommandCount)
+                    frameTimeScale = 1.01f;
 
-                //if (bufferedCommands > preferredBufferedCommandCount)
-                //    frameTimeScale = 0.99f;
+                if (bufferedCommands > preferredBufferedCommandCount)
+                    frameTimeScale = 0.99f;
             }
 
             //handle render tick
@@ -92,14 +102,14 @@ namespace Assets.Scripts.ECS
             // Force interp time to not exeede server time
             if (clientTickTime.render.Tick >= serverTick)
             {
-                FSLog.Info($"Client renderTime hard slowdown ... ");
+            //    FSLog.Warning($"Client renderTime hard slowdown ... ");
                 clientTickTime.render.SetTick(serverTick, 0);
             }
 
             // hard catchup
-            if (clientTickTime.render.Tick < serverTick - 10)
+            if (serverTick > 10 && clientTickTime.render.Tick < serverTick - 10)
             {
-                FSLog.Info($"Client renderTime hard catchup ... ");
+                FSLog.Warning($"Client renderTime hard catchup ... ({clientTickTime.render.Tick}=>{serverTick - 8}) ");
                 clientTickTime.render.SetTick(serverTick - 8, 0);
             }
 
@@ -109,10 +119,14 @@ namespace Assets.Scripts.ECS
                 clientTickTime.render.AddDuration(frameDuration * 0.01f);
             }
 
+           // FSLog.Info($"serverTick:{serverTick},predictTick:{clientTickTime.predict.Tick}," +
+              //    $"renderTick:{clientTickTime.render.Tick},preferredTick:{preferredTick - serverTick}");
+
             // If predicted time has entered a new tick the stored commands should be sent to server 
             if (clientTickTime.predict.Tick > prevTick)
             {
-                var oldestCommandToSend = (uint)Mathf.Max(prevTick, clientTickTime.predict.Tick - NetworkConfig.commandClientBufferSize);
+                var oldestCommandToSend = (uint)Mathf.Max(prevTick, clientTickTime.predict.Tick -
+                    NetworkConfig.commandClientBufferSize);
                 for (uint tick = oldestCommandToSend; tick < clientTickTime.predict.Tick; tick++)
                 {
                      inputSystem.StoreCommand(tick);

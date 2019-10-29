@@ -13,9 +13,9 @@ namespace Assets.Scripts.ECS
         {
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
+           // m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
+           // m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
+           // m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
             //   m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
         }
     }
@@ -26,6 +26,8 @@ namespace Assets.Scripts.ECS
     {
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
         private InputSystem inputSystem;
+
+        private TickStateDenseBuffer<EntityPredictData> commandBuffer = new TickStateDenseBuffer<EntityPredictData>(128);
 
         protected override void OnCreate()
         {    
@@ -58,7 +60,7 @@ namespace Assets.Scripts.ECS
                     SetSingleton(worldTime);
 
                     inputSystem.RetrieveCommand(worldTime.Tick);
-                    PredictionUpdate();
+                    PredictionUpdate(worldTime.Tick);
                 }
 
                 // PREDICT CURRENT TICK. Update current tick using duration of current tick
@@ -68,20 +70,66 @@ namespace Assets.Scripts.ECS
                 // Dont update systems with close to zero time. 
                 if (worldTime.TickDuration > 0.008f)
                 {
-                    PredictionUpdate();
+                    PredictionUpdate(predictTime.Tick);
                 }
             }
         }
 
-        private void PredictionUpdate()
+        private void PredictionUpdate(uint tick)
         {
             predictUpdateSystemGroup.Update();
+
+            //保存预测数据
+            var localPlayerQ = GetEntityQuery(typeof(LocalPlayer));
+            if (localPlayerQ.CalculateEntityCount() != 1)
+                return;
+
+            var entity = localPlayerQ.GetSingletonEntity();
+            var predictData = EntityManager.GetComponentData<EntityPredictData>(entity);
+
+         //   FSLog.Info($"<{tick}>PredictionUpdate:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
+
+            var lastBufferTick = commandBuffer.LastTick();
+            if (tick != lastBufferTick && tick != lastBufferTick + 1 && lastBufferTick!= -1)
+            {
+                commandBuffer.Clear();
+                FSLog.Warning(string.Format("Trying to store tick:{0} but last predictData tick is:{1}. Clearing buffer", tick, lastBufferTick));
+            }
+      
+            if (tick == lastBufferTick)
+                commandBuffer.Set(ref predictData, (int)tick);
+            else
+                commandBuffer.Add(ref predictData, (int)tick);          
         }
 
         private void PredictionRollback()
         {
 
+            var localPlayerQ = GetEntityQuery(typeof(LocalPlayer));
+            if (localPlayerQ.CalculateEntityCount() != 1)
+                return;
+
+            var snapshot = GetSingleton<SnapshotFromServer>();
+            var entity = localPlayerQ.GetSingletonEntity();
+            EntityManager.SetComponentData(entity, snapshot.predictData);
+
+
+            EntityPredictData predictData = default;
+            if (commandBuffer.TryGetValue((int)snapshot.tick, ref predictData))
+            {
+                var lastServerData = snapshot.predictData;
+
+                if (!lastServerData.Equals(predictData))
+                {
+                    FSLog.Warning($"<{snapshot.tick}>lastServerData:[{lastServerData.position.x},{lastServerData.position.y},{lastServerData.position.z}]");
+                    FSLog.Warning($"<{snapshot.tick}>   predictData:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
+                }
+            }
+
+            commandBuffer.Clear();
         }
+
+        
 
         private bool IsPredictionAllowed(GameTick predictTime,uint serverTick)
         {
