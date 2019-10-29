@@ -13,10 +13,10 @@ namespace Assets.Scripts.ECS
         {
             m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>());
 
-           // m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
-           // m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
-           // m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
-            //   m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
+            
         }
     }
 
@@ -80,53 +80,59 @@ namespace Assets.Scripts.ECS
             predictUpdateSystemGroup.Update();
 
             //保存预测数据
-            var localPlayerQ = GetEntityQuery(typeof(LocalPlayer));
-            if (localPlayerQ.CalculateEntityCount() != 1)
-                return;
+         //   var localPlayerQ = GetEntityQuery(typeof(LocalPlayer));
+         //   if (localPlayerQ.CalculateEntityCount() != 1)
+         //       return;
 
-            var entity = localPlayerQ.GetSingletonEntity();
-            var predictData = EntityManager.GetComponentData<EntityPredictData>(entity);
+         //   var entity = localPlayerQ.GetSingletonEntity();
+         //   var predictData = EntityManager.GetComponentData<EntityPredictData>(entity);
 
-         //   FSLog.Info($"<{tick}>PredictionUpdate:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
+         ////   FSLog.Info($"<{tick}>PredictionUpdate:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
 
-            var lastBufferTick = commandBuffer.LastTick();
-            if (tick != lastBufferTick && tick != lastBufferTick + 1 && lastBufferTick!= -1)
-            {
-                commandBuffer.Clear();
-                FSLog.Warning(string.Format("Trying to store tick:{0} but last predictData tick is:{1}. Clearing buffer", tick, lastBufferTick));
-            }
+         //   var lastBufferTick = commandBuffer.LastTick();
+         //   if (tick != lastBufferTick && tick != lastBufferTick + 1 && lastBufferTick!= -1)
+         //   {
+         //       commandBuffer.Clear();
+         //       FSLog.Warning(string.Format("Trying to store tick:{0} but last predictData tick is:{1}. Clearing buffer", tick, lastBufferTick));
+         //   }
       
-            if (tick == lastBufferTick)
-                commandBuffer.Set(ref predictData, (int)tick);
-            else
-                commandBuffer.Add(ref predictData, (int)tick);          
+         //   if (tick == lastBufferTick)
+         //       commandBuffer.Set(ref predictData, (int)tick);
+         //   else
+         //       commandBuffer.Add(ref predictData, (int)tick);          
         }
 
         private void PredictionRollback()
         {
-
-            var localPlayerQ = GetEntityQuery(typeof(LocalPlayer));
-            if (localPlayerQ.CalculateEntityCount() != 1)
-                return;
-
-            var snapshot = GetSingleton<SnapshotFromServer>();
-            var entity = localPlayerQ.GetSingletonEntity();
-            EntityManager.SetComponentData(entity, snapshot.predictData);
-
-
-            EntityPredictData predictData = default;
-            if (commandBuffer.TryGetValue((int)snapshot.tick, ref predictData))
+            Entities.ForEach((Entity entity, ref EntityPredictData predicData, ref EntityPredictDataSnapshot snapshotData) =>
             {
-                var lastServerData = snapshot.predictData;
+                predicData.position = snapshotData.position;
+                predicData.rotation = snapshotData.rotation;
 
-                if (!lastServerData.Equals(predictData))
-                {
-                    FSLog.Warning($"<{snapshot.tick}>lastServerData:[{lastServerData.position.x},{lastServerData.position.y},{lastServerData.position.z}]");
-                    FSLog.Warning($"<{snapshot.tick}>   predictData:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
-                }
-            }
+            });
 
-            commandBuffer.Clear();
+            //var localPlayerQ = GetEntityQuery(typeof(LocalPlayer));
+            //if (localPlayerQ.CalculateEntityCount() != 1)
+            //    return;
+
+            //var snapshot = GetSingleton<SnapshotFromServer>();
+            //var entity = localPlayerQ.GetSingletonEntity();
+            //EntityManager.SetComponentData(entity, snapshot.predictData);
+
+
+            //EntityPredictData predictData = default;
+            //if (commandBuffer.TryGetValue((int)snapshot.tick, ref predictData))
+            //{
+            //    var lastServerData = snapshot.predictData;
+
+            //    if (!lastServerData.Equals(predictData))
+            //    {
+            //        FSLog.Warning($"<{snapshot.tick}>lastServerData:[{lastServerData.position.x},{lastServerData.position.y},{lastServerData.position.z}]");
+            //        FSLog.Warning($"<{snapshot.tick}>   predictData:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
+            //    }
+            //}
+
+          //  commandBuffer.Clear();
         }
 
         

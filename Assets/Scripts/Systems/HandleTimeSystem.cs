@@ -17,7 +17,7 @@ namespace Assets.Scripts.ECS
         private float frameTimeScale = 1.0f;
         private InputSystem inputSystem;
         private WorldTimeSystem worldTimeSystem;
-        private NetworkClientSystem networkClientSystem;
+      //private NetworkClientSystem networkClientSystem;
 
         protected override void OnCreate()
         {          
@@ -31,7 +31,7 @@ namespace Assets.Scripts.ECS
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
 
-            networkClientSystem = World.GetOrCreateSystem<NetworkClientSystem>();
+        //    networkClientSystem = World.GetOrCreateSystem<NetworkClientSystem>();
         }
 
         protected override void OnUpdate()

@@ -86,7 +86,7 @@ namespace Assets.Scripts.ECS
         private NetworkClientNewSystem networkSystem;
         private HandleTimeSystem handleTimeSystem;
         private SetRenderTimeSystem setRenderTimeSystem;
-        private ReadSnapshotSystem readSnapshotSystem;
+    //    private ReadSnapshotSystem readSnapshotSystem;
         private SpawnSystemGroup spawnSystemGroup;
         private SetPredictTimeSystem setPredictTimeSystem;
         private PredictSystem predictSystem;
@@ -102,8 +102,8 @@ namespace Assets.Scripts.ECS
             networkSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
             m_systemsToUpdate.Add(networkSystem);
 
-            readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
-            m_systemsToUpdate.Add(readSnapshotSystem);
+            //readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
+            //m_systemsToUpdate.Add(readSnapshotSystem);
             
             handleTimeSystem = World.GetOrCreateSystemE<HandleTimeSystem>();
             m_systemsToUpdate.Add(handleTimeSystem);         

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Components\ClientTickTime.cs" />
+    <Compile Include="Assets\Scripts\Components\EntityPredictDataSnapshot.cs" />
     <Compile Include="Assets\Scripts\Components\LocalPlayer.cs" />
     <Compile Include="Assets\Scripts\Components\SnapshotFromServer.cs" />
     <Compile Include="Assets\Scripts\Components\SpawEntitiesClient.cs" />

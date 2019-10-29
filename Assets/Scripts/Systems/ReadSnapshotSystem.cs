@@ -23,11 +23,11 @@ namespace Assets.Scripts.ECS
             SetSingleton(new SnapshotFromServer()
             {
                 tick = 0,
-                length = 0,
+               // length = 0,
                 time = 0,
                 rtt = 0,
                 lastAcknowlegdedCommandTime = 0,
-                data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
+             //   data = (uint*)UnsafeUtility.Malloc(4 * 1024, UnsafeUtility.AlignOf<UInt32>(), Allocator.Persistent)
             });
 
           //  EntityManager.AddBuffer<SnapshotTick>(snapshotEntity);
@@ -39,8 +39,8 @@ namespace Assets.Scripts.ECS
 
         protected unsafe override void OnDestroy()
         {
-            var snapshot = GetSingleton<SnapshotFromServer>();
-            UnsafeUtility.Free(snapshot.data, Allocator.Persistent);
+          //  var snapshot = GetSingleton<SnapshotFromServer>();
+          //  UnsafeUtility.Free(snapshot.data, Allocator.Persistent);
             FSLog.Debug("Snapshot destroy!");
         }
 
@@ -57,7 +57,7 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {                        
-     
+     /*
             var snapshotFromServer = GetSingleton<SnapshotFromServer>();
             if (snapshotFromServer.length == 0)
                 return;
@@ -278,6 +278,7 @@ namespace Assets.Scripts.ECS
             //    
             //}          
             //array.Dispose();
+            */
 
         }
 
