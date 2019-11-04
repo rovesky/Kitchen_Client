@@ -13,7 +13,7 @@ namespace Assets.Scripts.ECS
     [DisableAutoCreation]
     public unsafe class ReadSnapshotSystem : ComponentSystem
     {
-        private Dictionary<int,Entity> entities = new Dictionary<int, Entity>();
+     //   private Dictionary<int,Entity> entities = new Dictionary<int, Entity>();
         private EntityQuery spawnEntitiesyQuery;
 
         protected override void OnCreate()
@@ -34,26 +34,26 @@ namespace Assets.Scripts.ECS
             
             FSLog.Debug("Snapshot create!");         
 
-            spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
+          //  spawnEntitiesyQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
         }
 
-        protected unsafe override void OnDestroy()
+        protected  override void OnDestroy()
         {
           //  var snapshot = GetSingleton<SnapshotFromServer>();
           //  UnsafeUtility.Free(snapshot.data, Allocator.Persistent);
             FSLog.Debug("Snapshot destroy!");
         }
 
-        private void ClearBuffer(ref DynamicBuffer<SnapshotTick> buffer)
-        {
-            var array = buffer.ToNativeArray(Allocator.Temp);
-            buffer.Clear();
-            for (int i = 0; i < array.Length; ++i)
-            {
-                UnsafeUtility.Free(array[i].data, Allocator.Persistent);
-            }          
-            array.Dispose();            
-        }
+        //private void ClearBuffer(ref DynamicBuffer<SnapshotTick> buffer)
+        //{
+        //    var array = buffer.ToNativeArray(Allocator.Temp);
+        //    buffer.Clear();
+        //    for (int i = 0; i < array.Length; ++i)
+        //    {
+        //        UnsafeUtility.Free(array[i].data, Allocator.Persistent);
+        //    }          
+        //    array.Dispose();            
+        //}
 
         protected override void OnUpdate()
         {                        
@@ -282,11 +282,11 @@ namespace Assets.Scripts.ECS
 
         }
 
-        public void AddEntity(int id, Entity e)
-        {
-            if (entities.ContainsKey(id))
-                return;
-            entities[id] = e;
-        }
+        //public void AddEntity(int id, Entity e)
+        //{
+        //    if (entities.ContainsKey(id))
+        //        return;
+        //    entities[id] = e;
+        //}
     }
 }

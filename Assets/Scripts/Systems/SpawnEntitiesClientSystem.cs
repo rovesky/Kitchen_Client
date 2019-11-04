@@ -119,7 +119,7 @@ namespace Assets.Scripts.ECS
                 enemy.type = (EnemyType)reader.ReadByte();
 
                 var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
-                predictData.position = reader.ReadVector3();
+                predictData.position = reader.ReadVector3Q();
                 EntityManager.SetComponentData(entity, predictData);
 
                 var health = EntityManager.GetComponentData<Health>(entity);

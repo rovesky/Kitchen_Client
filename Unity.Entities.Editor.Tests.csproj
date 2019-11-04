@@ -69,6 +69,9 @@
     <Compile Include="Packages\com.unity.entities@0.1.1-preview\Unity.Entities.Editor.Tests\EntityQueryGUITests.cs" />
     <Compile Include="Packages\com.unity.entities@0.1.1-preview\Unity.Entities.Editor.Tests\ListViewTests.cs" />
     <None Include="Packages\com.unity.entities@0.1.1-preview\Unity.Entities.Editor.Tests\Unity.Entities.Editor.Tests.asmdef" />
+    <Reference Include="Unity.Collections">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
     </Reference>
@@ -639,10 +642,6 @@
     <ProjectReference Include="Unity.Entities.Editor.csproj">
       <Project>{DE7085AB-45C2-6FA0-A481-0D33A4A3A7B5}</Project>
       <Name>Unity.Entities.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Collections.csproj">
-      <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
-      <Name>Unity.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Entities.Tests.csproj">
       <Project>{4AF85B6B-02CC-795A-D58D-382FDC6D500A}</Project>

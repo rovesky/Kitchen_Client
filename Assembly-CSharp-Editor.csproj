@@ -84,6 +84,9 @@
     <Reference Include="Unity.Burst.Editor">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Burst.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Collections">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Physics">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/ScriptAssemblies/Unity.Physics.dll</HintPath>
     </Reference>
@@ -309,17 +312,11 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="System.Buffers">
-      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>D:/work/ECS/TankDemo/Client/Packages/com.footstone.kcptransport/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.burst@1.1.2/Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.collections@0.1.1-preview/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>D:/work/ECS/TankDemo/Client/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
@@ -700,10 +697,6 @@
       <Project>{46D2FC0D-0DC0-974E-9DC6-1D92EF9B9A95}</Project>
       <Name>Unity.Entities.StaticTypeRegistry</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Collections.csproj">
-      <Project>{4CF7FA28-C2DB-2569-5643-4190F188BA2F}</Project>
-      <Name>Unity.Collections</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Scenes.Hybrid.csproj">
       <Project>{48BF3E97-277E-82B9-1ADE-237879BFC99C}</Project>
       <Name>Unity.Scenes.Hybrid</Name>
@@ -711,10 +704,6 @@
     <ProjectReference Include="Unity.Scenes.Editor.csproj">
       <Project>{0FEBA913-E846-41D5-0C26-5E64F8C2C17C}</Project>
       <Name>Unity.Scenes.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="FootStone.KcpTransport.csproj">
-      <Project>{E443916D-9AE3-E5C6-D54E-F84F1685BF93}</Project>
-      <Name>FootStone.KcpTransport</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Extensions.csproj">
       <Project>{883A36DF-8CB4-979F-F6CD-8576D4669C47}</Project>
