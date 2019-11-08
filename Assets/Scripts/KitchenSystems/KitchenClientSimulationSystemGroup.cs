@@ -48,8 +48,8 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {            
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
+        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
+        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
         }
     }
    
@@ -81,12 +81,11 @@ namespace Assets.Scripts.ECS
 
 
     [ExecuteAlways]
-    public class PredictClientSimulationSystemGroup : NoSortComponentSystemGroup
+    public class KitchenClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private NetworkClientNewSystem networkSystem;
         private HandleTimeSystem handleTimeSystem;
-        private SetRenderTimeSystem setRenderTimeSystem;
-    //    private ReadSnapshotSystem readSnapshotSystem;
+        private SetRenderTimeSystem setRenderTimeSystem; 
         private SpawnSystemGroup spawnSystemGroup;
         private SetPredictTimeSystem setPredictTimeSystem;
         private PredictSystem predictSystem;
@@ -95,15 +94,13 @@ namespace Assets.Scripts.ECS
 
         protected override void OnCreate()
         {
-            FSLog.Info("PredictClientSimulationSystemGroup OnCreate");
+            FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
           
             networkSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
             m_systemsToUpdate.Add(networkSystem);
-
-            //readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
-            //m_systemsToUpdate.Add(readSnapshotSystem);
+    
             
             handleTimeSystem = World.GetOrCreateSystemE<HandleTimeSystem>();
             m_systemsToUpdate.Add(handleTimeSystem);         
@@ -132,9 +129,7 @@ namespace Assets.Scripts.ECS
             networkSystem.Update();
 
             if (networkSystem.IsConnected)
-            {
-            //    readSnapshotSystem.Update();
-
+            {       
                 handleTimeSystem.Update();
               
                 setRenderTimeSystem.Update();
@@ -150,9 +145,10 @@ namespace Assets.Scripts.ECS
                 setRenderTimeSystem.Update();
 
                 despawnSystemGroup.Update();
+
+                networkSystem.SendData();
             }
 
-            networkSystem.SendData();
 
         }
     }
