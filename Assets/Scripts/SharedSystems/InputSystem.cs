@@ -39,35 +39,7 @@ namespace Assets.Scripts.ECS
         }
 
         private void InputToCommand()
-        {
-            /*
-            //是否开火
-            userCommand.buttons.Or(UserCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
-
-            //是否移动
-            userCommand.buttons.Or(UserCommand.Button.Move, Input.GetMouseButton(0));
-
-            //获取点击位置
-            if (userCommand.buttons.IsSet(UserCommand.Button.Move))
-            {
-                // 获得鼠标屏幕位置
-                Vector3 ms = Input.mousePosition;
-                // 将屏幕位置转为射线
-                Ray ray = Camera.main.ScreenPointToRay(ms);
-                // 用来记录射线碰撞信息
-                RaycastHit hitInfo;
-                // 产生射线                 
-                bool isCast = Physics.Raycast(ray, out hitInfo, 1000, InputMask);
-
-                var targetPos = Vector3.zero;
-                if (isCast)
-                {
-                    // 如果射中目标,记录射线碰撞点
-                    targetPos = hitInfo.point;
-                }
-                userCommand.targetPos = targetPos;
-                //   FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
-            }*/
+        {         
 
             var v = ETCInput.GetAxis("Vertical"); /*检测垂直方向键*/
             var h  = ETCInput.GetAxis("Horizontal"); /*检测水平方向键*/

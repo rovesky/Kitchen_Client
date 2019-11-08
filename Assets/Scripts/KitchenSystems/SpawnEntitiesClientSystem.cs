@@ -18,7 +18,7 @@ namespace Assets.Scripts.ECS
         private GameObject enemy1Prefab;
         private GameObject enemy2Prefab;
 
-        private ReadSnapshotSystem readSnapshotSystem;
+     //   private ReadSnapshotSystem readSnapshotSystem;
         private NetworkClientNewSystem networkClientNewSystem;
         private EntityQuery spawnEntitiesQuery;
         private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
@@ -149,7 +149,7 @@ namespace Assets.Scripts.ECS
             EntityManager.AddBuffer<SpawnEntityBuffer>(entity);
 
 
-            readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
+     //       readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
             networkClientNewSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
 
             rocketEnemy = GameObjectConversionUtility.ConvertGameObjectHierarchy(

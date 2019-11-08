@@ -16,9 +16,7 @@ namespace Assets.Scripts.ECS
         private double lastFrameTime = 0;
         private float frameTimeScale = 1.0f;
         private InputSystem inputSystem;
-        private WorldTimeSystem worldTimeSystem;
-      //private NetworkClientSystem networkClientSystem;
-
+        private WorldTimeSystem worldTimeSystem;  
         protected override void OnCreate()
         {          
             EntityManager.CreateEntity(typeof(ClientTickTime));
@@ -30,8 +28,6 @@ namespace Assets.Scripts.ECS
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
-
-        //    networkClientSystem = World.GetOrCreateSystem<NetworkClientSystem>();
         }
 
         protected override void OnUpdate()

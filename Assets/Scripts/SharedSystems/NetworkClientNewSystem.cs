@@ -25,6 +25,15 @@ namespace Assets.Scripts.ECS
             worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
             spawnEntitiesClientSystem = World.GetOrCreateSystem<SpawnEntitiesClientSystem>();
 
+            var snapshotEntity = EntityManager.CreateEntity(typeof(SnapshotFromServer));
+            SetSingleton(new SnapshotFromServer()
+            {
+                tick = 0,
+                time = 0,
+                rtt = 0,
+                lastAcknowlegdedCommandTime = 0,
+            });
+
             network = new NetworkClient();
         }
 
@@ -43,7 +52,6 @@ namespace Assets.Scripts.ECS
 
             network.Update(this, spawnEntitiesClientSystem);
          //   GameManager.Instance.UpdateRtt(network.rtt);
-
             var snapshotFromServer = GetSingleton<SnapshotFromServer>();        
             snapshotFromServer.tick = (uint)network.serverTime;
             snapshotFromServer.time = network.timeSinceSnapshot;
@@ -67,22 +75,22 @@ namespace Assets.Scripts.ECS
 
         public void OnConnect(int clientId)
         {
-            //throw new NotImplementedException();
+           
         }
 
         public void OnEvent(int clientId, NetworkEvent info)
         {
-           // throw new NotImplementedException();
+          
         }
 
         public void OnDisconnect(int clientId)
         {
-            //throw new NotImplementedException();
+           
         }
 
         public void OnMapUpdate(ref NetworkReader data)
         {
-           // throw new NotImplementedException();
+       
         }
 
      
