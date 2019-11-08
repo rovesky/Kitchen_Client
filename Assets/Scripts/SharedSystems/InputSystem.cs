@@ -40,6 +40,7 @@ namespace Assets.Scripts.ECS
 
         private void InputToCommand()
         {
+            /*
             //是否开火
             userCommand.buttons.Or(UserCommand.Button.PrimaryFire, Input.GetKey(KeyCode.Space));
 
@@ -66,7 +67,16 @@ namespace Assets.Scripts.ECS
                 }
                 userCommand.targetPos = targetPos;
                 //   FSLog.Info($"targetPos:[{targetPos.x},{targetPos.y},{targetPos.z}]");
-            }
+            }*/
+
+            var v = ETCInput.GetAxis("Vertical"); /*检测垂直方向键*/
+            var h  = ETCInput.GetAxis("Horizontal"); /*检测水平方向键*/
+
+            var v3 = new Vector3(h, 0, v);
+            if (Vector3.SqrMagnitude(v3) < 0.001f)
+                userCommand.targetPos = Vector3.zero;
+
+            userCommand.targetPos = v3.normalized;
         }
 
         public bool HasCommands(uint firstTick, uint lastTick)

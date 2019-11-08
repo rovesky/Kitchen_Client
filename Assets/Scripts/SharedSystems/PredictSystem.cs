@@ -11,14 +11,15 @@ namespace Assets.Scripts.ECS
 
         protected override void OnCreate()
         {
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<PlayerFireSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<PlayerFireSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<MovePositionSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MovePositionSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveInputSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystemE<CheckOutOfRangeSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<CheckOutOfRangeSystem>());
          //   m_systemsToUpdate.Add(World.GetOrCreateSystemE<RayCastSystem>());
 
         }
