@@ -12,7 +12,7 @@ namespace Assets.Scripts.ECS
         private LayerMask InputMask;
         private UserCommand userCommand = UserCommand.defaultCommand;
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
-        private Entity localEntity;
+      //  private Entity localEntity;
         private NetworkClientNewSystem networkClient;
 
         protected override void OnCreate()
@@ -84,13 +84,9 @@ namespace Assets.Scripts.ECS
 
         public void RetrieveCommand(uint tick)
         {
-            var query = GetEntityQuery(typeof(LocalPlayer));
-            if (query.CalculateEntityCount() == 0)
+            var localEntity = GetSingleton<LocalPlayer>().playerEntity;
+            if (localEntity == Entity.Null)
                 return;
-
-            var entities = query.ToEntityArray(Unity.Collections.Allocator.Persistent);
-            localEntity = entities[0];
-            entities.Dispose();
 
             var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity);
             var found = commandBuffer.TryGetValue((int)tick, ref userCommand);

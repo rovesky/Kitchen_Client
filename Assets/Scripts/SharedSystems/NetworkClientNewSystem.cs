@@ -75,7 +75,10 @@ namespace Assets.Scripts.ECS
 
         public void OnConnect(int clientId)
         {
-           
+            //FSLog.Error($"OnConnect:{network.clientId},clientId:{clientId}");
+            //var localPlayer = GetSingleton<LocalPlayer>();
+            //localPlayer.playerId = network.clientId;
+            //SetSingleton(localPlayer);
         }
 
         public void OnEvent(int clientId, NetworkEvent info)
@@ -85,12 +88,17 @@ namespace Assets.Scripts.ECS
 
         public void OnDisconnect(int clientId)
         {
-           
+            var localPlayer = GetSingleton<LocalPlayer>();
+            localPlayer.playerId = -1;
+            SetSingleton(localPlayer);
         }
 
         public void OnMapUpdate(ref NetworkReader data)
         {
-       
+           // FSLog.Error($"OnConnect:{network.clientId}");
+            var localPlayer = GetSingleton<LocalPlayer>();
+            localPlayer.playerId = network.clientId;
+            SetSingleton(localPlayer);
         }
 
      

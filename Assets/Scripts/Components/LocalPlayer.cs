@@ -9,6 +9,8 @@ namespace Assets.Scripts.ECS
     [Serializable]
     public struct LocalPlayer : IComponentData
     {
+        public int playerId;
+        public Entity playerEntity;
     
     }
 

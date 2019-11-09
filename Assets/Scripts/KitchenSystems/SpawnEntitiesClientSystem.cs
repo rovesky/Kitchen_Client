@@ -10,63 +10,47 @@ namespace Assets.Scripts.ECS
     [DisableAutoCreation]
     public class SpawnEntitiesClientSystem : ComponentSystem, ISnapshotConsumer
     {
-
-       private Entity rocketEnemy;
-        private Entity rocketPlayer;
+  
         private Entity player;
-
-        private GameObject enemy1Prefab;
-        private GameObject enemy2Prefab;
-
-     //   private ReadSnapshotSystem readSnapshotSystem;
-        private NetworkClientNewSystem networkClientNewSystem;
-        private EntityQuery spawnEntitiesQuery;
+        private NetworkClientNewSystem networkClientNewSystem;   
         private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
-
 
         public void ProcessEntitySpawn(int serverTime, int id, ushort typeId)
         {        
-            Entity e = Entity.Null;
-            if ((EntityType)typeId == EntityType.Enemy1 || (EntityType)typeId == EntityType.Enemy2)
-            {
-                var prefab = (EntityType)typeId == EntityType.Enemy1 ? enemy1Prefab : enemy2Prefab;
-                var type = (EntityType)typeId == EntityType.Enemy1 ? EnemyType.Normal : EnemyType.Super;
-                e = SpawnEntityUtil.SpwanEnemy(EntityManager, prefab, type,
-                     Vector3.zero, rocketEnemy);
-                EntityManager.AddComponentData(e, new Explosion());
-                EntityManager.AddComponentData(e, new EntityPredictData()
-                {
-                    position = Vector3.zero,
-                    rotation = Quaternion.identity
-                });
-                EntityManager.AddComponentData(e, new EntityPredictDataSnapshot()
-                {
-                    position = Vector3.zero,
-                    rotation = Quaternion.identity
-                });
-            }          
-            else if ((EntityType)typeId == EntityType.Player)
+            Entity e = Entity.Null;         
+            if ((EntityType)typeId == EntityType.Player)
             {             
-                e = SpawnEntityUtil.SpwanPlayer(EntityManager, id, player,
-                       Vector3.zero, rocketPlayer);
 
-                EntityManager.AddComponentData(e, new LocalPlayer());
-                EntityManager.AddComponentData(e, new UserCommand());
-           //     EntityManager.AddComponentData(e, new Explosion());
-               // EntityManager.AddComponentData(e, new UpdateUI());
+                e = EntityManager.Instantiate(player);
+                Translation position = new Translation() { Value = Vector3.zero };
+                Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
-                var rotation = Quaternion.identity;
-                rotation.eulerAngles = new Vector3(0, -180, 0);
+                EntityManager.SetComponentData(e, position);
+
+                EntityManager.AddComponentData(e, new Player() { playerId = id, id = e.Index });
+                EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
+                EntityManager.AddComponentData(e, new Damage());
+                EntityManager.AddComponentData(e, new Health() { Value = 30 });
+                EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
+                EntityManager.AddComponentData(e, new UpdateUI());
+                EntityManager.AddComponentData(e, new MoveInput()
+                {
+                    Speed = 6,
+                });         
+
+              //  EntityManager.AddComponentData(e, new LocalPlayer());
+              //  EntityManager.AddComponentData(e, new UserCommand());   
+
                 EntityManager.AddComponentData(e, new EntityPredictData()
                 {
                     position = Vector3.zero,
-                    rotation = rotation
+                    rotation = rotation.Value
                 });
 
                 EntityManager.AddComponentData(e, new EntityPredictDataSnapshot()
                 {
                     position = Vector3.zero,
-                    rotation = rotation
+                    rotation = rotation.Value
                 });
             }
             entities[id] = e;
@@ -88,12 +72,26 @@ namespace Assets.Scripts.ECS
                 return;
 
             var entity = entities[id];
+
+            var localPalyer = GetSingleton<LocalPlayer>();
+
             if (EntityManager.HasComponent<Player>(entity))
-            {
-                // FSLog.Info($"player Update!");
+            {        
                 var player = EntityManager.GetComponentData<Player>(entity);
                 player.id = reader.ReadInt32();
                 player.playerId = reader.ReadInt32();
+
+               // FSLog.Error($"player.playerId:{player.playerId},localPalyer.playerId:{localPalyer.playerId}");
+                if (localPalyer.playerId == player.playerId)
+                {
+                    if (localPalyer.playerEntity == Entity.Null)
+                    {
+                        localPalyer.playerEntity = entity;
+                        SetSingleton(localPalyer);
+                    }
+                    if (!EntityManager.HasComponent<UserCommand>(entity))
+                        EntityManager.AddComponentData(entity, new UserCommand());
+                }
               
                 var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
                 predictData.position = reader.ReadVector3Q();
@@ -111,57 +109,21 @@ namespace Assets.Scripts.ECS
                 score.ScoreValue = reader.ReadInt32();
                 score.MaxScoreValue = reader.ReadInt32();
                 EntityManager.SetComponentData(entity, score);
-            }
-            else if (EntityManager.HasComponent<Enemy>(entity))
-            {
-                var enemy = EntityManager.GetComponentData<Enemy>(entity);
-                enemy.id = reader.ReadInt32();
-                enemy.type = (EnemyType)reader.ReadByte();
-
-                var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
-                predictData.position = reader.ReadVector3Q();
-                EntityManager.SetComponentData(entity, predictData);
-
-                var health = EntityManager.GetComponentData<Health>(entity);
-                health.Value = reader.ReadInt32();
-                EntityManager.SetComponentData(entity, health);
-
-
-                var attack = EntityManager.GetComponentData<Attack>(entity);
-                attack.Power = reader.ReadInt32();
-                EntityManager.SetComponentData(entity, attack);
-
-                if (enemy.type == EnemyType.Super)
-                {
-                    var fireRocket = EntityManager.GetComponentData<FireRocket>(entity);
-                    fireRocket.FireCooldown = reader.ReadFloatQ();
-                    fireRocket.RocketTimer = reader.ReadFloatQ();
-                }
-            }
+            }           
         }
 
         protected override void OnCreate()
         {
 
-            spawnEntitiesQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
+          //  var spawnEntitiesQuery = GetEntityQuery(ComponentType.ReadOnly<SpawnEntitiesClient>());
             var entity = EntityManager.CreateEntity(typeof(SpawnEntitiesClient));
-            spawnEntitiesQuery.SetSingleton(new SpawnEntitiesClient());
+            SetSingleton(new SpawnEntitiesClient());
             EntityManager.AddBuffer<SpawnEntityBuffer>(entity);
 
+            EntityManager.CreateEntity(typeof(LocalPlayer));
+            SetSingleton(new LocalPlayer(){ playerId = -1, playerEntity = Entity.Null });
 
-     //       readSnapshotSystem = World.GetOrCreateSystem<ReadSnapshotSystem>();
             networkClientNewSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
-
-            rocketEnemy = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Prefabs/EnemyRocket") as GameObject, World.Active);
-
-            rocketPlayer = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Prefabs/PlayerRocket") as GameObject, World.Active);
-
-
-            enemy1Prefab = Resources.Load("Prefabs/Enemy1") as GameObject;
-            enemy2Prefab = Resources.Load("Prefabs/Enemy3") as GameObject;
-
 
             player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Player1") as GameObject, World.Active);
