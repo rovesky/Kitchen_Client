@@ -11,8 +11,8 @@ namespace Assets.Scripts.ECS
         {      
             Entities.WithAllReadOnly<UpdateUI>().ForEach((Entity entity, ref Health health, ref Score score) =>
             {
-                GameManager.Instance.ChangeLife(health.Value);
-                GameManager.Instance.UpdateScore(score);
+             //   GameManager.Instance.ChangeLife(health.Value);
+             //   GameManager.Instance.UpdateScore(score);
             });
         }
     }

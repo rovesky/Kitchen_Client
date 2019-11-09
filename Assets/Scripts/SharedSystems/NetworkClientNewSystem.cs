@@ -47,11 +47,11 @@ namespace Assets.Scripts.ECS
         {
             if(network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
-                network.Connect("127.0.0.1");
+                network.Connect("192.168.0.128");
             }
 
             network.Update(this, spawnEntitiesClientSystem);
-         //   GameManager.Instance.UpdateRtt(network.rtt);
+            GameManager.Instance.UpdateRtt(network.rtt);
             var snapshotFromServer = GetSingleton<SnapshotFromServer>();        
             snapshotFromServer.tick = (uint)network.serverTime;
             snapshotFromServer.time = network.timeSinceSnapshot;
