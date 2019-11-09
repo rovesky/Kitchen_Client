@@ -24,9 +24,7 @@ namespace Assets.Scripts.ECS
             Instance = this;          
             m_text_rtt = m_canvas_main.transform.Find("text_rtt").GetComponent<Text>();         
         
-        }
-
-     
+        }     
 
         // 改变RTT UI显示
         public void UpdateRtt(double rtt)

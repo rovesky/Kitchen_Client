@@ -51,7 +51,9 @@ namespace Assets.Scripts.ECS
             }
 
             network.Update(this, spawnEntitiesClientSystem);
+
             GameManager.Instance.UpdateRtt(network.rtt);
+
             var snapshotFromServer = GetSingleton<SnapshotFromServer>();        
             snapshotFromServer.tick = (uint)network.serverTime;
             snapshotFromServer.time = network.timeSinceSnapshot;
