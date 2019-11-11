@@ -91,6 +91,7 @@ namespace Assets.Scripts.ECS
         private PredictSystem predictSystem;
         private PresentationSystemGroup presentationSystemGroup;
         private DespawnSystemGroup despawnSystemGroup;
+        private InterpolatedSystem interpolatedSystem;
 
         protected override void OnCreate()
         {
@@ -104,13 +105,17 @@ namespace Assets.Scripts.ECS
     
             
             handleTimeSystem = World.GetOrCreateSystemE<HandleTimeSystem>();
-            m_systemsToUpdate.Add(handleTimeSystem);         
+            m_systemsToUpdate.Add(handleTimeSystem);
+       
 
             setRenderTimeSystem = World.GetOrCreateSystemE<SetRenderTimeSystem>();
-            m_systemsToUpdate.Add(setRenderTimeSystem);
+            m_systemsToUpdate.Add(setRenderTimeSystem);      
 
             spawnSystemGroup = World.GetOrCreateSystem<SpawnSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
+
+            interpolatedSystem = World.GetOrCreateSystemE<InterpolatedSystem>();
+            m_systemsToUpdate.Add(interpolatedSystem);
 
             setPredictTimeSystem = World.GetOrCreateSystemE<SetPredictTimeSystem>();
             m_systemsToUpdate.Add(setPredictTimeSystem);
@@ -136,6 +141,8 @@ namespace Assets.Scripts.ECS
                 setRenderTimeSystem.Update();
 
                 spawnSystemGroup.Update();
+
+                interpolatedSystem.Update();
 
                 setPredictTimeSystem.Update();
 

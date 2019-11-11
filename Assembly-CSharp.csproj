@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Components\ClientTickTime.cs" />
+    <Compile Include="Assets\Scripts\Components\EntityInterpolateData.cs" />
     <Compile Include="Assets\Scripts\Components\EntityPredictDataSnapshot.cs" />
     <Compile Include="Assets\Scripts\Components\LocalPlayer.cs" />
     <Compile Include="Assets\Scripts\Components\SnapshotFromServer.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Assets\Scripts\PlaneSystems\UpdateUISystem.cs" />
     <Compile Include="Assets\Scripts\SharedSystems\HandleTimeSystem.cs" />
     <Compile Include="Assets\Scripts\SharedSystems\InputSystem.cs" />
+    <Compile Include="Assets\Scripts\SharedSystems\InterpolatedSystem.cs" />
     <Compile Include="Assets\Scripts\SharedSystems\NetworkClientNewSystem.cs" />
     <Compile Include="Assets\Scripts\SharedSystems\PredictSystem.cs" />
     <Compile Include="Assets\ThirdParty\EasyTouchBundle\EasyTouch\Examples\4.X\AdvancedExamples\AutoSelect\MultiLayerTouch.cs" />

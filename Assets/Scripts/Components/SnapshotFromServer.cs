@@ -12,12 +12,6 @@ namespace Assets.Scripts.ECS
         public long time;
         public int rtt;
         public int lastAcknowlegdedCommandTime;
-     //   public int length;
-     //   public uint* data;
-
-     //   public EntityPredictData predictData;
-
-
     }
 
 }
