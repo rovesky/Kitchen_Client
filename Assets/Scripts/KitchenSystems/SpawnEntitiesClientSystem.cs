@@ -73,6 +73,7 @@ namespace Assets.Scripts.ECS
                 EntityManager.SetComponentData(entity,player);
 
                 var position = reader.ReadVector3Q();
+                var rotation = reader.ReadQuaternionQ();
 
                 // FSLog.Error($"player.playerId:{player.playerId},localPalyer.playerId:{localPalyer.playerId}");
                 if (localPalyer.playerId == player.playerId)
@@ -102,7 +103,7 @@ namespace Assets.Scripts.ECS
 
                     var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
                     predictData.position = position;         
-                    predictData.rotation = Quaternion.identity;
+                    predictData.rotation = rotation;
                     EntityManager.SetComponentData(entity, predictData);
                 }
                 else
@@ -116,7 +117,7 @@ namespace Assets.Scripts.ECS
                     var interpolateData = new EntityPredictData()
                     {
                         position = position,
-                        rotation = Quaternion.identity
+                        rotation = rotation
                     };
                     interpolatedSystem.AddData(serverTime,id,ref interpolateData);
                 }

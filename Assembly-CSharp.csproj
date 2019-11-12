@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Components\SnapshotFromServer.cs" />
     <Compile Include="Assets\Scripts\Components\SpawEntitiesClient.cs" />
     <Compile Include="Assets\Scripts\KitchenSystems\KitchenClientSimulationSystemGroup.cs" />
+    <Compile Include="Assets\Scripts\KitchenSystems\PreviewClientSimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\KitchenSystems\SpawnEntitiesClientSystem.cs" />
     <Compile Include="Assets\Scripts\Others\GameManager.cs" />
     <Compile Include="Assets\Scripts\PlaneSystems\UpdateUISystem.cs" />

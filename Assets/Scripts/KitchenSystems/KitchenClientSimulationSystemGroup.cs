@@ -27,19 +27,6 @@ namespace Assets.Scripts.ECS
     }
 
 
-    //[ExecuteAlways]
-    //[DisableAutoCreation]
-    //public class MoveSystemGroup : NoSortComponentSystemGroup
-    //{
-    //    protected override void OnCreate()
-    //    {
-    //        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
-    //        m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveSinSystem>());
-    //        m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTargetSystem>());
-    //        m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveForwardSystem>());
-    //     //   m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveTranslationSystem>());
-    //    }
-    //}
 
 
     [ExecuteAlways]
