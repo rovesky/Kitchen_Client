@@ -47,8 +47,8 @@ namespace Assets.Scripts.ECS
         {
             if(network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
-               // network.Connect("58.247.94.202");
-                network.Connect("211.75.33.162");
+                network.Connect("58.247.94.202");
+               // network.Connect("211.75.33.162");
 
              
                 //  network.Connect("192.168.0.128");
