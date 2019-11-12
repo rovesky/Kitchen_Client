@@ -1,5 +1,6 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
+using Unity.Physics.Systems;
 using UnityEngine;
 
 namespace Assets.Scripts.ECS
@@ -81,7 +82,8 @@ namespace Assets.Scripts.ECS
 
 
     [ExecuteAlways]
-    public class KitchenClientSimulationSystemGroup : NoSortComponentSystemGroup
+	[UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
+	public class KitchenClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private NetworkClientNewSystem networkSystem;
         private HandleTimeSystem handleTimeSystem;

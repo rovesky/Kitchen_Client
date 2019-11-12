@@ -11,7 +11,8 @@ namespace Assets.Scripts.ECS
 
         protected override void OnCreate()
         {
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveInputSystem>());
+			//m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveInputSystem>());
+			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterMoveSystem>());
         }
     }
 
