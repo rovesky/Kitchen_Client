@@ -47,7 +47,11 @@ namespace Assets.Scripts.ECS
         {
             if(network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
-                network.Connect("192.168.0.128");
+               // network.Connect("58.247.94.202");
+                network.Connect("211.75.33.162");
+
+             
+                //  network.Connect("192.168.0.128");
             }
 
             network.Update(this, spawnEntitiesClientSystem);
@@ -77,7 +81,7 @@ namespace Assets.Scripts.ECS
 
         public void OnConnect(int clientId)
         {
-            //FSLog.Error($"OnConnect:{network.clientId},clientId:{clientId}");
+            FSLog.Error($"OnConnect:{network.clientId},clientId:{clientId}");
             //var localPlayer = GetSingleton<LocalPlayer>();
             //localPlayer.playerId = network.clientId;
             //SetSingleton(localPlayer);
