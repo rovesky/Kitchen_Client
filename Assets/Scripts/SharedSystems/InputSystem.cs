@@ -9,7 +9,7 @@ namespace Assets.Scripts.ECS
     public class InputSystem : FSComponentSystem
     {
         // 鼠标射线碰撞层
-        private LayerMask InputMask;
+      //  private LayerMask InputMask;
         private UserCommand userCommand = UserCommand.defaultCommand;
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
       //  private Entity localEntity;
@@ -18,7 +18,7 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {
             base.OnCreate();
-            InputMask = 1 << LayerMask.NameToLayer("plane");
+       //     InputMask = 1 << LayerMask.NameToLayer("plane");
 
             EntityManager.CreateEntity(typeof(UserCommand));
             SetSingleton(new UserCommand()
@@ -39,16 +39,18 @@ namespace Assets.Scripts.ECS
         }
 
         private void InputToCommand()
-        {         
-
+        {                 
             var v = ETCInput.GetAxis("Vertical"); /*检测垂直方向键*/
             var h  = ETCInput.GetAxis("Horizontal"); /*检测水平方向键*/
 
             var v3 = new Vector3(h, 0, v);
-            if (Vector3.SqrMagnitude(v3) < 0.001f)
-                userCommand.targetPos = Vector3.zero;
+            if (Vector3.SqrMagnitude(v3) < 0.00001f)       
+                userCommand.targetPos = Vector3.zero;  
+             else     
+                userCommand.targetPos = v3.normalized;           
 
-            userCommand.targetPos = v3.normalized;
+            userCommand.buttons.Set(UserCommand.Button.Pick, UIInput.GetButtonClick("button1"));
+            
         }
 
         public bool HasCommands(uint firstTick, uint lastTick)

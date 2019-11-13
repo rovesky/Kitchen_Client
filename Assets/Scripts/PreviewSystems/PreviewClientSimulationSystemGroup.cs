@@ -7,13 +7,12 @@ using UnityEngine;
 namespace Assets.Scripts.ECS
 {
 
-
+   // [DisableAutoCreation]
     [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private GameTick gameTime = GameTick.defaultGameTick;
         private double nextTickTime = 0;
-
 
         private SpawnPreviewClientSystem spawnSystemGroup; 
         private PredictUpdateSystemGroup predictUpdateSystem;
@@ -60,17 +59,7 @@ namespace Assets.Scripts.ECS
                 nextTickTime += worldTime.gameTick.TickInterval;
             }
             if (commandWasConsumed)
-                inputSystem.ResetInput();
-
-            //float remainTime = (float)(nextTickTime - worldTime.frameTime);
-
-            //int rate = worldTime.gameTick.TickRate;
-            //if (remainTime > 0.75f * worldTime.gameTick.TickInterval)
-            //    rate -= 2;
-            //else if (remainTime < 0.25f * worldTime.gameTick.TickInterval)
-            //    rate += 2;
-
-            //Application.targetFrameRate = rate;
+                inputSystem.ResetInput();      
         }
 
         private void PrevierTickUpdate()
@@ -82,7 +71,8 @@ namespace Assets.Scripts.ECS
       
             spawnSystemGroup.Update();
      
-            inputSystem.RetrieveCommand(worldTime.Tick);         
+            inputSystem.RetrieveCommand(worldTime.Tick);     
+            
             predictUpdateSystem.Update();
 
             presentationSystemGroup.Update();

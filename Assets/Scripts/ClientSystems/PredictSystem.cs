@@ -13,6 +13,9 @@ namespace Assets.Scripts.ECS
         {
 			//m_systemsToUpdate.Add(World.GetOrCreateSystem<MoveInputSystem>());
 			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterMoveSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<PickSystem>());
+
+            
         }
     }
 

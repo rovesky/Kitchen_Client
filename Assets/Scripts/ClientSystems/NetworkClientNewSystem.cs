@@ -48,16 +48,12 @@ namespace Assets.Scripts.ECS
             if(network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
                 network.Connect("58.247.94.202");
-               // network.Connect("211.75.33.162");
-
-             
+               // network.Connect("211.75.33.162");             
                 //  network.Connect("192.168.0.128");
             }
 
             network.Update(this, spawnEntitiesClientSystem);
-
-            GameManager.Instance.UpdateRtt(network.rtt);
-
+        
             var snapshotFromServer = GetSingleton<SnapshotFromServer>();        
             snapshotFromServer.tick = (uint)network.serverTime;
             snapshotFromServer.time = network.timeSinceSnapshot;
@@ -65,7 +61,6 @@ namespace Assets.Scripts.ECS
             snapshotFromServer.lastAcknowlegdedCommandTime = network.lastAcknowlegdedCommandTime;   
             SetSingleton(snapshotFromServer);
         }
-
 
         public void QueueCommand(uint tick, NetworkClient.DataGenerator data )
         {
@@ -81,10 +76,7 @@ namespace Assets.Scripts.ECS
 
         public void OnConnect(int clientId)
         {
-            FSLog.Error($"OnConnect:{network.clientId},clientId:{clientId}");
-            //var localPlayer = GetSingleton<LocalPlayer>();
-            //localPlayer.playerId = network.clientId;
-            //SetSingleton(localPlayer);
+            FSLog.Info($"OnConnect:{network.clientId},clientId:{clientId}");
         }
 
         public void OnEvent(int clientId, NetworkEvent info)
