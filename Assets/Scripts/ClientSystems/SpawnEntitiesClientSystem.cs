@@ -12,6 +12,7 @@ namespace Assets.Scripts.ECS
     {
   
         private Entity player;
+        private Entity platePrefab;
         private NetworkClientNewSystem networkClientNewSystem;
         private InterpolatedSystem interpolatedSystem;
         private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
@@ -45,6 +46,17 @@ namespace Assets.Scripts.ECS
                     position = Vector3.zero,
                     rotation = Quaternion.identity
                 });
+            }
+            else if ((EntityType)typeId == EntityType.Plate)
+            {
+                FSLog.Info($"ProcessEntitySpawn Plate:{id}");
+                e = EntityManager.Instantiate(platePrefab);
+                EntityManager.AddComponentData(e, new Plate() { id = id });
+                Translation position = new Translation() { Value = Vector3.zero};
+                Rotation rotation = new Rotation() { Value = Quaternion.identity };
+
+                EntityManager.SetComponentData(e, position);
+                
             }
             entities[id] = e;
         }
@@ -105,6 +117,14 @@ namespace Assets.Scripts.ECS
                         });
                     }
 
+                    if (!EntityManager.HasComponent<PickupItem>(entity))
+                    {
+                        EntityManager.AddComponentData(entity, new PickupItem()
+                        {
+                            pickupEntity = Entity.Null
+                        });
+                    }
+
                     var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
                     predictData.position = position;         
                     predictData.rotation = rotation;
@@ -135,7 +155,28 @@ namespace Assets.Scripts.ECS
                 score.ScoreValue = reader.ReadInt32();
                 score.MaxScoreValue = reader.ReadInt32();
                 EntityManager.SetComponentData(entity, score);
-            }           
+            }        
+            else if (EntityManager.HasComponent<Plate>(entity))
+            {
+           
+                var id1 = reader.ReadInt32();     
+              
+
+                var position = reader.ReadVector3Q();
+                var rotation = reader.ReadQuaternionQ();
+
+                //if (!EntityManager.HasComponent<EntityInterpolate>(entity))
+                //{
+                //    EntityManager.AddComponentData(entity, new EntityInterpolate());
+                //}
+
+                //var interpolateData = new EntityPredictData()
+                //{
+                //    position = position,
+                //    rotation = rotation
+                //};
+                //interpolatedSystem.AddData(serverTime, id, ref interpolateData);
+            }
         }
 
         protected override void OnCreate()
@@ -152,6 +193,9 @@ namespace Assets.Scripts.ECS
 
             player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Player1") as GameObject, World.Active);
+
+            platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+                 Resources.Load("Plate") as GameObject, World.Active);
 
             FSLog.Info($" spwan entity OnCreate2");
         }

@@ -35,6 +35,13 @@ namespace Assets.Scripts.ECS
 
             EntityManager.AddComponentData(e, new Plate());
 
+            //EntityManager.AddComponentData(e, new EntityPredictData()
+            //{
+            //    position = position.Value,
+            //    rotation = rotation.Value
+
+            //});
+
         }      
     }
 }

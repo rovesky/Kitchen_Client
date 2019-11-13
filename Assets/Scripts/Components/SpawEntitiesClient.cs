@@ -7,7 +7,7 @@ namespace Assets.Scripts.ECS
     public enum EntityType
     {
         Player,
-        Enemy1,
+        Plate,
         Enemy2,
         RocketPlayer,
         RocketEnemy
