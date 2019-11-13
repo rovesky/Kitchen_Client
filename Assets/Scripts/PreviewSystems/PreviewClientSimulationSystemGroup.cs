@@ -19,6 +19,7 @@ namespace Assets.Scripts.ECS
         private PresentationSystemGroup presentationSystemGroup;
         private DespawnSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
+        private SpawnPlatesSystem spawnPlatesSystem;
 
         protected override void OnCreate()
         {
@@ -32,6 +33,11 @@ namespace Assets.Scripts.ECS
 
             spawnSystemGroup = World.GetOrCreateSystem<SpawnPreviewClientSystem>();
             m_systemsToUpdate.Add(spawnSystemGroup);
+
+            spawnPlatesSystem = World.GetOrCreateSystem<SpawnPlatesSystem>();
+            m_systemsToUpdate.Add(spawnPlatesSystem);
+
+            
 
             predictUpdateSystem = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             m_systemsToUpdate.Add(predictUpdateSystem);
@@ -70,7 +76,9 @@ namespace Assets.Scripts.ECS
             inputSystem.StoreCommand(worldTime.Tick);
       
             spawnSystemGroup.Update();
-     
+            spawnPlatesSystem.Update();
+
+
             inputSystem.RetrieveCommand(worldTime.Tick);     
             
             predictUpdateSystem.Update();

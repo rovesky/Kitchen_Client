@@ -55,7 +55,12 @@ namespace Assets.Scripts.ECS
             EntityManager.AddComponentData(e, new MoveInput()
             {
                 Speed = 6,
-            });        
+            });
+
+            EntityManager.AddComponentData(e, new PickupItem()
+            {
+                pickupEntity = Entity.Null
+            });
 
             localPalyer.playerEntity = e;
             SetSingleton(localPalyer);

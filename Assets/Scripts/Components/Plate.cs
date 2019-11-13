@@ -4,11 +4,10 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 namespace Assets.Scripts.ECS
-{ 
-    public struct LocalPlayer : IComponentData
-    {
-        public int playerId;
-        public Entity playerEntity;
+{    
+    
+    public struct Plate : IComponentData
+    {   
     
     }
 
