@@ -91,8 +91,10 @@ namespace Assets.Scripts.ECS
                 return;
 
             var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity);
+         //   FSLog.Info($"current command:{userCommand.checkTick},{userCommand.buttons.flags}");
             var found = commandBuffer.TryGetValue((int)tick, ref userCommand);
-            //   GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
+            GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
+         //   FSLog.Info($"{found},retrieve command:{userCommand.checkTick},{userCommand.buttons.flags}");
 
             if (found)
                 EntityManager.SetComponentData(localEntity, userCommand);

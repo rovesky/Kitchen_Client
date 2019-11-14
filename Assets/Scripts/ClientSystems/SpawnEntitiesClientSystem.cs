@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Components;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -46,6 +47,8 @@ namespace Assets.Scripts.ECS
                     position = Vector3.zero,
                     rotation = Quaternion.identity
                 });
+
+             
             }
             else if ((EntityType)typeId == EntityType.Plate)
             {
@@ -56,7 +59,8 @@ namespace Assets.Scripts.ECS
                 Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
                 EntityManager.SetComponentData(e, position);
-                
+                EntityManager.SetComponentData(e, rotation);
+
             }
             entities[id] = e;
         }
@@ -159,11 +163,21 @@ namespace Assets.Scripts.ECS
             else if (EntityManager.HasComponent<Plate>(entity))
             {
            
-                var id1 = reader.ReadInt32();     
-              
+                var id1 = reader.ReadInt32();
 
                 var position = reader.ReadVector3Q();
                 var rotation = reader.ReadQuaternionQ();
+
+                if(EntityManager.GetComponentData<Translation>(entity).Value.Equals((float3)Vector3.zero))
+                {
+                    EntityManager.SetComponentData(entity, new Translation() { Value = position });
+
+                }
+                if (EntityManager.GetComponentData<Rotation>(entity).Value.Equals(Quaternion.identity))
+                {
+                    EntityManager.SetComponentData(entity, new Rotation() { Value = rotation });
+
+                }
 
                 //if (!EntityManager.HasComponent<EntityInterpolate>(entity))
                 //{
