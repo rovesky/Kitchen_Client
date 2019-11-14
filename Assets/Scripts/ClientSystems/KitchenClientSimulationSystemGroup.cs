@@ -36,9 +36,10 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {            
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
-        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
-        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
-        }
+			m_systemsToUpdate.Add(World.GetOrCreateSystem<ClientTriggerProcessSystem>());
+			//    m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
+			//    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
+		}
     }
    
 
