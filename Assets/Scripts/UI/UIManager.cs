@@ -16,7 +16,8 @@ namespace Assets.Scripts.ECS
         public Canvas m_canvas_main;
         private Text m_text_rtt;
         private Button m_button1;
-      
+        private Button m_button2;
+
         void Start()
         {
             Debug.Log("GameManager Start!");
@@ -24,11 +25,19 @@ namespace Assets.Scripts.ECS
             Instance = this;          
             m_text_rtt = m_canvas_main.transform.Find("text_rtt").GetComponent<Text>();
             m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
+            m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
 
             m_button1.onClick.AddListener(() =>
             {
                 FSLog.Info("m_button1.onClick!");
-                UIInput.AddButtonClickEvent("button1");
+                UIInput.AddButtonClickEvent("pickup");
+
+            });
+
+            m_button2.onClick.AddListener(() =>
+            {
+                FSLog.Info("m_button2.onClick!");
+                UIInput.AddButtonClickEvent("throw");
 
             });
         }

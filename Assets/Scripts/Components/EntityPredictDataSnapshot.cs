@@ -10,6 +10,7 @@ namespace Assets.Scripts.ECS
     {
         public float3 position;
         public quaternion rotation;
+        public Entity pickupEntity;
      
     }
 }

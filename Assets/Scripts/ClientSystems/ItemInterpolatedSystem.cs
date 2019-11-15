@@ -8,15 +8,15 @@ namespace Assets.Scripts.ECS
 {
 
     [DisableAutoCreation]
-    public class ItemInterpolatedSystem<T> : ComponentSystem where T:struct,IComponentData,IInterpolate<T>
+    public class InterpolatedSystem : FSComponentSystem
     {
-        private Dictionary<int, TickStateSparseBuffer<T>> interpolateDataMap =
-            new Dictionary<int, TickStateSparseBuffer<T>>();
+        private Dictionary<int, TickStateSparseBuffer<EntityPredictData>> interpolateDataMap =
+            new Dictionary<int, TickStateSparseBuffer<EntityPredictData>>();
 
-        public void AddData(int serverTick, int id, ref T data)
+        public void AddData(int serverTick, int id, ref EntityPredictData data)
         {
             if (!interpolateDataMap.ContainsKey(id))
-                interpolateDataMap.Add(id, new TickStateSparseBuffer<T>(64));
+                interpolateDataMap.Add(id, new TickStateSparseBuffer<EntityPredictData>(64));
 
             var buffer = interpolateDataMap[id];
             buffer.Add(serverTick, data);
@@ -31,7 +31,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {        
             var worldTime = GetSingleton<WorldTime>();
-            Entities/*.WithAllReadOnly<EntityInterpolate>()*/.ForEach((Entity entity, ref EntityInterpolate interpolate) =>
+            Entities/*.WithAllReadOnly<EntityInterpolate>()*/.ForEach((Entity entity, ref EntityInterpolate interpolate, ref EntityPredictData predictData) =>
             {
               //  FSLog.Info($"InterpolatedSystem Update1:{interpolate.id}");
                 if (!interpolateDataMap.ContainsKey(interpolate.id))
@@ -45,7 +45,6 @@ namespace Assets.Scripts.ECS
                 float interpVal = 0;
                 var interpValid = buffer.GetStates((int)worldTime.Tick, worldTime.TickDurationAsFraction, ref lowIndex, ref highIndex, ref interpVal);
 
-                var predictData = default(T); 
             //    FSLog.Info($"InterpolatedSystem Update2:{interpolate.id}");
                 if (interpValid)
                 {
@@ -57,7 +56,6 @@ namespace Assets.Scripts.ECS
                 {
                     predictData = buffer.Last();
                 }
-                EntityManager.SetComponentData(entity, predictData);
             });
 
         }

@@ -39,18 +39,19 @@ namespace Assets.Scripts.ECS
         }
 
         private void InputToCommand()
-        {                 
+        {
             var v = ETCInput.GetAxis("Vertical"); /*检测垂直方向键*/
-            var h  = ETCInput.GetAxis("Horizontal"); /*检测水平方向键*/
+            var h = ETCInput.GetAxis("Horizontal"); /*检测水平方向键*/
 
             var v3 = new Vector3(h, 0, v);
-            if (Vector3.SqrMagnitude(v3) < 0.00001f)       
-                userCommand.targetPos = Vector3.zero;  
-             else     
-                userCommand.targetPos = v3.normalized;           
+            if (Vector3.SqrMagnitude(v3) < 0.00001f)
+                userCommand.targetPos = Vector3.zero;
+            else
+                userCommand.targetPos = v3.normalized;
 
-            userCommand.buttons.Set(UserCommand.Button.Pick, UIInput.GetButtonClick("button1"));
-            
+            userCommand.buttons.Set(UserCommand.Button.Pick, UIInput.GetButtonClick("pickup"));
+            userCommand.buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
+
         }
 
         public bool HasCommands(uint firstTick, uint lastTick)
@@ -70,6 +71,9 @@ namespace Assets.Scripts.ECS
         {
             userCommand.checkTick = tick;
 
+            if(userCommand.buttons.flags > 0)
+                FSLog.Info($"StoreCommand buffer count:{userCommand.checkTick},{userCommand.buttons.flags}");
+
             var lastBufferTick = commandBuffer.LastTick();
             if (tick != lastBufferTick && tick != lastBufferTick + 1)
             {
@@ -81,6 +85,8 @@ namespace Assets.Scripts.ECS
                 commandBuffer.Set(ref userCommand, (int)tick);
             else
                 commandBuffer.Add(ref userCommand, (int)tick);
+
+         //   
 
         }
 
@@ -94,7 +100,8 @@ namespace Assets.Scripts.ECS
          //   FSLog.Info($"current command:{userCommand.checkTick},{userCommand.buttons.flags}");
             var found = commandBuffer.TryGetValue((int)tick, ref userCommand);
             GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
-         //   FSLog.Info($"{found},retrieve command:{userCommand.checkTick},{userCommand.buttons.flags}");
+            if(userCommand.buttons.flags> 0)
+                FSLog.Info($"{found},retrieve command:{tick},{userCommand.checkTick},{userCommand.buttons.flags}");
 
             if (found)
                 EntityManager.SetComponentData(localEntity, userCommand);

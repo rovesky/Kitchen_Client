@@ -8,6 +8,7 @@ namespace Assets.Scripts.ECS
 
     public struct EntityInterpolate :IComponentData
     {
+        public int id;
      //   public TickStateSparseBufferStruct<EntityPredictData> buffer;
     }
 }

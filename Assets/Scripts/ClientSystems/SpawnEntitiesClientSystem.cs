@@ -16,6 +16,7 @@ namespace Assets.Scripts.ECS
         private Entity platePrefab;
         private NetworkClientNewSystem networkClientNewSystem;
         private InterpolatedSystem interpolatedSystem;
+        private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
         private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
 
         public void ProcessEntitySpawn(int serverTime, int id, ushort typeId)
@@ -55,11 +56,26 @@ namespace Assets.Scripts.ECS
                 FSLog.Info($"ProcessEntitySpawn Plate:{id}");
                 e = EntityManager.Instantiate(platePrefab);
                 EntityManager.AddComponentData(e, new Plate() { id = id });
-                Translation position = new Translation() { Value = Vector3.zero};
-                Rotation rotation = new Rotation() { Value = Quaternion.identity };
+               // Translation position = new Translation() { Value = Vector3.zero};
+               // Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
-                EntityManager.SetComponentData(e, position);
-                EntityManager.SetComponentData(e, rotation);
+                //EntityManager.AddComponentData(e, new EntityPredictData()
+                //{
+                //    position = Vector3.zero,
+                //    rotation = Quaternion.identity
+                //});
+
+
+                EntityManager.AddComponentData(e, new ItemInterpolatedState()
+                {
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,
+                    owner = Entity.Null
+                    
+                });
+
+                //EntityManager.SetComponentData(e, position);
+                //EntityManager.SetComponentData(e, rotation);
 
             }
             entities[id] = e;
@@ -95,6 +111,14 @@ namespace Assets.Scripts.ECS
                 var position = reader.ReadVector3Q();
                 var rotation = reader.ReadQuaternionQ();
 
+                var pickEntityId = reader.ReadInt32();
+
+                var pickEntity = Entity.Null;
+                if(pickEntityId != -1 && entities.ContainsKey(pickEntityId))
+                {
+                    pickEntity = entities[pickEntityId];
+                }
+            //    FSLog.Info($"pickupEntity:{pickEntityId},{pickEntity.Index}");
                 // FSLog.Error($"player.playerId:{player.playerId},localPalyer.playerId:{localPalyer.playerId}");
                 if (localPalyer.playerId == player.playerId)
                 {
@@ -117,29 +141,39 @@ namespace Assets.Scripts.ECS
                         EntityManager.AddComponentData(entity, new EntityPredictDataSnapshot()
                         {
                             position = Vector3.zero,
-                            rotation = Quaternion.identity
+                            rotation = Quaternion.identity,
+                            pickupEntity = Entity.Null
                         });
                     }
 
                     if (!EntityManager.HasComponent<PickupItem>(entity))
                     {
-                        EntityManager.AddComponentData(entity, new PickupItem()
+                        EntityManager.AddComponentData(entity, new PickupItem());
+                    }
+
+                    if (!EntityManager.HasComponent<ThrowItem>(entity))
+                    {
+                        EntityManager.AddComponentData(entity, new ThrowItem()
                         {
-                            pickupEntity = Entity.Null
+                            speed = 0
                         });
                     }
 
                     var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
                     predictData.position = position;         
                     predictData.rotation = rotation;
+                    predictData.pickupEntity = pickEntity;
                     EntityManager.SetComponentData(entity, predictData);
                 }
                 else
                 {
                     if (!EntityManager.HasComponent<EntityInterpolate>(entity))
-                    {                   
-                        EntityManager.AddComponentData(entity, new EntityInterpolate());
-                    }                                
+                    {
+                        EntityManager.AddComponentData(entity, new EntityInterpolate()
+                        {
+                            id = id
+                        });
+                    }                              
 
               
                     var interpolateData = new EntityPredictData()
@@ -161,35 +195,33 @@ namespace Assets.Scripts.ECS
                 EntityManager.SetComponentData(entity, score);
             }        
             else if (EntityManager.HasComponent<Plate>(entity))
-            {
-           
+            {           
                 var id1 = reader.ReadInt32();
 
                 var position = reader.ReadVector3Q();
-                var rotation = reader.ReadQuaternionQ();
+                var rotation = reader.ReadQuaternionQ();               
 
-                if(EntityManager.GetComponentData<Translation>(entity).Value.Equals((float3)Vector3.zero))
+                var ownerEnityID = reader.ReadInt32();
+
+                var ownerEntity = Entity.Null;
+                if (ownerEnityID != -1 && entities.ContainsKey(ownerEnityID))
                 {
-                    EntityManager.SetComponentData(entity, new Translation() { Value = position });
-
+                    ownerEntity = entities[ownerEnityID];
                 }
-                if (EntityManager.GetComponentData<Rotation>(entity).Value.Equals(Quaternion.identity))
+             
+                if (!EntityManager.HasComponent<EntityInterpolate>(entity))
                 {
-                    EntityManager.SetComponentData(entity, new Rotation() { Value = rotation });
-
+                    EntityManager.AddComponentData(entity, new EntityInterpolate()
+                    {
+                        id = id
+                    });
                 }
-
-                //if (!EntityManager.HasComponent<EntityInterpolate>(entity))
-                //{
-                //    EntityManager.AddComponentData(entity, new EntityInterpolate());
-                //}
-
-                //var interpolateData = new EntityPredictData()
-                //{
-                //    position = position,
-                //    rotation = rotation
-                //};
-                //interpolatedSystem.AddData(serverTime, id, ref interpolateData);
+                var state = new ItemInterpolatedState();
+                state.position = position;
+                state.rotation = rotation;
+                state.owner = ownerEntity;
+                itemInterpolatedSystem.AddData(serverTime, id,ref state);
+            
             }
         }
 
@@ -204,6 +236,9 @@ namespace Assets.Scripts.ECS
 
             networkClientNewSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
             interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
+
+            itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
+
 
             player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Player1") as GameObject, World.Active);

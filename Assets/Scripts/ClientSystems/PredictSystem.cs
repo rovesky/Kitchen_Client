@@ -12,8 +12,11 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {
 			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterMoveSystem>());
-			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterTriggerSystem>());
-			m_systemsToUpdate.Add(World.GetOrCreateSystem<PickupSystem>());            
+			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterTriggerSystem>());       
+         //   m_systemsToUpdate.Add(World.GetOrCreateSystem<PickupSystem>());
+        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ThrowSystem>());
+
+            //   m_systemsToUpdate.Add(World.GetOrCreateSystem<ReleaseItemSystem>());
         }
     }
 
@@ -105,6 +108,7 @@ namespace Assets.Scripts.ECS
             {
                 predicData.position = snapshotData.position;
                 predicData.rotation = snapshotData.rotation;
+                predicData.pickupEntity = snapshotData.pickupEntity;
 
             });
 

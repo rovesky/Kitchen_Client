@@ -36,9 +36,12 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {            
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPresentationSystem>());
-			m_systemsToUpdate.Add(World.GetOrCreateSystem<ClientTriggerProcessSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyItemPresentationSystem>());
+
+
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ClientTriggerProcessSystem>());
 			//    m_systemsToUpdate.Add(World.GetOrCreateSystem<ExlosionSystem>());
-			//    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateHealthUISystem>());
+			 m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateUISystem>());
 		}
     }
    
@@ -69,7 +72,7 @@ namespace Assets.Scripts.ECS
     }  
 
 
-   // [DisableAutoCreation]
+ //   [DisableAutoCreation]
 	[UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
 	public class KitchenClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
@@ -82,7 +85,7 @@ namespace Assets.Scripts.ECS
         private PresentationSystemGroup presentationSystemGroup;
         private DespawnSystemGroup despawnSystemGroup;
         private InterpolatedSystem interpolatedSystem;
-
+        private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
         protected override void OnCreate()
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
@@ -104,8 +107,11 @@ namespace Assets.Scripts.ECS
             spawnSystemGroup = World.GetOrCreateSystem<SpawnSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
 
-            interpolatedSystem = World.GetOrCreateSystemE<InterpolatedSystem>();
+            interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
             m_systemsToUpdate.Add(interpolatedSystem);
+
+            itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
+            m_systemsToUpdate.Add(itemInterpolatedSystem);
 
             setPredictTimeSystem = World.GetOrCreateSystemE<SetPredictTimeSystem>();
             m_systemsToUpdate.Add(setPredictTimeSystem);
@@ -133,6 +139,7 @@ namespace Assets.Scripts.ECS
                 spawnSystemGroup.Update();
 
                 interpolatedSystem.Update();
+                itemInterpolatedSystem.Update();
 
                 setPredictTimeSystem.Update();
 

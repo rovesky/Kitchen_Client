@@ -59,7 +59,13 @@ namespace Assets.Scripts.ECS
 
             EntityManager.AddComponentData(e, new PickupItem()
             {
-                pickupEntity = Entity.Null
+              //  pickupEntity = Entity.Null
+            });
+
+            EntityManager.AddComponentData(e, new ThrowItem()
+            {
+                speed = 10
+                //  pickupEntity = Entity.Null
             });
 
             localPalyer.playerEntity = e;

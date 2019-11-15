@@ -62,8 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ClientSystems\ClientTriggerProcessSystem.cs" />
     <Compile Include="Assets\Scripts\ClientSystems\HandleTimeSystem.cs" />
     <Compile Include="Assets\Scripts\ClientSystems\InterpolatedSystem.cs" />
+    <Compile Include="Assets\Scripts\ClientSystems\ItemInterpolatedSystem.cs" />
     <Compile Include="Assets\Scripts\ClientSystems\KitchenClientSimulationSystemGroup.cs" />
     <Compile Include="Assets\Scripts\ClientSystems\NetworkClientNewSystem.cs" />
     <Compile Include="Assets\Scripts\ClientSystems\PredictSystem.cs" />
