@@ -43,7 +43,7 @@ namespace Assets.Scripts.ECS
             EntityManager.AddComponentData(e, new Health() { Value = 30 });
             EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
             EntityManager.AddComponentData(e, new UpdateUI());
-            EntityManager.AddComponentData(e, new CharacterDataComponent() { SkinWidth = 0.02f });
+            EntityManager.AddComponentData(e, new CharacterDataComponent() { SkinWidth = 0.02f, Entity = e });
 
             EntityManager.AddComponentData(e, new EntityPredictData()
             {
