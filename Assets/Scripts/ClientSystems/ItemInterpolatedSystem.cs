@@ -8,15 +8,15 @@ namespace Assets.Scripts.ECS
 {
 
     [DisableAutoCreation]
-    public class InterpolatedSystem : FSComponentSystem
+    public class InterpolatedSystem : ComponentSystem
     {
-        private Dictionary<int, TickStateSparseBuffer<EntityPredictData>> interpolateDataMap =
-            new Dictionary<int, TickStateSparseBuffer<EntityPredictData>>();
+        private Dictionary<int, TickStateSparseBuffer<CharacterInterpolateState>> interpolateDataMap =
+            new Dictionary<int, TickStateSparseBuffer<CharacterInterpolateState>>();
 
-        public void AddData(int serverTick, int id, ref EntityPredictData data)
+        public void AddData(int serverTick, int id, ref CharacterInterpolateState data)
         {
             if (!interpolateDataMap.ContainsKey(id))
-                interpolateDataMap.Add(id, new TickStateSparseBuffer<EntityPredictData>(64));
+                interpolateDataMap.Add(id, new TickStateSparseBuffer<CharacterInterpolateState>(64));
 
             var buffer = interpolateDataMap[id];
             buffer.Add(serverTick, data);
@@ -31,7 +31,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {        
             var worldTime = GetSingleton<WorldTime>();
-            Entities/*.WithAllReadOnly<EntityInterpolate>()*/.ForEach((Entity entity, ref EntityInterpolate interpolate, ref EntityPredictData predictData) =>
+            Entities/*.WithAllReadOnly<EntityInterpolate>()*/.ForEach((Entity entity, ref EntityInterpolate interpolate, ref CharacterInterpolateState predictData) =>
             {
               //  FSLog.Info($"InterpolatedSystem Update1:{interpolate.id}");
                 if (!interpolateDataMap.ContainsKey(interpolate.id))

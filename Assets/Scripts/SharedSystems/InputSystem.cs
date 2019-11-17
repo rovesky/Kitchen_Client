@@ -6,14 +6,14 @@ namespace Assets.Scripts.ECS
 {
 
     [DisableAutoCreation]
-    public class InputSystem : FSComponentSystem
+    public class InputSystem : ComponentSystem
     {
         // 鼠标射线碰撞层
       //  private LayerMask InputMask;
         private UserCommand userCommand = UserCommand.defaultCommand;
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
       //  private Entity localEntity;
-        private NetworkClientNewSystem networkClient;
+        private NetworkClientSystem networkClient;
 
         protected override void OnCreate()
         {
@@ -28,7 +28,7 @@ namespace Assets.Scripts.ECS
                 targetPos = Vector3.zero
             });
 
-            networkClient = World.GetExistingSystem<NetworkClientNewSystem>();
+            networkClient = World.GetExistingSystem<NetworkClientSystem>();
 
         }
 

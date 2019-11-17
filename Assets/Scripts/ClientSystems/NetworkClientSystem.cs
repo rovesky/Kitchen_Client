@@ -10,10 +10,10 @@ namespace Assets.Scripts.ECS
 {
 
     [DisableAutoCreation]
-    public class NetworkClientNewSystem : ComponentSystem, INetworkClientCallbacks
+    public class NetworkClientSystem : ComponentSystem, INetworkClientCallbacks
     {
         private NetworkClient network;
-        private WorldTimeSystem worldTimeSystem;
+     //   private WorldTimeSystem worldTimeSystem;
         private SpawnEntitiesClientSystem spawnEntitiesClientSystem;
 
         public bool IsConnected => network.isConnected;
@@ -22,11 +22,11 @@ namespace Assets.Scripts.ECS
         {
             base.OnCreate();          
 
-            worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
+         //   worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
             spawnEntitiesClientSystem = World.GetOrCreateSystem<SpawnEntitiesClientSystem>();
 
-            var snapshotEntity = EntityManager.CreateEntity(typeof(SnapshotFromServer));
-            SetSingleton(new SnapshotFromServer()
+            var snapshotEntity = EntityManager.CreateEntity(typeof(ServerSnapshot));
+            SetSingleton(new ServerSnapshot()
             {
                 tick = 0,
                 time = 0,
@@ -54,7 +54,7 @@ namespace Assets.Scripts.ECS
 
             network.Update(this, spawnEntitiesClientSystem);
         
-            var snapshotFromServer = GetSingleton<SnapshotFromServer>();        
+            var snapshotFromServer = GetSingleton<ServerSnapshot>();        
             snapshotFromServer.tick = (uint)network.serverTime;
             snapshotFromServer.time = network.timeSinceSnapshot;
             snapshotFromServer.rtt = network.rtt;
@@ -97,8 +97,6 @@ namespace Assets.Scripts.ECS
             var localPlayer = GetSingleton<LocalPlayer>();
             localPlayer.playerId = network.clientId;
             SetSingleton(localPlayer);
-        }
-
-     
+        }     
     }
 }

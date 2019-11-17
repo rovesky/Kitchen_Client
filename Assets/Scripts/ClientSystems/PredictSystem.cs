@@ -4,30 +4,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [ExecuteAlways]
+       
+
     [DisableAutoCreation]
-    public class PredictUpdateSystemGroup : NoSortComponentSystemGroup
-    {
-
-        protected override void OnCreate()
-        {
-			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterMoveSystem>());
-			m_systemsToUpdate.Add(World.GetOrCreateSystem<CharacterTriggerSystem>());       
-         //   m_systemsToUpdate.Add(World.GetOrCreateSystem<PickupSystem>());
-        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<ThrowSystem>());
-
-            //   m_systemsToUpdate.Add(World.GetOrCreateSystem<ReleaseItemSystem>());
-        }
-    }
-
-    [ExecuteAlways]
-    [DisableAutoCreation]
-    public class PredictSystem : FSComponentSystem
+    public class PredictSystem :ComponentSystem
     {
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
         private InputSystem inputSystem;
 
-        private TickStateDenseBuffer<EntityPredictData> commandBuffer = new TickStateDenseBuffer<EntityPredictData>(128);
+        private TickStateDenseBuffer<CharacterPredictState> commandBuffer = new TickStateDenseBuffer<CharacterPredictState>(128);
 
         protected override void OnCreate()
         {    
@@ -38,7 +23,7 @@ namespace Assets.Scripts.ECS
 
         protected override void OnUpdate()
         {
-            var serverTick = GetSingleton<SnapshotFromServer>().tick;
+            var serverTick = GetSingleton<ServerSnapshot>().tick;
             var clientTick = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
             
@@ -104,7 +89,7 @@ namespace Assets.Scripts.ECS
 
         private void PredictionRollback()
         {
-            Entities.ForEach((Entity entity, ref EntityPredictData predicData, ref EntityPredictDataSnapshot snapshotData) =>
+            Entities.ForEach((Entity entity, ref CharacterPredictState predicData, ref EntityPredictDataSnapshot snapshotData) =>
             {
                 predicData.position = snapshotData.position;
                 predicData.rotation = snapshotData.rotation;

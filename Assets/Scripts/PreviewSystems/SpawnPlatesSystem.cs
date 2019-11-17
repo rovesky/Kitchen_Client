@@ -35,7 +35,7 @@ namespace Assets.Scripts.ECS
 
             EntityManager.AddComponentData(e, new Plate());
 
-            EntityManager.AddComponentData(e, new EntityPredictData()
+            EntityManager.AddComponentData(e, new ItemInterpolatedState()
             {
                 position = position.Value,
                 rotation = rotation.Value

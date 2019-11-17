@@ -7,14 +7,19 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
+    public enum EntityType
+    {
+        Player,
+        Plate
+    }
 
-	[DisableAutoCreation]
+    [DisableAutoCreation]
 	public class SpawnEntitiesClientSystem : ComponentSystem, ISnapshotConsumer
 	{
 
 		private Entity player;
 		private Entity platePrefab;
-		private NetworkClientNewSystem networkClientNewSystem;
+		private NetworkClientSystem networkClientNewSystem;
 		private InterpolatedSystem interpolatedSystem;
 		private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
 		private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
@@ -32,10 +37,10 @@ namespace Assets.Scripts.ECS
 				EntityManager.SetComponentData(e, position);
 
 				EntityManager.AddComponentData(e, new Player() { playerId = id, id = e.Index });
-				EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
-				EntityManager.AddComponentData(e, new Damage());
-				EntityManager.AddComponentData(e, new Health() { Value = 30 });
-				EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
+			//	EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
+			//	EntityManager.AddComponentData(e, new Damage());
+			//	EntityManager.AddComponentData(e, new Health() { Value = 30 });
+			//	EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
 				EntityManager.AddComponentData(e, new UpdateUI());
 				EntityManager.AddComponentData(e, new CharacterDataComponent()
 				{
@@ -43,28 +48,24 @@ namespace Assets.Scripts.ECS
 					Entity = e,
 				});
 
-				EntityManager.AddComponentData(e, new EntityPredictData()
+				EntityManager.AddComponentData(e, new CharacterPredictState()
 				{
 					position = Vector3.zero,
-					rotation = Quaternion.identity
-				});
+					rotation = Quaternion.identity,
+                    pickupEntity = Entity.Null
+                });
 
-
-			}
+                EntityManager.AddComponentData(e, new CharacterInterpolateState()
+                {
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,                 
+                });
+            }
 			else if ((EntityType)typeId == EntityType.Plate)
 			{
 				FSLog.Info($"ProcessEntitySpawn Plate:{id}");
 				e = EntityManager.Instantiate(platePrefab);
-				EntityManager.AddComponentData(e, new Plate() { id = id });
-				// Translation position = new Translation() { Value = Vector3.zero};
-				// Rotation rotation = new Rotation() { Value = Quaternion.identity };
-
-				//EntityManager.AddComponentData(e, new EntityPredictData()
-				//{
-				//    position = Vector3.zero,
-				//    rotation = Quaternion.identity
-				//});
-
+				EntityManager.AddComponentData(e, new Plate() { id = id });			
 
 				EntityManager.AddComponentData(e, new ItemInterpolatedState()
 				{
@@ -72,10 +73,7 @@ namespace Assets.Scripts.ECS
 					rotation = Quaternion.identity,
 					owner = Entity.Null
 
-				});
-
-				//EntityManager.SetComponentData(e, position);
-				//EntityManager.SetComponentData(e, rotation);
+				});		
 
 			}
 			entities[id] = e;
@@ -134,17 +132,7 @@ namespace Assets.Scripts.ECS
 						EntityManager.AddComponentData(entity, new MoveInput()
 						{
 							Speed = 6,
-						});
-
-					if (!EntityManager.HasComponent<EntityPredictDataSnapshot>(entity))
-					{
-						EntityManager.AddComponentData(entity, new EntityPredictDataSnapshot()
-						{
-							position = Vector3.zero,
-							rotation = Quaternion.identity,
-							pickupEntity = Entity.Null
-						});
-					}
+						});				
 
 					if (!EntityManager.HasComponent<PickupItem>(entity))
 					{
@@ -159,7 +147,17 @@ namespace Assets.Scripts.ECS
 						});
 					}
 
-					var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
+                    if (!EntityManager.HasComponent<EntityPredictDataSnapshot>(entity))
+                    {
+                        EntityManager.AddComponentData(entity, new EntityPredictDataSnapshot()
+                        {
+                            position = Vector3.zero,
+                            rotation = Quaternion.identity,
+                            pickupEntity = Entity.Null
+                        });
+                    }
+
+                    var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
 					predictData.position = position;
 					predictData.rotation = rotation;
 					predictData.pickupEntity = pickEntity;
@@ -175,8 +173,7 @@ namespace Assets.Scripts.ECS
 						});
 					}
 
-
-					var interpolateData = new EntityPredictData()
+					var interpolateData = new CharacterInterpolateState()
 					{
 						position = position,
 						rotation = rotation
@@ -184,15 +181,6 @@ namespace Assets.Scripts.ECS
 					interpolatedSystem.AddData(serverTime, id, ref interpolateData);
 				}
 
-				//   FSLog.Info($"player Update:{player.id},{id},[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
-				var health = EntityManager.GetComponentData<Health>(entity);
-				health.Value = reader.ReadInt32();
-				EntityManager.SetComponentData(entity, health);
-
-				var score = EntityManager.GetComponentData<Score>(entity);
-				score.ScoreValue = reader.ReadInt32();
-				score.MaxScoreValue = reader.ReadInt32();
-				EntityManager.SetComponentData(entity, score);
 			}
 			else if (EntityManager.HasComponent<Plate>(entity))
 			{
@@ -226,17 +214,14 @@ namespace Assets.Scripts.ECS
 		}
 
 		protected override void OnCreate()
-		{
-			var entity = EntityManager.CreateEntity(typeof(SpawnEntitiesClient));
-			SetSingleton(new SpawnEntitiesClient());
-			EntityManager.AddBuffer<SpawnEntityBuffer>(entity);
+		{		
 
 			EntityManager.CreateEntity(typeof(LocalPlayer));
 			SetSingleton(new LocalPlayer() { playerId = -1, playerEntity = Entity.Null });
 
-			networkClientNewSystem = World.GetOrCreateSystem<NetworkClientNewSystem>();
-			interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
+			networkClientNewSystem = World.GetOrCreateSystem<NetworkClientSystem>();
 
+			interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
 			itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
 
 

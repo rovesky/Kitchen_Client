@@ -17,7 +17,7 @@ namespace Assets.Scripts.ECS
         private SpawnPreviewClientSystem spawnSystemGroup; 
         private PredictUpdateSystemGroup predictUpdateSystem;
         private PresentationSystemGroup presentationSystemGroup;
-        private DespawnSystemGroup despawnSystemGroup;
+        private DespawnClientSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
         private SpawnPlatesSystem spawnPlatesSystem;
         private ThrowSystem throwSystem;
@@ -47,7 +47,7 @@ namespace Assets.Scripts.ECS
             presentationSystemGroup = World.GetOrCreateSystem<PresentationSystemGroup>();
             m_systemsToUpdate.Add(presentationSystemGroup);
 
-            despawnSystemGroup = World.GetOrCreateSystem<DespawnSystemGroup>();
+            despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
         }
 

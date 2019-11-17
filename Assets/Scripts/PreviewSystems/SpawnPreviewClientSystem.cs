@@ -38,14 +38,14 @@ namespace Assets.Scripts.ECS
             EntityManager.SetComponentData(e, position);
 
             EntityManager.AddComponentData(e, new Player() { playerId = 0, id = e.Index });
-            EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
-            EntityManager.AddComponentData(e, new Damage());
-            EntityManager.AddComponentData(e, new Health() { Value = 30 });
-            EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
+            //EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
+            //EntityManager.AddComponentData(e, new Damage());
+            //EntityManager.AddComponentData(e, new Health() { Value = 30 });
+            //EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
             EntityManager.AddComponentData(e, new UpdateUI());
             EntityManager.AddComponentData(e, new CharacterDataComponent() { SkinWidth = 0.02f, Entity = e });
 
-            EntityManager.AddComponentData(e, new EntityPredictData()
+            EntityManager.AddComponentData(e, new CharacterInterpolateState()
             {
                 position = position.Value,
                 rotation = rotation.Value

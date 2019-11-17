@@ -9,9 +9,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECS
 {
-    [ExecuteAlways]
     [DisableAutoCreation]
-    public class HandleTimeSystem : FSComponentSystem
+    public class HandleTimeSystem : ComponentSystem
     {
         private double lastFrameTime = 0;
         private float frameTimeScale = 1.0f;
@@ -33,7 +32,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {
 
-            var snapshot = GetSingleton<SnapshotFromServer>();
+            var snapshot = GetSingleton<ServerSnapshot>();
             var serverTick = snapshot.tick;      
             var clientTickTime = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();

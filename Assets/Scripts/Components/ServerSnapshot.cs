@@ -4,9 +4,7 @@ using Unity.Mathematics;
 
 namespace Assets.Scripts.ECS
 {
-
-    [Serializable]
-    public unsafe struct SnapshotFromServer : IComponentData
+    public struct ServerSnapshot : IComponentData
     {
         public uint tick;
         public long time;
