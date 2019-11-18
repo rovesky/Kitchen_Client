@@ -6,3 +6,5 @@
 /build
 /.vs
 /Packages/com.footstone.tankshared
+/*.csproj
+/*.sln
