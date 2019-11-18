@@ -48,7 +48,7 @@ namespace Assets.Scripts.ECS
         protected override void OnCreate()
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
-            Application.targetFrameRate = 30;
+        //    Application.targetFrameRate = 30;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
           

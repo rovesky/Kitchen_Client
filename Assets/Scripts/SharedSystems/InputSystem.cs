@@ -52,6 +52,10 @@ namespace Assets.Scripts.ECS
             userCommand.buttons.Set(UserCommand.Button.Pick, UIInput.GetButtonClick("pickup"));
             userCommand.buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
 
+            if (userCommand.buttons.flags > 0)
+                FSLog.Info($"is set pick:{userCommand.buttons.IsSet(UserCommand.Button.Pick)}" +
+                $",is set throw:{userCommand.buttons.IsSet(UserCommand.Button.Throw)}");
+
         }
 
         public bool HasCommands(uint firstTick, uint lastTick)
@@ -86,8 +90,6 @@ namespace Assets.Scripts.ECS
             else
                 commandBuffer.Add(ref userCommand, (int)tick);
 
-         //   
-
         }
 
         public void RetrieveCommand(uint tick)
@@ -100,8 +102,8 @@ namespace Assets.Scripts.ECS
          //   FSLog.Info($"current command:{userCommand.checkTick},{userCommand.buttons.flags}");
             var found = commandBuffer.TryGetValue((int)tick, ref userCommand);
             GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
-            if(userCommand.buttons.flags> 0)
-                FSLog.Info($"{found},retrieve command:{tick},{userCommand.checkTick},{userCommand.buttons.flags}");
+         //   if(userCommand.buttons.flags> 0)
+            //    FSLog.Info($"{found},retrieve command:{tick},{userCommand.checkTick},{userCommand.buttons.flags}");
 
             if (found)
                 EntityManager.SetComponentData(localEntity, userCommand);
@@ -113,8 +115,9 @@ namespace Assets.Scripts.ECS
             var commandValid = commandBuffer.TryGetValue((int)tick, ref command);
             if (commandValid)
             {
-              //  FSLog.Info($"send command:{command.renderTick},{command.checkTick}");
-                //  +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
+                if (command.buttons.flags > 0)
+                    FSLog.Info($"send command:{command.renderTick},{command.checkTick},{command.buttons.IsSet(UserCommand.Button.Pick)}");
+              //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
                 networkClient.QueueCommand(tick, (ref NetworkWriter writer) =>
                  {
                      command.Serialize(ref writer);
@@ -125,6 +128,8 @@ namespace Assets.Scripts.ECS
         public void ResetInput()
         {
             userCommand.Reset();
+
+            UIInput.ResetButtonClick();
             InputToCommand();
         }
     }

@@ -48,17 +48,17 @@ namespace Assets.Scripts.ECS
 					Entity = e,
 				});
 
-				EntityManager.AddComponentData(e, new CharacterPredictState()
-				{
-					position = Vector3.zero,
-					rotation = Quaternion.identity,
-                    pickupEntity = Entity.Null
-                });
+                //EntityManager.AddComponentData(e, new CharacterPredictState()
+                //{
+                //	position = Vector3.zero,
+                //	rotation = Quaternion.identity,
+                //                pickupEntity = Entity.Null
+                //            });
 
                 EntityManager.AddComponentData(e, new CharacterInterpolateState()
                 {
                     position = Vector3.zero,
-                    rotation = Quaternion.identity,                 
+                    rotation = Quaternion.identity,
                 });
             }
 			else if ((EntityType)typeId == EntityType.Plate)
@@ -146,6 +146,16 @@ namespace Assets.Scripts.ECS
 							speed = 0
 						});
 					}
+
+                    if (!EntityManager.HasComponent<CharacterPredictState>(entity))
+                    {
+                        EntityManager.AddComponentData(entity, new CharacterPredictState()
+                        {
+                            position = Vector3.zero,
+                            rotation = Quaternion.identity,
+                            pickupEntity = Entity.Null
+                        });
+                    }
 
                     if (!EntityManager.HasComponent<EntityPredictDataSnapshot>(entity))
                     {

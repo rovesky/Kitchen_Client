@@ -27,9 +27,26 @@ namespace Assets.Scripts.ECS
                 return false;
 
             var ret = events[buttonName];
-            events[buttonName] = false;
+          //  events[buttonName] = false;
             return ret;
         }
 
+        public static void ResetButtonClick()
+        {        
+            foreach(var id in events.Keys.ToArray())
+            {               
+                events[id] = false;
+            }
+
+        }
+
+        public static void ReleaseButtonClick(string buttonName)
+        {
+            if (!events.ContainsKey(buttonName))
+                return;
+
+            events[buttonName] = false;
+           
+        }
     }
 }
