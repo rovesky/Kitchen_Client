@@ -49,11 +49,11 @@ namespace Assets.Scripts.ECS
             else
                 userCommand.targetPos = v3.normalized;
 
-            userCommand.buttons.Set(UserCommand.Button.Pick, UIInput.GetButtonClick("pickup"));
+            userCommand.buttons.Set(UserCommand.Button.Pickup, UIInput.GetButtonClick("pickup"));
             userCommand.buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
 
             if (userCommand.buttons.flags > 0)
-                FSLog.Info($"is set pick:{userCommand.buttons.IsSet(UserCommand.Button.Pick)}" +
+                FSLog.Info($"is set pick:{userCommand.buttons.IsSet(UserCommand.Button.Pickup)}" +
                 $",is set throw:{userCommand.buttons.IsSet(UserCommand.Button.Throw)}");
 
         }
@@ -116,7 +116,7 @@ namespace Assets.Scripts.ECS
             if (commandValid)
             {
                 if (command.buttons.flags > 0)
-                    FSLog.Info($"send command:{command.renderTick},{command.checkTick},{command.buttons.IsSet(UserCommand.Button.Pick)}");
+                    FSLog.Info($"send command:{command.renderTick},{command.checkTick},{command.buttons.IsSet(UserCommand.Button.Pickup)}");
               //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
                 networkClient.QueueCommand(tick, (ref NetworkWriter writer) =>
                  {
