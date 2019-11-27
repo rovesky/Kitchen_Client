@@ -11,7 +11,7 @@ namespace Assets.Scripts.ECS
     [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
-        private GameTick gameTime = GameTick.defaultGameTick;
+        private GameTick gameTime = GameTick.DefaultGameTick;
         private double nextTickTime = 0;
 
         private SpawnPreviewClientSystem spawnSystemGroup; 
@@ -57,14 +57,14 @@ namespace Assets.Scripts.ECS
             inputSystem.SampleInput(worldTime.Tick);
 
             bool commandWasConsumed = false;
-            while (worldTime.frameTime > nextTickTime)
+            while (worldTime.FrameTime > nextTickTime)
             {
                 gameTime.Tick++;
                 gameTime.TickDuration = gameTime.TickInterval;
         
                 commandWasConsumed = true;
                 PrevierTickUpdate();
-                nextTickTime += worldTime.gameTick.TickInterval;
+                nextTickTime += worldTime.GameTick.TickInterval;
             }
             if (commandWasConsumed)
                 inputSystem.ResetInput();      
@@ -73,7 +73,7 @@ namespace Assets.Scripts.ECS
         private void PrevierTickUpdate()
         {
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.gameTick = gameTime;
+            worldTime.GameTick = gameTime;
   
             inputSystem.StoreCommand(worldTime.Tick);
       

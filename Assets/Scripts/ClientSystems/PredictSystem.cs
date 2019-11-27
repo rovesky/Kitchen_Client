@@ -49,7 +49,7 @@ namespace Assets.Scripts.ECS
                 }
 
                 // PREDICT CURRENT TICK. Update current tick using duration of current tick
-                worldTime.SetTick(predictTime);
+                worldTime.GameTick = predictTime;
                 SetSingleton(worldTime);
                 //     m_PlayerModule.RetrieveCommand(gameWorld.Tick);
                 // Dont update systems with close to zero time. 
@@ -72,7 +72,7 @@ namespace Assets.Scripts.ECS
          //   var entity = localPlayerQ.GetSingletonEntity();
          //   var predictData = EntityManager.GetComponentData<EntityPredictData>(entity);
 
-         ////   FSLog.Info($"<{tick}>PredictionUpdate:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
+         ////   FSLog.Info($"<{tick}>PredictionUpdate:[{predictData.Position.x},{predictData.Position.y},{predictData.Position.z}]");
 
          //   var lastBufferTick = commandBuffer.LastTick();
          //   if (tick != lastBufferTick && tick != lastBufferTick + 1 && lastBufferTick!= -1)
@@ -91,9 +91,9 @@ namespace Assets.Scripts.ECS
         {
             Entities.ForEach((Entity entity, ref CharacterPredictState predicData, ref EntityPredictDataSnapshot snapshotData) =>
             {
-                predicData.position = snapshotData.position;
-                predicData.rotation = snapshotData.rotation;
-                predicData.pickupEntity = snapshotData.pickupEntity;
+                predicData.Position = snapshotData.position;
+                predicData.Rotation = snapshotData.rotation;
+                predicData.PickupedEntity = snapshotData.pickupEntity;
 
             });
 
@@ -113,8 +113,8 @@ namespace Assets.Scripts.ECS
 
             //    if (!lastServerData.Equals(predictData))
             //    {
-            //        FSLog.Warning($"<{snapshot.tick}>lastServerData:[{lastServerData.position.x},{lastServerData.position.y},{lastServerData.position.z}]");
-            //        FSLog.Warning($"<{snapshot.tick}>   predictData:[{predictData.position.x},{predictData.position.y},{predictData.position.z}]");
+            //        FSLog.Warning($"<{snapshot.tick}>lastServerData:[{lastServerData.Position.x},{lastServerData.Position.y},{lastServerData.Position.z}]");
+            //        FSLog.Warning($"<{snapshot.tick}>   predictData:[{predictData.Position.x},{predictData.Position.y},{predictData.Position.z}]");
             //    }
             //}
 

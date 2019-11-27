@@ -37,8 +37,8 @@ namespace Assets.Scripts.ECS
             var clientTickTime = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
 
-            float frameDuration = lastFrameTime != 0 ? (float)(worldTime.frameTime - lastFrameTime) : 0;
-            lastFrameTime = worldTime.frameTime;
+            float frameDuration = lastFrameTime != 0 ? (float)(worldTime.FrameTime - lastFrameTime) : 0;
+            lastFrameTime = worldTime.FrameTime;
 
             inputSystem.SampleInput(clientTickTime.render.Tick);
             
@@ -55,7 +55,7 @@ namespace Assets.Scripts.ECS
         //    long time = worldTimeSystem.GetCurrentTime() - snapshot.time;
          //   FSLog.Info($"rtt:{snapshot.rtt},time:{snapshot.time} ");
             uint preferredTick = serverTick +
-                (uint)((snapshot.rtt + snapshot.time) / 1000.0f * worldTime.gameTick.TickRate) +             
+                (uint)((snapshot.rtt + snapshot.time) / 1000.0f * worldTime.GameTick.TickRate) +             
                 preferredBufferedCommandCount;
 
      
@@ -77,7 +77,7 @@ namespace Assets.Scripts.ECS
             {
                 FSLog.Warning(string.Format("CATCHUP ({0} -> {1} ：{2})", clientTickTime.predict.Tick, preferredTick, serverTick));
                 // m_NetworkStatistics.notifyHardCatchup = true;
-                //  m_GameWorld.nextTickTime = Game.frameTime;             
+                //  m_GameWorld.nextTickTime = Game.FrameTime;             
                 clientTickTime.predict.SetTick(preferredTick, 0);
             }
             else

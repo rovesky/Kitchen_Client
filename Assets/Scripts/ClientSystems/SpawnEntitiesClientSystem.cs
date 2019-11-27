@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Components;
+using FootStone.ECS;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -37,28 +37,11 @@ namespace Assets.Scripts.ECS
 				EntityManager.SetComponentData(e, position);
 
 				EntityManager.AddComponentData(e, new Player() { playerId = id, id = e.Index });
-			//	EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
-			//	EntityManager.AddComponentData(e, new Damage());
-			//	EntityManager.AddComponentData(e, new Health() { Value = 30 });
-			//	EntityManager.AddComponentData(e, new Score() { ScoreValue = 0, MaxScoreValue = 0 });
 				EntityManager.AddComponentData(e, new UpdateUI());
-				EntityManager.AddComponentData(e, new CharacterDataComponent()
-				{
-					SkinWidth = 0.02f,
-					Entity = e,
-				});
-
-                //EntityManager.AddComponentData(e, new CharacterPredictState()
-                //{
-                //	position = Vector3.zero,
-                //	rotation = Quaternion.identity,
-                //                pickupEntity = Entity.Null
-                //            });
-
                 EntityManager.AddComponentData(e, new CharacterInterpolateState()
                 {
-                    position = Vector3.zero,
-                    rotation = Quaternion.identity,
+                    Position = Vector3.zero,
+                    Rotation = Quaternion.identity,
                 });
             }
 			else if ((EntityType)typeId == EntityType.Plate)
@@ -118,23 +101,32 @@ namespace Assets.Scripts.ECS
 				}
 				//    FSLog.Info($"pickupEntity:{pickEntityId},{pickEntity.Index}");
 				// FSLog.Error($"player.playerId:{player.playerId},localPalyer.playerId:{localPalyer.playerId}");
-				if (localPalyer.playerId == player.playerId)
-				{
-					if (localPalyer.playerEntity == Entity.Null)
-					{
-						localPalyer.playerEntity = entity;
-						SetSingleton(localPalyer);
-					}
-					if (!EntityManager.HasComponent<UserCommand>(entity))
-						EntityManager.AddComponentData(entity, new UserCommand());
+                if (localPalyer.playerId == player.playerId)
+                {
+                    if (localPalyer.playerEntity == Entity.Null)
+                    {
+                        localPalyer.playerEntity = entity;
+                        SetSingleton(localPalyer);
+                    }
 
-					if (!EntityManager.HasComponent<MoveInput>(entity))
-						EntityManager.AddComponentData(entity, new MoveInput()
-						{
-							Speed = 6,
-						});				
+                    if (!EntityManager.HasComponent<UserCommand>(entity))
+                        EntityManager.AddComponentData(entity, new UserCommand());
 
-					if (!EntityManager.HasComponent<PickupItem>(entity))
+                    //if (!EntityManager.HasComponent<MoveInput>(entity))
+                    //    EntityManager.AddComponentData(entity, new MoveInput()
+                    //    {
+                    //        Speed = 6,
+                    //    });
+                    if (!EntityManager.HasComponent<CharacterMove>(entity))
+                    {
+                        EntityManager.AddComponentData(entity, new CharacterMove()
+                        {
+                            SkinWidth = 0.02f,
+                            Velocity = 6.0f
+                        });
+                    }
+
+                    if (!EntityManager.HasComponent<PickupItem>(entity))
 					{
 						EntityManager.AddComponentData(entity, new PickupItem());
 					}
@@ -151,9 +143,9 @@ namespace Assets.Scripts.ECS
                     {
                         EntityManager.AddComponentData(entity, new CharacterPredictState()
                         {
-                            position = Vector3.zero,
-                            rotation = Quaternion.identity,
-                            pickupEntity = Entity.Null
+                            Position = Vector3.zero,
+                            Rotation = Quaternion.identity,
+                            PickupedEntity = Entity.Null
                         });
                     }
 
@@ -185,8 +177,8 @@ namespace Assets.Scripts.ECS
 
 					var interpolateData = new CharacterInterpolateState()
 					{
-						position = position,
-						rotation = rotation
+						Position = position,
+						Rotation = rotation
 					};
 					interpolatedSystem.AddData(serverTime, id, ref interpolateData);
 				}

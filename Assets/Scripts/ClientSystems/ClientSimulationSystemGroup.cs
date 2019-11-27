@@ -13,7 +13,7 @@ namespace Assets.Scripts.ECS
         {
 
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.gameTick = GetSingleton<ClientTickTime>().render;
+            worldTime.GameTick = GetSingleton<ClientTickTime>().render;
             SetSingleton(worldTime);
         }
     }
@@ -25,7 +25,7 @@ namespace Assets.Scripts.ECS
         protected override void OnUpdate()
         {            
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.gameTick = GetSingleton<ClientTickTime>().predict;
+            worldTime.GameTick = GetSingleton<ClientTickTime>().predict;
             SetSingleton(worldTime);
         }
     }  
