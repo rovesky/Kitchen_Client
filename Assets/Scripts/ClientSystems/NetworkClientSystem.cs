@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FootStone.ECS;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Collections;
@@ -34,7 +35,7 @@ namespace Assets.Scripts.ECS
                 lastAcknowlegdedCommandTime = 0,
             });
 
-            network = new NetworkClient();
+            network = new NetworkClient(GameWorld.Active);
         }
 
         protected override void OnDestroy()
