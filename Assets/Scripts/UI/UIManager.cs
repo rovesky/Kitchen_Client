@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Assets.Scripts.ECS;
 using Unity.Entities;
+using FootStone.ECS;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {
 
     [AddComponentMenu("MyGame/GameManager")]

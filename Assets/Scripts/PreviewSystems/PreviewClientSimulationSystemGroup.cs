@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {
 
     [DisableAutoCreation]

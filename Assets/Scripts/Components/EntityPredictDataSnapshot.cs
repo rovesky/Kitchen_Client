@@ -3,7 +3,7 @@ using System;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {
     [Serializable]
     public struct EntityPredictDataSnapshot : IComponentData

@@ -2,7 +2,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {
        
 
@@ -12,7 +12,7 @@ namespace Assets.Scripts.ECS
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
         private InputSystem inputSystem;
 
-        private TickStateDenseBuffer<CharacterPredictState> commandBuffer = new TickStateDenseBuffer<CharacterPredictState>(128);
+        private TickStateDenseBuffer<CharacterPredictedState> commandBuffer = new TickStateDenseBuffer<CharacterPredictedState>(128);
 
         protected override void OnCreate()
         {    
@@ -89,7 +89,7 @@ namespace Assets.Scripts.ECS
 
         private void PredictionRollback()
         {
-            Entities.ForEach((Entity entity, ref CharacterPredictState predicData, ref EntityPredictDataSnapshot snapshotData) =>
+            Entities.ForEach((Entity entity, ref CharacterPredictedState predicData, ref EntityPredictDataSnapshot snapshotData) =>
             {
                 predicData.Position = snapshotData.position;
                 predicData.Rotation = snapshotData.rotation;

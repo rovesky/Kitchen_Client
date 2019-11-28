@@ -1,8 +1,9 @@
-﻿using Unity.Entities;
+﻿using FootStone.ECS;
+using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {
 
     [DisableAutoCreation]
@@ -35,7 +36,7 @@ namespace Assets.Scripts.ECS
 
             EntityManager.SetComponentData(e, position);
 
-            EntityManager.AddComponentData(e, new Player() { playerId = 0, id = e.Index });
+            EntityManager.AddComponentData(e, new Player() );
             //EntityManager.AddComponentData(e, new Attack() { Power = 10000 });
             //EntityManager.AddComponentData(e, new Damage());
             //EntityManager.AddComponentData(e, new Health() { Value = 30 });
@@ -43,7 +44,7 @@ namespace Assets.Scripts.ECS
             EntityManager.AddComponentData(e, new UpdateUI());
             EntityManager.AddComponentData(e, new CharacterMove() { SkinWidth = 0.02f, Velocity = 6.0f});
 
-            EntityManager.AddComponentData(e, new CharacterInterpolateState()
+            EntityManager.AddComponentData(e, new CharacterInterpolatedState()
             {
                 Position = position.Value,
                 Rotation = rotation.Value

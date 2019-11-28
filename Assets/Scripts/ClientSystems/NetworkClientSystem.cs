@@ -7,7 +7,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {
 
     [DisableAutoCreation]
@@ -53,7 +53,7 @@ namespace Assets.Scripts.ECS
                 //  network.Connect("192.168.0.128");
             }
 
-            network.Update(this, spawnEntitiesClientSystem);
+            network.Update(this, spawnEntitiesClientSystem.EntityClient);
         
             var snapshotFromServer = GetSingleton<ServerSnapshot>();        
             snapshotFromServer.tick = (uint)network.serverTime;

@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS
+namespace FootStone.Kitchen
 {  
 
     [DisableAutoCreation]
@@ -43,8 +43,8 @@ namespace Assets.Scripts.ECS
         private PredictSystem predictSystem;
         private PresentationSystemGroup presentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
-        private InterpolatedSystem interpolatedSystem;
-        private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
+      //  private InterpolatedSystem interpolatedSystem;
+      //  private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
         protected override void OnCreate()
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
@@ -64,11 +64,11 @@ namespace Assets.Scripts.ECS
             spawnSystemGroup = World.GetOrCreateSystem<SpawnClientSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
 
-            interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
-            m_systemsToUpdate.Add(interpolatedSystem);
+          //  interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
+           // m_systemsToUpdate.Add(interpolatedSystem);
 
-            itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
-            m_systemsToUpdate.Add(itemInterpolatedSystem);
+            //itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
+            //m_systemsToUpdate.Add(itemInterpolatedSystem);
 
             setPredictTimeSystem = World.GetOrCreateSystem<SetPredictTimeSystem>();
             m_systemsToUpdate.Add(setPredictTimeSystem);
@@ -97,8 +97,8 @@ namespace Assets.Scripts.ECS
 
             spawnSystemGroup.Update();
 
-            interpolatedSystem.Update();
-            itemInterpolatedSystem.Update();
+        //    interpolatedSystem.Update();
+        //    itemInterpolatedSystem.Update();
 
             setPredictTimeSystem.Update();
 
