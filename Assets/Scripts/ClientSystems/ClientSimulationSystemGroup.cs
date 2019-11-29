@@ -43,32 +43,34 @@ namespace FootStone.Kitchen
         private PredictSystem predictSystem;
         private PresentationSystemGroup presentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
-      //  private InterpolatedSystem interpolatedSystem;
-      //  private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
+        private ReplicateEntitySystemGroup replicateEntitySystemGroup;
+
+
+        //  private InterpolatedSystem interpolatedSystem;
+        //  private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
         protected override void OnCreate()
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
         //    Application.targetFrameRate = 30;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
-          
+
+         
+
             networkSystem = World.GetOrCreateSystem<NetworkClientSystem>();
             m_systemsToUpdate.Add(networkSystem);    
             
             handleTimeSystem = World.GetOrCreateSystem<HandleTimeSystem>();
-            m_systemsToUpdate.Add(handleTimeSystem);       
+            m_systemsToUpdate.Add(handleTimeSystem);
+
+            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
+            m_systemsToUpdate.Add(replicateEntitySystemGroup);
 
             setRenderTimeSystem = World.GetOrCreateSystem<SetRenderTimeSystem>();
             m_systemsToUpdate.Add(setRenderTimeSystem);      
 
             spawnSystemGroup = World.GetOrCreateSystem<SpawnClientSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
-
-          //  interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
-           // m_systemsToUpdate.Add(interpolatedSystem);
-
-            //itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
-            //m_systemsToUpdate.Add(itemInterpolatedSystem);
 
             setPredictTimeSystem = World.GetOrCreateSystem<SetPredictTimeSystem>();
             m_systemsToUpdate.Add(setPredictTimeSystem);
@@ -95,10 +97,10 @@ namespace FootStone.Kitchen
 
             setRenderTimeSystem.Update();
 
+            replicateEntitySystemGroup.Update();
             spawnSystemGroup.Update();
 
-        //    interpolatedSystem.Update();
-        //    itemInterpolatedSystem.Update();
+          //  replicateEntitySystemGroup.Interpolate();
 
             setPredictTimeSystem.Update();
 

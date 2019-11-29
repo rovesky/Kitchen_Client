@@ -15,16 +15,19 @@ namespace FootStone.Kitchen
     {
         private NetworkClient network;
      //   private WorldTimeSystem worldTimeSystem;
-        private SpawnEntitiesClientSystem spawnEntitiesClientSystem;
+     //   private SpawnEntitiesClientSystem spawnEntitiesClientSystem;
+        private ReplicateEntitySystemGroup replicateEntitySystemGroup;
 
         public bool IsConnected => network.isConnected;
+      //  public ReplicatedEntityClient EntityClient { get; } = new ReplicatedEntityClient(World.Active);
 
         protected override void OnCreate()
         {
             base.OnCreate();          
 
          //   worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
-            spawnEntitiesClientSystem = World.GetOrCreateSystem<SpawnEntitiesClientSystem>();
+        //    spawnEntitiesClientSystem = World.GetOrCreateSystem<SpawnEntitiesClientSystem>();
+            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
 
             var snapshotEntity = EntityManager.CreateEntity(typeof(ServerSnapshot));
             SetSingleton(new ServerSnapshot()
@@ -53,7 +56,7 @@ namespace FootStone.Kitchen
                 //  network.Connect("192.168.0.128");
             }
 
-            network.Update(this, spawnEntitiesClientSystem.EntityClient);
+            network.Update(this, replicateEntitySystemGroup.EntityClient);
         
             var snapshotFromServer = GetSingleton<ServerSnapshot>();        
             snapshotFromServer.tick = (uint)network.serverTime;
@@ -98,6 +101,7 @@ namespace FootStone.Kitchen
             var localPlayer = GetSingleton<LocalPlayer>();
             localPlayer.playerId = network.clientId;
             SetSingleton(localPlayer);
+            replicateEntitySystemGroup.SetLocalPlayerId(network.clientId);
         }     
     }
 }

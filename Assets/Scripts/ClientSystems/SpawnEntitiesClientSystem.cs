@@ -1,248 +1,244 @@
-﻿using System.Collections.Generic;
-using FootStone.ECS;
-using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Transforms;
-using UnityEngine;
+﻿//using System.Collections.Generic;
+//using FootStone.ECS;
+//using Unity.Entities;
+//using Unity.Mathematics;
+//using Unity.Transforms;
+//using UnityEngine;
 
-namespace FootStone.Kitchen
-{
-    public enum EntityType
-    {
-        Player,
-        Plate
-    }
+//namespace FootStone.Kitchen
+//{
+   
 
-    [DisableAutoCreation]
-	public class SpawnEntitiesClientSystem : ComponentSystem//, ISnapshotConsumer
-	{
+//    [DisableAutoCreation]
+//	public class SpawnEntitiesClientSystem : ComponentSystem//, ISnapshotConsumer
+//	{
 
-		private Entity player;
-		private Entity platePrefab;
-		private NetworkClientSystem networkClientNewSystem;
-	//	private InterpolatedSystem interpolatedSystem;
-	//	private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
-		private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
+//		//private Entity player;
+//		//private Entity platePrefab;
+//		private NetworkClientSystem networkClientNewSystem;
+//	//	private InterpolatedSystem interpolatedSystem;
+//	//	private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
+//	//	private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
 
-        public ReplicatedEntityClient EntityClient { get; } = new ReplicatedEntityClient(World.Active);
+//        public ReplicatedEntityClient EntityClient { get; } = new ReplicatedEntityClient(World.Active);
 
 
-        public void ProcessEntitySpawn(int serverTime, int id, ushort typeId)
-		{
-			Entity e = Entity.Null;
-			if ((EntityType)typeId == EntityType.Player)
-			{
+//  //      public void ProcessEntitySpawn(int serverTime, int id, ushort typeId)
+//		//{
+//		//	Entity e = Entity.Null;
+//		//	if ((EntityType)typeId == EntityType.Player)
+//		//	{
 
-				e = EntityManager.Instantiate(player);
-				Translation position = new Translation() { Value = Vector3.zero };
-				Rotation rotation = new Rotation() { Value = Quaternion.identity };
+//		//		e = EntityManager.Instantiate(player);
+//		//		Translation position = new Translation() { Value = Vector3.zero };
+//		//		Rotation rotation = new Rotation() { Value = Quaternion.identity };
 
-				EntityManager.SetComponentData(e, position);
+//		//		EntityManager.SetComponentData(e, position);
 
-				EntityManager.AddComponentData(e, new Player());
-				EntityManager.AddComponentData(e, new UpdateUI());
-                EntityManager.AddComponentData(e, new CharacterInterpolatedState()
-                {
-                    Position = Vector3.zero,
-                    Rotation = Quaternion.identity,
-                });
-            }
-			else if ((EntityType)typeId == EntityType.Plate)
-			{
-				FSLog.Info($"ProcessEntitySpawn Plate:{id}");
-				e = EntityManager.Instantiate(platePrefab);
-				EntityManager.AddComponentData(e, new Plate() { id = id });			
+//		//		EntityManager.AddComponentData(e, new Player());
+//		//		EntityManager.AddComponentData(e, new UpdateUI());
+//  //              EntityManager.AddComponentData(e, new CharacterInterpolatedState()
+//  //              {
+//  //                  Position = Vector3.zero,
+//  //                  Rotation = Quaternion.identity,
+//  //              });
+//  //          }
+//		//	else if ((EntityType)typeId == EntityType.Plate)
+//		//	{
+//		//		FSLog.Info($"ProcessEntitySpawn Plate:{id}");
+//		//		e = EntityManager.Instantiate(platePrefab);
+//		//		EntityManager.AddComponentData(e, new Plate());			
 
-				EntityManager.AddComponentData(e, new ItemInterpolatedState()
-				{
-					position = Vector3.zero,
-					rotation = Quaternion.identity,
-					owner = Entity.Null
+//		//		EntityManager.AddComponentData(e, new ItemInterpolatedState()
+//		//		{
+//		//			Position = Vector3.zero,
+//		//			Rotation = Quaternion.identity,
+//		//			Owner = Entity.Null
 
-				});		
+//		//		});		
 
-			}
-			entities[id] = e;
-		}
+//		//	}
+//		//	entities[id] = e;
+//		//}
 
-		public void ProcessEntityDespawns(int serverTime, List<int> despawns)
-		{
-			foreach (var id in despawns)
-			{
-				EntityManager.AddComponentData(entities[id], new Despawn() { Frame = 0 });
-				entities.Remove(id);
-			}
-		}
-
-
-		//public void ProcessEntityUpdate(int serverTime, int id, ref NetworkReader reader)
-		//{
-		//	if (!entities.ContainsKey(id))
-		//		return;
-
-		//	var entity = entities[id];
-
-		//	var localPalyer = GetSingleton<LocalPlayer>();
-
-		//	if (EntityManager.HasComponent<Player>(entity))
-		//	{
-		//		var player = EntityManager.GetComponentData<Player>(entity);
-		//		//player.id = reader.ReadInt32();
-		//		//player.id = id;
-		//		//player.playerId = reader.ReadInt32();
-		//		EntityManager.SetComponentData(entity, player);
-
-		//		var position = reader.ReadVector3Q();
-		//		var rotation = reader.ReadQuaternionQ();
-
-		//		var pickEntityId = reader.ReadInt32();
-
-		//		var pickEntity = Entity.Null;
-		//		if (pickEntityId != -1 && entities.ContainsKey(pickEntityId))
-		//		{
-		//			pickEntity = entities[pickEntityId];
-		//		}
-		//		//    FSLog.Info($"pickupEntity:{pickEntityId},{pickEntity.Index}");
-		//		// FSLog.Error($"player.playerId:{player.playerId},localPalyer.playerId:{localPalyer.playerId}");
-  //              if (localPalyer.playerId == player.playerId)
-  //              {
-  //                  if (localPalyer.playerEntity == Entity.Null)
-  //                  {
-  //                      localPalyer.playerEntity = entity;
-  //                      SetSingleton(localPalyer);
-  //                  }
-
-  //                  if (!EntityManager.HasComponent<UserCommand>(entity))
-  //                      EntityManager.AddComponentData(entity, new UserCommand());
-
-  //                  //if (!EntityManager.HasComponent<MoveInput>(entity))
-  //                  //    EntityManager.AddComponentData(entity, new MoveInput()
-  //                  //    {
-  //                  //        Speed = 6,
-  //                  //    });
-  //                  if (!EntityManager.HasComponent<CharacterMove>(entity))
-  //                  {
-  //                      EntityManager.AddComponentData(entity, new CharacterMove()
-  //                      {
-  //                          SkinWidth = 0.02f,
-  //                          Velocity = 6.0f
-  //                      });
-  //                  }
-
-  //                  if (!EntityManager.HasComponent<PickupItem>(entity))
-		//			{
-		//				EntityManager.AddComponentData(entity, new PickupItem());
-		//			}
-
-		//			if (!EntityManager.HasComponent<ThrowItem>(entity))
-		//			{
-		//				EntityManager.AddComponentData(entity, new ThrowItem()
-		//				{
-		//					speed = 0
-		//				});
-		//			}
-
-  //                  if (!EntityManager.HasComponent<CharacterPredictedState>(entity))
-  //                  {
-  //                      EntityManager.AddComponentData(entity, new CharacterPredictedState()
-  //                      {
-  //                          Position = Vector3.zero,
-  //                          Rotation = Quaternion.identity,
-  //                          PickupedEntity = Entity.Null
-  //                      });
-  //                  }
-
-  //                  if (!EntityManager.HasComponent<EntityPredictDataSnapshot>(entity))
-  //                  {
-  //                      EntityManager.AddComponentData(entity, new EntityPredictDataSnapshot()
-  //                      {
-  //                          position = Vector3.zero,
-  //                          rotation = Quaternion.identity,
-  //                          pickupEntity = Entity.Null
-  //                      });
-  //                  }
-
-  //                  var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
-		//			predictData.position = position;
-		//			predictData.rotation = rotation;
-		//			predictData.pickupEntity = pickEntity;
-		//			EntityManager.SetComponentData(entity, predictData);
-		//		}
-		//		else
-		//		{
-		//			if (!EntityManager.HasComponent<EntityInterpolate>(entity))
-		//			{
-		//				EntityManager.AddComponentData(entity, new EntityInterpolate()
-		//				{
-		//					id = id
-		//				});
-		//			}
-
-		//			var interpolateData = new CharacterInterpolatedState()
-		//			{
-		//				Position = position,
-		//				Rotation = rotation
-		//			};
-		//		//	interpolatedSystem.AddData(serverTime, id, ref interpolateData);
-		//		}
-
-		//	}
-		//	else if (EntityManager.HasComponent<Plate>(entity))
-		//	{
-		//		var id1 = reader.ReadInt32();
-
-		//		var position = reader.ReadVector3Q();
-		//		var rotation = reader.ReadQuaternionQ();
-
-		//		var ownerEnityID = reader.ReadInt32();
-
-		//		var ownerEntity = Entity.Null;
-		//		if (ownerEnityID != -1 && entities.ContainsKey(ownerEnityID))
-		//		{
-		//			ownerEntity = entities[ownerEnityID];
-		//		}
-
-		//		if (!EntityManager.HasComponent<EntityInterpolate>(entity))
-		//		{
-		//			EntityManager.AddComponentData(entity, new EntityInterpolate()
-		//			{
-		//				id = id
-		//			});
-		//		}
-		//		var state = new ItemInterpolatedState();
-		//		state.position = position;
-		//		state.rotation = rotation;
-		//		state.owner = ownerEntity;
-		//		//itemInterpolatedSystem.AddData(serverTime, id, ref state);
-
-		//	}
-		//}
-
-		protected override void OnCreate()
-		{		
-
-			EntityManager.CreateEntity(typeof(LocalPlayer));
-			SetSingleton(new LocalPlayer() { playerId = -1, playerEntity = Entity.Null });
-
-			networkClientNewSystem = World.GetOrCreateSystem<NetworkClientSystem>();
-
-		//	interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
-		//	itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
+//		//public void ProcessEntityDespawns(int serverTime, List<int> despawns)
+//		//{
+//		//	foreach (var id in despawns)
+//		//	{
+//		//		EntityManager.AddComponentData(entities[id], new Despawn() { Frame = 0 });
+//		//		entities.Remove(id);
+//		//	}
+//		//}
 
 
-			player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-				Resources.Load("Player1") as GameObject, World.Active);
+//		//public void ProcessEntityUpdate(int serverTime, int id, ref NetworkReader reader)
+//		//{
+//		//	if (!entities.ContainsKey(id))
+//		//		return;
 
-			platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-				 Resources.Load("Plate") as GameObject, World.Active);
+//		//	var entity = entities[id];
 
-			FSLog.Info($" spwan entity OnCreate2");
-		}
+//		//	var localPalyer = GetSingleton<LocalPlayer>();
 
-		protected override void OnUpdate()
-		{
+//		//	if (EntityManager.HasComponent<Player>(entity))
+//		//	{
+//		//		var player = EntityManager.GetComponentData<Player>(entity);
+//		//		//player.id = reader.ReadInt32();
+//		//		//player.id = id;
+//		//		//player.playerId = reader.ReadInt32();
+//		//		EntityManager.SetComponentData(entity, player);
+
+//		//		var position = reader.ReadVector3Q();
+//		//		var rotation = reader.ReadQuaternionQ();
+
+//		//		var pickEntityId = reader.ReadInt32();
+
+//		//		var pickEntity = Entity.Null;
+//		//		if (pickEntityId != -1 && entities.ContainsKey(pickEntityId))
+//		//		{
+//		//			pickEntity = entities[pickEntityId];
+//		//		}
+//		//		//    FSLog.Info($"pickupEntity:{pickEntityId},{pickEntity.Index}");
+//		//		// FSLog.Error($"player.playerId:{player.playerId},localPalyer.playerId:{localPalyer.playerId}");
+//  //              if (localPalyer.playerId == player.playerId)
+//  //              {
+//  //                  if (localPalyer.playerEntity == Entity.Null)
+//  //                  {
+//  //                      localPalyer.playerEntity = entity;
+//  //                      SetSingleton(localPalyer);
+//  //                  }
+
+//  //                  if (!EntityManager.HasComponent<UserCommand>(entity))
+//  //                      EntityManager.AddComponentData(entity, new UserCommand());
+
+//  //                  //if (!EntityManager.HasComponent<MoveInput>(entity))
+//  //                  //    EntityManager.AddComponentData(entity, new MoveInput()
+//  //                  //    {
+//  //                  //        Speed = 6,
+//  //                  //    });
+//  //                  if (!EntityManager.HasComponent<CharacterMove>(entity))
+//  //                  {
+//  //                      EntityManager.AddComponentData(entity, new CharacterMove()
+//  //                      {
+//  //                          SkinWidth = 0.02f,
+//  //                          Velocity = 6.0f
+//  //                      });
+//  //                  }
+
+//  //                  if (!EntityManager.HasComponent<PickupItem>(entity))
+//		//			{
+//		//				EntityManager.AddComponentData(entity, new PickupItem());
+//		//			}
+
+//		//			if (!EntityManager.HasComponent<ThrowItem>(entity))
+//		//			{
+//		//				EntityManager.AddComponentData(entity, new ThrowItem()
+//		//				{
+//		//					speed = 0
+//		//				});
+//		//			}
+
+//  //                  if (!EntityManager.HasComponent<CharacterPredictedState>(entity))
+//  //                  {
+//  //                      EntityManager.AddComponentData(entity, new CharacterPredictedState()
+//  //                      {
+//  //                          Position = Vector3.zero,
+//  //                          Rotation = Quaternion.identity,
+//  //                          PickupedEntity = Entity.Null
+//  //                      });
+//  //                  }
+
+//  //                  if (!EntityManager.HasComponent<EntityPredictDataSnapshot>(entity))
+//  //                  {
+//  //                      EntityManager.AddComponentData(entity, new EntityPredictDataSnapshot()
+//  //                      {
+//  //                          position = Vector3.zero,
+//  //                          rotation = Quaternion.identity,
+//  //                          pickupEntity = Entity.Null
+//  //                      });
+//  //                  }
+
+//  //                  var predictData = EntityManager.GetComponentData<EntityPredictDataSnapshot>(entity);
+//		//			predictData.position = position;
+//		//			predictData.rotation = rotation;
+//		//			predictData.pickupEntity = pickEntity;
+//		//			EntityManager.SetComponentData(entity, predictData);
+//		//		}
+//		//		else
+//		//		{
+//		//			if (!EntityManager.HasComponent<EntityInterpolate>(entity))
+//		//			{
+//		//				EntityManager.AddComponentData(entity, new EntityInterpolate()
+//		//				{
+//		//					id = id
+//		//				});
+//		//			}
+
+//		//			var interpolateData = new CharacterInterpolatedState()
+//		//			{
+//		//				Position = position,
+//		//				Rotation = rotation
+//		//			};
+//		//		//	interpolatedSystem.AddData(serverTime, id, ref interpolateData);
+//		//		}
+
+//		//	}
+//		//	else if (EntityManager.HasComponent<Plate>(entity))
+//		//	{
+//		//		var id1 = reader.ReadInt32();
+
+//		//		var position = reader.ReadVector3Q();
+//		//		var rotation = reader.ReadQuaternionQ();
+
+//		//		var ownerEnityID = reader.ReadInt32();
+
+//		//		var ownerEntity = Entity.Null;
+//		//		if (ownerEnityID != -1 && entities.ContainsKey(ownerEnityID))
+//		//		{
+//		//			ownerEntity = entities[ownerEnityID];
+//		//		}
+
+//		//		if (!EntityManager.HasComponent<EntityInterpolate>(entity))
+//		//		{
+//		//			EntityManager.AddComponentData(entity, new EntityInterpolate()
+//		//			{
+//		//				id = id
+//		//			});
+//		//		}
+//		//		var state = new ItemInterpolatedState();
+//		//		state.position = position;
+//		//		state.rotation = rotation;
+//		//		state.owner = ownerEntity;
+//		//		//itemInterpolatedSystem.AddData(serverTime, id, ref state);
+
+//		//	}
+//		//}
+
+//		protected override void OnCreate()
+//		{		
+
+//			EntityManager.CreateEntity(typeof(LocalPlayer));
+//			SetSingleton(new LocalPlayer() { playerId = -1, playerEntity = Entity.Null });
+
+//			networkClientNewSystem = World.GetOrCreateSystem<NetworkClientSystem>();
+
+//		//	interpolatedSystem = World.GetOrCreateSystem<InterpolatedSystem>();
+//		//	itemInterpolatedSystem = World.GetOrCreateSystem<ItemInterpolatedSystem<ItemInterpolatedState>>();
 
 
-		}
-	}
-}
+//			//player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+//			//	Resources.Load("Player1") as GameObject, World.Active);
+
+//			//platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+//			//	 Resources.Load("Plate") as GameObject, World.Active);
+
+//			FSLog.Info($" spawn entity OnCreate2");
+//		}
+
+//		protected override void OnUpdate()
+//		{
+
+
+//		}
+//	}
+//}

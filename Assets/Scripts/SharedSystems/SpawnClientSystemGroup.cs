@@ -11,7 +11,7 @@ namespace FootStone.Kitchen
      
         protected override void OnCreate()
         {
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEntitiesClientSystem>());
+         //   m_systemsToUpdate.Add(World.GetOrCreateSystem<SpawnEntitiesClientSystem>());
         }
     } 
     

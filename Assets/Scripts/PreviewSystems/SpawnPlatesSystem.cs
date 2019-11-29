@@ -37,8 +37,8 @@ namespace FootStone.Kitchen
 
             EntityManager.AddComponentData(e, new ItemInterpolatedState()
             {
-                position = position.Value,
-                rotation = rotation.Value
+                Position = position.Value,
+                Rotation = rotation.Value
 
             });
 
