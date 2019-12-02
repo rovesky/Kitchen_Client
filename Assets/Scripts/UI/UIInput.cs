@@ -1,52 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace FootStone.Kitchen
 {
     public static class UIInput
     {
-        private static Dictionary<string, bool> events = new Dictionary<string, bool>();
+        private static readonly Dictionary<string, bool> Events = new Dictionary<string, bool>();
 
         public static void AddButtonClickEvent(string buttonName)
         {
-            if (!events.ContainsKey(buttonName))
-                events.Add(buttonName, true);
+            if (!Events.ContainsKey(buttonName))
+                Events.Add(buttonName, true);
 
-            events[buttonName] = true;
-
+            Events[buttonName] = true;
         }
 
 
-        public static bool  GetButtonClick(string buttonName)
+        public static bool GetButtonClick(string buttonName)
         {
-            if (!events.ContainsKey(buttonName))
+            if (!Events.ContainsKey(buttonName))
                 return false;
 
-            var ret = events[buttonName];
-          //  events[buttonName] = false;
+            var ret = Events[buttonName];
+            //  events[buttonName] = false;
             return ret;
         }
 
         public static void ResetButtonClick()
-        {        
-            foreach(var id in events.Keys.ToArray())
-            {               
-                events[id] = false;
-            }
-
+        {
+            foreach (var id in Events.Keys.ToArray()) Events[id] = false;
         }
 
         public static void ReleaseButtonClick(string buttonName)
         {
-            if (!events.ContainsKey(buttonName))
+            if (!Events.ContainsKey(buttonName))
                 return;
 
-            events[buttonName] = false;
-           
+            Events[buttonName] = false;
         }
     }
 }

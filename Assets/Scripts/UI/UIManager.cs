@@ -1,28 +1,24 @@
-﻿using UnityEngine;
+﻿using FootStone.ECS;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using Unity.Entities;
-using FootStone.ECS;
 
 namespace FootStone.Kitchen
 {
-
     [AddComponentMenu("MyGame/GameManager")]
     public class UIManager : MonoBehaviour
     {
-
         public static UIManager Instance;
-
-        public Canvas m_canvas_main;
-        private Text m_text_rtt;
         private Button m_button1;
         private Button m_button2;
 
-        void Start()
+        public Canvas m_canvas_main;
+        private Text m_text_rtt;
+
+        private void Start()
         {
             Debug.Log("GameManager Start!");
-     
-            Instance = this;          
+
+            Instance = this;
             m_text_rtt = m_canvas_main.transform.Find("text_rtt").GetComponent<Text>();
             m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
             m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
@@ -31,22 +27,19 @@ namespace FootStone.Kitchen
             {
                 FSLog.Info("m_button1.onClick!");
                 UIInput.AddButtonClickEvent("pickup");
-
             });
 
             m_button2.onClick.AddListener(() =>
             {
                 FSLog.Info("m_button2.onClick!");
                 UIInput.AddButtonClickEvent("throw");
-
             });
         }
 
         // 改变RTT UI显示
         public void UpdateRtt(double rtt)
         {
-            m_text_rtt.text =  rtt.ToString("#.00");
+            m_text_rtt.text = rtt.ToString("#.00");
         }
     }
-
 }

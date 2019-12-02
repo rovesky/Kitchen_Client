@@ -103,7 +103,8 @@ namespace FootStone.Kitchen
             }
 
             // Throttle up to catch up
-            if (clientTickTime.Render.Tick < serverTick - 1) clientTickTime.Render.AddDuration(frameDuration * 0.01f);
+            if (clientTickTime.Render.Tick < serverTick - 1)
+                clientTickTime.Render.AddDuration(frameDuration * 0.01f);
 
             // FSLog.Info($"serverTick:{serverTick},predictTick:{clientTickTime.predict.Tick}," +
             //    $"renderTick:{clientTickTime.render.Tick},preferredTick:{preferredTick - serverTick}");

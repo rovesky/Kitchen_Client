@@ -6,8 +6,8 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class PredictSystem : ComponentSystem
     {
-        private TickStateDenseBuffer<CharacterPredictedState> commandBuffer =
-            new TickStateDenseBuffer<CharacterPredictedState>(128);
+       // private TickStateDenseBuffer<CharacterPredictedState> commandBuffer =
+           // new TickStateDenseBuffer<CharacterPredictedState>(128);
 
         private InputSystem inputSystem;
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
@@ -27,7 +27,7 @@ namespace FootStone.Kitchen
             var worldTime = GetSingleton<WorldTime>();
 
             var predictTime = clientTick.Predict;
-            var renderTime = clientTick.Render;
+         //   var renderTime = clientTick.Render;
 
             if (IsPredictionAllowed(predictTime, serverTick))
             {
@@ -50,7 +50,7 @@ namespace FootStone.Kitchen
                 // PREDICT CURRENT TICK. Update current tick using duration of current tick
                 worldTime.GameTick = predictTime;
                 SetSingleton(worldTime);
-                //     m_PlayerModule.RetrieveCommand(gameWorld.Tick);
+                inputSystem.RetrieveCommand(worldTime.Tick);
                 // Dont update systems with close to zero time. 
                 if (worldTime.TickDuration > 0.008f)
                     PredictionUpdate();
@@ -59,14 +59,14 @@ namespace FootStone.Kitchen
 
         private void PredictionUpdate()
         {
-            var worldTime = GetSingleton<WorldTime>();
+        //    var worldTime = GetSingleton<WorldTime>();
         //    FSLog.Info($"PredictionUpdate:{worldTime.Tick}");
             predictUpdateSystemGroup.Update();
         }
 
         private void PredictionRollback()
         {
-            var worldTime = GetSingleton<WorldTime>();
+         //   var worldTime = GetSingleton<WorldTime>();
          //   FSLog.Info($"PredictionRollback:{worldTime.Tick}");
             replicateEntitySystemGroup.Rollback();
         }

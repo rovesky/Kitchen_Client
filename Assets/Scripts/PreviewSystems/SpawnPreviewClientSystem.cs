@@ -56,14 +56,14 @@ namespace FootStone.Kitchen
             //    Speed = 6,
             //});
 
-            EntityManager.AddComponentData(e, new PickupItem()
+            EntityManager.AddComponentData(e, new CharacterPickupItem()
             {
               //  pickupEntity = Entity.Null
             });
 
-            EntityManager.AddComponentData(e, new ThrowItem()
+            EntityManager.AddComponentData(e, new CharacterThrowItem()
             {
-                speed = 10
+                Velocity = 10
                 //  pickupEntity = Entity.Null
             });
 

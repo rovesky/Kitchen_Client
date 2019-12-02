@@ -1,4 +1,5 @@
-﻿using FootStone.ECS;
+﻿using System;
+using FootStone.ECS;
 using Unity.Entities;
 using UnityEngine;
 
@@ -66,9 +67,6 @@ namespace FootStone.Kitchen
         {
             userCommand.checkTick = tick;
 
-            if (userCommand.buttons.flags > 0)
-                FSLog.Info($"StoreCommand buffer count:{userCommand.checkTick},{userCommand.buttons.flags}");
-
             var lastBufferTick = commandBuffer.LastTick();
             if (tick != lastBufferTick && tick != lastBufferTick + 1)
             {
@@ -81,6 +79,19 @@ namespace FootStone.Kitchen
                 commandBuffer.Set(ref userCommand, (int) tick);
             else
                 commandBuffer.Add(ref userCommand, (int) tick);
+
+            //if (userCommand.buttons.flags > 0)
+            //{
+            //    FSLog.Info($"StoreCommand buffer count:{userCommand.checkTick},{userCommand.buttons.flags}");
+            //    for (var i = Mathf.Max(commandBuffer.LastTick() - 5, 0); i <= commandBuffer.LastTick(); i++)
+            //    {
+            //        var command = UserCommand.defaultCommand;
+            //        commandBuffer.TryGetValue(i, ref command);
+
+            //        FSLog.Info($"StoreCommand buffer :{i},{command.checkTick},{command.buttons.flags}");
+
+            //    }
+            //}
         }
 
         public void RetrieveCommand(uint tick)
@@ -89,16 +100,18 @@ namespace FootStone.Kitchen
             if (localEntity == Entity.Null)
                 return;
 
-            var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity);
+            var command = EntityManager.GetComponentData<UserCommand>(localEntity);
             //   FSLog.Info($"current command:{userCommand.checkTick},{userCommand.buttons.flags}");
-            var found = commandBuffer.TryGetValue((int) tick, ref userCommand);
-            GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
-            //   if(userCommand.buttons.flags> 0)
-           // FSLog.Info($"{found},retrieve command:{tick},{userCommand.checkTick}," +
-                     //  $"{userCommand.buttons.flags},userCommand.targetPos.x:{userCommand.targetPos.x},userCommand.targetPos.z:{userCommand.targetPos.z}");
+            var found = commandBuffer.TryGetValue((int) tick, ref command);
+            //if (command.buttons.flags > 0)
+            //    FSLog.Info($"{found},retrieve command:{tick},{command.checkTick}," +
+            //               $"{command.buttons.flags},userCommand.targetPos.x:{command.targetPos.x},userCommand.targetPos.z:{command.targetPos.z}");
 
+            GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
             if (found)
-                EntityManager.SetComponentData(localEntity, userCommand);
+                EntityManager.SetComponentData(localEntity, command);
+            else
+                EntityManager.SetComponentData(localEntity, UserCommand.defaultCommand);
         }
 
         public void SendCommand(uint tick)

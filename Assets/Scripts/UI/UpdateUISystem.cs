@@ -1,8 +1,7 @@
 ﻿using Unity.Entities;
-using UnityEngine;
 
 namespace FootStone.Kitchen
-{ 
+{
     [DisableAutoCreation]
     public class UpdateUISystem : ComponentSystem
     {
@@ -13,7 +12,6 @@ namespace FootStone.Kitchen
 
             var snapshotFromServer = GetSingleton<ServerSnapshot>();
             UIManager.Instance.UpdateRtt(snapshotFromServer.Rtt);
-          
         }
     }
 }
