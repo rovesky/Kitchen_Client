@@ -1,9 +1,4 @@
 ﻿using FootStone.ECS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Entities;
 using UnityEngine;
 
@@ -12,17 +7,18 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class HandleTimeSystem : ComponentSystem
     {
-        private double lastFrameTime = 0;
         private float frameTimeScale = 1.0f;
         private InputSystem inputSystem;
-        private WorldTimeSystem worldTimeSystem;  
+        private double lastFrameTime;
+        private WorldTimeSystem worldTimeSystem;
+
         protected override void OnCreate()
-        {          
+        {
             EntityManager.CreateEntity(typeof(ClientTickTime));
-            SetSingleton(new ClientTickTime()
+            SetSingleton(new ClientTickTime
             {
-                predict = new GameTick(30),
-                render = new GameTick(30)
+                Predict = new GameTick(30),
+                Render = new GameTick(30)
             });
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
@@ -31,58 +27,58 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-
             var snapshot = GetSingleton<ServerSnapshot>();
-            var serverTick = snapshot.tick;      
+            var serverTick = snapshot.Tick;
             var clientTickTime = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
 
-            float frameDuration = lastFrameTime != 0 ? (float)(worldTime.FrameTime - lastFrameTime) : 0;
+            var frameDuration = lastFrameTime != 0 ? (float) (worldTime.FrameTime - lastFrameTime) : 0;
             lastFrameTime = worldTime.FrameTime;
 
-            inputSystem.SampleInput(clientTickTime.render.Tick);
-            
+            inputSystem.SampleInput(clientTickTime.Render.Tick);
+
             // handle pridect tick
-            uint prevTick = clientTickTime.predict.Tick;
+            var prevTick = clientTickTime.Predict.Tick;
 
             // Increment time
             var deltaPredictedTime = frameDuration * frameTimeScale;
-            clientTickTime.predict.AddDuration(deltaPredictedTime);
+            clientTickTime.Predict.AddDuration(deltaPredictedTime);
 
             // Adjust time to be synchronized with server
             uint preferredBufferedCommandCount = 3;
 
-        //    long time = worldTimeSystem.GetCurrentTime() - snapshot.time;
-         //   FSLog.Info($"rtt:{snapshot.rtt},time:{snapshot.time} ");
-            uint preferredTick = serverTick +
-                (uint)((snapshot.rtt + snapshot.time) / 1000.0f * worldTime.GameTick.TickRate) +             
-                preferredBufferedCommandCount;
+            //    long time = worldTimeSystem.GetCurrentTime() - snapshot.time;
+            //   FSLog.Info($"rtt:{snapshot.rtt},time:{snapshot.time} ");
+            var preferredTick = serverTick +
+                                (uint) ((snapshot.Rtt + snapshot.Time) / 1000.0f * worldTime.GameTick.TickRate) +
+                                preferredBufferedCommandCount;
 
-     
-            bool resetTime = false;
-            if (!resetTime && clientTickTime.predict.Tick < preferredTick - 3)
+
+            var resetTime = false;
+            if (!resetTime && clientTickTime.Predict.Tick < preferredTick - 3)
             {
-                FSLog.Warning($"Client predictTime hard catchup ... ");
+                FSLog.Warning("Client predictTime hard catchup ... ");
                 resetTime = true;
             }
 
-            if (!resetTime && clientTickTime.predict.Tick > preferredTick + 6)
+            if (!resetTime && clientTickTime.Predict.Tick > preferredTick + 6)
             {
-                FSLog.Warning($"Client predictTime hard slowdown ... ");
+                FSLog.Warning("Client predictTime hard slowdown ... ");
                 resetTime = true;
             }
 
             frameTimeScale = 1.0f;
             if (resetTime)
             {
-                FSLog.Warning(string.Format("CATCHUP ({0} -> {1} ：{2})", clientTickTime.predict.Tick, preferredTick, serverTick));
+                FSLog.Warning(string.Format("CATCHUP ({0} -> {1} ：{2})", clientTickTime.Predict.Tick, preferredTick,
+                    serverTick));
                 // m_NetworkStatistics.notifyHardCatchup = true;
                 //  m_GameWorld.nextTickTime = Game.FrameTime;             
-                clientTickTime.predict.SetTick(preferredTick, 0);
+                clientTickTime.Predict.SetTick(preferredTick, 0);
             }
             else
             {
-                int bufferedCommands = snapshot.lastAcknowlegdedCommandTime - (int)serverTick;
+                var bufferedCommands = snapshot.LastAcknowlegdedCommandTime - (int) serverTick;
                 if (bufferedCommands < preferredBufferedCommandCount)
                     frameTimeScale = 1.01f;
 
@@ -92,48 +88,44 @@ namespace FootStone.Kitchen
 
             //handle render tick
             // Increment interpolation time
-            clientTickTime.render.AddDuration(frameDuration * frameTimeScale);
+            clientTickTime.Render.AddDuration(frameDuration * frameTimeScale);
 
             // Force interp time to not exeede server time
-            if (clientTickTime.render.Tick >= serverTick)
-            {
-            //    FSLog.Warning($"Client renderTime hard slowdown ... ");
-                clientTickTime.render.SetTick(serverTick, 0);
-            }
+            if (clientTickTime.Render.Tick >= serverTick)
+                //    FSLog.Warning($"Client renderTime hard slowdown ... ");
+                clientTickTime.Render.SetTick(serverTick, 0);
 
             // hard catchup
-            if (serverTick > 10 && clientTickTime.render.Tick < serverTick - 10)
+            if (serverTick > 10 && clientTickTime.Render.Tick < serverTick - 10)
             {
-                FSLog.Warning($"Client renderTime hard catchup ... ({clientTickTime.render.Tick}=>{serverTick - 8}) ");
-                clientTickTime.render.SetTick(serverTick - 8, 0);
+                FSLog.Warning($"Client renderTime hard catchup ... ({clientTickTime.Render.Tick}=>{serverTick - 8}) ");
+                clientTickTime.Render.SetTick(serverTick - 8, 0);
             }
 
             // Throttle up to catch up
-            if (clientTickTime.render.Tick < serverTick - 1)
-            {
-                clientTickTime.render.AddDuration(frameDuration * 0.01f);
-            }
+            if (clientTickTime.Render.Tick < serverTick - 1) clientTickTime.Render.AddDuration(frameDuration * 0.01f);
 
-           // FSLog.Info($"serverTick:{serverTick},predictTick:{clientTickTime.predict.Tick}," +
-              //    $"renderTick:{clientTickTime.render.Tick},preferredTick:{preferredTick - serverTick}");
+            // FSLog.Info($"serverTick:{serverTick},predictTick:{clientTickTime.predict.Tick}," +
+            //    $"renderTick:{clientTickTime.render.Tick},preferredTick:{preferredTick - serverTick}");
 
             // If predicted time has entered a new tick the stored commands should be sent to server 
-            if (clientTickTime.predict.Tick > prevTick)
+            if (clientTickTime.Predict.Tick > prevTick)
             {
-                var oldestCommandToSend = (uint)Mathf.Max(prevTick, clientTickTime.predict.Tick -
-                    NetworkConfig.commandClientBufferSize);
-                for (uint tick = oldestCommandToSend; tick < clientTickTime.predict.Tick; tick++)
+                var oldestCommandToSend = (uint) Mathf.Max(prevTick, clientTickTime.Predict.Tick -
+                                                                     NetworkConfig.commandClientBufferSize);
+                for (var tick = oldestCommandToSend; tick < clientTickTime.Predict.Tick; tick++)
                 {
-                     inputSystem.StoreCommand(tick);
-                     inputSystem.SendCommand(tick);
+                    inputSystem.StoreCommand(tick);
+                    inputSystem.SendCommand(tick);
                 }
-                inputSystem.ResetInput();               
+
+                inputSystem.ResetInput();
             }
+
             // Store command
-            inputSystem.StoreCommand(clientTickTime.predict.Tick);
+            inputSystem.StoreCommand(clientTickTime.Predict.Tick);
 
             SetSingleton(clientTickTime);
         }
     }
-
 }

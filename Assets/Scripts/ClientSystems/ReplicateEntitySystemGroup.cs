@@ -1,7 +1,7 @@
-﻿using FootStone.ECS;
+﻿using System.Collections.Generic;
+using FootStone.ECS;
 using Unity.Entities;
-using Unity.Physics.Systems;
-using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace FootStone.Kitchen
 {
@@ -12,22 +12,72 @@ namespace FootStone.Kitchen
     }
 
     [DisableAutoCreation]
-    public class ReplicateEntitySystemGroup : NoSortComponentSystemGroup
+    public class ReplicateEntitySystemGroup : NoSortComponentSystemGroup, ISnapshotConsumer
     {
-        public ReplicatedEntityClient EntityClient { get; } = new ReplicatedEntityClient(World.Active);
+        private ReplicatedEntityFactoryManager factoryManager;
+        private ReplicatedEntityCollection replicatedEntities;
+
+        public void ProcessEntityDespawns(int serverTick, List<int> despawns)
+        {
+            foreach (var id in despawns)
+            {
+                var entity = replicatedEntities.Unregister(id);
+                EntityManager.AddComponentData(entity, new Despawn() { Frame = 0 });
+            }
+        }
+
+        public void ProcessEntitySpawn(int serverTick, int id, ushort typeId)
+        {
+            FSLog.Info("ProcessEntitySpawns. Server tick:" + serverTick + " id:" + id + " typeid:" + typeId);
+
+            Profiler.BeginSample("ReplicatedEntitySystemClient.ProcessEntitySpawns()");
+
+            var factory = factoryManager.GetFactory(typeId);
+            if (factory == null)
+                return;
+
+            var entity = factory.Create(EntityManager, null, null);
+            if (entity == Entity.Null)
+                return;
+
+            var replicatedDataEntity = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
+            replicatedDataEntity.Id = id;
+            EntityManager.SetComponentData(entity, replicatedDataEntity);
+
+            replicatedEntities.Register(id, entity);
+
+            Profiler.EndSample();
+        }
+
+        public void ProcessEntityUpdate(int serverTick, int id, ref NetworkReader reader)
+        {
+            replicatedEntities.ProcessEntityUpdate(serverTick, id, ref reader);
+
+            //Update PlayerEntity
+            var entity = replicatedEntities.GetEntity(id);
+            var replicatedData = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
+            var localPlayer = GetSingleton<LocalPlayer>();
+
+            if (replicatedData.PredictingPlayerId == localPlayer.PlayerId)
+            {
+                localPlayer.PlayerEntity = entity;
+                SetSingleton(localPlayer);
+            }
+        }
+
         protected override void OnCreate()
         {
             EntityManager.CreateEntity(typeof(LocalPlayer));
-            SetSingleton(new LocalPlayer() { playerId = -1, playerEntity = Entity.Null });
+            SetSingleton(new LocalPlayer {PlayerId = -1, PlayerEntity = Entity.Null});
 
-         //   replicatedEntityClient = new ReplicatedEntityClient(World.Active);
-         
-           // FSLog.Error($"RegisterFactorys");
-            EntityClient.RegisterFactory((ushort)EntityType.Player,new CharacterFactory());
-            EntityClient.RegisterFactory((ushort)EntityType.Plate, new PlateFactory());
+            replicatedEntities = new ReplicatedEntityCollection(EntityManager);
+            factoryManager = new ReplicatedEntityFactoryManager();
+
+            // FSLog.Error($"RegisterFactorys");
+            factoryManager.RegisterFactory((ushort) EntityType.Player, new CharacterFactory());
+            factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
-
         }
 
         protected override void OnUpdate()
@@ -43,13 +93,12 @@ namespace FootStone.Kitchen
 
         public void Interpolate()
         {
-            EntityClient.Interpolate(GetSingleton<WorldTime>().GameTick);
+            replicatedEntities.Interpolate(GetSingleton<WorldTime>().GameTick);
         }
 
         public void Rollback()
         {
-            EntityClient.Rollback();
+            replicatedEntities.Rollback();
         }
     }
-
 }

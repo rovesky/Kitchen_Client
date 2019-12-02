@@ -32,10 +32,10 @@ namespace FootStone.Kitchen
             var snapshotEntity = EntityManager.CreateEntity(typeof(ServerSnapshot));
             SetSingleton(new ServerSnapshot()
             {
-                tick = 0,
-                time = 0,
-                rtt = 0,
-                lastAcknowlegdedCommandTime = 0,
+                Tick = 0,
+                Time = 0,
+                Rtt = 0,
+                LastAcknowlegdedCommandTime = 0,
             });
 
             network = new NetworkClient(GameWorld.Active);
@@ -56,13 +56,13 @@ namespace FootStone.Kitchen
                 //  network.Connect("192.168.0.128");
             }
 
-            network.Update(this, replicateEntitySystemGroup.EntityClient);
+            network.Update(this, replicateEntitySystemGroup);
         
             var snapshotFromServer = GetSingleton<ServerSnapshot>();        
-            snapshotFromServer.tick = (uint)network.serverTime;
-            snapshotFromServer.time = network.timeSinceSnapshot;
-            snapshotFromServer.rtt = network.rtt;
-            snapshotFromServer.lastAcknowlegdedCommandTime = network.lastAcknowlegdedCommandTime;   
+            snapshotFromServer.Tick = (uint)network.serverTime;
+            snapshotFromServer.Time = network.timeSinceSnapshot;
+            snapshotFromServer.Rtt = network.rtt;
+            snapshotFromServer.LastAcknowlegdedCommandTime = network.lastAcknowlegdedCommandTime;   
             SetSingleton(snapshotFromServer);
         }
 
@@ -91,7 +91,7 @@ namespace FootStone.Kitchen
         public void OnDisconnect(int clientId)
         {
             var localPlayer = GetSingleton<LocalPlayer>();
-            localPlayer.playerId = -1;
+            localPlayer.PlayerId = -1;
             SetSingleton(localPlayer);
         }
 
@@ -99,7 +99,7 @@ namespace FootStone.Kitchen
         {
            // FSLog.Error($"OnConnect:{network.clientId}");
             var localPlayer = GetSingleton<LocalPlayer>();
-            localPlayer.playerId = network.clientId;
+            localPlayer.PlayerId = network.clientId;
             SetSingleton(localPlayer);
             replicateEntitySystemGroup.SetLocalPlayerId(network.clientId);
         }     

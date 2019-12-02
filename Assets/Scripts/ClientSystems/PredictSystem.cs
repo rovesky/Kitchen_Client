@@ -22,12 +22,12 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-            var serverTick = GetSingleton<ServerSnapshot>().tick;
+            var serverTick = GetSingleton<ServerSnapshot>().Tick;
             var clientTick = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
 
-            var predictTime = clientTick.predict;
-            var renderTime = clientTick.render;
+            var predictTime = clientTick.Predict;
+            var renderTime = clientTick.Render;
 
             if (IsPredictionAllowed(predictTime, serverTick))
             {
@@ -59,20 +59,16 @@ namespace FootStone.Kitchen
 
         private void PredictionUpdate()
         {
+            var worldTime = GetSingleton<WorldTime>();
+        //    FSLog.Info($"PredictionUpdate:{worldTime.Tick}");
             predictUpdateSystemGroup.Update();
         }
 
         private void PredictionRollback()
         {
+            var worldTime = GetSingleton<WorldTime>();
+         //   FSLog.Info($"PredictionRollback:{worldTime.Tick}");
             replicateEntitySystemGroup.Rollback();
-
-            //Entities.ForEach((Entity entity, ref CharacterPredictedState predicData, ref EntityPredictDataSnapshot snapshotData) =>
-            //{
-            //    predicData.Position = snapshotData.position;
-            //    predicData.Rotation = snapshotData.rotation;
-            //    predicData.PickupedEntity = snapshotData.pickupEntity;
-
-            //});
         }
 
 

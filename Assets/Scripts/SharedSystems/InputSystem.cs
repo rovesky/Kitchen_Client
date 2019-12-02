@@ -4,24 +4,19 @@ using UnityEngine;
 
 namespace FootStone.Kitchen
 {
-
     [DisableAutoCreation]
     public class InputSystem : ComponentSystem
     {
-        // 鼠标射线碰撞层
-      //  private LayerMask InputMask;
-        private UserCommand userCommand = UserCommand.defaultCommand;
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
-      //  private Entity localEntity;
         private NetworkClientSystem networkClient;
+        private UserCommand userCommand = UserCommand.defaultCommand;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-       //     InputMask = 1 << LayerMask.NameToLayer("plane");
 
             EntityManager.CreateEntity(typeof(UserCommand));
-            SetSingleton(new UserCommand()
+            SetSingleton(new UserCommand
             {
                 checkTick = 0,
                 renderTick = 0,
@@ -29,13 +24,10 @@ namespace FootStone.Kitchen
             });
 
             networkClient = World.GetExistingSystem<NetworkClientSystem>();
-
         }
 
         protected override void OnUpdate()
         {
-
-
         }
 
         private void InputToCommand()
@@ -54,14 +46,13 @@ namespace FootStone.Kitchen
 
             if (userCommand.buttons.flags > 0)
                 FSLog.Info($"is set pick:{userCommand.buttons.IsSet(UserCommand.Button.Pickup)}" +
-                $",is set throw:{userCommand.buttons.IsSet(UserCommand.Button.Throw)}");
-
+                           $",is set throw:{userCommand.buttons.IsSet(UserCommand.Button.Throw)}");
         }
 
         public bool HasCommands(uint firstTick, uint lastTick)
         {
             var hasCommands = commandBuffer.FirstTick() <= firstTick &&
-                      commandBuffer.LastTick() >= lastTick;
+                              commandBuffer.LastTick() >= lastTick;
             return hasCommands;
         }
 
@@ -75,35 +66,36 @@ namespace FootStone.Kitchen
         {
             userCommand.checkTick = tick;
 
-            if(userCommand.buttons.flags > 0)
+            if (userCommand.buttons.flags > 0)
                 FSLog.Info($"StoreCommand buffer count:{userCommand.checkTick},{userCommand.buttons.flags}");
 
             var lastBufferTick = commandBuffer.LastTick();
             if (tick != lastBufferTick && tick != lastBufferTick + 1)
             {
                 commandBuffer.Clear();
-                GameDebug.Log(string.Format("Trying to store tick:{0} but last buffer tick is:{1}. Clearing buffer", tick, lastBufferTick));
+                GameDebug.Log(string.Format("Trying to store tick:{0} but last buffer tick is:{1}. Clearing buffer",
+                    tick, lastBufferTick));
             }
 
             if (tick == lastBufferTick)
-                commandBuffer.Set(ref userCommand, (int)tick);
+                commandBuffer.Set(ref userCommand, (int) tick);
             else
-                commandBuffer.Add(ref userCommand, (int)tick);
-
+                commandBuffer.Add(ref userCommand, (int) tick);
         }
 
         public void RetrieveCommand(uint tick)
         {
-            var localEntity = GetSingleton<LocalPlayer>().playerEntity;
+            var localEntity = GetSingleton<LocalPlayer>().PlayerEntity;
             if (localEntity == Entity.Null)
                 return;
 
             var userCommand = EntityManager.GetComponentData<UserCommand>(localEntity);
-         //   FSLog.Info($"current command:{userCommand.checkTick},{userCommand.buttons.flags}");
-            var found = commandBuffer.TryGetValue((int)tick, ref userCommand);
+            //   FSLog.Info($"current command:{userCommand.checkTick},{userCommand.buttons.flags}");
+            var found = commandBuffer.TryGetValue((int) tick, ref userCommand);
             GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
-         //   if(userCommand.buttons.flags> 0)
-            //    FSLog.Info($"{found},retrieve command:{tick},{userCommand.checkTick},{userCommand.buttons.flags}");
+            //   if(userCommand.buttons.flags> 0)
+           // FSLog.Info($"{found},retrieve command:{tick},{userCommand.checkTick}," +
+                     //  $"{userCommand.buttons.flags},userCommand.targetPos.x:{userCommand.targetPos.x},userCommand.targetPos.z:{userCommand.targetPos.z}");
 
             if (found)
                 EntityManager.SetComponentData(localEntity, userCommand);
@@ -112,16 +104,14 @@ namespace FootStone.Kitchen
         public void SendCommand(uint tick)
         {
             var command = UserCommand.defaultCommand;
-            var commandValid = commandBuffer.TryGetValue((int)tick, ref command);
+            var commandValid = commandBuffer.TryGetValue((int) tick, ref command);
             if (commandValid)
             {
                 if (command.buttons.flags > 0)
-                    FSLog.Info($"send command:{command.renderTick},{command.checkTick},{command.buttons.IsSet(UserCommand.Button.Pickup)}");
-              //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
-                networkClient.QueueCommand(tick, (ref NetworkWriter writer) =>
-                 {
-                     command.Serialize(ref writer);
-                 });
+                    FSLog.Info(
+                        $"send command:{command.renderTick},{command.checkTick},{command.buttons.IsSet(UserCommand.Button.Pickup)}");
+                //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
+                networkClient.QueueCommand(tick, (ref NetworkWriter writer) => { command.Serialize(ref writer); });
             }
         }
 

@@ -12,7 +12,7 @@ namespace FootStone.Kitchen
                 return;
 
             var snapshotFromServer = GetSingleton<ServerSnapshot>();
-            UIManager.Instance.UpdateRtt(snapshotFromServer.rtt);
+            UIManager.Instance.UpdateRtt(snapshotFromServer.Rtt);
           
         }
     }

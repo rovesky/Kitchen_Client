@@ -1,49 +1,47 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
 using Unity.Physics.Systems;
-using UnityEngine;
 
 namespace FootStone.Kitchen
-{  
-
+{
     [DisableAutoCreation]
     public class SetRenderTimeSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
-
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.GameTick = GetSingleton<ClientTickTime>().render;
+            worldTime.GameTick = GetSingleton<ClientTickTime>().Render;
             SetSingleton(worldTime);
         }
     }
 
-  
+
     [DisableAutoCreation]
     public class SetPredictTimeSystem : ComponentSystem
     {
         protected override void OnUpdate()
-        {            
+        {
             var worldTime = GetSingleton<WorldTime>();
-            worldTime.GameTick = GetSingleton<ClientTickTime>().predict;
+            worldTime.GameTick = GetSingleton<ClientTickTime>().Predict;
             SetSingleton(worldTime);
         }
-    }  
+    }
 
 
- //   [DisableAutoCreation]
-	[UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
-	public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
+    //   [DisableAutoCreation]
+    [UpdateAfter(typeof(ExportPhysicsWorld))]
+    [UpdateBefore(typeof(EndFramePhysicsSystem))]
+    public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
-        private NetworkClientSystem networkSystem;
+        private DespawnClientSystemGroup despawnSystemGroup;
         private HandleTimeSystem handleTimeSystem;
-        private SetRenderTimeSystem setRenderTimeSystem; 
-        private SpawnClientSystemGroup spawnSystemGroup;
-        private SetPredictTimeSystem setPredictTimeSystem;
+        private NetworkClientSystem networkSystem;
         private PredictSystem predictSystem;
         private PresentationSystemGroup presentationSystemGroup;
-        private DespawnClientSystemGroup despawnSystemGroup;
         private ReplicateEntitySystemGroup replicateEntitySystemGroup;
+        private SetPredictTimeSystem setPredictTimeSystem;
+        private SetRenderTimeSystem setRenderTimeSystem;
+        private SpawnClientSystemGroup spawnSystemGroup;
 
 
         //  private InterpolatedSystem interpolatedSystem;
@@ -51,15 +49,14 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
-        //    Application.targetFrameRate = 30;
+            //    Application.targetFrameRate = 30;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
 
-         
 
             networkSystem = World.GetOrCreateSystem<NetworkClientSystem>();
-            m_systemsToUpdate.Add(networkSystem);    
-            
+            m_systemsToUpdate.Add(networkSystem);
+
             handleTimeSystem = World.GetOrCreateSystem<HandleTimeSystem>();
             m_systemsToUpdate.Add(handleTimeSystem);
 
@@ -67,7 +64,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(replicateEntitySystemGroup);
 
             setRenderTimeSystem = World.GetOrCreateSystem<SetRenderTimeSystem>();
-            m_systemsToUpdate.Add(setRenderTimeSystem);      
+            m_systemsToUpdate.Add(setRenderTimeSystem);
 
             spawnSystemGroup = World.GetOrCreateSystem<SpawnClientSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
@@ -82,7 +79,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(presentationSystemGroup);
 
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
-            m_systemsToUpdate.Add(despawnSystemGroup);            
+            m_systemsToUpdate.Add(despawnSystemGroup);
         }
 
 
@@ -100,7 +97,7 @@ namespace FootStone.Kitchen
             replicateEntitySystemGroup.Update();
             spawnSystemGroup.Update();
 
-          //  replicateEntitySystemGroup.Interpolate();
+            //  replicateEntitySystemGroup.Interpolate();
 
             setPredictTimeSystem.Update();
 
@@ -113,8 +110,6 @@ namespace FootStone.Kitchen
             despawnSystemGroup.Update();
 
             networkSystem.SendData();
-
-
         }
     }
 }

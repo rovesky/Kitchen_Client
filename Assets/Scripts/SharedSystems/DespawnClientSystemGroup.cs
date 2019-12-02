@@ -1,7 +1,5 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
-using Unity.Physics.Systems;
-using UnityEngine;
 
 namespace FootStone.Kitchen
 {
@@ -13,5 +11,4 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<DespawnSystem>());
         }
     }
-
 }

@@ -14,7 +14,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {        
             EntityManager.CreateEntity(typeof(LocalPlayer));
-            SetSingleton(new LocalPlayer(){ playerId = -1, playerEntity = Entity.Null });        
+            SetSingleton(new LocalPlayer(){ PlayerId = -1, PlayerEntity = Entity.Null });        
 
             player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Player1") as GameObject, World.Active);
@@ -26,7 +26,7 @@ namespace FootStone.Kitchen
         {
             var localPalyer = GetSingleton<LocalPlayer>();
 
-            if (localPalyer.playerEntity != Entity.Null)
+            if (localPalyer.PlayerEntity != Entity.Null)
                 return;
             
 
@@ -67,7 +67,7 @@ namespace FootStone.Kitchen
                 //  pickupEntity = Entity.Null
             });
 
-            localPalyer.playerEntity = e;
+            localPalyer.PlayerEntity = e;
             SetSingleton(localPalyer);
 
         }

@@ -1,15 +1,11 @@
 using FootStone.ECS;
-using System;
 using Unity.Entities;
-using Unity.Mathematics;
 
 namespace FootStone.Kitchen
 {
-
     public struct ClientTickTime : IComponentData
     {
-        public GameTick predict;
-        public GameTick render;
+        public GameTick Predict;
+        public GameTick Render;
     }
-
 }
