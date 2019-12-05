@@ -1,22 +1,17 @@
 ﻿using System.Collections.Generic;
 using FootStone.ECS;
 using Unity.Entities;
-using UnityEngine;
 using UnityEngine.Profiling;
 
 namespace FootStone.Kitchen
 {
-    public enum EntityType
-    {
-        Player,
-        Plate
-    }
 
     [DisableAutoCreation]
     public class ReplicateEntitySystemGroup : NoSortComponentSystemGroup, ISnapshotConsumer
     {
         private ReplicatedEntityFactoryManager factoryManager;
         private ReplicatedEntityCollection replicatedEntities;
+        private EntityQuery sceneEntityQuery;
 
         public void ProcessEntityDespawns(int serverTick, List<int> despawns)
         {
@@ -29,7 +24,6 @@ namespace FootStone.Kitchen
                 {
                     var animEntity = EntityManager.GetComponentData<Character>(entity).PresentationEntity;
                     EntityManager.AddComponentData(animEntity, new Despawn() { Frame = 0 });
-                 
                 }
             }
         }
@@ -39,6 +33,12 @@ namespace FootStone.Kitchen
             FSLog.Info("ProcessEntitySpawns. Server tick:" + serverTick + " id:" + id + " typeid:" + typeId);
 
             Profiler.BeginSample("ReplicatedEntitySystemClient.ProcessEntitySpawns()");
+
+            //if (id < sceneEntityQuery.CalculateEntityCount())
+            //{
+               
+            //    return;
+            //}
 
             var factory = factoryManager.GetFactory(typeId);
             if (factory == null)
@@ -74,10 +74,10 @@ namespace FootStone.Kitchen
                 SetSingleton(localPlayer);
             }
 
-            if (EntityManager.HasComponent<ItemInterpolatedState>(entity))
-            {
+            //if (EntityManager.HasComponent<ItemInterpolatedState>(entity))
+            //{
 
-            }
+            //}
         }
 
         protected override void OnCreate()
@@ -88,11 +88,19 @@ namespace FootStone.Kitchen
             replicatedEntities = new ReplicatedEntityCollection(EntityManager);
             factoryManager = new ReplicatedEntityFactoryManager();
 
-            // FSLog.Error($"RegisterFactorys");
-            factoryManager.RegisterFactory((ushort) EntityType.Player, new CharacterFactory());
+         
+            factoryManager.RegisterFactory((ushort) EntityType.Character, new CharacterFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
+
+
+            sceneEntityQuery = GetEntityQuery(typeof(TriggerData));
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
         }
 
         protected override void OnUpdate()

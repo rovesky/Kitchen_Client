@@ -44,9 +44,6 @@ namespace FootStone.Kitchen
         private SetRenderTimeSystem setRenderTimeSystem;
         private SpawnClientSystemGroup spawnSystemGroup;
 
-
-        //  private InterpolatedSystem interpolatedSystem;
-        //  private ItemInterpolatedSystem<ItemInterpolatedState> itemInterpolatedSystem;
         protected override void OnCreate()
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
@@ -96,9 +93,8 @@ namespace FootStone.Kitchen
             setRenderTimeSystem.Update();
 
             replicateEntitySystemGroup.Update();
-            spawnSystemGroup.Update();
 
-            //  replicateEntitySystemGroup.Interpolate();
+            spawnSystemGroup.Update();
 
             setPredictTimeSystem.Update();
 
