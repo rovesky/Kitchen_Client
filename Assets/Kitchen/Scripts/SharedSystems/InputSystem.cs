@@ -9,19 +9,14 @@ namespace FootStone.Kitchen
     {
         private TickStateDenseBuffer<UserCommand> commandBuffer = new TickStateDenseBuffer<UserCommand>(128);
         private NetworkClientSystem networkClient;
-        private UserCommand userCommand = UserCommand.defaultCommand;
+        private UserCommand userCommand = UserCommand.DefaultCommand;
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
             EntityManager.CreateEntity(typeof(UserCommand));
-            SetSingleton(new UserCommand
-            {
-                checkTick = 0,
-                renderTick = 0,
-                targetPos = Vector3.zero
-            });
+            SetSingleton(UserCommand.DefaultCommand);
 
             networkClient = World.GetExistingSystem<NetworkClientSystem>();
         }
@@ -36,10 +31,10 @@ namespace FootStone.Kitchen
             var h = ETCInput.GetAxis("Horizontal"); /*检测水平方向键*/
 
             var v3 = new Vector3(h, 0, v);
-            userCommand.targetPos = Vector3.SqrMagnitude(v3) < 0.00001f ? Vector3.zero : v3.normalized;
+            userCommand.TargetDir = Vector3.SqrMagnitude(v3) < 0.00001f ? Vector3.zero : v3.normalized;
 
-            userCommand.buttons.Set(UserCommand.Button.Pickup, UIInput.GetButtonClick("pickup"));
-            userCommand.buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
+            userCommand.Buttons.Set(UserCommand.Button.Pickup, UIInput.GetButtonClick("pickup"));
+            userCommand.Buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
 
         //    if (userCommand.buttons.flags > 0)
         //        FSLog.Info($"is set pick:{userCommand.buttons.IsSet(UserCommand.Button.Pickup)}" +
@@ -56,12 +51,12 @@ namespace FootStone.Kitchen
         public void SampleInput(uint renderTick)
         {
             InputToCommand();
-            userCommand.renderTick = renderTick;
+            userCommand.RenderTick = renderTick;
         }
 
         public void StoreCommand(uint tick)
         {
-            userCommand.checkTick = tick;
+            userCommand.CheckTick = tick;
 
             var lastBufferTick = commandBuffer.LastTick();
             if (tick != lastBufferTick && tick != lastBufferTick + 1)
@@ -103,18 +98,18 @@ namespace FootStone.Kitchen
             //               $"{command.buttons.flags},userCommand.targetPos.x:{command.targetPos.x},userCommand.targetPos.z:{command.targetPos.z}");
 
             GameDebug.Assert(found, "Failed to find command for tick:{0}", tick);
-            EntityManager.SetComponentData(localEntity, found ? command : UserCommand.defaultCommand);
+            EntityManager.SetComponentData(localEntity, found ? command : UserCommand.DefaultCommand);
         }
 
         public void SendCommand(uint tick)
         {
-            var command = UserCommand.defaultCommand;
+            var command = UserCommand.DefaultCommand;
             var commandValid = commandBuffer.TryGetValue((int) tick, ref command);
             if (commandValid)
             {
-                if (command.buttons.flags > 0)
+                if (command.Buttons.Flags > 0)
                     FSLog.Info(
-                        $"send command:{command.renderTick},{command.checkTick},{command.buttons.IsSet(UserCommand.Button.Pickup)}");
+                        $"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
                 //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
                 networkClient.QueueCommand(tick, (ref NetworkWriter writer) => { command.Serialize(ref writer); });
             }
