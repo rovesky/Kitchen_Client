@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FootStone.ECS;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.Profiling;
 
@@ -12,6 +14,7 @@ namespace FootStone.Kitchen
         private ReplicatedEntityFactoryManager factoryManager;
         private ReplicatedEntityCollection replicatedEntities;
         private EntityQuery sceneEntityQuery;
+        private WorldSceneEntitiesSystem worldSceneEntitiesSystem;
 
         public void ProcessEntityDespawns(int serverTick, List<int> despawns)
         {
@@ -34,11 +37,11 @@ namespace FootStone.Kitchen
 
             Profiler.BeginSample("ReplicatedEntitySystemClient.ProcessEntitySpawns()");
 
-            //if (id < sceneEntityQuery.CalculateEntityCount())
-            //{
-               
-            //    return;
-            //}
+            if (id < worldSceneEntitiesSystem.SceneEntities.Count)
+            {
+                replicatedEntities.Register(id, worldSceneEntitiesSystem.SceneEntities[id]);
+                return;
+            }
 
             var factory = factoryManager.GetFactory(typeId);
             if (factory == null)
@@ -94,8 +97,8 @@ namespace FootStone.Kitchen
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
 
-
-            sceneEntityQuery = GetEntityQuery(typeof(TriggerData));
+            worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();
+         
         }
 
         protected override void OnDestroy()

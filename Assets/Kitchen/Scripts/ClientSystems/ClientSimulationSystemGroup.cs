@@ -43,6 +43,7 @@ namespace FootStone.Kitchen
         private SetPredictTimeSystem setPredictTimeSystem;
         private SetRenderTimeSystem setRenderTimeSystem;
         private SpawnClientSystemGroup spawnSystemGroup;
+        private WorldSceneEntitiesSystem worldSceneEntitiesSystem;
 
         protected override void OnCreate()
         {
@@ -51,10 +52,13 @@ namespace FootStone.Kitchen
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
 
+            worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();
+            m_systemsToUpdate.Add(worldSceneEntitiesSystem);
 
             networkSystem = World.GetOrCreateSystem<NetworkClientSystem>();
             m_systemsToUpdate.Add(networkSystem);
 
+          
             handleTimeSystem = World.GetOrCreateSystem<HandleTimeSystem>();
             m_systemsToUpdate.Add(handleTimeSystem);
 
@@ -83,6 +87,7 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
+            worldSceneEntitiesSystem.Update();
             networkSystem.Update();
 
             if (!networkSystem.IsConnected)
