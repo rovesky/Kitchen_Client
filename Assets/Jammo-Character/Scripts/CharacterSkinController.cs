@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using FootStone.ECS;
 using UnityEngine;
 
 public class CharacterSkinController : MonoBehaviour
@@ -12,13 +13,16 @@ public class CharacterSkinController : MonoBehaviour
     public Color[] eyeColors;
     public enum EyePosition { normal, happy, angry, dead}
     public EyePosition eyeState;
+    private int lastIndex;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         characterMaterials = GetComponentsInChildren<Renderer>();
-        
+
+        FSLog.Info($"characterMaterials:{characterMaterials.Length}");
+
     }
 
     // Update is called once per frame
@@ -57,15 +61,24 @@ public class CharacterSkinController : MonoBehaviour
         animator.SetTrigger(trigger);
     }
 
-    void ChangeMaterialSettings(int index)
+    public void ChangeMaterialSettings(int index)
     {
+        if (lastIndex == index)
+            return;
+
+        if (characterMaterials == null)
+            characterMaterials = GetComponentsInChildren<Renderer>();
+
+        FSLog.Info($"ChangeMaterialSettings:{characterMaterials.Length},{index}");
         for (int i = 0; i < characterMaterials.Length; i++)
         {
             if (characterMaterials[i].transform.CompareTag("PlayerEyes"))
                 characterMaterials[i].material.SetColor("_EmissionColor", eyeColors[index]);
             else
-                characterMaterials[i].material.SetTexture("_MainTex",albedoList[index]);
+                characterMaterials[i].material.SetTexture("_MainTex", albedoList[index]);
         }
+
+        lastIndex = index;
     }
 
     void ChangeEyeOffset(EyePosition pos)
