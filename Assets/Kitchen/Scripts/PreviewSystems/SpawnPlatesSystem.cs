@@ -1,4 +1,5 @@
 ﻿using FootStone.ECS;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace FootStone.Kitchen
             base.OnCreate();
 
            platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-           Resources.Load("Plate") as GameObject, World.Active);
+           Resources.Load("Apple") as GameObject, World.Active);
 
         }
 
@@ -27,20 +28,54 @@ namespace FootStone.Kitchen
 
             isSpawned = true;
 
-            var e = EntityManager.Instantiate(platePrefab);
-            Translation position = new Translation() { Value = { x = -4, y = 1, z = -1 } };
-            Rotation rotation = new Rotation() { Value = Quaternion.identity };
+            var query = GetEntityQuery(typeof(TriggerData));
+            var entities = query.ToEntityArray(Allocator.TempJob);
 
-            EntityManager.SetComponentData(e, position);
 
-            EntityManager.AddComponentData(e, new Plate());
-
-            EntityManager.AddComponentData(e, new ItemInterpolatedState()
+            //生成Plate
+            for (var i = 0; i < 3; ++i)
             {
-                Position = position.Value,
-                Rotation = rotation.Value
+                var entity = entities[i * 2];
+                var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
+                var triggerData = EntityManager.GetComponentData<TriggerData>(entity);
+                //  var pos = EntityManager.GetComponentData<LocalToWorld>(slot.SlotPos);
 
-            });
+                var e = EntityManager.Instantiate(platePrefab);
+                var position = new Translation { Value = triggerData.SlotPos };
+                var rotation = new Rotation { Value = Quaternion.identity };
+
+                EntityManager.SetComponentData(e, position);
+                EntityManager.SetComponentData(e, rotation);
+
+                EntityManager.AddComponentData(e, new ReplicatedEntityData()
+                {
+                    Id = 0,
+                    PredictingPlayerId = 0
+                });
+
+                EntityManager.AddComponentData(e, new Plate());
+
+                slot.FilledInEntity = e;
+                EntityManager.SetComponentData(entity, slot);
+
+                EntityManager.AddComponentData(e, new ItemInterpolatedState
+                {
+                    Position = position.Value,
+                    Rotation = Quaternion.identity,
+                    Owner = Entity.Null
+                });
+
+
+                EntityManager.AddComponentData(e, new ItemPredictedState
+                {
+                    Position = position.Value,
+                    Rotation = Quaternion.identity,
+                    Owner = Entity.Null
+                });
+
+            }
+
+            entities.Dispose();
 
         }      
     }

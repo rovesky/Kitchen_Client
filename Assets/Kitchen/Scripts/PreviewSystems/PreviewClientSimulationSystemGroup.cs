@@ -1,5 +1,4 @@
-﻿using System;
-using FootStone.ECS;
+﻿using FootStone.ECS;
 using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace FootStone.Kitchen
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private GameTick gameTime = GameTick.DefaultGameTick;
-        private double nextTickTime = 0;
+        private double nextTickTime ;
 
         private SpawnPreviewClientSystem spawnSystemGroup; 
         private PredictUpdateSystemGroup predictUpdateSystem;
@@ -20,7 +19,7 @@ namespace FootStone.Kitchen
         private DespawnClientSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
         private SpawnPlatesSystem spawnPlatesSystem;
-        private ThrowSystem throwSystem;
+        private UpdateReplicatedOwnerFlag updateReplicatedOwnerFlag;
 
         protected override void OnCreate()
         {
@@ -36,13 +35,13 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(spawnSystemGroup);
 
             spawnPlatesSystem = World.GetOrCreateSystem<SpawnPlatesSystem>();
-            m_systemsToUpdate.Add(spawnPlatesSystem);            
+            m_systemsToUpdate.Add(spawnPlatesSystem);
+
+            updateReplicatedOwnerFlag = World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>();
+            m_systemsToUpdate.Add(updateReplicatedOwnerFlag);
 
             predictUpdateSystem = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             m_systemsToUpdate.Add(predictUpdateSystem);
-
-        //    throwSystem = World.GetOrCreateSystem<ThrowSystem>();
-       //     m_systemsToUpdate.Add(throwSystem);
 
             presentationSystemGroup = World.GetOrCreateSystem<PresentationSystemGroup>();
             m_systemsToUpdate.Add(presentationSystemGroup);
@@ -80,6 +79,8 @@ namespace FootStone.Kitchen
             spawnSystemGroup.Update();
 
             spawnPlatesSystem.Update();
+
+            updateReplicatedOwnerFlag.Update();
 
             inputSystem.RetrieveCommand(worldTime.Tick);     
             

@@ -76,11 +76,6 @@ namespace FootStone.Kitchen
                 localPlayer.PlayerEntity = entity;
                 SetSingleton(localPlayer);
             }
-
-            //if (EntityManager.HasComponent<ItemInterpolatedState>(entity))
-            //{
-
-            //}
         }
 
         protected override void OnCreate()
@@ -101,10 +96,7 @@ namespace FootStone.Kitchen
          
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
+    
 
         protected override void OnUpdate()
         {
