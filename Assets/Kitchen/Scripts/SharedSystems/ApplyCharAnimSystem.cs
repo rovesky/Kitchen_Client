@@ -21,7 +21,7 @@ namespace FootStone.Kitchen
                 presentPos.rotation = state.Rotation;
 
                 var anim = EntityManager.GetComponentObject<Animator>(character.PresentationEntity);
-                anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f, Time.deltaTime);
+                anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f, Time.DeltaTime);
 
                 var skinController =
                     EntityManager.GetComponentObject<CharacterSkinController>(character.PresentationEntity);

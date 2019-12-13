@@ -64,7 +64,12 @@ namespace FootStone.Kitchen
         protected override void OnUpdate()
         {
             if (network.connectionState == NetworkClient.ConnectionState.Disconnected)
+            {
+                FSLog.Info("network.Connect4");
                 network.Connect("58.247.94.202");
+            }
+            //   if (!network.isConnected)
+
             // network.Connect("211.75.33.162");             
             //  network.Connect("192.168.0.128");
 

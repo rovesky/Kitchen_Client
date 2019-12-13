@@ -17,7 +17,10 @@ namespace FootStone.Kitchen
             base.OnCreate();
 
            platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-           Resources.Load("Apple") as GameObject, World.Active);
+               Resources.Load("Apple") as GameObject,
+               GameObjectConversionSettings.FromWorld(World,
+                   World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
+
 
         }
 

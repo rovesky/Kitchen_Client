@@ -15,8 +15,12 @@ namespace FootStone.Kitchen
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world)
         {
+
             var platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Plate") as GameObject, World.Active);
+                Resources.Load("Plate") as GameObject,
+                GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
+                    World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
+
 
             var e = entityManager.Instantiate(platePrefab);
 

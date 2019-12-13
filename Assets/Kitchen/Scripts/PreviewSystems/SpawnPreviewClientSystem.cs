@@ -7,16 +7,18 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class SpawnPreviewClientSystem : ComponentSystem
     {
-        private Entity player;
+        private GameObject playerObj;
+
+        //private Entity player;
 
         protected override void OnCreate()
         {
             EntityManager.CreateEntity(typeof(LocalPlayer));
             SetSingleton(new LocalPlayer {PlayerId = -1, PlayerEntity = Entity.Null});
 
-            player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Player2") as GameObject, World.Active);
-
+            //player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+            //    Resources.Load("Player2") as GameObject, World.Active);
+            playerObj = Object.Instantiate(Resources.Load("Player3") as GameObject);
             FSLog.Info(" spwan entity OnCreate2");
         }
 
@@ -26,8 +28,8 @@ namespace FootStone.Kitchen
             if (localPalyer.PlayerEntity != Entity.Null)
                 return;
 
-            var go = Object.Instantiate(Resources.Load("Player3") as GameObject);
-            var e = go.GetComponent<EntityTracker>().EntityToTrack;
+           
+            var e = playerObj.GetComponent<EntityTracker>().EntityToTrack;
             //  var e = EntityManager.Instantiate(player);
 
             var position = new Vector3 {x = 0, y = 1, z = -5};
@@ -37,7 +39,13 @@ namespace FootStone.Kitchen
 
             EntityManager.SetComponentData(e, new Character
             {
-                PresentationEntity = go.GetComponentInChildren<GameObjectEntity>().Entity
+                PresentationEntity = playerObj.GetComponentInChildren<GameObjectEntity>().Entity
+            });
+
+            EntityManager.SetComponentData(e, new ReplicatedEntityData
+            {
+                Id = 0,
+                PredictingPlayerId = -1
             });
 
             EntityManager.AddComponentData(e, new ServerEntity());
