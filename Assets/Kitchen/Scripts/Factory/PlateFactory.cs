@@ -1,5 +1,7 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace FootStone.Kitchen
@@ -10,7 +12,7 @@ namespace FootStone.Kitchen
 
         public PlateFactory()
         {
-             platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+            platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Plate") as GameObject,
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
@@ -20,10 +22,10 @@ namespace FootStone.Kitchen
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world)
         {
-        
-
             var e = entityManager.Instantiate(platePrefab);
 
+            var position = new Translation() {Value = new float3() {x = 0.0f, y = -10f, z = 0.0f}};
+            entityManager.SetComponentData(e, position);
             entityManager.AddComponentData(e, new ReplicatedEntityData
             {
                 Id = -1,
@@ -33,14 +35,14 @@ namespace FootStone.Kitchen
             entityManager.AddComponentData(e, new Plate());
             entityManager.AddComponentData(e, new ItemInterpolatedState
             {
-                Position = Vector3.zero,
+                Position = position.Value,
                 Rotation = Quaternion.identity,
                 Owner = Entity.Null
             });
 
             entityManager.AddComponentData(e, new ItemPredictedState
             {
-                Position = Vector3.zero,
+                Position = position.Value,
                 Rotation = Quaternion.identity,
                 Owner = Entity.Null
             });

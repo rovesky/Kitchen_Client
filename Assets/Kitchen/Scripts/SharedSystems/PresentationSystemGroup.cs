@@ -15,7 +15,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCharPresentationSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyItemPresentationSystem>());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCharAnimSystem>());
+           // m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCharAnimSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateUISystem>());
         }
     }

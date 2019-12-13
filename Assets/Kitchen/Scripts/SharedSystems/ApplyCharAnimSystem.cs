@@ -1,21 +1,26 @@
 ﻿using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace FootStone.Kitchen
 {
-    [DisableAutoCreation]
+   // [DisableAutoCreation]
+    [UpdateInGroup(typeof(Unity.Entities.PresentationSystemGroup))]
     public class ApplyCharAnimSystem : ComponentSystem
     {
         protected override void OnUpdate()
         {
             Entities.ForEach((Entity entity,
                 ref CharacterInterpolatedState state,
-                ref Character character) =>
+                ref Character character,
+                ref LocalToWorld localToWorld) =>
             {
+                if(character.PresentationEntity == Entity.Null)
+                    return;
                 //显示动作
                 var presentPos = EntityManager.GetComponentObject<Transform>(character.PresentationEntity);
-                // var oy = presentPos.position.y;
-                var cPos = state.Position;
+             //   var oy = presentPos.position.y;
+                var cPos = localToWorld.Position;
                 cPos.y = 0;
                 presentPos.position = cPos;
                 presentPos.rotation = state.Rotation;

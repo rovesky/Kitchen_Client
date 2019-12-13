@@ -11,6 +11,7 @@ namespace FootStone.Kitchen
         public CharacterFactory()
         {
              playerObj = Instantiate(Resources.Load("Player3") as GameObject);
+             playerObj.transform.position = new Vector3(0, -10, 9);
         }
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world)
@@ -20,10 +21,11 @@ namespace FootStone.Kitchen
 
             //var e = entityManager.Instantiate(playerPrefab);
             //entityManager.AddComponentData(e, new Character());
-         
+           // playerObj.SetActive(true);
             var e = playerObj.GetComponent<EntityTracker>().EntityToTrack;
 
-            CreateEntityUtilities.CreateCharacterComponent(entityManager, e, Vector3.zero, Quaternion.identity);
+            var pos = new Vector3(0, -10, 9);
+            CreateEntityUtilities.CreateCharacterComponent(entityManager, e, pos, Quaternion.identity);
 
             entityManager.SetComponentData(e, new Character
             {
