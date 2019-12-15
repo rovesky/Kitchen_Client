@@ -1,6 +1,5 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
-using Unity.Transforms;
 using UnityEngine;
 
 namespace FootStone.Kitchen

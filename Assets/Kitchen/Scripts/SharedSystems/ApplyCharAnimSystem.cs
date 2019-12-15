@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace FootStone.Kitchen
 {
-   // [DisableAutoCreation]
-    [UpdateInGroup(typeof(Unity.Entities.PresentationSystemGroup))]
+    [DisableAutoCreation]
     public class ApplyCharAnimSystem : ComponentSystem
     {
         protected override void OnUpdate()

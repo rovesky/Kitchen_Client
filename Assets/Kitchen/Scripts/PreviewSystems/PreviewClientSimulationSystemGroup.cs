@@ -15,7 +15,7 @@ namespace FootStone.Kitchen
 
         private SpawnPreviewClientSystem spawnSystemGroup; 
         private PredictUpdateSystemGroup predictUpdateSystem;
-        private PresentationSystemGroup presentationSystemGroup;
+        private PredictPresentationSystemGroup latePresentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
         private SpawnPlatesSystem spawnPlatesSystem;
@@ -43,8 +43,8 @@ namespace FootStone.Kitchen
             predictUpdateSystem = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             m_systemsToUpdate.Add(predictUpdateSystem);
 
-            presentationSystemGroup = World.GetOrCreateSystem<PresentationSystemGroup>();
-            m_systemsToUpdate.Add(presentationSystemGroup);
+            latePresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
+            m_systemsToUpdate.Add(latePresentationSystemGroup);
 
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
@@ -88,7 +88,7 @@ namespace FootStone.Kitchen
 
          //   throwSystem.Update();
 
-            presentationSystemGroup.Update();
+            latePresentationSystemGroup.Update();
 
             despawnSystemGroup.Update();
 

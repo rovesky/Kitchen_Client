@@ -6,9 +6,7 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class PredictSystem : ComponentSystem
     {
-       // private TickStateDenseBuffer<CharacterPredictedState> commandBuffer =
-           // new TickStateDenseBuffer<CharacterPredictedState>(128);
-
+    
         private InputSystem inputSystem;
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
         private ReplicateEntitySystemGroup replicateEntitySystemGroup;

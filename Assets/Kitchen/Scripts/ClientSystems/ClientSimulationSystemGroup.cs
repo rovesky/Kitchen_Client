@@ -38,12 +38,12 @@ namespace FootStone.Kitchen
         private HandleTimeSystem handleTimeSystem;
         private NetworkClientSystem networkSystem;
         private PredictSystem predictSystem;
-        private PresentationSystemGroup presentationSystemGroup;
+      //  private LatePresentationSystemGroup latePresentationSystemGroup;
         private ReplicateEntitySystemGroup replicateEntitySystemGroup;
         private SetPredictTimeSystem setPredictTimeSystem;
         private SetRenderTimeSystem setRenderTimeSystem;
-        private SpawnClientSystemGroup spawnSystemGroup;
         private WorldSceneEntitiesSystem worldSceneEntitiesSystem;
+        private PredictPresentationSystemGroup predictPresentationSystemGroup;
 
         protected override void OnCreate()
         {
@@ -62,14 +62,12 @@ namespace FootStone.Kitchen
             handleTimeSystem = World.GetOrCreateSystem<HandleTimeSystem>();
             m_systemsToUpdate.Add(handleTimeSystem);
 
-            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
-            m_systemsToUpdate.Add(replicateEntitySystemGroup);
-
             setRenderTimeSystem = World.GetOrCreateSystem<SetRenderTimeSystem>();
             m_systemsToUpdate.Add(setRenderTimeSystem);
 
-            spawnSystemGroup = World.GetOrCreateSystem<SpawnClientSystemGroup>();
-            m_systemsToUpdate.Add(spawnSystemGroup);
+            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
+            m_systemsToUpdate.Add(replicateEntitySystemGroup);
+    
 
             setPredictTimeSystem = World.GetOrCreateSystem<SetPredictTimeSystem>();
             m_systemsToUpdate.Add(setPredictTimeSystem);
@@ -77,8 +75,11 @@ namespace FootStone.Kitchen
             predictSystem = World.GetOrCreateSystem<PredictSystem>();
             m_systemsToUpdate.Add(predictSystem);
 
-            presentationSystemGroup = World.GetOrCreateSystem<PresentationSystemGroup>();
-            m_systemsToUpdate.Add(presentationSystemGroup);
+            predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
+            m_systemsToUpdate.Add(predictPresentationSystemGroup);
+
+          //  latePresentationSystemGroup = World.GetOrCreateSystem<LatePresentationSystemGroup>();
+          //  m_systemsToUpdate.Add(latePresentationSystemGroup);
 
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
@@ -99,13 +100,11 @@ namespace FootStone.Kitchen
 
             replicateEntitySystemGroup.Update();
 
-            spawnSystemGroup.Update();
-
             setPredictTimeSystem.Update();
 
             predictSystem.Update();
 
-            presentationSystemGroup.Update();
+            predictPresentationSystemGroup.Update();
 
             setRenderTimeSystem.Update();
 

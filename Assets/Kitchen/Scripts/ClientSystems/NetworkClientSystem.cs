@@ -65,13 +65,11 @@ namespace FootStone.Kitchen
         {
             if (network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
-                FSLog.Info("network.Connect4");
-                network.Connect("58.247.94.202");
+                var ip = "58.247.94.202";
+                FSLog.Info($"network.Connect:{ip}");
+                network.Connect(ip);
             }
-            //   if (!network.isConnected)
-
-            // network.Connect("211.75.33.162");             
-            //  network.Connect("192.168.0.128");
+        
 
             network.Update(this, replicateEntitySystemGroup);
 
