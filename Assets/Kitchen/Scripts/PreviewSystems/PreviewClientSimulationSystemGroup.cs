@@ -1,6 +1,7 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace FootStone.Kitchen
@@ -15,7 +16,7 @@ namespace FootStone.Kitchen
 
         private SpawnPreviewClientSystem spawnSystemGroup; 
         private PredictUpdateSystemGroup predictUpdateSystem;
-        private PredictPresentationSystemGroup latePresentationSystemGroup;
+        private PredictPresentationSystemGroup predictPresentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
         private SpawnPlatesSystem spawnPlatesSystem;
@@ -24,7 +25,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             FSLog.Info("PreviewClientSimulationSystemGroup OnCreate");
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 30;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
 
@@ -43,8 +44,8 @@ namespace FootStone.Kitchen
             predictUpdateSystem = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             m_systemsToUpdate.Add(predictUpdateSystem);
 
-            latePresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
-            m_systemsToUpdate.Add(latePresentationSystemGroup);
+            predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
+            m_systemsToUpdate.Add(predictPresentationSystemGroup);
 
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
@@ -86,9 +87,7 @@ namespace FootStone.Kitchen
             
             predictUpdateSystem.Update();
 
-         //   throwSystem.Update();
-
-            latePresentationSystemGroup.Update();
+            predictPresentationSystemGroup.Update();
 
             despawnSystemGroup.Update();
 

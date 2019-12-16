@@ -29,7 +29,7 @@ namespace FootStone.Kitchen
     }
 
 
-   // [DisableAutoCreation]
+    //[DisableAutoCreation]
     [UpdateAfter(typeof(ExportPhysicsWorld))]
     [UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
@@ -38,7 +38,6 @@ namespace FootStone.Kitchen
         private HandleTimeSystem handleTimeSystem;
         private NetworkClientSystem networkSystem;
         private PredictSystem predictSystem;
-      //  private LatePresentationSystemGroup latePresentationSystemGroup;
         private ReplicateEntitySystemGroup replicateEntitySystemGroup;
         private SetPredictTimeSystem setPredictTimeSystem;
         private SetRenderTimeSystem setRenderTimeSystem;
@@ -77,10 +76,7 @@ namespace FootStone.Kitchen
 
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
-
-          //  latePresentationSystemGroup = World.GetOrCreateSystem<LatePresentationSystemGroup>();
-          //  m_systemsToUpdate.Add(latePresentationSystemGroup);
-
+        
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
         }

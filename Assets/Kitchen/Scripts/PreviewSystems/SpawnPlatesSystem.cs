@@ -1,6 +1,7 @@
 ﻿using FootStone.ECS;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ namespace FootStone.Kitchen
 
 
             //生成Plate
-            for (var i = 0; i < 3; ++i)
+            for (var i = 0; i < 1; ++i)
             {
                 var entity = entities[i * 2];
                 var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
@@ -61,6 +62,8 @@ namespace FootStone.Kitchen
                 slot.FilledInEntity = e;
                 EntityManager.SetComponentData(entity, slot);
 
+                var mass = EntityManager.GetComponentData<PhysicsMass>(e);
+
                 EntityManager.AddComponentData(e, new ItemInterpolatedState
                 {
                     Position = position.Value,
@@ -72,10 +75,12 @@ namespace FootStone.Kitchen
                 EntityManager.AddComponentData(e, new ItemPredictedState
                 {
                     Position = position.Value,
+                    Mass =  mass,
                     Rotation = Quaternion.identity,
                     Owner = Entity.Null
                 });
 
+                EntityManager.RemoveComponent<PhysicsMass>(e);
             }
 
             entities.Dispose();

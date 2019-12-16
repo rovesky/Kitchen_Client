@@ -20,7 +20,7 @@ namespace FootStone.Kitchen
                 var presentPos = EntityManager.GetComponentObject<Transform>(character.PresentationEntity);
              //   var oy = presentPos.position.y;
                 var cPos = localToWorld.Position;
-                cPos.y = 0;
+                cPos.y = cPos.y - 1.2f;
                 presentPos.position = cPos;
                 presentPos.rotation = state.Rotation;
 
