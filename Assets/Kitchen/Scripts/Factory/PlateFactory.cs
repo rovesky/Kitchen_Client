@@ -1,6 +1,7 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -40,12 +41,17 @@ namespace FootStone.Kitchen
                 Owner = Entity.Null
             });
 
+            var mass = entityManager.GetComponentData<PhysicsMass>(e);
+
             entityManager.AddComponentData(e, new ItemPredictedState
             {
                 Position = position.Value,
                 Rotation = Quaternion.identity,
+                Mass =  mass,
                 Owner = Entity.Null
             });
+          
+            entityManager.RemoveComponent<PhysicsMass>(e);
 
             return e;
         }

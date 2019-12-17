@@ -45,7 +45,7 @@ namespace FootStone.Kitchen
             clientTickTime.Predict.AddDuration(deltaPredictedTime);
 
             // Adjust time to be synchronized with server
-            uint preferredBufferedCommandCount = 3;
+            uint preferredBufferedCommandCount = 2;
 
             //    long time = worldTimeSystem.GetCurrentTime() - snapshot.time;
             //   FSLog.Info($"rtt:{snapshot.rtt},time:{snapshot.time} ");
