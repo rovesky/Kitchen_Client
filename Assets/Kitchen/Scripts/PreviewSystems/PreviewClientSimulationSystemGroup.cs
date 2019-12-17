@@ -26,6 +26,7 @@ namespace FootStone.Kitchen
         {
             FSLog.Info("PreviewClientSimulationSystemGroup OnCreate");
             Application.targetFrameRate = 30;
+            UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
 

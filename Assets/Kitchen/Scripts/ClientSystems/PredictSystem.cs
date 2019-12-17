@@ -10,14 +10,14 @@ namespace FootStone.Kitchen
         private InputSystem inputSystem;
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
         private ReplicateEntitySystemGroup replicateEntitySystemGroup;
-        private UpdateItemParentSystem updateItemParentSystem;
+        private PredictRollbackStateSystemGroup predictRollbackStateSystemGroup;
 
         protected override void OnCreate()
         {
             predictUpdateSystemGroup = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
 
-            updateItemParentSystem = World.GetOrCreateSystem<UpdateItemParentSystem>();
+            predictRollbackStateSystemGroup = World.GetOrCreateSystem<PredictRollbackStateSystemGroup>();
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
         }
@@ -71,7 +71,7 @@ namespace FootStone.Kitchen
             var worldTime = GetSingleton<WorldTime>();
           //  FSLog.Info($"PredictionRollback:{worldTime.Tick}");
             replicateEntitySystemGroup.Rollback();
-            updateItemParentSystem.Update();
+            predictRollbackStateSystemGroup.Update();
         }
 
 
