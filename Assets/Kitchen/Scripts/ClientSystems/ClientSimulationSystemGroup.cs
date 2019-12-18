@@ -29,7 +29,7 @@ namespace FootStone.Kitchen
     }
 
 
-    //[DisableAutoCreation]
+   // [DisableAutoCreation]
     [UpdateAfter(typeof(ExportPhysicsWorld))]
     [UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
@@ -48,8 +48,10 @@ namespace FootStone.Kitchen
         {
             FSLog.Info("KitchenClientSimulationSystemGroup OnCreate");
             Application.targetFrameRate = 30;
+       
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
+            UnityEngine.Time.fixedDeltaTime = GameTick.DefaultGameTick.TickInterval;
 
             worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();
             m_systemsToUpdate.Add(worldSceneEntitiesSystem);

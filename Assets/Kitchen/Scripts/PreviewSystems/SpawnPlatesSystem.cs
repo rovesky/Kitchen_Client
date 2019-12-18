@@ -1,6 +1,7 @@
 ﻿using FootStone.ECS;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
@@ -75,8 +76,10 @@ namespace FootStone.Kitchen
                 EntityManager.AddComponentData(e, new ItemPredictedState
                 {
                     Position = position.Value,
-                    Mass =  mass,
+                //    Mass =  mass,
                     Rotation = Quaternion.identity,
+                    LinearVelocity = float3.zero,
+
                     Owner = Entity.Null
                 });
 

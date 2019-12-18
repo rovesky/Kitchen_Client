@@ -47,7 +47,7 @@ namespace FootStone.Kitchen
             {
                 Position = position.Value,
                 Rotation = Quaternion.identity,
-                Mass =  mass,
+            //    Mass =  mass,
                 Owner = Entity.Null
             });
           
