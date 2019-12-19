@@ -43,10 +43,14 @@ namespace FootStone.Kitchen
                 var entity = entities[i * 2];
                 var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
                 var triggerData = EntityManager.GetComponentData<TriggerData>(entity);
-        
+
                 var e = EntityManager.Instantiate(platePrefab);
-                var position = new Translation { Value = triggerData.SlotPos };
-                var rotation = new Rotation { Value = Quaternion.identity };
+                
+                if (EntityManager.HasComponent<PhysicsVelocity>(e))
+                    EntityManager.RemoveComponent<PhysicsVelocity>(e);
+
+                var position = new Translation {Value = triggerData.SlotPos};
+                var rotation = new Rotation {Value = Quaternion.identity};
 
                 EntityManager.SetComponentData(e, position);
                 EntityManager.SetComponentData(e, rotation);
@@ -61,9 +65,7 @@ namespace FootStone.Kitchen
 
                 slot.FilledInEntity = e;
                 EntityManager.SetComponentData(entity, slot);
-
-                var mass = EntityManager.GetComponentData<PhysicsMass>(e);
-
+            
                 EntityManager.AddComponentData(e, new ItemInterpolatedState
                 {
                     Position = position.Value,
@@ -77,8 +79,6 @@ namespace FootStone.Kitchen
                 {
                     Owner = Entity.Null
                 });
-
-                EntityManager.RemoveComponent<PhysicsMass>(e);
             }
 
             entities.Dispose();

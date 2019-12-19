@@ -50,7 +50,7 @@ namespace FootStone.Kitchen
                 Owner = Entity.Null
             });
           
-            entityManager.RemoveComponent<PhysicsMass>(e);
+           // entityManager.RemoveComponent<PhysicsMass>(e);
 
             return e;
         }
