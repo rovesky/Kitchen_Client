@@ -35,7 +35,7 @@ namespace FootStone.Kitchen
 
             userCommand.Buttons.Set(UserCommand.Button.Pickup, UIInput.GetButtonClick("pickup"));
             userCommand.Buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
-            userCommand.Buttons.Set(UserCommand.Button.Jump, Input.GetKey(KeyCode.Space));
+            userCommand.Buttons.Set(UserCommand.Button.Jump, Input.GetKey(KeyCode.J));
 
             //    if (userCommand.buttons.flags > 0)
             //        FSLog.Info($"is set pick:{userCommand.buttons.IsSet(UserCommand.Button.Pickup)}" +

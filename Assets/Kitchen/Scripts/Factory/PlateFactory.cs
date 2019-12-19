@@ -43,11 +43,10 @@ namespace FootStone.Kitchen
 
             var mass = entityManager.GetComponentData<PhysicsMass>(e);
 
+            entityManager.AddComponentData(e, new EntityPredictedState());
+
             entityManager.AddComponentData(e, new ItemPredictedState
             {
-                Position = position.Value,
-                Rotation = Quaternion.identity,
-            //    Mass =  mass,
                 Owner = Entity.Null
             });
           
