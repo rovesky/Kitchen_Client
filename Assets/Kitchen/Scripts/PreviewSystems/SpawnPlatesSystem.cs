@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace FootStone.Kitchen
 {
@@ -45,10 +46,7 @@ namespace FootStone.Kitchen
                 var triggerData = EntityManager.GetComponentData<TriggerData>(entity);
 
                 var e = EntityManager.Instantiate(platePrefab);
-                
-                if (EntityManager.HasComponent<PhysicsVelocity>(e))
-                    EntityManager.RemoveComponent<PhysicsVelocity>(e);
-
+               
                 var position = new Translation {Value = triggerData.SlotPos};
                 var rotation = new Rotation {Value = Quaternion.identity};
 
@@ -73,12 +71,32 @@ namespace FootStone.Kitchen
                     Owner = Entity.Null
                 });
 
-                EntityManager.AddComponentData(e, new EntityPredictedState());
+                EntityManager.AddComponentData(e, new EntityPredictedState()
+                {
+                    Transform = new RigidTransform()
+                    {
+                        pos = position.Value,
+                        rot = rotation.Value
+                    }
+                });
 
                 EntityManager.AddComponentData(e, new ItemPredictedState
                 {
                     Owner = Entity.Null
                 });
+
+                EntityManager.AddComponentData(e, new TriggerSetting()
+                {
+                    Distance = 0.1f
+                });
+
+                EntityManager.AddComponentData(e, new TriggerPredictedState()
+                {
+                    TriggeredEntity = Entity.Null
+                });
+
+                EntityManager.RemoveComponent<PhysicsVelocity>(e);
+
             }
 
             entities.Dispose();

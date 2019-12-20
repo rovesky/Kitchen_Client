@@ -27,10 +27,9 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-            var localPalyer = GetSingleton<LocalPlayer>();
-            if (localPalyer.PlayerEntity != Entity.Null)
+            var localPlayer = GetSingleton<LocalPlayer>();
+            if (localPlayer.PlayerEntity != Entity.Null)
                 return;
-
            
          //   var e = playerObj.GetComponent<EntityTracker>().EntityToTrack;
             var e = EntityManager.Instantiate(player);
@@ -61,8 +60,8 @@ namespace FootStone.Kitchen
             EntityManager.AddComponentData(e, new ServerEntity());
             EntityManager.AddComponentData(e, new UpdateUI());
 
-            localPalyer.PlayerEntity = e;
-            SetSingleton(localPalyer);
+            localPlayer.PlayerEntity = e;
+            SetSingleton(localPlayer);
         }
     }
 }
