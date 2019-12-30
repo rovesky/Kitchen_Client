@@ -32,7 +32,7 @@ namespace FootStone.Kitchen
             var clientTickTime = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
 
-            var frameDuration = lastFrameTime != 0 ? (float) (worldTime.FrameTime - lastFrameTime) : 0;
+            var frameDuration = lastFrameTime != 0.0f ? (float) (worldTime.FrameTime - lastFrameTime) : 0;
             lastFrameTime = worldTime.FrameTime;
 
             inputSystem.SampleInput(clientTickTime.Render.Tick);

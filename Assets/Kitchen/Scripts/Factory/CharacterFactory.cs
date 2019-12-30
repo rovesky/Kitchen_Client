@@ -25,7 +25,7 @@ namespace FootStone.Kitchen
             var e = playerObj.GetComponent<EntityTracker>().EntityToTrack;
 
             var pos = new Vector3(0, -10, 9);
-            CreateEntityUtilities.CreateCharacterComponent(entityManager, e, pos, Quaternion.identity);
+            CreateCharacterUtilities.CreateCharacterComponent(entityManager, e, pos, Quaternion.identity);
 
             entityManager.SetComponentData(e, new Character
             {

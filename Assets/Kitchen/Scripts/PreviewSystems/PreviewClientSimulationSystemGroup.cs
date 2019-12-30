@@ -7,7 +7,7 @@ using UnityEngine;
 namespace FootStone.Kitchen
 {
 
-   // [DisableAutoCreation]
+    [DisableAutoCreation]
     [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
@@ -30,6 +30,8 @@ namespace FootStone.Kitchen
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
 
+          //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());
+
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);
 
@@ -50,6 +52,8 @@ namespace FootStone.Kitchen
 
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
+
+            updateReplicatedOwnerFlag.SetLocalPlayerId(0);
         }
 
         protected override void OnUpdate()
