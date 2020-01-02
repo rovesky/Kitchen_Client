@@ -16,7 +16,6 @@ namespace FootStone.Kitchen
         {
             predictUpdateSystemGroup = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
-
             predictRollbackStateSystemGroup = World.GetOrCreateSystem<PredictRollbackStateSystemGroup>();
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();

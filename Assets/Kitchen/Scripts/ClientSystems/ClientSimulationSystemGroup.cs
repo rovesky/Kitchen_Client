@@ -30,8 +30,8 @@ namespace FootStone.Kitchen
 
 
    // [DisableAutoCreation]
-    [UpdateAfter(typeof(ExportPhysicsWorld))]
-    [UpdateBefore(typeof(EndFramePhysicsSystem))]
+   // [UpdateAfter(typeof(ExportPhysicsWorld))]
+  //  [UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private DespawnClientSystemGroup despawnSystemGroup;

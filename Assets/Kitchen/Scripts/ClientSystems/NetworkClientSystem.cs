@@ -49,7 +49,7 @@ namespace FootStone.Kitchen
                 Tick = 0,
                 Time = 0,
                 Rtt = 0,
-                LastAcknowlegdedCommandTime = 0
+                LastAcknowledgedTick = 0
             });
 
             network = new NetworkClient(GameWorld.Active);
@@ -77,7 +77,7 @@ namespace FootStone.Kitchen
             snapshotFromServer.Tick = (uint) network.serverTime;
             snapshotFromServer.Time = network.timeSinceSnapshot;
             snapshotFromServer.Rtt = network.rtt;
-            snapshotFromServer.LastAcknowlegdedCommandTime = network.lastAcknowlegdedCommandTime;
+            snapshotFromServer.LastAcknowledgedTick = network.lastAcknowlegdedCommandTime;
             SetSingleton(snapshotFromServer);
         }
 

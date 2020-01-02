@@ -45,10 +45,8 @@ namespace FootStone.Kitchen
             clientTickTime.Predict.AddDuration(deltaPredictedTime);
 
             // Adjust time to be synchronized with server
-            uint preferredBufferedCommandCount = 2;
-
-            //    long time = worldTimeSystem.GetCurrentTime() - snapshot.time;
-            //   FSLog.Info($"rtt:{snapshot.rtt},time:{snapshot.time} ");
+            const int preferredBufferedCommandCount = 2;
+         
             var preferredTick = serverTick +
                                 (uint) ((snapshot.Rtt + snapshot.Time) / 1000.0f * worldTime.GameTick.TickRate) +
                                 preferredBufferedCommandCount;
@@ -78,7 +76,7 @@ namespace FootStone.Kitchen
             }
             else
             {
-                var bufferedCommands = snapshot.LastAcknowlegdedCommandTime - (int) serverTick;
+                var bufferedCommands = snapshot.LastAcknowledgedTick - (int) serverTick;
                 if (bufferedCommands < preferredBufferedCommandCount)
                     frameTimeScale = 1.01f;
 
@@ -118,9 +116,10 @@ namespace FootStone.Kitchen
                 {
                     inputSystem.StoreCommand(tick);
                     inputSystem.SendCommand(tick);
+                    inputSystem.ResetInput();
                 }
 
-                inputSystem.ResetInput();
+              
             }
 
             // Store command

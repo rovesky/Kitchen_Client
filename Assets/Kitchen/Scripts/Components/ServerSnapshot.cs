@@ -7,6 +7,6 @@ namespace FootStone.Kitchen
         public uint Tick;
         public long Time;
         public int Rtt;
-        public int LastAcknowlegdedCommandTime;
+        public int LastAcknowledgedTick;
     }
 }

@@ -8,7 +8,7 @@ namespace FootStone.Kitchen
 {
 
     [DisableAutoCreation]
-    [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
+ //   [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private GameTick gameTime = GameTick.DefaultGameTick;
@@ -25,7 +25,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             FSLog.Info("PreviewClientSimulationSystemGroup OnCreate");
-            Application.targetFrameRate = 30;
+         //   Application.targetFrameRate = 30;
             UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
@@ -68,14 +68,14 @@ namespace FootStone.Kitchen
                 gameTime.TickDuration = gameTime.TickInterval;
         
                 commandWasConsumed = true;
-                PrevierTickUpdate();
+                PreviewTickUpdate();
                 nextTickTime += worldTime.GameTick.TickInterval;
             }
             if (commandWasConsumed)
                 inputSystem.ResetInput();      
         }
 
-        private void PrevierTickUpdate()
+        private void PreviewTickUpdate()
         {
             var worldTime = GetSingleton<WorldTime>();
             worldTime.GameTick = gameTime;
