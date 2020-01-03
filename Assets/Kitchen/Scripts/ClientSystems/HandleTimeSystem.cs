@@ -118,7 +118,6 @@ namespace FootStone.Kitchen
                     inputSystem.SendCommand(tick);
                     inputSystem.ResetInput();
                 }
-
               
             }
 
