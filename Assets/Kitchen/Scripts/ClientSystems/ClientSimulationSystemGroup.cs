@@ -32,6 +32,9 @@ namespace FootStone.Kitchen
    // [DisableAutoCreation]
    // [UpdateAfter(typeof(ExportPhysicsWorld))]
   //  [UpdateBefore(typeof(EndFramePhysicsSystem))]
+
+   // [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [DisableAutoCreation]
     public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private DespawnClientSystemGroup despawnSystemGroup;
@@ -58,7 +61,6 @@ namespace FootStone.Kitchen
 
             networkSystem = World.GetOrCreateSystem<NetworkClientSystem>();
             m_systemsToUpdate.Add(networkSystem);
-
           
             handleTimeSystem = World.GetOrCreateSystem<HandleTimeSystem>();
             m_systemsToUpdate.Add(handleTimeSystem);

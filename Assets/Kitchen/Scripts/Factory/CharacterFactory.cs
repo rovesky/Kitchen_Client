@@ -6,30 +6,37 @@ namespace FootStone.Kitchen
 {
     public class CharacterFactory : ReplicatedEntityFactory
     {
-        private readonly GameObject playerObj;
+      //  private  GameObject playerObj;
+        private readonly Entity player;
 
         public CharacterFactory()
         {
-             playerObj = Instantiate(Resources.Load("Player3") as GameObject);
-             playerObj.transform.position = new Vector3(0, -10, 9);
+          //  playerObj = Instantiate(Resources.Load("Player3") as GameObject);
+          //  playerObj.transform.position = new Vector3(0, -10, 9);
+
+            player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+                Resources.Load("Player2") as GameObject,
+                GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
+                    World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
         }
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world)
         {
-            //var playerPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-            //     Resources.Load("Player1") as GameObject, World.Active);
 
-            //var e = entityManager.Instantiate(playerPrefab);
-            //entityManager.AddComponentData(e, new Character());
-           // playerObj.SetActive(true);
-            var e = playerObj.GetComponent<EntityTracker>().EntityToTrack;
+            var e = entityManager.Instantiate(player);
+            var playerObj = Instantiate(Resources.Load("CharacterRobot1") as GameObject);
 
+            FSLog.Info($" spawn character:{e}");
             var pos = new Vector3(0, -10, 9);
             CreateCharacterUtilities.CreateCharacterComponent(entityManager, e, pos, Quaternion.identity);
 
+            var presentationEntity = playerObj.GetComponentInChildren<GameObjectEntity>() == null
+                ? Entity.Null
+                : playerObj.GetComponentInChildren<GameObjectEntity>().Entity;
+
             entityManager.SetComponentData(e, new Character
             {
-                PresentationEntity = playerObj.GetComponentInChildren<GameObjectEntity>().Entity
+                PresentationEntity = presentationEntity
             });
 
             entityManager.AddComponentData(e, new UpdateUI());

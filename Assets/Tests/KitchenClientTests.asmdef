@@ -1,0 +1,30 @@
+{
+  "name": "Kitchen.ClientTests",
+  "references": [
+    "Unity.Burst",
+    "Unity.Collections",
+    "Unity.Entities",
+    "Unity.Entities.Hybrid",
+    "Unity.Entities.Tests",
+    "Unity.Mathematics",
+    "Unity.PerformanceTesting",
+    "Unity.Physics",
+    "Unity.Physics.Hybrid",
+    "Unity.Physics.Editor",
+    "Unity.Transforms",
+    "Unity.Jobs",
+    "FootStone.ECSShared",
+    "Kitchen.Client"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": []
+}

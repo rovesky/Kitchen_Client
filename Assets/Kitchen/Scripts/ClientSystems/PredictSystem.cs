@@ -26,36 +26,33 @@ namespace FootStone.Kitchen
             var serverTick = GetSingleton<ServerSnapshot>().Tick;
             var clientTick = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
-
             var predictTime = clientTick.Predict;
-         //   var renderTime = clientTick.Render;
 
-            if (IsPredictionAllowed(predictTime, serverTick))
+            if (!IsPredictionAllowed(predictTime, serverTick)) 
+                return;
+            // ROLLBACK. All predicted entities (with the ServerEntity component) are rolled back to last server state 
+            worldTime.SetTick(serverTick, predictTime.TickInterval);
+            SetSingleton(worldTime);
+
+            PredictionRollback();
+
+            // PREDICT PREVIOUS TICKS. Replay every tick *after* the last tick we have from server up to the last stored command we have
+            for (var tick = serverTick + 1; tick < predictTime.Tick; tick++)
             {
-                // ROLLBACK. All predicted entities (with the ServerEntity component) are rolled back to last server state 
-                worldTime.SetTick(serverTick, predictTime.TickInterval);
+                worldTime.SetTick(tick, predictTime.TickInterval);
                 SetSingleton(worldTime);
 
-                PredictionRollback();
-
-                // PREDICT PREVIOUS TICKS. Replay every tick *after* the last tick we have from server up to the last stored command we have
-                for (var tick = serverTick + 1; tick < predictTime.Tick; tick++)
-                {
-                    worldTime.SetTick(tick, predictTime.TickInterval);
-                    SetSingleton(worldTime);
-
-                    inputSystem.RetrieveCommand(worldTime.Tick);
-                    PredictionUpdate();
-                }
-
-                // PREDICT CURRENT TICK. Update current tick using duration of current tick
-                worldTime.GameTick = predictTime;
-                SetSingleton(worldTime);
                 inputSystem.RetrieveCommand(worldTime.Tick);
-                // Dont update systems with close to zero time. 
-                if (worldTime.TickDuration > 0.008f)
-                    PredictionUpdate();
+                PredictionUpdate();
             }
+
+            // PREDICT CURRENT TICK. Update current tick using duration of current tick
+            worldTime.GameTick = predictTime;
+            SetSingleton(worldTime);
+            inputSystem.RetrieveCommand(worldTime.Tick);
+            // Dont update systems with close to zero time. 
+            if (worldTime.TickDuration > 0.008f)
+                PredictionUpdate();
         }
 
         private void PredictionUpdate()

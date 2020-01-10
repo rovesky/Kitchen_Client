@@ -57,7 +57,7 @@ namespace FootStone.Kitchen
 
             replicatedEntities.Register(id, entity);
 
-            Profiler.EndSample();
+            Profiler.EndSample();   
         }
 
         public void ProcessEntityUpdate(int serverTick, int id, ref NetworkReader reader)
@@ -91,12 +91,8 @@ namespace FootStone.Kitchen
             factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
 
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
-
             worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();
-         
         }
-
-    
 
         protected override void OnUpdate()
         {
