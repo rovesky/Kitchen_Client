@@ -90,7 +90,7 @@ namespace FootStone.Kitchen
             factoryManager.RegisterFactory((ushort) EntityType.Character, new CharacterFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
 
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
+        //    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
             worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();
         }
 

@@ -46,8 +46,8 @@ namespace FootStone.Kitchen
             EntityManager.CreateEntity(typeof(ServerSnapshot));
             SetSingleton(new ServerSnapshot
             {
-                Tick = 0,
-                Time = 0,
+                ServerTick = 0,
+                TimeSinceSnapshot = 0,
                 Rtt = 0,
                 LastAcknowledgedTick = 0
             });
@@ -65,7 +65,8 @@ namespace FootStone.Kitchen
         {
             if (network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
-                var ip = "58.247.94.202";
+             //   var ip = "192.168.0.128";
+                var ip = "220.229.229.91";
                 FSLog.Info($"network.Connect:{ip}");
                 network.Connect(ip);
             }
@@ -74,8 +75,8 @@ namespace FootStone.Kitchen
             network.Update(this, replicateEntitySystemGroup);
 
             var snapshotFromServer = GetSingleton<ServerSnapshot>();
-            snapshotFromServer.Tick = (uint) network.serverTime;
-            snapshotFromServer.Time = network.timeSinceSnapshot;
+            snapshotFromServer.ServerTick = (uint) network.serverTime;
+            snapshotFromServer.TimeSinceSnapshot = network.timeSinceSnapshot;
             snapshotFromServer.Rtt = network.rtt;
             snapshotFromServer.LastAcknowledgedTick = network.lastAcknowlegdedCommandTime;
             SetSingleton(snapshotFromServer);

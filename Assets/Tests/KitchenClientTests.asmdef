@@ -14,6 +14,7 @@
     "Unity.Transforms",
     "Unity.Jobs",
     "FootStone.ECSShared",
+    "FootStone.ECSUtils",
     "Kitchen.Client"
   ],
   "optionalUnityReferences": [

@@ -4,7 +4,7 @@ using Unity.Entities;
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class PredictSystem : ComponentSystem
+    public class PredictSystem : NoSortComponentSystemGroup
     {
     
         private InputSystem inputSystem;
@@ -15,27 +15,33 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             predictUpdateSystemGroup = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
-            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
+            AddSystemToUpdateList(predictUpdateSystemGroup);
+          
             predictRollbackStateSystemGroup = World.GetOrCreateSystem<PredictRollbackStateSystemGroup>();
-
+           // AddSystemToUpdateList(predictRollbackStateSystemGroup);
             inputSystem = World.GetOrCreateSystem<InputSystem>();
+            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
+
         }
 
         protected override void OnUpdate()
         {
-            var serverTick = GetSingleton<ServerSnapshot>().Tick;
-            var clientTick = GetSingleton<ClientTickTime>();
-            var worldTime = GetSingleton<WorldTime>();
+            var serverTick = GetSingleton<ServerSnapshot>().ServerTick;
+            var clientTick = GetSingleton<ClientTickTime>();  
             var predictTime = clientTick.Predict;
 
             if (!IsPredictionAllowed(predictTime, serverTick)) 
                 return;
+        
+            var worldTime = GetSingleton<WorldTime>();
+
             // ROLLBACK. All predicted entities (with the ServerEntity component) are rolled back to last server state 
             worldTime.SetTick(serverTick, predictTime.TickInterval);
             SetSingleton(worldTime);
 
             PredictionRollback();
 
+            var count = 0;
             // PREDICT PREVIOUS TICKS. Replay every tick *after* the last tick we have from server up to the last stored command we have
             for (var tick = serverTick + 1; tick < predictTime.Tick; tick++)
             {
@@ -44,15 +50,21 @@ namespace FootStone.Kitchen
 
                 inputSystem.RetrieveCommand(worldTime.Tick);
                 PredictionUpdate();
+                count++;
             }
-
+        
             // PREDICT CURRENT TICK. Update current tick using duration of current tick
             worldTime.GameTick = predictTime;
             SetSingleton(worldTime);
             inputSystem.RetrieveCommand(worldTime.Tick);
             // Dont update systems with close to zero time. 
             if (worldTime.TickDuration > 0.008f)
+            {
                 PredictionUpdate();
+                count++;
+            }
+
+            FSLog.Info($"PredictionUpdate Count:{count}");
         }
 
         private void PredictionUpdate()
@@ -64,7 +76,7 @@ namespace FootStone.Kitchen
 
         private void PredictionRollback()
         {
-            var worldTime = GetSingleton<WorldTime>();
+         //   var worldTime = GetSingleton<WorldTime>();
           //  FSLog.Info($"PredictionRollback:{worldTime.Tick}");
             replicateEntitySystemGroup.Rollback();
             predictRollbackStateSystemGroup.Update();

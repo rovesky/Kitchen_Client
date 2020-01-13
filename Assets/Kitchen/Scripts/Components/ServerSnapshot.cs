@@ -4,8 +4,8 @@ namespace FootStone.Kitchen
 {
     public struct ServerSnapshot : IComponentData
     {
-        public uint Tick;
-        public long Time;
+        public uint ServerTick;
+        public long TimeSinceSnapshot;
         public int Rtt;
         public int LastAcknowledgedTick;
     }

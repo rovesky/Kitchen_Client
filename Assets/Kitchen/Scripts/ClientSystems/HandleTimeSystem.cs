@@ -1,4 +1,5 @@
-﻿using FootStone.ECS;
+﻿using System;
+using FootStone.ECS;
 using Unity.Entities;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace FootStone.Kitchen
         private float frameTimeScale = 1.0f;
         private InputSystem inputSystem;
         private double lastFrameTime;
-        private WorldTimeSystem worldTimeSystem;
+     //   private WorldTimeSystem worldTimeSystem;
 
         protected override void OnCreate()
         {
@@ -22,17 +23,17 @@ namespace FootStone.Kitchen
             });
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
-            worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
+           // worldTimeSystem = World.GetOrCreateSystem<WorldTimeSystem>();
         }
 
         protected override void OnUpdate()
         {
             var snapshot = GetSingleton<ServerSnapshot>();
-            var serverTick = snapshot.Tick;
+            var serverTick = snapshot.ServerTick;
             var clientTickTime = GetSingleton<ClientTickTime>();
             var worldTime = GetSingleton<WorldTime>();
 
-            var frameDuration = lastFrameTime != 0.0f ? (float) (worldTime.FrameTime - lastFrameTime) : 0;
+            var frameDuration = Math.Abs(lastFrameTime) > 0 ? (float) (worldTime.FrameTime - lastFrameTime) : 0;
             lastFrameTime = worldTime.FrameTime;
 
             inputSystem.SampleInput(clientTickTime.Render.Tick);
@@ -48,12 +49,12 @@ namespace FootStone.Kitchen
             const int preferredBufferedCommandCount = 2;
          
             var preferredTick = serverTick +
-                                (uint) ((snapshot.Rtt + snapshot.Time) / 1000.0f * worldTime.GameTick.TickRate) +
+                                (uint) ((snapshot.Rtt + snapshot.TimeSinceSnapshot) / 1000.0f * worldTime.GameTick.TickRate) +
                                 preferredBufferedCommandCount;
 
 
             var resetTime = false;
-            if (!resetTime && clientTickTime.Predict.Tick < preferredTick - 3)
+            if (clientTickTime.Predict.Tick < preferredTick - 3)
             {
                 FSLog.Warning("Client predictTime hard catchup ... ");
                 resetTime = true;
