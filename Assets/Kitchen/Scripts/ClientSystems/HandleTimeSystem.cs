@@ -85,6 +85,7 @@ namespace FootStone.Kitchen
                     frameTimeScale = 0.99f;
             }
 
+           // FSLog.Info($"preferredTick：{preferredTick-serverTick}，frameTimeScale：{frameTimeScale}，frameDuration{frameDuration}");
             //handle render tick
             // Increment interpolation time
             clientTickTime.Render.AddDuration(frameDuration * frameTimeScale);
@@ -119,12 +120,12 @@ namespace FootStone.Kitchen
                     inputSystem.SendCommand(tick);
                     inputSystem.ResetInput();
                 }
-              
+                // Store command
+                inputSystem.StoreCommand(clientTickTime.Predict.Tick);
+
             }
 
-            // Store command
-            inputSystem.StoreCommand(clientTickTime.Predict.Tick);
-
+          
             SetSingleton(clientTickTime);
         }
     }

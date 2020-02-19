@@ -76,8 +76,8 @@ namespace FootStone.Kitchen
 
         private void PredictionRollback()
         {
-            var worldTime = GetSingleton<WorldTime>();
-            FSLog.Info($"PredictionRollback:{worldTime.Tick}");
+          //  var worldTime = GetSingleton<WorldTime>();
+          //  FSLog.Info($"PredictionRollback:{worldTime.Tick}");
             replicateEntitySystemGroup.Rollback();
             applyPredictedStateSystemGroup.Update();
         }

@@ -8,13 +8,13 @@ namespace FootStone.Kitchen
 {
 
     [DisableAutoCreation]
- //   [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
+    //   [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private GameTick gameTime = GameTick.DefaultGameTick;
-        private double nextTickTime ;
+        private double nextTickTime;
 
-        private SpawnPreviewClientSystem spawnSystemGroup; 
+        private SpawnPreviewClientSystem spawnSystemGroup;
         private PredictUpdateSystemGroup predictUpdateSystem;
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
@@ -25,12 +25,12 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             FSLog.Info("PreviewClientSimulationSystemGroup OnCreate");
-         //   Application.targetFrameRate = 30;
+            Application.targetFrameRate = 30;
             UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
 
-          //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());
+            //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);
@@ -57,7 +57,7 @@ namespace FootStone.Kitchen
         }
 
         protected override void OnUpdate()
-        {          
+        {
             var worldTime = GetSingleton<WorldTime>();
             inputSystem.SampleInput(worldTime.Tick);
 
@@ -66,31 +66,36 @@ namespace FootStone.Kitchen
             {
                 gameTime.Tick++;
                 gameTime.TickDuration = gameTime.TickInterval;
-        
+
                 commandWasConsumed = true;
                 PreviewTickUpdate();
                 nextTickTime += worldTime.GameTick.TickInterval;
             }
+
             if (commandWasConsumed)
-                inputSystem.ResetInput();      
+                inputSystem.ResetInput();
         }
 
         private void PreviewTickUpdate()
         {
             var worldTime = GetSingleton<WorldTime>();
             worldTime.GameTick = gameTime;
-  
+
             inputSystem.StoreCommand(worldTime.Tick);
-      
+
             spawnSystemGroup.Update();
 
             spawnPlatesSystem.Update();
 
             updateReplicatedOwnerFlag.Update();
 
-            inputSystem.RetrieveCommand(worldTime.Tick);     
-            
-            predictUpdateSystem.Update();
+           // for (var i = 0; i < 1; ++i)
+            {
+                inputSystem.RetrieveCommand(worldTime.Tick);
+
+                predictUpdateSystem.Update();
+            }
+
 
             predictPresentationSystemGroup.Update();
 

@@ -38,7 +38,7 @@ namespace FootStone.Kitchen
             var entities = query.ToEntityArray(Allocator.TempJob);
 
             //生成Plate
-            for (var i = 0; i < 1; ++i)
+            for (var i = 0; i < 3; ++i)
             {
                 var entity = entities[i * 2];
                 var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
