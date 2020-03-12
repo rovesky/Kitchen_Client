@@ -28,13 +28,13 @@ namespace FootStone.Kitchen
 
             m_button1.onClick.AddListener(() =>
             {
-                FSLog.Info("m_button1.onClick!");
+             //   FSLog.Info("m_button1.onClick!");
                 UIInput.AddButtonClickEvent("pickup");
             });
 
             m_button2.onClick.AddListener(() =>
             {
-                FSLog.Info("m_button2.onClick!");
+             //   FSLog.Info("m_button2.onClick!");
                 UIInput.AddButtonClickEvent("throw");
             });
         }

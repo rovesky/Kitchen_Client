@@ -23,8 +23,6 @@ namespace FootStone.Kitchen
                Resources.Load("Apple") as GameObject,
                GameObjectConversionSettings.FromWorld(World,
                    World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
-
-
         }
 
         protected override void OnUpdate()

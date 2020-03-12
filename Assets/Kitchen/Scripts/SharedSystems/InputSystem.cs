@@ -50,10 +50,9 @@ namespace FootStone.Kitchen
             InputToCommand();
             userCommand.RenderTick = renderTick;
 
-
-            if (userCommand.Buttons.Flags > 0)
-                FSLog.Info($"is set pick:{userCommand.Buttons.IsSet(UserCommand.Button.Pickup)}" +
-                           $",is set throw:{userCommand.Buttons.IsSet(UserCommand.Button.Throw)},renderTick:{renderTick}");
+          //  if (userCommand.Buttons.Flags > 0)
+              //  FSLog.Info($"is set pick:{userCommand.Buttons.IsSet(UserCommand.Button.Pickup)}" +
+                    //a       $",is set throw:{userCommand.Buttons.IsSet(UserCommand.Button.Throw)},renderTick:{renderTick}");
         }
 
         public void StoreCommand(uint tick)
@@ -72,18 +71,19 @@ namespace FootStone.Kitchen
             else
                 commandBuffer.Add(ref userCommand, (int) tick);
 
-            if (userCommand.Buttons.Flags > 0)
-            {
-                FSLog.Info($"StoreCommand buffer count:{userCommand.CheckTick},{userCommand.Buttons.Flags}");
-                //for (var i = Mathf.Max(commandBuffer.LastTick() - 5, 0); i <= commandBuffer.LastTick(); i++)
-                //{
-                //    var command = UserCommand.defaultCommand;
-                //    commandBuffer.TryGetValue(i, ref command);
+            if (userCommand.Buttons.Flags <= 0)
+                return;
 
-                //    FSLog.Info($"StoreCommand buffer :{i},{command.checkTick},{command.buttons.flags}");
+      //      FSLog.Info($"StoreCommand buffer count:{userCommand.CheckTick},{userCommand.Buttons.Flags}");
+            ResetInput();
+            //for (var i = Mathf.Max(commandBuffer.LastTick() - 5, 0); i <= commandBuffer.LastTick(); i++)
+            //{
+            //    var command = UserCommand.defaultCommand;
+            //    commandBuffer.TryGetValue(i, ref command);
 
-                //}
-            }
+            //    FSLog.Info($"StoreCommand buffer :{i},{command.checkTick},{command.buttons.flags}");
+
+            //}
         }
 
         public void RetrieveCommand(uint tick)
@@ -110,8 +110,8 @@ namespace FootStone.Kitchen
             if (commandValid)
             {
                 if (command.Buttons.Flags > 0)
-                    FSLog.Info(
-                        $"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
+                //    FSLog.Info(
+                   //     $"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
                 //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
                 networkClient.QueueCommand(tick, (ref NetworkWriter writer) => { command.Serialize(ref writer); });
             }
@@ -120,7 +120,6 @@ namespace FootStone.Kitchen
         public void ResetInput()
         {
             userCommand.Reset();
-
             UIInput.ResetButtonClick();
             InputToCommand();
         }

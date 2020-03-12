@@ -1,7 +1,5 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
-using Unity.Physics.Systems;
-using Unity.Transforms;
 using UnityEngine;
 
 namespace FootStone.Kitchen
@@ -61,7 +59,7 @@ namespace FootStone.Kitchen
             var worldTime = GetSingleton<WorldTime>();
             inputSystem.SampleInput(worldTime.Tick);
 
-            bool commandWasConsumed = false;
+            var commandWasConsumed = false;
             while (worldTime.FrameTime > nextTickTime)
             {
                 gameTime.Tick++;
