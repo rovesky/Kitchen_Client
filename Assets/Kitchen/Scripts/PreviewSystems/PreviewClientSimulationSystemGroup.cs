@@ -12,7 +12,7 @@ namespace FootStone.Kitchen
         private GameTick gameTime = GameTick.DefaultGameTick;
         private double nextTickTime;
 
-        private SpawnPreviewClientSystem spawnSystemGroup;
+        private SpawnCharactersSystem spawnSystemGroup;
         private PredictUpdateSystemGroup predictUpdateSystem;
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
@@ -23,7 +23,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             FSLog.Info("PreviewClientSimulationSystemGroup OnCreate");
-            Application.targetFrameRate = 30;
+            Application.targetFrameRate = 40;
             UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
@@ -33,7 +33,7 @@ namespace FootStone.Kitchen
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);
 
-            spawnSystemGroup = World.GetOrCreateSystem<SpawnPreviewClientSystem>();
+            spawnSystemGroup = World.GetOrCreateSystem<SpawnCharactersSystem>();
             m_systemsToUpdate.Add(spawnSystemGroup);
 
             spawnPlatesSystem = World.GetOrCreateSystem<SpawnPlatesSystem>();

@@ -6,16 +6,16 @@ using UnityEngine;
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class SpawnPreviewClientSystem : ComponentSystem
+    public class SpawnCharactersSystem : ComponentSystem
     {
-        private Entity player;
+        private Entity playerPrefab;
 
         protected override void OnCreate()
         {
             EntityManager.CreateEntity(typeof(LocalPlayer));
             SetSingleton(new LocalPlayer {PlayerId = -1, PlayerEntity = Entity.Null});
 
-            player = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+            playerPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Player2") as GameObject,
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
@@ -27,20 +27,18 @@ namespace FootStone.Kitchen
             if (localPlayer.PlayerEntity != Entity.Null)
                 return;
 
-            localPlayer.PlayerEntity = CreateCharacter(new float3 {x = 0, y = 1, z = -5}, true);
+            localPlayer.PlayerEntity = CreateCharacter(new float3 {x = 0, y = 1, z = -5}, true,0);
             SetSingleton(localPlayer);
-
-            var e = CreateCharacter(new float3 {x = -3, y = 3, z = -5}, false);
-
-            EntityManager.SetComponentData(e,new VelocityPredictedState()
-            {
-                Linear = new float3(6,0,0)
-            });
+          
+            var e = CreateCharacter(new float3 {x = -3, y = 3, z = -5}, true,1);
+            var interpolatedState = EntityManager.GetComponentData<CharacterInterpolatedState>(e);
+            interpolatedState.MaterialId = 1;
+            EntityManager.SetComponentData(e, interpolatedState);
         }
 
-        private Entity CreateCharacter(float3 position, bool isLocal)
+        private Entity CreateCharacter(float3 position, bool isLocal,int id)
         {
-            var e = EntityManager.Instantiate(player);
+            var e = EntityManager.Instantiate(playerPrefab);
             var playerObj = Object.Instantiate(Resources.Load("CharacterRobot1") as GameObject);
             FSLog.Info(" spwan entity OnCreate2");
 
@@ -59,7 +57,7 @@ namespace FootStone.Kitchen
             
             EntityManager.SetComponentData(e, new ReplicatedEntityData
             {
-                Id = isLocal ? 0 : 1,
+                Id =  id,
                 PredictingPlayerId = isLocal ? 0 : 1
             });
 

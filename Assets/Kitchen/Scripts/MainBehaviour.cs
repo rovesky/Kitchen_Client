@@ -15,8 +15,8 @@ namespace FootStone.Kitchen
             var simulationSystemGroup =
                 World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
             simulationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
-              //  .CreateSystem<ClientSimulationSystemGroup>());
-                .CreateSystem<PreviewClientSimulationSystemGroup>());
+                .CreateSystem<ClientSimulationSystemGroup>());
+              //  .CreateSystem<PreviewClientSimulationSystemGroup>());
         }
 
         // Update is called once per frame
