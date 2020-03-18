@@ -109,10 +109,9 @@ namespace FootStone.Kitchen
             var commandValid = commandBuffer.TryGetValue((int) tick, ref command);
             if (commandValid)
             {
-                if (command.Buttons.Flags > 0)
-                //    FSLog.Info(
-                   //     $"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
-                //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
+              //  if (command.Buttons.Flags > 0)
+                //  FSLog.Info($"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
+               //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
                 networkClient.QueueCommand(tick, (ref NetworkWriter writer) => { command.Serialize(ref writer); });
             }
         }

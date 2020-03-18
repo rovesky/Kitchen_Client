@@ -120,10 +120,10 @@ namespace FootStone.Kitchen
                     inputSystem.SendCommand(tick);
                     inputSystem.ResetInput();
                 }
-                // Store command
-                inputSystem.StoreCommand(clientTickTime.Predict.Tick);
-
+        
             }
+            // Store command
+            inputSystem.StoreCommand(clientTickTime.Predict.Tick);
 
           
             SetSingleton(clientTickTime);
