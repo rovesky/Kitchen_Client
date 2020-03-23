@@ -10,6 +10,7 @@ namespace FootStone.Kitchen
         public static UIManager Instance;
         private Button m_button1;
         private Button m_button2;
+        private Button m_button3;
 
         public Canvas m_canvas_main;
         private Text m_text_rtt;
@@ -25,6 +26,7 @@ namespace FootStone.Kitchen
 
             m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
             m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
+            m_button3 = m_canvas_main.transform.Find("button3").GetComponent<Button>();
 
             m_button1.onClick.AddListener(() =>
             {
@@ -36,6 +38,12 @@ namespace FootStone.Kitchen
             {
              //   FSLog.Info("m_button2.onClick!");
                 UIInput.AddButtonClickEvent("throw");
+            });
+
+            m_button3.onClick.AddListener(() =>
+            {
+                FSLog.Info("m_button3.onClick!");
+                UIInput.AddButtonClickEvent("rush");
             });
         }
 

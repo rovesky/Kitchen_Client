@@ -35,6 +35,7 @@ namespace FootStone.Kitchen
 
             userCommand.Buttons.Set(UserCommand.Button.Pickup, UIInput.GetButtonClick("pickup"));
             userCommand.Buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
+            userCommand.Buttons.Set(UserCommand.Button.Rush, UIInput.GetButtonClick("rush"));
             userCommand.Buttons.Set(UserCommand.Button.Jump, Input.GetKey(KeyCode.J));
         }
 

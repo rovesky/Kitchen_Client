@@ -23,7 +23,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             FSLog.Info("PreviewClientSimulationSystemGroup OnCreate");
-            Application.targetFrameRate = 40;
+          //  Application.targetFrameRate = 40;
             UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
