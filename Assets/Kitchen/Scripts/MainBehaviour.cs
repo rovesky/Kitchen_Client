@@ -15,14 +15,13 @@ namespace FootStone.Kitchen
             var simulationSystemGroup =
                 World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
             simulationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
-               // .CreateSystem<ClientSimulationSystemGroup>());
-                .CreateSystem<PreviewClientSimulationSystemGroup>());
+                .CreateSystem<ClientSimulationSystemGroup>());
+              //  .CreateSystem<PreviewClientSimulationSystemGroup>());
         }
 
         // Update is called once per frame
         private void Update()
         {
-       
             frameCount++;
             passedTime += UnityEngine.Time.unscaledDeltaTime;
             if (passedTime >= 1.5f && frameCount>=1)
@@ -30,9 +29,7 @@ namespace FootStone.Kitchen
                 UIManager.Instance.UpdateFps(frameCount / passedTime);
                 frameCount = 0;
                 passedTime = 0.0f;
-
             }
-
         }
     }
 }

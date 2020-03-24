@@ -32,7 +32,7 @@ namespace FootStone.Kitchen
 
             isSpawned = true;
 
-            var query = GetEntityQuery(typeof(TriggerData));
+            var query = GetEntityQuery(typeof(TriggeredSetting));
             var entities = query.ToEntityArray(Allocator.TempJob);
 
             //生成Plate
@@ -40,7 +40,7 @@ namespace FootStone.Kitchen
             {
                 var entity = entities[i * 2];
                 var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
-                var triggerData = EntityManager.GetComponentData<TriggerData>(entity);
+                var triggerData = EntityManager.GetComponentData<TriggeredSetting>(entity);
 
                 var e = EntityManager.Instantiate(platePrefab);
                 slot.FilledInEntity = e;
