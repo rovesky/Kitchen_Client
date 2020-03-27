@@ -80,6 +80,7 @@ namespace FootStone.Kitchen
             worldTime.GameTick = gameTime;
 
             inputSystem.StoreCommand(worldTime.Tick);
+            inputSystem.ResetInput();
 
             spawnSystemGroup.Update();
 

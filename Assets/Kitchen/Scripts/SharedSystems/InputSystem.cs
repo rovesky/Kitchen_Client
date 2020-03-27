@@ -50,7 +50,6 @@ namespace FootStone.Kitchen
         {
             InputToCommand();
             userCommand.RenderTick = renderTick;
-
           //  if (userCommand.Buttons.Flags > 0)
               //  FSLog.Info($"is set pick:{userCommand.Buttons.IsSet(UserCommand.Button.Pickup)}" +
                     //a       $",is set throw:{userCommand.Buttons.IsSet(UserCommand.Button.Throw)},renderTick:{renderTick}");
@@ -72,11 +71,11 @@ namespace FootStone.Kitchen
             else
                 commandBuffer.Add(ref userCommand, (int) tick);
 
-            if (userCommand.Buttons.Flags <= 0)
-                return;
+            //if (userCommand.Buttons.Flags <= 0)
+              //  return;
 
       //      FSLog.Info($"StoreCommand buffer count:{userCommand.CheckTick},{userCommand.Buttons.Flags}");
-            ResetInput();
+         //   ResetInput();
             //for (var i = Mathf.Max(commandBuffer.LastTick() - 5, 0); i <= commandBuffer.LastTick(); i++)
             //{
             //    var command = UserCommand.defaultCommand;
@@ -111,8 +110,8 @@ namespace FootStone.Kitchen
             if (commandValid)
             {
               //  if (command.Buttons.Flags > 0)
-                //  FSLog.Info($"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
-               //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
+                //  FSLog.Error($"send command:{command.RenderTick},{command.CheckTick},{command.Buttons.IsSet(UserCommand.Button.Pickup)}");
+              //   +    $",{command.buttons.flags},{command.targetPos.x},{command.targetPos.y},{command.targetPos.z}");
                 networkClient.QueueCommand(tick, (ref NetworkWriter writer) => { command.Serialize(ref writer); });
             }
         }
@@ -123,5 +122,10 @@ namespace FootStone.Kitchen
             UIInput.ResetButtonClick();
             InputToCommand();
         }
+
+        //public void ResetButtonClick()
+        //{
+        //    UIInput.ResetButtonClick();
+        //}
     }
 }
