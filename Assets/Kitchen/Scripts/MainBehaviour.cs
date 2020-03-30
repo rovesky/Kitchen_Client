@@ -8,15 +8,21 @@ namespace FootStone.Kitchen
         private int frameCount;
         private float passedTime;
 
+        public bool IsPreview;
+
 
         // Start is called before the first frame update
         private void Start()
         {
             var simulationSystemGroup =
                 World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
-            simulationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
-                .CreateSystem<ClientSimulationSystemGroup>());
-              //  .CreateSystem<PreviewClientSimulationSystemGroup>());
+
+            if (IsPreview)
+                simulationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
+                    .CreateSystem<PreviewClientSimulationSystemGroup>());
+            else
+                simulationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
+                    .CreateSystem<ClientSimulationSystemGroup>());
         }
 
         // Update is called once per frame
