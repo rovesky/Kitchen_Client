@@ -4,17 +4,24 @@ using UnityEngine.UI;
 
 namespace FootStone.Kitchen
 {
-    [AddComponentMenu("MyGame/GameManager")]
+  //  [AddComponentMenu("MyGame/GameManager")]
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance;
+
+        public Canvas m_canvas_main;
+      //  public Canvas m_canvas_slider;
+      //  public int a;
+
+
         private Button m_button1;
         private Button m_button2;
         private Button m_button3;
 
-        public Canvas m_canvas_main;
         private Text m_text_rtt;
         private Text m_text_fps;
+
+        private  Slider sliceSlider;
 
         private void Start()
         {
@@ -27,6 +34,8 @@ namespace FootStone.Kitchen
             m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
             m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
             m_button3 = m_canvas_main.transform.Find("button3").GetComponent<Button>();
+
+            sliceSlider =  m_canvas_main.transform.Find("Slider").GetComponent<Slider>();
 
             m_button1.onClick.AddListener(() =>
             {
@@ -56,6 +65,18 @@ namespace FootStone.Kitchen
         public void UpdateFps(double fps)
         {
             m_text_fps.text = fps.ToString("#.00");
+        }
+
+
+        public void UpdateSlider(bool isVisible,Vector3 pos, float value)
+        {
+            sliceSlider.gameObject.SetActive(isVisible);
+
+            var screenPos = Camera.main.WorldToScreenPoint(pos);
+            var rectTransform = sliceSlider.gameObject.GetComponent<RectTransform>();
+            rectTransform.position = screenPos;
+
+            sliceSlider.value = value;
         }
     }
 }

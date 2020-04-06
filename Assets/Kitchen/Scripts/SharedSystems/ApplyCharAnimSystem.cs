@@ -25,8 +25,8 @@ namespace FootStone.Kitchen
                 presentPos.position = cPos;
                 presentPos.rotation = state.Rotation;
 
-                if(state.SqrMagnitude > 0)
-                    FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");
+              //  if(state.SqrMagnitude > 0)
+                 //   FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");
                 var anim = EntityManager.GetComponentObject<Animator>(character.PresentationEntity);
                 anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f, Time.DeltaTime);
 
