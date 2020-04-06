@@ -20,8 +20,7 @@ namespace FootStone.Kitchen
 
         private Text m_text_rtt;
         private Text m_text_fps;
-
-        private  Slider sliceSlider;
+      
 
         private void Start()
         {
@@ -35,11 +34,11 @@ namespace FootStone.Kitchen
             m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
             m_button3 = m_canvas_main.transform.Find("button3").GetComponent<Button>();
 
-            sliceSlider =  m_canvas_main.transform.Find("Slider").GetComponent<Slider>();
+      
 
             m_button1.onClick.AddListener(() =>
             {
-             //   FSLog.Info("m_button1.onClick!");
+                FSLog.Info("pickup.onClick!");
                 UIInput.AddButtonClickEvent("pickup");
             });
 
@@ -67,16 +66,14 @@ namespace FootStone.Kitchen
             m_text_fps.text = fps.ToString("#.00");
         }
 
-
-        public void UpdateSlider(bool isVisible,Vector3 pos, float value)
+        public GameObject CreateProgess()
         {
-            sliceSlider.gameObject.SetActive(isVisible);
-
-            var screenPos = Camera.main.WorldToScreenPoint(pos);
-            var rectTransform = sliceSlider.gameObject.GetComponent<RectTransform>();
-            rectTransform.position = screenPos;
-
-            sliceSlider.value = value;
+            var slider = Instantiate(Resources.Load("Progress")) as GameObject;
+            slider.transform.parent = m_canvas_main.transform;
+            slider.transform.localScale = m_button1.transform.localScale;
+            return slider;
         }
+
+       
     }
 }
