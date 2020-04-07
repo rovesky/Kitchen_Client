@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using FootStone.ECS;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -52,10 +53,25 @@ namespace FootStone.Kitchen
                 slot.FilledInEntity = e;
                 EntityManager.SetComponentData(entity, slot);
 
+                FSLog.Info($"slotData.Pos:{slotData.Pos}");
                 ItemCreateUtilities.CreateItemComponent(EntityManager, e,
                     slotData.Pos, Quaternion.identity);
 
-                EntityManager.SetComponentData(e, new Plate());
+                EntityManager.SetComponentData(e,new ItemPredictedState()
+                {
+                    Owner = entity,
+                    PreOwner = Entity.Null
+                });
+
+                EntityManager.AddComponentData(e, new Plate());
+                EntityManager.AddComponentData(e, new PlatePredictedState()
+                {
+                    Material1 = Entity.Null,
+                    Material2 = Entity.Null,
+                    Material3 = Entity.Null,
+                    Material4 = Entity.Null
+                });
+              //  EntityManager.RemoveComponent<TriggerSetting>(e);
             }
 
             entities.Dispose();
