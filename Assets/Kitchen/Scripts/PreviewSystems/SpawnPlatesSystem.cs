@@ -1,28 +1,23 @@
-﻿using FootStone.ECS;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Physics;
-using Unity.Transforms;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
     public class SpawnPlatesSystem : ComponentSystem
     {
+        private bool isSpawned;
         private Entity platePrefab;
-        private bool isSpawned = false;
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
-           platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-               Resources.Load("Plate") as GameObject,
-               GameObjectConversionSettings.FromWorld(World,
-                   World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
+            platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
+                Resources.Load("Plate") as GameObject,
+                GameObjectConversionSettings.FromWorld(World,
+                    World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
         }
 
         protected override void OnUpdate()
@@ -32,7 +27,18 @@ namespace FootStone.Kitchen
 
             isSpawned = true;
 
-            var query = GetEntityQuery(typeof(TriggeredSetting));
+            var query = GetEntityQuery(new EntityQueryDesc
+            {
+                All = new ComponentType[]
+                {
+                    typeof(Table)
+                },
+                None = new ComponentType[]
+                {
+                    typeof(BoxSetting),
+                    typeof(TableSlice)
+                }
+            });
             var entities = query.ToEntityArray(Allocator.TempJob);
 
             //生成Plate
@@ -40,18 +46,19 @@ namespace FootStone.Kitchen
             {
                 var entity = entities[i * 2];
                 var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
-                var triggerData = EntityManager.GetComponentData<TriggeredSetting>(entity);
+                var slotData = EntityManager.GetComponentData<SlotSetting>(entity);
 
                 var e = EntityManager.Instantiate(platePrefab);
                 slot.FilledInEntity = e;
                 EntityManager.SetComponentData(entity, slot);
-           
-                CreateItemUtilities.CreateItemComponent(EntityManager, e, 
-                    triggerData.SlotPos, Quaternion.identity);
+
+                ItemCreateUtilities.CreateItemComponent(EntityManager, e,
+                    slotData.Pos, Quaternion.identity);
+
+                EntityManager.SetComponentData(e, new Plate());
             }
 
             entities.Dispose();
-
         }
     }
 }

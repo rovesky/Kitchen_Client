@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -11,7 +12,7 @@ namespace FootStone.Kitchen
     public class UpdateItemUISystem :SystemBase
     {
 
-        private Dictionary<int, GameObject> sliders = new  Dictionary<int, GameObject>();
+        private Dictionary<Entity, GameObject> sliders = new  Dictionary<Entity, GameObject>();
        // private GameObject sliderPrefab;
 
         protected override void OnCreate()
@@ -24,13 +25,13 @@ namespace FootStone.Kitchen
             Entities
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    ref ItemSliceState sliceState,
-                    in ItemSliceSetting sliceSetting,
+                    ref FoodSliceState sliceState,
+                    in FoodSliceSetting sliceSetting,
                     in LocalToWorld translation) =>
             {
-                if (sliceState.CurSliceTick == 0)
+                if (sliceState.CurSliceTick == 0 || sliceState.CurSliceTick == sliceSetting.TotalSliceTick)
                 {
-                    UpdateSlider(entity.Index,false, float3.zero, 0);
+                    UpdateSlider(entity,false, float3.zero, 0);
                 }
                 else
                 {
@@ -39,20 +40,36 @@ namespace FootStone.Kitchen
                     // if(percentage > 0)
                     //  FSLog.Info($"UpdateItemUISystem,percentage:{percentage}");
                     //   var viewPos = Camera.main.WorldToViewportPoint(translation.Position); //得到视窗坐标
-                    UpdateSlider(entity.Index, true, translation.Position + sliceSetting.OffPos, percentage);
+                    UpdateSlider(entity, true, translation.Position + sliceSetting.OffPos, percentage);
                 }
 
             }).Run();
+
+            var removes = new List<Entity>();
+            foreach (var entity in sliders.Keys)
+            {
+                if(!EntityManager.Exists(entity))
+                {
+                    removes.Add(entity);
+                }
+            }
+
+            foreach (var entity in removes)
+            {
+                var slider = sliders[entity];
+                Object.Destroy(slider);
+                sliders.Remove(entity);
+            }
           
         }
 
-        private void UpdateSlider(int id,bool isVisible,Vector3 pos, float value)
+        private void UpdateSlider(Entity entity,bool isVisible,Vector3 pos, float value)
         {
-            if(!sliders.ContainsKey(id))
-                sliders.Add(id, UIManager.Instance.CreateProgess());
+            if(!sliders.ContainsKey(entity))
+                sliders.Add(entity, UIManager.Instance.CreateProgess());
 
 
-            var sliceSlider = sliders[id];
+            var sliceSlider = sliders[entity];
 
             sliceSlider.SetActive(isVisible);
 

@@ -22,7 +22,7 @@ namespace FootStone.Kitchen
         {
             var e = entityManager.Instantiate(platePrefab);
 
-            CreateItemUtilities.CreateItemComponent(entityManager, e,
+            ItemCreateUtilities.CreateItemComponent(entityManager, e,
                 new float3 {x = 0.0f, y = -10f, z = 0.0f}, quaternion.identity);
 
             entityManager.SetComponentData(e, new ReplicatedEntityData
