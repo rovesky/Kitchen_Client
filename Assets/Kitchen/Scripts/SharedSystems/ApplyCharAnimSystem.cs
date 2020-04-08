@@ -8,8 +8,32 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class ApplyCharAnimSystem : ComponentSystem
     {
+        private void SetAction(Animator anim, byte ActionId)
+        {
+            switch (ActionId)
+            {
+                case 0:
+                    anim.SetTrigger("normal");
+                    break;
+                case 1:
+                    anim.SetTrigger("angry");
+                    break;
+                case 2:
+                    anim.SetTrigger("happy");
+                    break;
+                case 3:
+                    anim.SetTrigger("dead");
+                    break;
+                default:
+                    anim.SetTrigger("normal");
+                    break;
+            }
+
+        }
+
         protected override void OnUpdate()
         {
+          
             Entities.ForEach((Entity entity,
                 ref CharacterInterpolatedState state,
                 ref Character character,
@@ -29,6 +53,9 @@ namespace FootStone.Kitchen
                  //   FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");
                 var anim = EntityManager.GetComponentObject<Animator>(character.PresentationEntity);
                 anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f, Time.DeltaTime);
+
+                if(state.SqrMagnitude < 0.1f)
+                   SetAction(anim,state.ActionId);
 
                 var skinController =
                     EntityManager.GetComponentObject<CharacterSkinController>(character.PresentationEntity);
