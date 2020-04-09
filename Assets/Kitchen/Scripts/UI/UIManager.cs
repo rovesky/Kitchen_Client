@@ -27,8 +27,9 @@ namespace FootStone.Kitchen
             Debug.Log("GameManager Start!");
 
             Instance = this;
-            m_text_rtt = m_canvas_main.transform.Find("text_rtt").GetComponent<Text>();
-            m_text_fps = m_canvas_main.transform.Find("text_fps").GetComponent<Text>();
+            var pannelInfo = m_canvas_main.transform.Find("PannelInfo");
+            m_text_rtt = pannelInfo.Find("text_rtt").GetComponent<Text>();
+            m_text_fps = pannelInfo.Find("text_fps").GetComponent<Text>();
 
             m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
             m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
