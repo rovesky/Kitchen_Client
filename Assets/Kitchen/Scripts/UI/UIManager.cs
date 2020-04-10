@@ -1,4 +1,5 @@
-﻿using FootStone.ECS;
+﻿using System;
+using FootStone.ECS;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,8 @@ namespace FootStone.Kitchen
         private Button m_button1;
         private Button m_button2;
         private Button m_button3;
-
+        private UI_SpriteText textTime;
+        private UI_SpriteText textScore;
         private Text m_text_rtt;
         private Text m_text_fps;
       
@@ -32,10 +34,15 @@ namespace FootStone.Kitchen
             m_text_fps = pannelInfo.Find("text_fps").GetComponent<Text>();
 
             m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
-            m_button2 = m_canvas_main.transform.Find("button2").GetComponent<Button>();
-            m_button3 = m_canvas_main.transform.Find("button3").GetComponent<Button>();
+            m_button2 = m_canvas_main.transform.Find("Btn_Drop/Btn_Main").GetComponent<Button>();
+            m_button3 = m_canvas_main.transform.Find("Btn_Pick/Btn_Main").GetComponent<Button>();
 
-      
+       //     var obj = m_canvas_main.transform.Find("PannelMain/TextTime");
+         //   FSLog.Info($"TextTime Obj：{obj}");
+            textTime = m_canvas_main.transform.Find("PannelMain/TextTime").GetComponent<UI_SpriteText>();
+          //  FSLog.Info($"TextTime：{textTime}");
+            textScore = m_canvas_main.transform.Find("PannelMain/TextScore").GetComponent<UI_SpriteText>();
+
 
             m_button1.onClick.AddListener(() =>
             {
@@ -75,6 +82,14 @@ namespace FootStone.Kitchen
             return slider;
         }
 
+        public void UpdateTime(ushort timeSecond)
+        {
+            var endTime = DateTime.Now.AddSeconds(timeSecond);
+            var timeSpan = endTime - DateTime.Now;
+            var str = timeSpan.ToString(@"mm\:ss");
+          //  FSLog.Info($"UpdateTime:{str}");
+            textTime.SetText(str);
+        }
        
     }
 }
