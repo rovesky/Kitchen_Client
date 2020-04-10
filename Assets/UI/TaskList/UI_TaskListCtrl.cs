@@ -13,7 +13,7 @@ public class UI_TaskListCtrl : MonoBehaviour
 	[SerializeField] float m_nItemSpace = 0;    // 每一项间隔距离;
 
 	private Queue<UI_TaskListItem> m_listFrees = new Queue<UI_TaskListItem>();
-	private Queue<UI_TaskListItem> m_listUsing = new Queue<UI_TaskListItem>();
+	private List<UI_TaskListItem> m_listUsing = new List<UI_TaskListItem>();
 
 	private float m_nUsingTime = 0; // 计时;
 
@@ -32,12 +32,11 @@ public class UI_TaskListCtrl : MonoBehaviour
 		else
 		{
 			GameObject newObj = (GameObject)Instantiate(m_preItem.gameObject, m_rootTrans);
-
 			UI_TaskListItem item = newObj.GetComponent<UI_TaskListItem>();
 			result = item;
 		}
 
-		m_listUsing.Enqueue(result);
+		m_listUsing.Add(result);
 		return result;
 	}
 
@@ -50,7 +49,8 @@ public class UI_TaskListCtrl : MonoBehaviour
 	{
 		if (m_listUsing.Count > 0)
 		{
-			UI_TaskListItem item = m_listUsing.Dequeue();
+			UI_TaskListItem item = m_listUsing[0];
+			m_listUsing.RemoveAt(0);
 			item.Stop();
 			item.PlayOut(
 				()=> { m_nRemoveCount++; });
@@ -81,6 +81,7 @@ public class UI_TaskListCtrl : MonoBehaviour
 			{
 				m_v3RootTo = m_v3RootFrom = m_rootTrans.localPosition;
 				m_v3RootTo.y += (m_nItemSpace + m_preItem.BGHeight);
+				m_nRemoveRunTime = 0;
 				m_isPlayRemove = true;
 			}
 		}

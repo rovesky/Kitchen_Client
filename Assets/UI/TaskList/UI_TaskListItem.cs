@@ -94,6 +94,7 @@ public class UI_TaskListItem : MonoBehaviour
 		m_nTimeLen = nTimeLen;
 		m_v3From = v2From;
 		m_v3To = v2To;
+		m_nPctTemp = 0;
 
 		m_nRunTime = 0;
 		m_isPlaying = true;
@@ -103,10 +104,11 @@ public class UI_TaskListItem : MonoBehaviour
 	{
 		m_cbOutFinish = callBack;
 
-		m_nTimeLen = 2;
+		m_nTimeLen = 0.2f;
 		m_v3To = m_v3From = this.transform.localPosition;
-		m_v3To.x -= 150;
+		m_v3To.x -= m_picBackGround.rectTransform.sizeDelta.x;
 
+		m_nPctTemp = 0;
 		m_nRunTime = 0;
 		m_isPlaying = true;
 	}
