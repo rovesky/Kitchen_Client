@@ -20,7 +20,7 @@ namespace FootStone.Kitchen
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
         }
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
-            GameWorld world)
+            GameWorld world,ushort type)
         {
             var e = entityManager.Instantiate(playerPrefab);
             var playerObj = Instantiate(Resources.Load("CharacterRobot1") as GameObject);

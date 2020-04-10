@@ -47,7 +47,7 @@ namespace FootStone.Kitchen
             if (factory == null)
                 return;
 
-            var entity = factory.Create(EntityManager, null, null);
+            var entity = factory.Create(EntityManager, null, null,typeId);
             if (entity == Entity.Null)
                 return;
 
@@ -86,9 +86,12 @@ namespace FootStone.Kitchen
             replicatedEntities = new ReplicatedEntityCollection(EntityManager);
             factoryManager = new ReplicatedEntityFactoryManager();
 
+            var foodFactory = new FoodFactory();
          
             factoryManager.RegisterFactory((ushort) EntityType.Character, new CharacterFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
+            factoryManager.RegisterFactory((ushort) EntityType.Apple, foodFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.AppleSlice, foodFactory);
 
         //    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
             worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();

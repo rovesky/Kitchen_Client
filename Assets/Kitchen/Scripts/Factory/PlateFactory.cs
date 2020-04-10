@@ -18,7 +18,7 @@ namespace FootStone.Kitchen
         }
 
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
-            GameWorld world)
+            GameWorld world,ushort type)
         {
             var e = entityManager.Instantiate(platePrefab);
 
