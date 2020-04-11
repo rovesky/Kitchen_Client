@@ -20,6 +20,7 @@ namespace FootStone.Kitchen
         private Button m_button3;
         private UI_SpriteText textTime;
         private UI_SpriteText textScore;
+        private UI_TaskListCtrl taskList;
         private Text m_text_rtt;
         private Text m_text_fps;
       
@@ -43,6 +44,9 @@ namespace FootStone.Kitchen
           //  FSLog.Info($"TextTime：{textTime}");
             textScore = m_canvas_main.transform.Find("PannelMain/TextScore").GetComponent<UI_SpriteText>();
 
+            taskList = m_canvas_main.transform.Find("UI_TaskListCtrl").GetComponent<UI_TaskListCtrl>();
+        //    taskList.InsertTail(1,1);
+         //   taskList.InsertTail(2,1,2);
 
             m_button1.onClick.AddListener(() =>
             {
@@ -84,12 +88,16 @@ namespace FootStone.Kitchen
 
         public void UpdateTime(ushort timeSecond)
         {
-            var endTime = DateTime.Now.AddSeconds(timeSecond);
-            var timeSpan = endTime - DateTime.Now;
+           //ar endTime = DateTime.Now.AddSeconds(timeSecond);
+            var timeSpan = new TimeSpan(0, 0, seconds: timeSecond);
             var str = timeSpan.ToString(@"mm\:ss");
           //  FSLog.Info($"UpdateTime:{str}");
             textTime.SetText(str);
         }
        
+        public void AddMenu(int productId,int material1,int material2,int material3,int material4)
+        {
+            taskList.InsertTail(productId,material1,material2,material3,material4);
+        }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using Unity.Entities;
+﻿using Unity.Entities;
 
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class UpdateTimeSystem : ComponentSystem
+    public class UpdateTimeSystem : SystemBase
     {
 
         private int frameCount;
@@ -12,7 +11,12 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-            UIManager.Instance.UpdateTime((ushort)DateTime.Now.Second);
+            Entities
+                .ForEach((Entity entity,
+                    in Countdown countddown) =>
+                {
+                    UIManager.Instance.UpdateTime(countddown.Value);
+                }).Run();
         }
     }
 }
