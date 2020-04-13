@@ -23,9 +23,12 @@ namespace FootStone.Kitchen
 
         public FoodFactory()
         {
-            RegisterPrefabs(EntityType.Apple, "Apple");
-            RegisterPrefabs(EntityType.AppleSlice, "AppleSlice");
-
+            RegisterPrefabs(EntityType.Shrimp, "Shrimp");
+            RegisterPrefabs(EntityType.ShrimpSlice, "ShrimpSlice");
+            RegisterPrefabs(EntityType.KelpSlice, "KelpSlice");
+            RegisterPrefabs(EntityType.Rice, "Rice");
+            RegisterPrefabs(EntityType.Cucumber, "Cucumber");
+            RegisterPrefabs(EntityType.CucumberSlice, "CucumberSlice");
         }
 
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,

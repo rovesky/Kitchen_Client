@@ -29,9 +29,13 @@ namespace FootStone.Kitchen
             SetSingleton(new SpawnFoodArray());
             EntityManager.AddBuffer<SpawnFoodRequest>(entity);
 
-            RegisterPrefabs(EntityType.Apple, "Apple");
-            RegisterPrefabs(EntityType.AppleSlice, "AppleSlice");
-    
+            RegisterPrefabs(EntityType.Shrimp, "Shrimp");
+            RegisterPrefabs(EntityType.ShrimpSlice, "ShrimpSlice");
+            RegisterPrefabs(EntityType.KelpSlice, "KelpSlice");
+            RegisterPrefabs(EntityType.Rice, "Rice");
+            RegisterPrefabs(EntityType.Cucumber, "Cucumber");
+            RegisterPrefabs(EntityType.CucumberSlice, "CucumberSlice");
+
 
         }
 
@@ -73,7 +77,10 @@ namespace FootStone.Kitchen
                     });
                 }
 
-                EntityManager.AddComponentData(e, new Food());
+                EntityManager.AddComponentData(e, new Food()
+                {
+                    Type = spawnFood.Type
+                });
 
                 if(spawnFood.IsSlice)
                     EntityManager.AddComponentData(e, new Slice());
