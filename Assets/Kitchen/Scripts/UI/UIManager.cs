@@ -94,6 +94,14 @@ namespace FootStone.Kitchen
           //  FSLog.Info($"UpdateTime:{str}");
             textTime.SetText(str);
         }
+
+        public void UpdateScore(ushort score)
+        {
+          
+            var str = score.ToString();
+            //  FSLog.Info($"UpdateTime:{str}");
+            textScore.SetText(str);
+        }
        
         public void AddMenu(int productId,int material1,int material2,int material3,int material4)
         {

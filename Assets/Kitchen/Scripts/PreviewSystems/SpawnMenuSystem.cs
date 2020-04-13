@@ -1,8 +1,5 @@
-﻿using System;
-using FootStone.ECS;
-using Unity.Collections;
+﻿using FootStone.ECS;
 using Unity.Entities;
-using UnityEngine;
 
 namespace FootStone.Kitchen
 {
