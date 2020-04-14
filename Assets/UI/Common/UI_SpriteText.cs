@@ -87,6 +87,7 @@ public class UI_SpriteText : MonoBehaviour
 					nUseLen += m_nSpecialOffset;
 					strKey = m_listSpriteKeys[nSpecial].ToString();
 				}
+				//Debug.Log(strKey);
 				Sprite sprite = m_dicSprites[strKey];
 
 				img.sprite = sprite;

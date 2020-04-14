@@ -45,7 +45,7 @@ public class UI_TaskListCtrl : MonoBehaviour
 		m_nUsingHeight += m_nItemSpace;
 	}
 
-	public void RemoveOne()
+	public void RemoveHead()
 	{
 		if (m_listUsing.Count > 0)
 		{
@@ -58,9 +58,44 @@ public class UI_TaskListCtrl : MonoBehaviour
 		}
 	}
 
-	private int m_nRemoveCount = 0;
+    public void InsertTail(int productId, int material1,
+        int material2 = 0, int material3 = 0, int material4 = 0)
+    {
+        UI_TaskListItem item = GetItem();
+
+        int[] materials;
+        if (material2 == 0)
+        {
+            materials = new int[] {material1};
+        }
+        else  if (material3 == 0)
+        {
+            materials = new int[] {material1,material2};
+        }
+        else  if (material4 == 0)
+        {
+            materials = new int[] {material1,material2,material3};
+        }
+        else 
+        {
+            materials = new int[] {material1,material2,material3,material4};
+        }
+
+        item.InitItem(productId, materials);
+
+        m_v3Temp2 = m_v3Temp1 = new Vector3(0, 0 - m_nUsingHeight, 0);
+        m_v3Temp2.y -= m_nPrepareLength;
+
+        item.Play(m_v3Temp2, m_v3Temp1, 1);
+     //   m_nUsingTime -= m_nTimeSpace;
+
+        m_nUsingHeight += m_preItem.BGHeight;
+        m_nUsingHeight += m_nItemSpace;
+    }
+
+    private int m_nRemoveCount = 0;
 	private bool m_isPlayRemove = false;
-	[SerializeField] float m_nRemoveUseTime = 0;
+	[SerializeField] float m_nRemoveUseTime = 1;
 	private float m_nRemoveRunTime = 0;
 	private float m_nTempRemovePct = 0;
 
@@ -70,9 +105,9 @@ public class UI_TaskListCtrl : MonoBehaviour
 	private bool mof = false;
 	void Update()
     {
-		if (Input.GetKeyDown(KeyCode.A))
+		if (Input.GetKeyDown(KeyCode.Z))
 		{
-			RemoveOne();
+			RemoveHead();
 		}
 
 		if (!m_isPlayRemove)
@@ -97,27 +132,27 @@ public class UI_TaskListCtrl : MonoBehaviour
 			}
 		}
 
-		//this is a test;
-		if (m_nUsingTime >= m_nTimeSpace)
-		{
-			UI_TaskListItem item = GetItem();
-			if (mof)
-			{
-				item.InitItem(1, new int[] { 1, 2 });
-			}
-			else
-			{
-				item.InitItem(1, new int[] { 2, 3 ,1});
-			}
-			m_v3Temp2 = m_v3Temp1 = new Vector3(0, 0 - m_nUsingHeight, 0);
-			m_v3Temp2.y -= m_nPrepareLength;
+		////this is a test;
+		//if (m_nUsingTime >= m_nTimeSpace)
+		//{
+		//	UI_TaskListItem item = GetItem();
+		//	if (mof)
+		//	{
+		//		item.InitItem(1, new int[] { 1, 2 });
+		//	}
+		//	else
+		//	{
+		//		item.InitItem(1, new int[] { 2, 3 ,1});
+		//	}
+		//	m_v3Temp2 = m_v3Temp1 = new Vector3(0, 0 - m_nUsingHeight, 0);
+		//	m_v3Temp2.y -= m_nPrepareLength;
 
-			item.Play(m_v3Temp2, m_v3Temp1, 1);
-			m_nUsingTime -= m_nTimeSpace;
+		//	item.Play(m_v3Temp2, m_v3Temp1, 1);
+		//	m_nUsingTime -= m_nTimeSpace;
 
-			m_nUsingHeight += m_preItem.BGHeight;
-			m_nUsingHeight += m_nItemSpace;
-		}
-		m_nUsingTime += Time.deltaTime;
+		//	m_nUsingHeight += m_preItem.BGHeight;
+		//	m_nUsingHeight += m_nItemSpace;
+		//}
+		//m_nUsingTime += Time.deltaTime;
 	}
 }

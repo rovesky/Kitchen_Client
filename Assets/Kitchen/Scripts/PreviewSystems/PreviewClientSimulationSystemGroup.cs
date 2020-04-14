@@ -12,13 +12,14 @@ namespace FootStone.Kitchen
         private GameTick gameTime = GameTick.DefaultGameTick;
         private double nextTickTime;
 
-        private SpawnCharactersSystem spawnSystemGroup;
+        private SpawnSystemGroup spawnSystemGroup;
         private PredictUpdateSystemGroup predictUpdateSystem;
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
-        private SpawnPlatesSystem spawnPlatesSystem;
+      //  private SpawnSystemGroup spawnPlatesSystem;
         private UpdateReplicatedOwnerFlag updateReplicatedOwnerFlag;
+        private ServerSystemGroup serverSystemGroup;
 
         protected override void OnCreate()
         {
@@ -33,11 +34,11 @@ namespace FootStone.Kitchen
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);
 
-            spawnSystemGroup = World.GetOrCreateSystem<SpawnCharactersSystem>();
+            spawnSystemGroup = World.GetOrCreateSystem<SpawnSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
 
-            spawnPlatesSystem = World.GetOrCreateSystem<SpawnPlatesSystem>();
-            m_systemsToUpdate.Add(spawnPlatesSystem);
+           // spawnPlatesSystem = World.GetOrCreateSystem<SpawnPlatesSystem>();
+           // m_systemsToUpdate.Add(spawnPlatesSystem);
 
             updateReplicatedOwnerFlag = World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>();
             m_systemsToUpdate.Add(updateReplicatedOwnerFlag);
@@ -45,9 +46,15 @@ namespace FootStone.Kitchen
             predictUpdateSystem = World.GetOrCreateSystem<PredictUpdateSystemGroup>();
             m_systemsToUpdate.Add(predictUpdateSystem);
 
+            serverSystemGroup = World.GetOrCreateSystem<ServerSystemGroup>();
+            m_systemsToUpdate.Add(serverSystemGroup);
+       
+
+
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
 
+          
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
 
@@ -84,7 +91,7 @@ namespace FootStone.Kitchen
 
             spawnSystemGroup.Update();
 
-            spawnPlatesSystem.Update();
+          //  spawnPlatesSystem.Update();
 
             updateReplicatedOwnerFlag.Update();
 
@@ -93,6 +100,8 @@ namespace FootStone.Kitchen
                 inputSystem.RetrieveCommand(worldTime.Tick);
 
                 predictUpdateSystem.Update();
+
+                serverSystemGroup.Update();
             }
 
 

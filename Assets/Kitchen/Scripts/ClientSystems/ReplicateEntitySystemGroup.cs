@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FootStone.ECS;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.Profiling;
 
@@ -47,7 +45,7 @@ namespace FootStone.Kitchen
             if (factory == null)
                 return;
 
-            var entity = factory.Create(EntityManager, null, null);
+            var entity = factory.Create(EntityManager, null, null,typeId);
             if (entity == Entity.Null)
                 return;
 
@@ -86,9 +84,14 @@ namespace FootStone.Kitchen
             replicatedEntities = new ReplicatedEntityCollection(EntityManager);
             factoryManager = new ReplicatedEntityFactoryManager();
 
+            var foodFactory = new FoodFactory();
          
             factoryManager.RegisterFactory((ushort) EntityType.Character, new CharacterFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
+            factoryManager.RegisterFactory((ushort) EntityType.Shrimp, foodFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.ShrimpSlice, foodFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.Game, new GameFactory());
+            factoryManager.RegisterFactory((ushort) EntityType.Menu, new MenuFactory());
 
         //    m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>());
             worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();

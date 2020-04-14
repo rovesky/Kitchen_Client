@@ -25,8 +25,8 @@ namespace FootStone.Kitchen
             Entities
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    ref FoodSliceState sliceState,
-                    in FoodSliceSetting sliceSetting,
+                    ref FoodSlicedState sliceState,
+                    in FoodSlicedSetting sliceSetting,
                     in LocalToWorld translation) =>
             {
                 if (sliceState.CurSliceTick == 0 || sliceState.CurSliceTick == sliceSetting.TotalSliceTick)

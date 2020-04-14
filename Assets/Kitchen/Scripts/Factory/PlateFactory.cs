@@ -12,18 +12,28 @@ namespace FootStone.Kitchen
         public PlateFactory()
         {
             platePrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Apple") as GameObject,
+                Resources.Load("Plate") as GameObject,
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
         }
 
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
-            GameWorld world)
+            GameWorld world,ushort type)
         {
             var e = entityManager.Instantiate(platePrefab);
 
             ItemCreateUtilities.CreateItemComponent(entityManager, e,
                 new float3 {x = 0.0f, y = -10f, z = 0.0f}, quaternion.identity);
+            
+
+            entityManager.AddComponentData(e, new Plate());
+            entityManager.AddComponentData(e, new PlatePredictedState()
+            {
+                Material1 = Entity.Null,
+                Material2 = Entity.Null,
+                Material3 = Entity.Null,
+                Material4 = Entity.Null
+            });
 
             entityManager.SetComponentData(e, new ReplicatedEntityData
             {
