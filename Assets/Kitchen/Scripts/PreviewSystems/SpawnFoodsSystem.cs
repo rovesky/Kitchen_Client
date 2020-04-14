@@ -62,20 +62,7 @@ namespace FootStone.Kitchen
 
                 ItemCreateUtilities.CreateItemComponent(EntityManager, e,
                     spawnFood.Pos, quaternion.identity);
-
-                if (spawnFood.Owner != Entity.Null)
-                {
-                    EntityManager.SetComponentData(e, new ItemPredictedState()
-                    {
-                        Owner = spawnFood.Owner,
-                        PreOwner = Entity.Null
-                    });
-
-                    EntityManager.SetComponentData(spawnFood.Owner,new SlotPredictedState()
-                    {
-                        FilledInEntity = e
-                    });
-                }
+                
 
                 EntityManager.AddComponentData(e, new Food()
                 {
@@ -90,6 +77,27 @@ namespace FootStone.Kitchen
                     Id = -1,
                     PredictingPlayerId = -1
                 });
+
+                if (spawnFood.Owner == Entity.Null) 
+                    continue;
+              
+
+                if (EntityManager.HasComponent<Character>(spawnFood.Owner))
+                {
+                    ItemAttachUtilities.ItemAttachToCharacter(EntityManager,e,spawnFood.Owner,-1);
+                    var pickupState = EntityManager.GetComponentData<PickupPredictedState>(spawnFood.Owner);
+                    pickupState.PickupedEntity = e;
+                    EntityManager.SetComponentData(spawnFood.Owner,pickupState);
+                }
+                else if (EntityManager.HasComponent<SlotPredictedState>(spawnFood.Owner))
+                {
+                    ItemAttachUtilities.ItemAttachToTable(EntityManager,e,
+                        spawnFood.Owner,spawnFood.Pos);
+                    EntityManager.SetComponentData(spawnFood.Owner, new SlotPredictedState()
+                    {
+                        FilledInEntity = e
+                    });
+                }
             }
 
             array.Dispose();

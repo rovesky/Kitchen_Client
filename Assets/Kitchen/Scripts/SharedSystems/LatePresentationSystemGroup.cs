@@ -15,6 +15,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateRTTSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateSliceProgressSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateSliceIconSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePlateIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateMenuSystem>());
         }
     }

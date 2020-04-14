@@ -43,38 +43,56 @@ namespace FootStone.Kitchen
             var entities = query.ToEntityArray(Allocator.TempJob);
 
             //生成Plate
-            for (var i = 0; i < 3; ++i)
+            for (var i = 0; i < 5; ++i)
             {
                 var entity = entities[i * 2];
                 var slot = EntityManager.GetComponentData<SlotPredictedState>(entity);
                 var slotData = EntityManager.GetComponentData<SlotSetting>(entity);
 
-                var e = EntityManager.Instantiate(platePrefab);
-                slot.FilledInEntity = e;
-                EntityManager.SetComponentData(entity, slot);
-
-                FSLog.Info($"slotData.Pos:{slotData.Pos}");
-                ItemCreateUtilities.CreateItemComponent(EntityManager, e,
-                    slotData.Pos, Quaternion.identity);
-
-                EntityManager.SetComponentData(e,new ItemPredictedState()
+                if(i<3)
+                    CreatePlate(entity, slotData,ref slot);
+                else
                 {
-                    Owner = entity,
-                    PreOwner = Entity.Null
-                });
-
-                EntityManager.AddComponentData(e, new Plate());
-                EntityManager.AddComponentData(e, new PlatePredictedState()
-                {
-                    Material1 = Entity.Null,
-                    Material2 = Entity.Null,
-                    Material3 = Entity.Null,
-                    Material4 = Entity.Null
-                });
+                    var spawnFoodEntity = GetSingletonEntity<SpawnFoodArray>();
+                    var buffer = EntityManager.GetBuffer<SpawnFoodRequest>(spawnFoodEntity);
+                    buffer.Add(new SpawnFoodRequest()
+                    {
+                        Type = EntityType.ShrimpSlice,
+                        Pos = slotData.Pos,
+                        Owner = entity,
+                        IsSlice = true
+                    });
+                }
               //  EntityManager.RemoveComponent<TriggerSetting>(e);
             }
 
             entities.Dispose();
+        }
+
+        private void CreatePlate(Entity entity, SlotSetting slotData, ref SlotPredictedState slot)
+        {
+            var e = EntityManager.Instantiate(platePrefab);
+            slot.FilledInEntity = e;
+            EntityManager.SetComponentData(entity, slot);
+
+            FSLog.Info($"slotData.Pos:{slotData.Pos}");
+            ItemCreateUtilities.CreateItemComponent(EntityManager, e,
+                slotData.Pos, Quaternion.identity);
+
+            EntityManager.SetComponentData(e,new ItemPredictedState()
+            {
+                Owner = entity,
+                PreOwner = Entity.Null
+            });
+
+            EntityManager.AddComponentData(e, new Plate());
+            EntityManager.AddComponentData(e, new PlatePredictedState()
+            {
+                Material1 = Entity.Null,
+                Material2 = Entity.Null,
+                Material3 = Entity.Null,
+                Material4 = Entity.Null
+            });
         }
     }
 }
