@@ -20,6 +20,7 @@ public class UI_SpriteText : MonoBehaviour
 	[SerializeField] Transform m_transRoot = null;
 	[SerializeField] float m_nSpaceNormal = 0;	// 普通字符间距;
 	[SerializeField] float m_nSpecialOffset = 0;    // 特殊字符修正;
+	[SerializeField] Alignment m_alignment = Alignment.left;
 
 
 	private List<char> m_listChars
@@ -86,7 +87,6 @@ public class UI_SpriteText : MonoBehaviour
 					nUseLen += m_nSpecialOffset;
 					strKey = m_listSpriteKeys[nSpecial].ToString();
 				}
-				Debug.Log(strKey);
 				Sprite sprite = m_dicSprites[strKey];
 
 				img.sprite = sprite;
@@ -94,21 +94,42 @@ public class UI_SpriteText : MonoBehaviour
 				img.transform.localPosition = new Vector3(nUseLen, 0);
 
 				nUseLen += sprite.rect.width;
-				nUseLen += m_nSpaceNormal;
 
-				if (isSpecial)
+				if (i != (arrChar.Length - 1))
 				{
-					nUseLen += m_nSpecialOffset;
+					nUseLen += m_nSpaceNormal;
+
+					if (isSpecial)
+					{
+						nUseLen += m_nSpecialOffset;
+					}
 				}
+
+				img.gameObject.SetActive(true);
 			}
 			else
 			{
 				Debug.LogError("UI_SpriteText SetText, out of range : " + arrChar[i]);
 			}
 		}
-	}
 
-	void Update()
-    {
-    }
+		Vector3 rootPos = Vector3.zero;
+		switch (m_alignment)
+		{
+			case Alignment.left:
+				break;
+			case Alignment.center:
+				rootPos.x = 0 - nUseLen / 2;
+				break;
+			case Alignment.right:
+				rootPos.x = 0 - nUseLen;
+				break;
+		}
+		m_transRoot.localPosition = rootPos;
+
+		for (int i = arrChar.Length; i < m_listImage.Count; i++)
+		{
+			m_listImage[i].gameObject.SetActive(false);
+		}
+	}
 }
