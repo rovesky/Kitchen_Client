@@ -9,15 +9,14 @@ using UnityEngine.UI;
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class UpdateItemUISystem :SystemBase
+    public class UpdateSliceProgressSystem :SystemBase
     {
 
         private Dictionary<Entity, GameObject> sliders = new  Dictionary<Entity, GameObject>();
-       // private GameObject sliderPrefab;
-
+  
         protected override void OnCreate()
         {
-           // sliderPrefab = Resources.Load("Progress") as GameObject;
+          
         }
 
         protected override void OnUpdate()

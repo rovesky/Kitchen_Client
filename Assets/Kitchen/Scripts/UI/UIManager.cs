@@ -86,6 +86,14 @@ namespace FootStone.Kitchen
             return slider;
         }
 
+        public GameObject CreateIcon()
+        {
+            var slider = Instantiate(Resources.Load("Image")) as GameObject;
+            slider.transform.parent = m_canvas_main.transform;
+          //  slider.transform.localScale = m_button1.transform.localScale;
+            return slider;
+        }
+
         public void UpdateTime(ushort timeSecond)
         {
            //ar endTime = DateTime.Now.AddSeconds(timeSecond);
