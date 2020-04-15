@@ -21,7 +21,7 @@ namespace FootStone.Kitchen
             sprites[EntityType.ShrimpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients5");
             sprites[EntityType.CucumberSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients6");
             sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients7");
-
+            sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
         }
 
         protected override void OnUpdate()

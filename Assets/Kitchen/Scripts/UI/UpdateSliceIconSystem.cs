@@ -21,6 +21,7 @@ namespace FootStone.Kitchen
             sprites[EntityType.ShrimpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients5");
             sprites[EntityType.CucumberSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients6");
             sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients7");
+            sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
 
         }
 
@@ -69,9 +70,7 @@ namespace FootStone.Kitchen
             if(!icons.ContainsKey(entity))
                 icons.Add(entity, UIManager.Instance.CreateIcon());
 
-
             var sliceIcon = icons[entity];
-
          
             var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0,50,0);
 
@@ -82,8 +81,6 @@ namespace FootStone.Kitchen
             image.sprite = sprites[type];
 
             sliceIcon.SetActive(isVisible);
-
-
         }
     }
 }

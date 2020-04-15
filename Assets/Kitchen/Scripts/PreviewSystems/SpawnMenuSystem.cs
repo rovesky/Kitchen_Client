@@ -20,8 +20,9 @@ namespace FootStone.Kitchen
 
             isSpawned = true;
 
-            CreateMenu(1, 5);
-            CreateMenu(2, 6,1,7);
+            CreateMenu(1, (ushort)EntityType.ShrimpSlice);
+            CreateMenu(2, (ushort)EntityType.KelpSlice,
+                (ushort)EntityType.RiceCooked,(ushort)EntityType.CucumberSlice);
         }
 
         private void CreateMenu(ushort productId,ushort material1,ushort material2 = 0
