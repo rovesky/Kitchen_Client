@@ -47,6 +47,7 @@ namespace FootStone.Kitchen
        
             ConfigVar.Init();
             GameWorld.Active = new GameWorld();
+            ItemCreateUtilities.Init();
       //      Application.targetFrameRate = 30;
             UnityEngine.Time.fixedDeltaTime = GameTick.DefaultGameTick.TickInterval;
 

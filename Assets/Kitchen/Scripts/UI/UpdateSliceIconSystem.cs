@@ -31,7 +31,7 @@ namespace FootStone.Kitchen
                 .WithAll<Material>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    in Item food,
+                    in GameEntity food,
                     in OwnerPredictedState itemState,
                     in LocalToWorld localToWorld,
                     in OffsetSetting offset) =>

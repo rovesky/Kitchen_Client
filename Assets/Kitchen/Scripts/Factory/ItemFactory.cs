@@ -11,7 +11,7 @@ namespace FootStone.Kitchen
             GameWorld world, ushort type)
         {
             return ItemCreateUtilities.CreateItem(entityManager,
-                (EntityType) type, new float3 {x = 0.0f, y = -10f, z = 0.0f},Entity.Null,-1);
+                (EntityType) type, new float3 {x = 0.0f, y = -10f, z = 0.0f},Entity.Null);
         }
     }
 }
