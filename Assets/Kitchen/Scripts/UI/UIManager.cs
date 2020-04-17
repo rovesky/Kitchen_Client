@@ -123,5 +123,10 @@ namespace FootStone.Kitchen
         {
             taskList.InsertTail(productId,material1,material2,material3,material4);
         }
+
+        public void RemoveMenu()
+        {
+            taskList.RemoveHead();
+        }
     }
 }

@@ -92,7 +92,7 @@ namespace FootStone.Kitchen
             }
             else
             {
-                var food = EntityManager.GetComponentData<Food>(entity);
+                var food = EntityManager.GetComponentData<Item>(entity);
                 icon1.sprite = sprites[food.Type];
                 icon1.gameObject.SetActive(true);
             }

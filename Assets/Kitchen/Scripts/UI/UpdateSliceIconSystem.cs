@@ -28,11 +28,11 @@ namespace FootStone.Kitchen
         protected override void OnUpdate()
         {
             Entities
-                .WithAll<Slice>()
+                .WithAll<Material>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    in Food food,
-                    in ItemPredictedState itemState,
+                    in Item food,
+                    in OwnerPredictedState itemState,
                     in LocalToWorld localToWorld,
                     in OffsetSetting offset) =>
                 {

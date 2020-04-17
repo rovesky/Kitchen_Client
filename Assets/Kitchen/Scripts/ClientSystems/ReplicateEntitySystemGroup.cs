@@ -84,18 +84,17 @@ namespace FootStone.Kitchen
             replicatedEntities = new ReplicatedEntityCollection(EntityManager);
             factoryManager = new ReplicatedEntityFactoryManager();
 
-            var foodFactory = new FoodFactory();
+            var itemFactory = new ItemFactory();
          
             factoryManager.RegisterFactory((ushort) EntityType.Character, new CharacterFactory());
-            factoryManager.RegisterFactory((ushort) EntityType.Plate, new PlateFactory());
-            factoryManager.RegisterFactory((ushort) EntityType.Shrimp, foodFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.ShrimpSlice, foodFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.Cucumber, foodFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.CucumberSlice, foodFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.Rice, foodFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.RiceCooked, foodFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.KelpSlice, foodFactory);
-
+            factoryManager.RegisterFactory((ushort) EntityType.Plate,  itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.Shrimp, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.ShrimpSlice, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.Cucumber, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.CucumberSlice, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.Rice, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.RiceCooked, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.KelpSlice, itemFactory);
 
             factoryManager.RegisterFactory((ushort) EntityType.Game, new GameFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Menu, new MenuFactory());

@@ -17,9 +17,10 @@ namespace FootStone.Kitchen
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
         private DespawnClientSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
-      //  private SpawnSystemGroup spawnPlatesSystem;
         private UpdateReplicatedOwnerFlag updateReplicatedOwnerFlag;
         private ServerSystemGroup serverSystemGroup;
+        private InitSystemGroup initSystemGroup;
+        private SpawnCharactersSystem spawnCharacterSystem;
 
         protected override void OnCreate()
         {
@@ -34,11 +35,14 @@ namespace FootStone.Kitchen
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);
 
+            initSystemGroup = World.GetOrCreateSystem<InitSystemGroup>();
+            m_systemsToUpdate.Add(initSystemGroup);
+
+            spawnCharacterSystem = World.GetOrCreateSystem<SpawnCharactersSystem>();
+            m_systemsToUpdate.Add(spawnCharacterSystem);
+
             spawnSystemGroup = World.GetOrCreateSystem<SpawnSystemGroup>();
             m_systemsToUpdate.Add(spawnSystemGroup);
-
-           // spawnPlatesSystem = World.GetOrCreateSystem<SpawnPlatesSystem>();
-           // m_systemsToUpdate.Add(spawnPlatesSystem);
 
             updateReplicatedOwnerFlag = World.GetOrCreateSystem<UpdateReplicatedOwnerFlag>();
             m_systemsToUpdate.Add(updateReplicatedOwnerFlag);
@@ -89,10 +93,12 @@ namespace FootStone.Kitchen
             inputSystem.StoreCommand(worldTime.Tick);
             inputSystem.ResetInput();
 
+            initSystemGroup.Update();
+
+            spawnCharacterSystem.Update();
             spawnSystemGroup.Update();
 
-          //  spawnPlatesSystem.Update();
-
+        
             updateReplicatedOwnerFlag.Update();
 
            // for (var i = 0; i < 1; ++i)
