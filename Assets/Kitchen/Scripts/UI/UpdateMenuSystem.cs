@@ -30,8 +30,8 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-          
-         //   FSLog.Info($"UpdateMenuItemSystem OnUpdate1");
+
+            //   FSLog.Info($"UpdateMenuItemSystem OnUpdate1");
             var query = GetEntityQuery(new EntityQueryDesc
             {
                 All = new ComponentType[]
@@ -40,18 +40,17 @@ namespace FootStone.Kitchen
                 }
             });
 
-         //   if (query.CalculateEntityCount() > 0)
+            //   if (query.CalculateEntityCount() > 0)
             {
                 var entities = query.ToEntityArray(Allocator.TempJob);
 
-                //生成Plate
                 for (var i = 0; i < entities.Length; ++i)
                 {
                     var entity = entities[i];
                     var menu = EntityManager.GetComponentData<Menu>(entity);
                     if (!menus.ContainsKey(menu.Index))
                     {
-                        UIManager.Instance.AddMenu(menu.ProductId,
+                        UIManager.Instance.AddMenu(menu.Index, menu.ProductId,
                             TypeToIcon(menu.MaterialId1),
                             TypeToIcon(menu.MaterialId2),
                             TypeToIcon(menu.MaterialId3),
@@ -60,15 +59,16 @@ namespace FootStone.Kitchen
 
                     menus[menu.Index] = true;
                 }
+
                 entities.Dispose();
             }
 
             var removes = new List<ushort>();
-            foreach(var key in menus.Keys)
+            foreach (var key in menus.Keys)
             {
-              
+
                 var menu = menus[key];
-            //    FSLog.Info($"key:{key},{menu}");
+                //    FSLog.Info($"key:{key},{menu}");
                 if (!menu)
                 {
                     UIManager.Instance.RemoveMenu(key);
@@ -87,7 +87,7 @@ namespace FootStone.Kitchen
             {
                 menus[key] = false;
             }
-           
+
         }
     }
 }

@@ -67,6 +67,7 @@ namespace FootStone.Kitchen
 
             EntityManager.AddComponentData(e, new ServerEntity());
             EntityManager.AddComponentData(e, new UpdateUI());
+            EntityManager.AddComponentData(e, new Connection());
 
             return e;
         }

@@ -5,25 +5,32 @@ using UnityEngine.UI;
 
 namespace FootStone.Kitchen
 {
-  //  [AddComponentMenu("MyGame/GameManager")]
+    //  [AddComponentMenu("MyGame/GameManager")]
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance;
 
         public Canvas m_canvas_main;
-      //  public Canvas m_canvas_slider;
-      //  public int a;
+        //  public Canvas m_canvas_slider;
+        //  public int a;
 
 
         private Button m_button1;
         private Button m_button2;
         private Button m_button3;
-        private UI_SpriteText textTime;
+        private UI_SpriteText textTimePlaying;
+        private UI_SpriteText textTimePreparing;
         private UI_SpriteText textScore;
         private UI_TaskListCtrl taskList;
+        private CanvasGroup canvasGroup;
+        private GameObject pannelButton;
+        private GameObject pannelMain;
+        private GameObject pannelStart;
+        private GameObject pannelEnd;
+        private GameObject joystick;
         private Text m_text_rtt;
         private Text m_text_fps;
-      
+
 
         private void Start()
         {
@@ -34,19 +41,27 @@ namespace FootStone.Kitchen
             m_text_rtt = pannelInfo.Find("text_rtt").GetComponent<Text>();
             m_text_fps = pannelInfo.Find("text_fps").GetComponent<Text>();
 
-            m_button1 = m_canvas_main.transform.Find("button1").GetComponent<Button>();
-            m_button2 = m_canvas_main.transform.Find("Btn_Drop/Btn_Main").GetComponent<Button>();
-            m_button3 = m_canvas_main.transform.Find("Btn_Pick/Btn_Main").GetComponent<Button>();
+            m_button1 = m_canvas_main.transform.Find("PannelButton/button1").GetComponent<Button>();
+            m_button2 = m_canvas_main.transform.Find("PannelButton/Btn_Drop/Btn_Main").GetComponent<Button>();
+            m_button3 = m_canvas_main.transform.Find("PannelButton/Btn_Pick/Btn_Main").GetComponent<Button>();
 
-       //     var obj = m_canvas_main.transform.Find("PannelMain/TextTime");
-         //   FSLog.Info($"TextTime Obj：{obj}");
-            textTime = m_canvas_main.transform.Find("PannelMain/TextTime").GetComponent<UI_SpriteText>();
-          //  FSLog.Info($"TextTime：{textTime}");
+
+            textTimePlaying = m_canvas_main.transform.Find("PannelMain/TextTime").GetComponent<UI_SpriteText>();
+
+            textTimePreparing = m_canvas_main.transform.Find("PannelStart/TextTime").GetComponent<UI_SpriteText>();
+
             textScore = m_canvas_main.transform.Find("PannelMain/TextScore").GetComponent<UI_SpriteText>();
 
             taskList = m_canvas_main.transform.Find("UI_TaskListCtrl").GetComponent<UI_TaskListCtrl>();
-        //    taskList.InsertTail(1,1);
-         //   taskList.InsertTail(2,1,2);
+
+            canvasGroup = m_canvas_main.GetComponent<CanvasGroup>();
+
+            pannelButton = m_canvas_main.transform.Find("PannelButton").gameObject;
+            pannelMain = m_canvas_main.transform.Find("PannelMain").gameObject;
+            pannelStart = m_canvas_main.transform.Find("PannelStart").gameObject;
+            pannelEnd = m_canvas_main.transform.Find("PannelEnd").gameObject;
+
+            joystick = m_canvas_main.transform.Find("Joystick").gameObject;
 
             m_button1.onClick.AddListener(() =>
             {
@@ -56,7 +71,7 @@ namespace FootStone.Kitchen
 
             m_button2.onClick.AddListener(() =>
             {
-             //   FSLog.Info("m_button2.onClick!");
+                //   FSLog.Info("m_button2.onClick!");
                 UIInput.AddButtonClickEvent("throw");
             });
 
@@ -90,7 +105,7 @@ namespace FootStone.Kitchen
         {
             var slider = Instantiate(Resources.Load("Image")) as GameObject;
             slider.transform.parent = m_canvas_main.transform;
-          //  slider.transform.localScale = m_button1.transform.localScale;
+            //  slider.transform.localScale = m_button1.transform.localScale;
             return slider;
         }
 
@@ -102,31 +117,64 @@ namespace FootStone.Kitchen
             return slider;
         }
 
-        public void UpdateTime(ushort timeSecond)
+        public void UpdateTime(GameState state, ushort timeSecond)
         {
-           //ar endTime = DateTime.Now.AddSeconds(timeSecond);
+            //ar endTime = DateTime.Now.AddSeconds(timeSecond);
+
             var timeSpan = new TimeSpan(0, 0, seconds: timeSecond);
-            var str = timeSpan.ToString(@"mm\:ss");
-          //  FSLog.Info($"UpdateTime:{str}");
-            textTime.SetText(str);
+
+            if (state == GameState.Playing)
+            {
+                var str = timeSpan.ToString(@"mm\:ss");
+                //  FSLog.Info($"UpdateTime:{str}");
+                textTimePlaying.SetText(str);
+            }
+            else if (state == GameState.Preparing)
+            {
+                var str = timeSpan.ToString(@"ss");
+                //  FSLog.Info($"UpdateTime:{str}");
+                textTimePreparing.SetText(str);
+            }
+
         }
 
         public void UpdateScore(ushort score)
         {
-          
+
             var str = score.ToString();
             //  FSLog.Info($"UpdateTime:{str}");
             textScore.SetText(str);
         }
-       
-        public void AddMenu(int productId,int material1,int material2,int material3,int material4)
+
+        public void AddMenu(int index, int productId, int material1, int material2, int material3, int material4)
         {
-            taskList.InsertTail(productId,material1,material2,material3,material4);
+            taskList.InsertTail(index, productId, material1, material2, material3, material4);
         }
 
         public void RemoveMenu(int index)
         {
-            taskList.RemoveIndex(index);
+            taskList.RemoveAt(index);
+        }
+
+
+        public void EnableGame(bool enable)
+        {
+            pannelButton.SetActive(enable);
+            pannelMain.SetActive(enable);
+            joystick.SetActive(enable);
+            taskList.gameObject.SetActive(enable);
+            canvasGroup.blocksRaycasts = enable;
+           
+        }
+
+        public void EnablePannelStart(bool enable)
+        {
+            pannelStart.SetActive(enable);
+        }
+
+        public void EnablePannelEnd(bool enable)
+        {
+            pannelEnd.SetActive(enable);
         }
     }
 }
