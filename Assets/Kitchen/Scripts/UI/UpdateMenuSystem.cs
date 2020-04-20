@@ -31,7 +31,7 @@ namespace FootStone.Kitchen
         protected override void OnUpdate()
         {
           
-            FSLog.Info($"UpdateMenuItemSystem OnUpdate1");
+         //   FSLog.Info($"UpdateMenuItemSystem OnUpdate1");
             var query = GetEntityQuery(new EntityQueryDesc
             {
                 All = new ComponentType[]
@@ -39,33 +39,29 @@ namespace FootStone.Kitchen
                     typeof(Menu)
                 }
             });
-            var entities = query.ToEntityArray(Allocator.TempJob);
 
-            FSLog.Info($"UpdateMenuItemSystem OnUpdate2");
-            if (entities.Length == 0)
+         //   if (query.CalculateEntityCount() > 0)
             {
-                UIManager.Instance.RemoveMenu();
-            }
+                var entities = query.ToEntityArray(Allocator.TempJob);
 
-            //生成Plate
-            for (var i = 0; i < entities.Length; ++i)
-            {
-                var entity = entities[i];
-                var menu = EntityManager.GetComponentData<Menu>(entity);
-                if (!menus.ContainsKey(menu.Index))
+                //生成Plate
+                for (var i = 0; i < entities.Length; ++i)
                 {
-                    UIManager.Instance.AddMenu(menu.ProductId,
-                        TypeToIcon(menu.MaterialId1),
-                        TypeToIcon(menu.MaterialId2),
-                        TypeToIcon(menu.MaterialId3),
-                        TypeToIcon(menu.MaterialId4));
+                    var entity = entities[i];
+                    var menu = EntityManager.GetComponentData<Menu>(entity);
+                    if (!menus.ContainsKey(menu.Index))
+                    {
+                        UIManager.Instance.AddMenu(menu.ProductId,
+                            TypeToIcon(menu.MaterialId1),
+                            TypeToIcon(menu.MaterialId2),
+                            TypeToIcon(menu.MaterialId3),
+                            TypeToIcon(menu.MaterialId4));
+                    }
+
+                    menus[menu.Index] = true;
                 }
-
-                menus[menu.Index] = true;
+                entities.Dispose();
             }
-
-            entities.Dispose();
-
 
             var removes = new List<ushort>();
             foreach(var key in menus.Keys)
@@ -75,7 +71,7 @@ namespace FootStone.Kitchen
             //    FSLog.Info($"key:{key},{menu}");
                 if (!menu)
                 {
-                    UIManager.Instance.RemoveMenu();
+                    UIManager.Instance.RemoveMenu(key);
                     removes.Add(key);
                 }
             }

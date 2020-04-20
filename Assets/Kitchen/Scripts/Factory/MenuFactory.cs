@@ -24,7 +24,7 @@ namespace FootStone.Kitchen
             });
 
             entityManager.SetComponentData(e,new Menu());
-            entityManager.AddComponentData(e,new NewEntity());
+         //   entityManager.AddComponentData(e,new NewEntity());
 
             return e;
         }

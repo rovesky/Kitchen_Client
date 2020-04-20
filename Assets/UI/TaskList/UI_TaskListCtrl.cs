@@ -58,6 +58,19 @@ public class UI_TaskListCtrl : MonoBehaviour
 		}
 	}
 
+    public void RemoveIndex(int index)
+    {
+        if (m_listUsing.Count > index)
+        {
+            UI_TaskListItem item = m_listUsing[index];
+            m_listUsing.RemoveAt(index);
+            item.Stop();
+            item.PlayOut(
+                ()=> { m_nRemoveCount++; });
+            m_listFrees.Enqueue(item);
+        }
+    }
+
     public void InsertTail(int productId, int material1,
         int material2 = 0, int material3 = 0, int material4 = 0)
     {
@@ -107,7 +120,7 @@ public class UI_TaskListCtrl : MonoBehaviour
     {
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
-			RemoveHead();
+			RemoveIndex(1);
 		}
 
 		if (!m_isPlayRemove)
