@@ -7,21 +7,23 @@ public class UI_TaskListCtrl : MonoBehaviour
 	[SerializeField] UI_TaskListItem m_preItem = null;
 	[SerializeField] Transform m_rootTrans = null;
 
-	[SerializeField] float m_nTimeSpace = 0;    // 间隔时间;
 	[SerializeField] float m_nPrepareLength = 0;    // 动态效果距离
 
 	[SerializeField] float m_nItemSpace = 0;    // 每一项间隔距离;
 
+	[SerializeField] float m_nAniTimeLen = 0.5f;
+
 	private Queue<UI_TaskListItem> m_listFrees = new Queue<UI_TaskListItem>();
-	private List<UI_TaskListItem> m_listUsing = new List<UI_TaskListItem>();
 
-	private float m_nUsingTime = 0; // 计时;
+	private List<int> m_listSort = new List<int>();
+	private Dictionary<int, UI_TaskListItem> m_dicUsing = new Dictionary<int, UI_TaskListItem>();
 
-	private float m_nUsingHeight = 0;   // 已经使用的高度;
-
-	private Vector3 m_v3Temp1 = Vector3.zero;
-	private Vector3 m_v3Temp2 = Vector3.zero;
-
+	private bool m_isLockAni = false;
+	private List<int> m_listAdd = new List<int>();
+	private List<int> m_listRemove = new List<int>();	// 移出列表;
+	private int m_nRemoveIndex = -1;                    // 是否有重新排动画 or 下标位置 之后的，都要参与动画;
+	private List<bool> m_listWaitting = null;
+	
 	private UI_TaskListItem GetItem()
 	{
 		UI_TaskListItem result = null;
@@ -36,34 +38,51 @@ public class UI_TaskListCtrl : MonoBehaviour
 			result = item;
 		}
 
-		m_listUsing.Add(result);
 		return result;
 	}
 
 	void Start()
 	{
-		m_nUsingHeight += m_nItemSpace;
 	}
 
-	public void RemoveHead()
+	public void RemoveAt(int nIndex)
 	{
-		if (m_listUsing.Count > 0)
+		if (m_dicUsing.Count > 0)
 		{
-			UI_TaskListItem item = m_listUsing[0];
-			m_listUsing.RemoveAt(0);
-			item.Stop();
-			item.PlayOut(
-				()=> { m_nRemoveCount++; });
-			m_listFrees.Enqueue(item);
+			if (m_dicUsing.ContainsKey(nIndex))
+			{
+				m_listRemove.Add(nIndex);	// 添加一个任务;
+			}
+			else
+			{
+				Debug.LogError("UI_TaskListCtrl RemoveAt, m_dicUsing not ContainsKey : " + nIndex);
+			}
+		}
+		else
+		{
+			Debug.LogError("UI_TaskListCtrl RemoveAt, m_dicUsing's count Error : " + m_dicUsing.Count);
 		}
 	}
 
-    public void InsertTail(int productId, int material1,
+	/// <summary>
+	/// 添加一个项目
+	/// </summary>
+	/// <param name="nIndex">唯一ID</param>
+    public void InsertTail(int nIndex, 
+		int productId, int material1,
         int material2 = 0, int material3 = 0, int material4 = 0)
     {
-        UI_TaskListItem item = GetItem();
+		if (m_dicUsing.ContainsKey(nIndex))
+		{
+			Debug.LogError("UI_TaskListCtrl InsertTail, already has key : " + nIndex);
+			return;
+		}
 
-        int[] materials;
+        UI_TaskListItem item = GetItem();
+		m_dicUsing.Add(nIndex, item);
+		m_listSort.Add(nIndex);
+
+		int[] materials;
         if (material2 == 0)
         {
             materials = new int[] {material1};
@@ -81,78 +100,108 @@ public class UI_TaskListCtrl : MonoBehaviour
             materials = new int[] {material1,material2,material3,material4};
         }
 
-        item.InitItem(productId, materials);
-
-        m_v3Temp2 = m_v3Temp1 = new Vector3(0, 0 - m_nUsingHeight, 0);
-        m_v3Temp2.y -= m_nPrepareLength;
-
-        item.Play(m_v3Temp2, m_v3Temp1, 1);
-     //   m_nUsingTime -= m_nTimeSpace;
-
-        m_nUsingHeight += m_preItem.BGHeight;
-        m_nUsingHeight += m_nItemSpace;
+		item.InitItem(productId, materials);
+		m_listAdd.Add(nIndex);
     }
 
-    private int m_nRemoveCount = 0;
-	private bool m_isPlayRemove = false;
-	[SerializeField] float m_nRemoveUseTime = 1;
-	private float m_nRemoveRunTime = 0;
-	private float m_nTempRemovePct = 0;
-
-	private Vector3 m_v3RootFrom = Vector3.zero;
-	private Vector3 m_v3RootTo = Vector3.zero;
-
-	private bool mof = false;
 	void Update()
-    {
-		if (Input.GetKeyDown(KeyCode.Z))
+	{
+		// 向上补空缺的动画部分;
+		if (m_nRemoveIndex != -1)
 		{
-			RemoveHead();
-		}
-
-		if (!m_isPlayRemove)
-		{
-			if (m_nRemoveCount > 0)
+			if (m_listWaitting == null)
 			{
-				m_v3RootTo = m_v3RootFrom = m_rootTrans.localPosition;
-				m_v3RootTo.y += (m_nItemSpace + m_preItem.BGHeight);
-				m_nRemoveRunTime = 0;
-				m_isPlayRemove = true;
+				m_listWaitting = new List<bool>();
+				for (int i = m_nRemoveIndex; i < m_listSort.Count; i++)
+				{
+					if (!m_dicUsing.ContainsKey(m_listSort[i]))
+					{
+						Debug.LogError("UI_TaskListCtrl UpdatePlayAni, Error key : " + m_listSort[i]);
+						continue;
+					}
+					m_listWaitting.Add(false);
+					int nIndex = m_listWaitting.Count - 1;
+					UI_TaskListItem item = m_dicUsing[m_listSort[i]];
+					item.Play((m_nItemSpace + m_preItem.BGHeight), m_nAniTimeLen, () =>
+					{
+						m_listWaitting[nIndex] = true;
+					});
+				}
 			}
-		}
-		else
-		{
-			m_nTempRemovePct = m_nRemoveRunTime / m_nRemoveUseTime;
-			m_nRemoveRunTime += Time.deltaTime;
-			m_rootTrans.localPosition = Vector3.Lerp(m_v3RootFrom, m_v3RootTo, m_nTempRemovePct);
-			if (m_nTempRemovePct >= 1)
+			else
 			{
-				m_isPlayRemove = false;
-				m_nRemoveCount--;
+				if (!m_listWaitting.Contains(false))
+				{
+					m_nRemoveIndex = -1;
+					m_listWaitting.Clear();
+					m_listWaitting = null;
+				}
 			}
+			return;
 		}
 
-		////this is a test;
-		//if (m_nUsingTime >= m_nTimeSpace)
-		//{
-		//	UI_TaskListItem item = GetItem();
-		//	if (mof)
-		//	{
-		//		item.InitItem(1, new int[] { 1, 2 });
-		//	}
-		//	else
-		//	{
-		//		item.InitItem(1, new int[] { 2, 3 ,1});
-		//	}
-		//	m_v3Temp2 = m_v3Temp1 = new Vector3(0, 0 - m_nUsingHeight, 0);
-		//	m_v3Temp2.y -= m_nPrepareLength;
+		if (m_isLockAni)
+		{
+			return;
+		}
 
-		//	item.Play(m_v3Temp2, m_v3Temp1, 1);
-		//	m_nUsingTime -= m_nTimeSpace;
+		// 移出一个元素的部分;
+		if (m_listRemove.Count > 0)
+		{
+			m_isLockAni = true;
+			//取第一个元素;
+			int nIndex = m_listRemove[0];
+			m_listRemove.RemoveAt(0);
 
-		//	m_nUsingHeight += m_preItem.BGHeight;
-		//	m_nUsingHeight += m_nItemSpace;
-		//}
-		//m_nUsingTime += Time.deltaTime;
+			// 开始移出操作;
+			UI_TaskListItem item = m_dicUsing[nIndex];
+			item.Stop();
+
+			m_dicUsing.Remove(nIndex);
+			m_nRemoveIndex = m_listSort.IndexOf(nIndex);    // 记录下标位置;
+			m_listSort.Remove(nIndex);
+
+			item.PlayOut(
+				() =>
+				{
+					// 结束后 回收item;
+					m_listFrees.Enqueue(item);
+					m_isLockAni = false;
+				});
+			return;
+		}
+
+		//加入一个新项目;
+		if (m_listAdd.Count > 0)
+		{
+			m_isLockAni = true;
+			//取第一个元素;
+			int nIndex = m_listAdd[0];
+			m_listAdd.RemoveAt(0);
+
+			Vector3 v3LastPos = Vector3.zero;
+			if (m_listSort.Count > 1)
+			{
+				int nSortIndex = m_listSort.IndexOf(nIndex);
+				if (nSortIndex > 0)
+				{
+					nSortIndex--;
+					int nEnd = m_listSort[nSortIndex];
+					v3LastPos = m_dicUsing[nEnd].transform.localPosition;
+					v3LastPos.y -= (m_nItemSpace + m_preItem.BGHeight);
+				}
+			}
+
+			// 开始進入操作;
+			UI_TaskListItem item = m_dicUsing[nIndex];
+
+			Vector3 v3Temp = v3LastPos;
+			v3Temp.y -= m_nPrepareLength;
+
+			item.Play(v3Temp, v3LastPos, m_nAniTimeLen, () =>
+			{
+				m_isLockAni = false;
+			});
+		}
 	}
 }

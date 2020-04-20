@@ -87,13 +87,27 @@ public class UI_TaskListItem : MonoBehaviour
 
 	private System.Action m_cbOutFinish = null;
 
-	public void Play(Vector3 v2From, Vector3 v2To, float nTimeLen)
+	public void Play(Vector3 v2From, Vector3 v2To, float nTimeLen, System.Action callBack)
 	{
-		m_cbOutFinish = null;
+		m_cbOutFinish = callBack;
 
 		m_nTimeLen = nTimeLen;
 		m_v3From = v2From;
 		m_v3To = v2To;
+		m_nPctTemp = 0;
+
+		m_nRunTime = 0;
+		m_isPlaying = true;
+	}
+
+	public void Play(float nMoveLen, float nTimeLen, System.Action callBack)
+	{
+		m_cbOutFinish = callBack;
+
+		m_nTimeLen = nTimeLen;
+		m_v3From = this.transform.localPosition;
+		m_v3To = m_v3From;
+		m_v3To.y += nMoveLen;
 		m_nPctTemp = 0;
 
 		m_nRunTime = 0;
