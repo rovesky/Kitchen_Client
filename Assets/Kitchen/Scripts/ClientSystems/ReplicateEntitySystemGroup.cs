@@ -88,6 +88,7 @@ namespace FootStone.Kitchen
          
             factoryManager.RegisterFactory((ushort) EntityType.Character, new CharacterFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Plate,  itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.PlateDirty, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Shrimp, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.ShrimpSlice, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Cucumber, itemFactory);
@@ -95,7 +96,11 @@ namespace FootStone.Kitchen
             factoryManager.RegisterFactory((ushort) EntityType.Rice, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.RiceCooked, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.KelpSlice, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.PotEmpty, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.PotFull, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.FireExtinguisher, itemFactory);
 
+            
             factoryManager.RegisterFactory((ushort) EntityType.Game, new GameFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Menu, new MenuFactory());
 

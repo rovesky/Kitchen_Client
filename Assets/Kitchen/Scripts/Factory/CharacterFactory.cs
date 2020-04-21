@@ -6,14 +6,10 @@ namespace FootStone.Kitchen
 {
     public class CharacterFactory : ReplicatedEntityFactory
     {
-      //  private  GameObject playerObj;
         private readonly Entity playerPrefab;
 
         public CharacterFactory()
         {
-          //  playerObj = Instantiate(Resources.Load("Player3") as GameObject);
-          //  playerObj.transform.position = new Vector3(0, -10, 9);
-
             playerPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
                 Resources.Load("Player2") as GameObject,
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
