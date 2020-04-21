@@ -64,6 +64,24 @@ public class UI_TaskListCtrl : MonoBehaviour
 		}
 	}
 
+	public void Clear()
+	{
+		m_listSort.Clear();
+		foreach ( KeyValuePair<int, UI_TaskListItem> kv in m_dicUsing)
+		{
+			kv.Value.Stop();
+			kv.Value.gameObject.SetActive(false);
+			m_listFrees.Enqueue(kv.Value);
+		}
+		m_dicUsing.Clear();
+
+		m_isLockAni = false;
+		m_listAdd.Clear();
+		m_listRemove.Clear();
+		m_nRemoveIndex = -1;
+		m_listWaitting = null;
+	}
+
 	/// <summary>
 	/// 添加一个项目
 	/// </summary>
@@ -157,13 +175,14 @@ public class UI_TaskListCtrl : MonoBehaviour
 			UI_TaskListItem item = m_dicUsing[nIndex];
 			item.Stop();
 
-			m_dicUsing.Remove(nIndex);
 			m_nRemoveIndex = m_listSort.IndexOf(nIndex);    // 记录下标位置;
 			m_listSort.Remove(nIndex);
 
 			item.PlayOut(
 				() =>
 				{
+					item.gameObject.SetActive(false);
+					m_dicUsing.Remove(nIndex);
 					// 结束后 回收item;
 					m_listFrees.Enqueue(item);
 					m_isLockAni = false;
@@ -194,10 +213,11 @@ public class UI_TaskListCtrl : MonoBehaviour
 
 			// 开始進入操作;
 			UI_TaskListItem item = m_dicUsing[nIndex];
+			item.gameObject.SetActive(true);
 
 			Vector3 v3Temp = v3LastPos;
 			v3Temp.y -= m_nPrepareLength;
-
+			item.transform.localPosition = v3Temp;
 			item.Play(v3Temp, v3LastPos, m_nAniTimeLen, () =>
 			{
 				m_isLockAni = false;
