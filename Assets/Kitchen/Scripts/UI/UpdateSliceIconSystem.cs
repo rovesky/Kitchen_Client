@@ -28,7 +28,7 @@ namespace FootStone.Kitchen
         protected override void OnUpdate()
         {
             Entities
-                .WithAll<Material>()
+                .WithAll<Sliced>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in GameEntity food,
