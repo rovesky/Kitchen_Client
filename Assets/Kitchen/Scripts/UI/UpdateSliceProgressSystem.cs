@@ -65,7 +65,7 @@ namespace FootStone.Kitchen
         private void UpdateSlider(Entity entity,bool isVisible,Vector3 pos, float value)
         {
             if(!sliders.ContainsKey(entity))
-                sliders.Add(entity, UIManager.Instance.CreateProgess());
+                sliders.Add(entity, UIManager.Instance.CreateProgress());
 
 
             var sliceSlider = sliders[entity];

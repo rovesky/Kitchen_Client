@@ -5,15 +5,10 @@ using UnityEngine.UI;
 
 namespace FootStone.Kitchen
 {
-    //  [AddComponentMenu("MyGame/GameManager")]
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance;
-
         public Canvas m_canvas_main;
-        //  public Canvas m_canvas_slider;
-        //  public int a;
-
 
         private Button m_button1;
         private Button m_button2;
@@ -93,11 +88,12 @@ namespace FootStone.Kitchen
             m_text_fps.text = fps.ToString("#.00");
         }
 
-        public GameObject CreateProgess()
+        public GameObject CreateProgress()
         {
             var slider = Instantiate(Resources.Load("Progress")) as GameObject;
             slider.transform.parent = m_canvas_main.transform;
             slider.transform.localScale = m_button1.transform.localScale;
+            slider.transform.SetAsFirstSibling();
             return slider;
         }
 
@@ -105,6 +101,7 @@ namespace FootStone.Kitchen
         {
             var slider = Instantiate(Resources.Load("Image")) as GameObject;
             slider.transform.parent = m_canvas_main.transform;
+            slider.transform.SetAsFirstSibling();
             //  slider.transform.localScale = m_button1.transform.localScale;
             return slider;
         }
@@ -113,14 +110,13 @@ namespace FootStone.Kitchen
         {
             var slider = Instantiate(Resources.Load("PlateIcon")) as GameObject;
             slider.transform.parent = m_canvas_main.transform;
+            slider.transform.SetAsFirstSibling();
             //  slider.transform.localScale = m_button1.transform.localScale;
             return slider;
         }
 
         public void UpdateTime(GameState state, ushort timeSecond)
         {
-            //ar endTime = DateTime.Now.AddSeconds(timeSecond);
-
             var timeSpan = new TimeSpan(0, 0, seconds: timeSecond);
 
             if (state == GameState.Playing)
@@ -135,7 +131,6 @@ namespace FootStone.Kitchen
                 //  FSLog.Info($"UpdateTime:{str}");
                 textTimePreparing.SetText(str);
             }
-
         }
 
         public void UpdateScore(ushort score)

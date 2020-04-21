@@ -36,7 +36,7 @@ namespace FootStone.Kitchen
             {
                 All = new ComponentType[]
                 {
-                    typeof(Menu)
+                    typeof(MenuItem)
                 }
             });
 
@@ -47,7 +47,7 @@ namespace FootStone.Kitchen
                 for (var i = 0; i < entities.Length; ++i)
                 {
                     var entity = entities[i];
-                    var menu = EntityManager.GetComponentData<Menu>(entity);
+                    var menu = EntityManager.GetComponentData<MenuItem>(entity);
                     if (!menus.ContainsKey(menu.Index))
                     {
                         UIManager.Instance.AddMenu(menu.Index, menu.ProductId,

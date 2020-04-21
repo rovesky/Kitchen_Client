@@ -16,14 +16,14 @@ namespace FootStone.Kitchen
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world,ushort type)
         {
-            var e = entityManager.CreateEntity(typeof(ReplicatedEntityData),typeof(Menu));
+            var e = entityManager.CreateEntity(typeof(ReplicatedEntityData),typeof(MenuItem));
              entityManager.SetComponentData(e,new ReplicatedEntityData()
             {
                 Id = -1,
                 PredictingPlayerId = -1
             });
 
-            entityManager.SetComponentData(e,new Menu());
+            entityManager.SetComponentData(e,new MenuItem());
          //   entityManager.AddComponentData(e,new NewEntity());
 
             return e;
