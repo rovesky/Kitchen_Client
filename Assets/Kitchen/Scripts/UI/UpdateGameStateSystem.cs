@@ -23,12 +23,12 @@ namespace FootStone.Kitchen
                         UIManager.Instance.EnablePannelStart(true);
                         UIManager.Instance.EnablePannelEnd(false);
                     }
-                    else  if (gameState.State == GameState.Ending)
-                    {
-                        UIManager.Instance.EnableGame(false );
-                        UIManager.Instance.EnablePannelStart(false );
-                        UIManager.Instance.EnablePannelEnd(true );
-                    }
+                    //else  if (gameState.State == GameState.Ending)
+                    //{
+                    //    UIManager.Instance.EnableGame(false );
+                    //    UIManager.Instance.EnablePannelStart(false );
+                    //    UIManager.Instance.EnablePannelEnd(true );
+                    //}
 
                 }).Run();
         }

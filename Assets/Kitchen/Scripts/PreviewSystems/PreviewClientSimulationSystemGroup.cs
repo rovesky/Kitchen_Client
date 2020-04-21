@@ -28,6 +28,8 @@ namespace FootStone.Kitchen
           //  Application.targetFrameRate = 40;
             UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
+            ItemCreateUtilities.Init();
+
             GameWorld.Active = new GameWorld();
 
             //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());

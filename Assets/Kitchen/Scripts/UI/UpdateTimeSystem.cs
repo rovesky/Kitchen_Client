@@ -12,7 +12,6 @@ namespace FootStone.Kitchen
                     in GameStateComponent gameState,
                     in  Countdown countdown) =>
                 {
-                   
                      UIManager.Instance.UpdateTime(gameState.State,countdown.Value);
                 
                 }).Run();
