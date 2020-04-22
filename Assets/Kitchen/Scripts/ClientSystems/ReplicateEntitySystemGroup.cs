@@ -91,6 +91,7 @@ namespace FootStone.Kitchen
             factoryManager.RegisterFactory((ushort) EntityType.PlateDirty, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Shrimp, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.ShrimpSlice, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.ShrimpProduct, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Cucumber, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.CucumberSlice, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Rice, itemFactory);

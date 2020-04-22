@@ -22,6 +22,9 @@ namespace FootStone.Kitchen
             sprites[EntityType.CucumberSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients6");
             sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients7");
             sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
+            sprites[EntityType.Sushi] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
+            sprites[EntityType.ShrimpProduct] = Resources.Load<Sprite>("demo_icon_food_Ingredients5a");
+
         }
 
         protected override void OnUpdate()
@@ -31,17 +34,11 @@ namespace FootStone.Kitchen
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in PlatePredictedState plateState,
-                   // in ItemPredictedState itemState,
+                    in MultiSlotPredictedState slotState,
                     in LocalToWorld localToWorld) =>
                 {
-                    //if (itemState.Owner != Entity.Null && EntityManager.HasComponent<Plate>(itemState.Owner))
-                    //{
-                    //    UpdateIcon(entity, false,localToWorld.Position, food.Type);
-                    //    return;
-                    //}
-                    //   var pos = localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0, 0.2f, 1.3f));
                     var pos = localToWorld.Position;
-                    UpdateIcon(entity, pos, plateState);
+                    UpdateIcon(entity, pos, plateState,slotState);
                 }).Run();
 
             var removes = new List<Entity>();
@@ -62,7 +59,7 @@ namespace FootStone.Kitchen
 
         }
 
-        private void UpdateIcon(Entity entity, Vector3 pos, PlatePredictedState plateState)
+        private void UpdateIcon(Entity entity, Vector3 pos, PlatePredictedState plateState,MultiSlotPredictedState slotState)
         {
 
             if (!icons.ContainsKey(entity))
@@ -73,14 +70,27 @@ namespace FootStone.Kitchen
 
             var rectTransform = platePannel.GetComponent<RectTransform>();
             rectTransform.position = screenPos;
-         
 
-            SetImage(1, plateState.Material1, platePannel);
-            SetImage(2, plateState.Material2, platePannel);
-            SetImage(3, plateState.Material3, platePannel);
-            SetImage(4, plateState.Material4, platePannel);
+            if (plateState.Product == Entity.Null)
+            {
 
-            platePannel.SetActive(!plateState.IsEmpty());
+                SetImage(1, slotState.FilledIn1, platePannel);
+                SetImage(2, slotState.FilledIn2, platePannel);
+                SetImage(3, slotState.FilledIn3, platePannel);
+                SetImage(4, slotState.FilledIn4, platePannel);
+
+                platePannel.SetActive(!slotState.IsEmpty());
+            }
+            else
+            {
+                var gameEntity = EntityManager.GetComponentData<GameEntity>(plateState.Product);
+                var menuT = MenuUtilities.GetMenuTemplate(gameEntity.Type);
+                SetImage1(1, menuT.Material1, platePannel);
+                SetImage1(2, menuT.Material2, platePannel);
+                SetImage1(3, menuT.Material3, platePannel);
+                SetImage1(4, menuT.Material4, platePannel);
+                platePannel.SetActive(true);
+            }
         }
 
         private void SetImage(int index, Entity entity,GameObject platePannel)
@@ -94,6 +104,20 @@ namespace FootStone.Kitchen
             {
                 var food = EntityManager.GetComponentData<GameEntity>(entity);
                 icon1.sprite = sprites[food.Type];
+                icon1.gameObject.SetActive(true);
+            }
+        }
+
+        private void SetImage1(int index, EntityType type,GameObject platePannel)
+        {
+            var icon1 = platePannel.transform.Find("Image"+index).GetComponent<Image>();
+            if (type == EntityType.None)
+            {
+                icon1.gameObject.SetActive(false);
+            }
+            else
+            {
+                icon1.sprite = sprites[type];
                 icon1.gameObject.SetActive(true);
             }
         }

@@ -10,15 +10,20 @@ namespace FootStone.Kitchen
     public class UpdateMenuItemSystem : SystemBase
     {
         private Dictionary<EntityType,int>  icons = new Dictionary<EntityType, int>();
+        private Dictionary<EntityType,int>  productIcons = new Dictionary<EntityType, int>();
 
         private Dictionary<ushort, bool> menus = new Dictionary<ushort, bool>();
       
         protected override void OnCreate()
         {
+
             icons[EntityType.ShrimpSlice] = 5;
             icons[EntityType.CucumberSlice] = 6;
             icons[EntityType.KelpSlice] = 7;
             icons[EntityType.RiceCooked] = 1;
+
+            productIcons[EntityType.ShrimpProduct] = 1;
+            productIcons[EntityType.Sushi] = 2;
         }
 
         private int TypeToIcon(int type)
@@ -26,6 +31,13 @@ namespace FootStone.Kitchen
             if (!icons.ContainsKey((EntityType)type))
                 return 0;
             return icons[(EntityType) type];
+        }
+
+        private int ProductToIcon(int type)
+        {
+            if (!productIcons.ContainsKey((EntityType)type))
+                return 0;
+            return productIcons[(EntityType) type];
         }
 
         protected override void OnUpdate()
@@ -50,7 +62,7 @@ namespace FootStone.Kitchen
                     var menu = EntityManager.GetComponentData<MenuItem>(entity);
                     if (!menus.ContainsKey(menu.Index))
                     {
-                        UIManager.Instance.AddMenu(menu.Index, menu.ProductId,
+                        UIManager.Instance.AddMenu(menu.Index, ProductToIcon(menu.ProductId),
                             TypeToIcon(menu.MaterialId1),
                             TypeToIcon(menu.MaterialId2),
                             TypeToIcon(menu.MaterialId3),
