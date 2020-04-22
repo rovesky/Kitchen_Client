@@ -12,6 +12,7 @@ namespace FootStone.Kitchen
         protected override void OnUpdate()
         {
             Entities
+                .WithoutBurst()
                 .ForEach((Entity entity,
                     in Score score) =>
                 {
