@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using FootStone.ECS;
+using Unity.Entities;
 
 namespace FootStone.Kitchen
 {
@@ -12,6 +13,7 @@ namespace FootStone.Kitchen
                 .ForEach((Entity entity,
                     in GameStateComponent gameState) =>
                 {
+                    FSLog.Info($"gameState:{gameState.State}");
                     if (gameState.State == GameState.Playing)
                     {
                         UIManager.Instance.EnableGame(true);
