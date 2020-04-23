@@ -13,7 +13,7 @@ namespace FootStone.Kitchen
                 .ForEach((Entity entity,
                     in GameStateComponent gameState) =>
                 {
-                    FSLog.Info($"gameState:{gameState.State}");
+                //    FSLog.Info($"gameState:{gameState.State}");
                     if (gameState.State == GameState.Playing)
                     {
                         UIManager.Instance.EnableGame(true);

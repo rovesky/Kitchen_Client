@@ -77,6 +77,8 @@ namespace FootStone.Kitchen
             });
         }
 
+      
+
         // 改变RTT UI显示
         public void UpdateRtt(double rtt)
         {
@@ -128,7 +130,7 @@ namespace FootStone.Kitchen
             else if (state == GameState.Preparing)
             {
                 var str = timeSpan.ToString(@"ss");
-                //  FSLog.Info($"UpdateTime:{str}");
+              // FSLog.Info($"UpdateTime textTimePreparing:{str}");
                 textTimePreparing.SetText(str);
             }
         }
@@ -151,6 +153,10 @@ namespace FootStone.Kitchen
             taskList.RemoveAt(index);
         }
 
+        public void ClearMenu()
+        {
+            taskList.Clear();
+        }
 
         public void EnableGame(bool enable)
         {

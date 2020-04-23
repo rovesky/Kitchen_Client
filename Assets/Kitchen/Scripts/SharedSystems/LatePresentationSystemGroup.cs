@@ -10,6 +10,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCharAnimSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateGameStateSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateTimeSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateScoreSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateRTTSystem>());
@@ -17,8 +18,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateSliceIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePlateIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateMenuItemSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateGameStateSystem>());
-
+          
             
         }
     }

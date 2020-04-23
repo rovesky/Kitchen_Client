@@ -52,6 +52,10 @@ namespace FootStone.Kitchen
                 }
             });
 
+            if (query.CalculateEntityCount() == 0)
+                UIManager.Instance.ClearMenu();
+
+
             //   if (query.CalculateEntityCount() > 0)
             {
                 var entities = query.ToEntityArray(Allocator.TempJob);

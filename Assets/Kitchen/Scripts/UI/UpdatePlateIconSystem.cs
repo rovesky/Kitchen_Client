@@ -74,12 +74,12 @@ namespace FootStone.Kitchen
             if (plateState.Product == Entity.Null)
             {
 
-                SetImage(1, slotState.FilledIn1, platePannel);
-                SetImage(2, slotState.FilledIn2, platePannel);
-                SetImage(3, slotState.FilledIn3, platePannel);
-                SetImage(4, slotState.FilledIn4, platePannel);
+                SetImage(1, slotState.Value.FilledIn1, platePannel);
+                SetImage(2, slotState.Value.FilledIn2, platePannel);
+                SetImage(3, slotState.Value.FilledIn3, platePannel);
+                SetImage(4, slotState.Value.FilledIn4, platePannel);
 
-                platePannel.SetActive(!slotState.IsEmpty());
+                platePannel.SetActive(!slotState.Value.IsEmpty());
             }
             else
             {

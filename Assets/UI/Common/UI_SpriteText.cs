@@ -32,7 +32,8 @@ public class UI_SpriteText : MonoBehaviour
 
 	private List<Image> m_listImage = new List<Image>();
 
-    void Start()
+ //   void Start()
+    void Awake()
     {
 		Object[] objs = Resources.LoadAll(m_strAsset,typeof(Sprite));
 		for (int i = 0; i < objs.Length; i++)
@@ -87,7 +88,7 @@ public class UI_SpriteText : MonoBehaviour
 					nUseLen += m_nSpecialOffset;
 					strKey = m_listSpriteKeys[nSpecial].ToString();
 				}
-				//Debug.Log(strKey);
+			//	Debug.Log($"strKey:{strKey},m_dicSprites:{m_dicSprites.Count}");
 				Sprite sprite = m_dicSprites[strKey];
 
 				img.sprite = sprite;
