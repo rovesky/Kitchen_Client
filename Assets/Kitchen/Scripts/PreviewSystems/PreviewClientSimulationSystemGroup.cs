@@ -54,12 +54,9 @@ namespace FootStone.Kitchen
 
             serverSystemGroup = World.GetOrCreateSystem<ServerSystemGroup>();
             m_systemsToUpdate.Add(serverSystemGroup);
-       
-
 
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
-
           
             despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);

@@ -93,7 +93,7 @@ namespace FootStone.Kitchen
         public GameObject CreateProgress()
         {
             var slider = Instantiate(Resources.Load("Progress")) as GameObject;
-            slider.transform.parent = m_canvas_main.transform;
+            slider.transform.SetParent(m_canvas_main.transform);
             slider.transform.localScale = m_button1.transform.localScale;
             slider.transform.SetAsFirstSibling();
             return slider;
@@ -102,18 +102,18 @@ namespace FootStone.Kitchen
         public GameObject CreateIcon()
         {
             var slider = Instantiate(Resources.Load("Image")) as GameObject;
-            slider.transform.parent = m_canvas_main.transform;
+            slider.transform.SetParent(m_canvas_main.transform);
             slider.transform.SetAsFirstSibling();
-            //  slider.transform.localScale = m_button1.transform.localScale;
+       //     slider.transform.localScale = m_button1.transform.localScale;
             return slider;
         }
 
         public GameObject CreatePlateIcon()
         {
             var slider = Instantiate(Resources.Load("PlateIcon")) as GameObject;
-            slider.transform.parent = m_canvas_main.transform;
+            slider.transform.SetParent(m_canvas_main.transform);
             slider.transform.SetAsFirstSibling();
-            //  slider.transform.localScale = m_button1.transform.localScale;
+       //      slider.transform.localScale = m_button1.transform.localScale;
             return slider;
         }
 

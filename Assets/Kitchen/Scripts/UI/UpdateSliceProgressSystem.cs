@@ -1,5 +1,6 @@
 ﻿using System.CodeDom;
 using System.Collections.Generic;
+using FootStone.ECS;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -11,14 +12,8 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class UpdateSliceProgressSystem :SystemBase
     {
-
         private Dictionary<Entity, GameObject> sliders = new  Dictionary<Entity, GameObject>();
   
-        protected override void OnCreate()
-        {
-          
-        }
-
         protected override void OnUpdate()
         {
             Entities
@@ -28,7 +23,9 @@ namespace FootStone.Kitchen
                     in FoodSlicedSetting sliceSetting,
                     in LocalToWorld translation) =>
             {
-                if (sliceState.CurSliceTick == 0 || sliceState.CurSliceTick == sliceSetting.TotalSliceTick)
+                if (sliceState.CurSliceTick == 0
+                    || sliceState.CurSliceTick == sliceSetting.TotalSliceTick
+                    || EntityManager.HasComponent<Despawn>(entity))
                 {
                     UpdateSlider(entity,false, float3.zero, 0);
                 }
