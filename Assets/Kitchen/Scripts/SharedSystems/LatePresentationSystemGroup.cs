@@ -10,6 +10,8 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCharAnimSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyBoxAnimSystem>());
+            
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateGameStateSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateTimeSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateScoreSystem>());
