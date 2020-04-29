@@ -20,25 +20,22 @@ namespace FootStone.Kitchen
                     in FirePresentation presentation,
                     in SlotPredictedState slotState) =>
                 {
-                   
+
                     var visible = false;
                     if (slotState.FilledIn != Entity.Null &&
                         EntityManager.HasComponent<Pot>(slotState.FilledIn) &&
                         EntityManager.HasComponent<SlotPredictedState>(slotState.FilledIn))
                     {
-                      
-                          var potSlot = EntityManager.GetComponentData<SlotPredictedState>(slotState.FilledIn);
-                          if (potSlot.FilledIn != Entity.Null)
-                              visible = true;
+
+                        var potSlot = EntityManager.GetComponentData<SlotPredictedState>(slotState.FilledIn);
+                        if (potSlot.FilledIn != Entity.Null)
+                            visible = true;
                     }
 
-                   // FSLog.Info($"presentation.Value:{presentation.Value}");
-                    
-                   // var gameObject= EntityManager.GetComponentObject<Transform>(presentation.Value).gameObject;
                     presentation.Value.SetActive(visible);
-                   
+
                 }).Run();
-            
+
         }
     }
 }

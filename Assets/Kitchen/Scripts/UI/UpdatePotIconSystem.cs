@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using FootStone.ECS;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +7,7 @@ using UnityEngine.UI;
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class UpdateSliceIconSystem :SystemBase
+    public class UpdatePotIconSystem :SystemBase
     {
 
         private Dictionary<Entity, GameObject> icons = new  Dictionary<Entity, GameObject>();
@@ -18,10 +16,7 @@ namespace FootStone.Kitchen
         private Dictionary<EntityType,Sprite>  sprites = new Dictionary<EntityType, Sprite>();
         protected override void OnCreate()
         {
-            sprites[EntityType.ShrimpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients5");
-            sprites[EntityType.CucumberSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients6");
-            sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients7");
-            sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
+            sprites[EntityType.None] = Resources.Load<Sprite>("demo_icon_food_Ingredients4");
             sprites[EntityType.Rice] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
 
         }
@@ -29,23 +24,19 @@ namespace FootStone.Kitchen
         protected override void OnUpdate()
         {
             Entities
-                .WithAny<Sliced,Uncooked>()
+                .WithAll<Pot>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    in GameEntity food,
-                    in OwnerPredictedState itemState,
+                    in SlotPredictedState slotState,
                     in LocalToWorld localToWorld,
                     in OffsetSetting offset) =>
                 {
-                    if (itemState.Owner != Entity.Null && 
-                        (EntityManager.HasComponent<Plate>(itemState.Owner)||EntityManager.HasComponent<Pot>(itemState.Owner)))
-                    {
-                        UpdateIcon(entity, false,localToWorld.Position, food.Type);
-                        return;
-                    }
+                 
+                 //   if()
                     //   var pos = localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0, 0.2f, 1.3f));
                     var pos = localToWorld.Position;
-                    UpdateIcon(entity, true, pos, food.Type);
+                    var type = slotState.FilledIn == Entity.Null?EntityType.None:EntityType.Rice;
+                    UpdateIcon(entity, true, pos, type);
                 }).Run();
 
             var removes = new List<Entity>();
