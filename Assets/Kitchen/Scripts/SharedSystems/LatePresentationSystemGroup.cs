@@ -13,6 +13,8 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyBoxAnimSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyPotAnimSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyGasCookerAnimSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyExtinguisherAnimSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCatchFireAnimSystem>());
 
             
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateGameStateSystem>());
