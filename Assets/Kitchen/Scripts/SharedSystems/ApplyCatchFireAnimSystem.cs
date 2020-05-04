@@ -24,18 +24,18 @@ namespace FootStone.Kitchen
 
                    if (state.IsCatchFire)
                    {
-                       if (presentation.Value == null)
-                           presentation.Value = Object.Instantiate(Resources.Load("CatchFire")) as GameObject;
+                       if (presentation.Object == null)
+                           presentation.Object = Object.Instantiate(Resources.Load("CatchFire")) as GameObject;
 
-                       presentation.Value.SetActive(true);
-                       presentation.Value.transform.position =
+                       presentation.Object.SetActive(true);
+                       presentation.Object.transform.position =
                            localToWorld.Position + math.mul(localToWorld.Rotation, slotSetting.Pos);
                    }
                    else
                    {
-                       if (presentation.Value != null)
+                       if (presentation.Object != null)
 
-                           presentation.Value.SetActive(false);
+                           presentation.Object.SetActive(false);
                    }
 
                }).Run();

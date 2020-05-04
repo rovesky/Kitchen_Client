@@ -6,6 +6,13 @@ using UnityEngine.UI;
 
 namespace FootStone.Kitchen
 {
+    public enum PotState
+    {
+        Empty,
+        Full,
+        Burnt
+    }
+
     [DisableAutoCreation]
     public class UpdatePotIconSystem :SystemBase
     {
@@ -13,11 +20,12 @@ namespace FootStone.Kitchen
         private Dictionary<Entity, GameObject> icons = new  Dictionary<Entity, GameObject>();
     
 
-        private Dictionary<EntityType,Sprite>  sprites = new Dictionary<EntityType, Sprite>();
+        private Dictionary<PotState,Sprite>  sprites = new Dictionary<PotState, Sprite>();
         protected override void OnCreate()
         {
-            sprites[EntityType.None] = Resources.Load<Sprite>("demo_icon_food_Ingredients4");
-            sprites[EntityType.Rice] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
+            sprites[PotState.Empty] = Resources.Load<Sprite>("demo_cookzone_btn_addition");
+            sprites[PotState.Full] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
+            sprites[PotState.Burnt] = Resources.Load<Sprite>("demo_cookzone_btn_fire");
 
         }
 
@@ -32,10 +40,8 @@ namespace FootStone.Kitchen
                     in OffsetSetting offset) =>
                 {
                  
-                 //   if()
-                    //   var pos = localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0, 0.2f, 1.3f));
                     var pos = localToWorld.Position;
-                    var type = slotState.FilledIn == Entity.Null?EntityType.None:EntityType.Rice;
+                    var type = slotState.FilledIn == Entity.Null?PotState.Empty:PotState.Full;
                     UpdateIcon(entity, true, pos, type);
                 }).Run();
 
@@ -57,7 +63,7 @@ namespace FootStone.Kitchen
 
         }
 
-        private void UpdateIcon(Entity entity, bool isVisible, Vector3 pos, EntityType type)
+        private void UpdateIcon(Entity entity, bool isVisible, Vector3 pos, PotState type)
         {
             
             if(!icons.ContainsKey(entity))

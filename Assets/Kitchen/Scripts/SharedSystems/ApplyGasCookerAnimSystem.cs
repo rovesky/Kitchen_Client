@@ -1,6 +1,8 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Rendering;
+using Unity.Transforms;
 using UnityEngine;
 
 
@@ -17,8 +19,10 @@ namespace FootStone.Kitchen
             Entities
                 .WithStructuralChanges()
                 .ForEach((Entity entity,
-                    in FirePresentation presentation,
-                    in SlotPredictedState slotState) =>
+                    in CookFirePresentation presentation,
+                    in SlotPredictedState slotState,
+                    in SlotSetting slotSetting,
+                    in LocalToWorld localToWorld ) =>
                 {
 
                     var visible = false;
@@ -29,10 +33,21 @@ namespace FootStone.Kitchen
 
                         var potSlot = EntityManager.GetComponentData<SlotPredictedState>(slotState.FilledIn);
                         if (potSlot.FilledIn != Entity.Null)
+                        {
+                            if (presentation.Object == null)
+                                presentation.Object = Object.Instantiate(Resources.Load("CookFire")) as GameObject;
+                            
+                            presentation.Object.transform.position =
+                                localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0.79f,0.89f,-0.86f));
+                            presentation.Object.transform.rotation = localToWorld.Rotation;
                             visible = true;
+
+                        }
+                          
                     }
 
-                    presentation.Value.SetActive(visible);
+                    if (presentation.Object != null)
+                        presentation.Object.SetActive(visible);
 
                 }).Run();
 

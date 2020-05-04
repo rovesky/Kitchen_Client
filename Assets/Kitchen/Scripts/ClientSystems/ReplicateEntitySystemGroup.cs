@@ -100,7 +100,7 @@ namespace FootStone.Kitchen
             factoryManager.RegisterFactory((ushort) EntityType.Sushi, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Pot, itemFactory);
        //     factoryManager.RegisterFactory((ushort) EntityType.PotFull, itemFactory);
-            factoryManager.RegisterFactory((ushort) EntityType.FireExtinguisher, itemFactory);
+            factoryManager.RegisterFactory((ushort) EntityType.Extinguisher, itemFactory);
             factoryManager.RegisterFactory((ushort) EntityType.Game, new GameFactory());
             factoryManager.RegisterFactory((ushort) EntityType.Menu, new MenuFactory());
 

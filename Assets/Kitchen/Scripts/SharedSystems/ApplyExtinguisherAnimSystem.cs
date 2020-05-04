@@ -18,7 +18,7 @@ namespace FootStone.Kitchen
             Entities
                 .WithStructuralChanges()
                 .ForEach((Entity entity,
-                    in FireExtinguisherPresentation presentation,
+                    in ExtinguisherPresentation presentation,
                     in ExtinguisherPredictedState extinguisherState,
                     in LocalToWorld localToWorld) =>
                 {
