@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class UpdateSliceProgressSystem :SystemBase
+    public class UpdateProgressSystem :SystemBase
     {
         private Dictionary<Entity, GameObject> sliders = new  Dictionary<Entity, GameObject>();
   
@@ -19,19 +19,19 @@ namespace FootStone.Kitchen
             Entities
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    ref FoodSlicedState sliceState,
-                    in FoodSlicedSetting sliceSetting,
+                    ref ProgressPredictState sliceState,
+                    in ProgressSetting sliceSetting,
                     in LocalToWorld translation) =>
             {
-                if (sliceState.CurSliceTick == 0
-                    || sliceState.CurSliceTick == sliceSetting.TotalSliceTick
+                if (sliceState.CurTick == 0
+                    || sliceState.CurTick == sliceSetting.TotalTick
                     || EntityManager.HasComponent<Despawn>(entity))
                 {
                     UpdateSlider(entity,false, float3.zero, 0);
                 }
                 else
                 {
-                    var percentage = (float) sliceState.CurSliceTick / sliceSetting.TotalSliceTick;
+                    var percentage = (float) sliceState.CurTick / sliceSetting.TotalTick;
 
                     // if(percentage > 0)
                     //  FSLog.Info($"UpdateItemUISystem,percentage:{percentage}");

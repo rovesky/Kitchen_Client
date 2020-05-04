@@ -20,8 +20,8 @@ namespace FootStone.Kitchen
                 .ForEach((Entity entity,
                     in PotPresentation presentation,
                     in SlotPredictedState slotState,
-                    in FoodSlicedSetting cookedSetting,
-                    in FoodSlicedState cookedState,
+                    in ProgressSetting cookedSetting,
+                    in ProgressPredictState cookedState,
                     in LocalToWorld localToWorld) =>
                 {
                     if (slotState.FilledIn == Entity.Null)
@@ -59,7 +59,7 @@ namespace FootStone.Kitchen
                             presentation.Steam.SetActive(false);
                         }
 
-                        if (cookedState.CurSliceTick == cookedSetting.TotalSliceTick)
+                        if (cookedState.CurTick == cookedSetting.TotalTick)
                         {
                             presentation.Steam.SetActive(true);
                             presentation.Steam.transform.position = localToWorld.Position + new float3(0, 1.5f, 0);

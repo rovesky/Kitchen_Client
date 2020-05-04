@@ -21,7 +21,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateTimeSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateScoreSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateRTTSystem>());
-            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateSliceProgressSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateProgressSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateSliceIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePlateIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePotIconSystem>());
