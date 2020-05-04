@@ -36,12 +36,15 @@ namespace FootStone.Kitchen
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in SlotPredictedState slotState,
+                    in BurntPredictedState burntState,
                     in LocalToWorld localToWorld,
                     in OffsetSetting offset) =>
                 {
                  
                     var pos = localToWorld.Position;
                     var type = slotState.FilledIn == Entity.Null?PotState.Empty:PotState.Full;
+                    if (burntState.IsBurnt)
+                        type = PotState.Burnt;
                     UpdateIcon(entity, true, pos, type);
                 }).Run();
 

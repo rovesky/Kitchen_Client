@@ -22,6 +22,7 @@ namespace FootStone.Kitchen
                     in SlotPredictedState slotState,
                     in ProgressSetting cookedSetting,
                     in ProgressPredictState cookedState,
+                    in BurntPredictedState burntState,
                     in LocalToWorld localToWorld) =>
                 {
                     if (slotState.FilledIn == Entity.Null)
@@ -65,6 +66,13 @@ namespace FootStone.Kitchen
                             presentation.Steam.transform.position = localToWorld.Position + new float3(0, 1.5f, 0);
                         }
                         //     FSLog.Info($"stream active true,pos:{presentation.Steam.transform.position}");
+
+                    }
+
+                    if (burntState.IsBurnt)
+                    {
+                        if (presentation.Steam != null)
+                            presentation.Steam.SetActive(false);
 
                     }
 

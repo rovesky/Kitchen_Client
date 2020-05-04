@@ -99,6 +99,16 @@ namespace FootStone.Kitchen
             return slider;
         }
 
+
+        public GameObject CreateFireAlert()
+        {
+            var slider = Instantiate(Resources.Load("FireAlert")) as GameObject;
+            slider.transform.SetParent(m_canvas_main.transform);
+            slider.transform.localScale = m_button1.transform.localScale;
+            slider.transform.SetAsFirstSibling();
+            return slider;
+        }
+
         public GameObject CreateIcon()
         {
             var slider = Instantiate(Resources.Load("Image")) as GameObject;

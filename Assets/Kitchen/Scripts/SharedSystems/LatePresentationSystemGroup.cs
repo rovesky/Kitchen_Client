@@ -26,6 +26,9 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePlateIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePotIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateMenuItemSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateFireAlertSystem>());
+
+            
          
 
             
