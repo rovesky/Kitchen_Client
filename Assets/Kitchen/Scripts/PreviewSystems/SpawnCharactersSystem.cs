@@ -30,10 +30,10 @@ namespace FootStone.Kitchen
             localPlayer.PlayerEntity = CreateCharacter(new float3 {x = 0, y = 1, z = -4}, true,0);
             SetSingleton(localPlayer);
           
-            var e = CreateCharacter(new float3 {x = -3, y = 1, z = -4}, false,1);
-            var interpolatedState = EntityManager.GetComponentData<CharacterInterpolatedState>(e);
-            interpolatedState.MaterialId = 1;
-            EntityManager.SetComponentData(e, interpolatedState);
+            //var e = CreateCharacter(new float3 {x = -3, y = 1, z = -4}, false,1);
+            //var interpolatedState = EntityManager.GetComponentData<CharacterInterpolatedState>(e);
+            //interpolatedState.MaterialId = 1;
+            //EntityManager.SetComponentData(e, interpolatedState);
         }
 
         private Entity CreateCharacter(float3 position, bool isLocal,int id)
