@@ -4,7 +4,8 @@ using Unity.Entities;
 namespace FootStone.Kitchen
 {
 
-    [UpdateInGroup(typeof(PresentationSystemGroup))]
+   // [UpdateInGroup(typeof(PresentationSystemGroup))]
+    [DisableAutoCreation]
     public class LatePresentationSystemGroup : NoSortComponentSystemGroup
     {
         protected override void OnCreate()

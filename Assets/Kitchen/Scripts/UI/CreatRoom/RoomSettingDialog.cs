@@ -36,7 +36,7 @@ public class RoomSettingDialog : PanelBase
     {
         if (Close_Btn != null)
         {
-            EventTriggerListener.Get(Close_Btn.gameObject).onPointerClick = o => 
+            EventTriggerListener.Get(Close_Btn.gameObject).onPointerClick = o =>
             {
                 PanelManager.Instance.ClosePanel(GameCommon.Instance.RoomSettingDialog);
                 OnClosed();
@@ -66,23 +66,25 @@ public class RoomSettingDialog : PanelBase
 
         if (GameMode_Group != null)
         {
-            for (var i = 0; i < GameMode_Group.childCount ; i ++)
+            for (var i = 0; i < GameMode_Group.childCount; i++)
             {
                 var target = GameMode_Group.GetChild(i).GetComponent<Toggle>();
                 if (target != null)
                 {
                     target.onValueChanged.AddListener((o) =>
                     {
-                        var text = target.transform.Find("Label").GetComponent<Text>();
-                        text.color = o ? Color.white : Color.black;
+                        var obj = target.transform.Find("Background/Image");
+                        obj.gameObject.SetActive(o);
+
                     });
                 }
-                
-               
+
             }
-           
-    }
-        
+
+
+        }
+
+
     }
 
     public void RandomPwd()
@@ -106,15 +108,15 @@ public class RoomSettingDialog : PanelBase
 
     public void RequsetPwd()
     {
-        var Pwd = Random.Range(1000,9999);
+        var Pwd = Random.Range(1000, 9999);
         if (RoomPwd_Text != null)
         {
-            RoomPwd_Text.GetComponent<Text>().text = Pwd.ToString() ;
+            RoomPwd_Text.GetComponent<Text>().text = Pwd.ToString();
         }
     }
     public override void OnClosed()
     {
-        
+
         base.OnClosed();
     }
 
