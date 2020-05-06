@@ -25,7 +25,7 @@ namespace FootStone.Kitchen
                     in LocalToWorld localToWorld ) =>
                 {
 
-                    var visible = true;
+                    var visible = false;
                     if (slotState.FilledIn != Entity.Null &&
                         EntityManager.HasComponent<Pot>(slotState.FilledIn) &&
                         EntityManager.HasComponent<SlotPredictedState>(slotState.FilledIn))
