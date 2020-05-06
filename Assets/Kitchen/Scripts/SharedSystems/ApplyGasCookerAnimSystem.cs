@@ -25,7 +25,7 @@ namespace FootStone.Kitchen
                     in LocalToWorld localToWorld ) =>
                 {
 
-                    var visible = false;
+                    var visible = true;
                     if (slotState.FilledIn != Entity.Null &&
                         EntityManager.HasComponent<Pot>(slotState.FilledIn) &&
                         EntityManager.HasComponent<SlotPredictedState>(slotState.FilledIn))
@@ -38,7 +38,7 @@ namespace FootStone.Kitchen
                                 presentation.Object = Object.Instantiate(Resources.Load("Effect/CookFire")) as GameObject;
                             
                             presentation.Object.transform.position =
-                                localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0.79f,0.89f,-0.86f));
+                                localToWorld.Position + math.mul(localToWorld.Rotation, slotSetting.Pos);
                             presentation.Object.transform.rotation = localToWorld.Rotation;
                             visible = true;
 

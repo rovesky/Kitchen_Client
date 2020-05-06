@@ -93,7 +93,7 @@ namespace FootStone.Kitchen
 
         public GameObject CreateUIFromPrefabs(string name)
         {
-            var obj = Instantiate(Resources.Load("UI/"+name)) as GameObject;
+            var obj = Instantiate(Resources.Load("UI/Prefab/"+name)) as GameObject;
             obj.transform.SetParent(m_canvas_main.transform);
          //   slider.transform.localScale = m_canvas_main.transform.localScale;
             obj.transform.SetAsFirstSibling();
