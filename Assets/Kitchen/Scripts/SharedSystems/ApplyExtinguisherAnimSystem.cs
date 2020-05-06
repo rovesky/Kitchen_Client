@@ -31,7 +31,7 @@ namespace FootStone.Kitchen
 
                     if (presentation.Smog == null)
                     {
-                        presentation.Smog = Object.Instantiate(Resources.Load("Smog")) as GameObject;
+                        presentation.Smog = Object.Instantiate(Resources.Load("Effect/Smog")) as GameObject;
                     }
 
                     presentation.Smog.SetActive(true);

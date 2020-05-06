@@ -24,7 +24,7 @@ namespace FootStone.Kitchen
                    if (state.IsCatchFire)
                    {
                        if (presentation.Object == null)
-                           presentation.Object = Object.Instantiate(Resources.Load("CatchFire")) as GameObject;
+                           presentation.Object = Object.Instantiate(Resources.Load("Effect/CatchFire")) as GameObject;
 
                        presentation.Object.SetActive(true);
                        presentation.Object.transform.position =

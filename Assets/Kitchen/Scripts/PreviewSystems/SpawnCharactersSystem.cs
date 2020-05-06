@@ -16,7 +16,7 @@ namespace FootStone.Kitchen
             SetSingleton(new LocalPlayer {PlayerId = -1, PlayerEntity = Entity.Null});
 
             playerPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Player2") as GameObject,
+                Resources.Load("Character/Player2") as GameObject,
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
         }
@@ -39,7 +39,7 @@ namespace FootStone.Kitchen
         private Entity CreateCharacter(float3 position, bool isLocal,int id)
         {
             var e = EntityManager.Instantiate(playerPrefab);
-            var playerObj = Object.Instantiate(Resources.Load("CharacterRobot1") as GameObject);
+            var playerObj = Object.Instantiate(Resources.Load("Character/CharacterRobot1") as GameObject);
             FSLog.Info(" spwan entity OnCreate2");
 
             var rotation = Quaternion.identity;

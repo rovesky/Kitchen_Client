@@ -18,11 +18,11 @@ namespace FootStone.Kitchen
         private Dictionary<EntityType,Sprite>  sprites = new Dictionary<EntityType, Sprite>();
         protected override void OnCreate()
         {
-            sprites[EntityType.ShrimpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients5");
-            sprites[EntityType.CucumberSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients6");
-            sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("demo_icon_food_Ingredients7");
-            sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
-            sprites[EntityType.Rice] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
+            sprites[EntityType.ShrimpSlice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients5");
+            sprites[EntityType.CucumberSlice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients6");
+            sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients7");
+            sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
+            sprites[EntityType.Rice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
 
         }
 

@@ -56,7 +56,7 @@ namespace FootStone.Kitchen
 
                         if (presentation.Steam == null)
                         {
-                            presentation.Steam = Object.Instantiate(Resources.Load("Steam")) as GameObject;
+                            presentation.Steam = Object.Instantiate(Resources.Load("Effect/Steam")) as GameObject;
                             presentation.Steam.SetActive(false);
                         }
 

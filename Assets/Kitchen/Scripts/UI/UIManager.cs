@@ -100,42 +100,6 @@ namespace FootStone.Kitchen
             return obj;
         }
 
-       // public GameObject CreateProgress()
-       // {
-       //     var slider = Instantiate(Resources.Load("Progress")) as GameObject;
-       //     slider.transform.SetParent(m_canvas_main.transform);
-       //     slider.transform.localScale = m_button1.transform.localScale;
-       //     slider.transform.SetAsFirstSibling();
-       //     return slider;
-       // }
-
-
-       // public GameObject CreateFireAlert()
-       // {
-       //     var slider = Instantiate(Resources.Load("FireAlert")) as GameObject;
-       //     slider.transform.SetParent(m_canvas_main.transform);
-       //     slider.transform.localScale = m_button1.transform.localScale;
-       //     slider.transform.SetAsFirstSibling();
-       //     return slider;
-       // }
-
-       // public GameObject CreateIcon()
-       // {
-       //     var slider = Instantiate(Resources.Load("Image")) as GameObject;
-       //     slider.transform.SetParent(m_canvas_main.transform);
-       //     slider.transform.SetAsFirstSibling();
-       ////     slider.transform.localScale = m_button1.transform.localScale;
-       //     return slider;
-       // }
-
-       // public GameObject CreatePlateIcon()
-       // {
-       //     var slider = Instantiate(Resources.Load("PlateIcon")) as GameObject;
-       //     slider.transform.SetParent(m_canvas_main.transform);
-       //     slider.transform.SetAsFirstSibling();
-       ////      slider.transform.localScale = m_button1.transform.localScale;
-       //     return slider;
-       // }
 
         public void UpdateTime(GameState state, ushort timeSecond)
         {

@@ -23,9 +23,9 @@ namespace FootStone.Kitchen
         private Dictionary<PotState,Sprite>  sprites = new Dictionary<PotState, Sprite>();
         protected override void OnCreate()
         {
-            sprites[PotState.Empty] = Resources.Load<Sprite>("demo_cookzone_btn_addition");
-            sprites[PotState.Full] = Resources.Load<Sprite>("demo_icon_food_Ingredients1");
-            sprites[PotState.Burnt] = Resources.Load<Sprite>("demo_cookzone_btn_fire");
+            sprites[PotState.Empty] = Resources.Load<Sprite>("UI/Icon/demo_cookzone_btn_addition");
+            sprites[PotState.Full] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
+            sprites[PotState.Burnt] = Resources.Load<Sprite>("UI/Icon/demo_cookzone_btn_fire");
 
         }
 

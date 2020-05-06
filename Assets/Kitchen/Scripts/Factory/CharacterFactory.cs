@@ -11,7 +11,7 @@ namespace FootStone.Kitchen
         public CharacterFactory()
         {
             playerPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(
-                Resources.Load("Player2") as GameObject,
+                Resources.Load("Character/Player2") as GameObject,
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
         }
@@ -19,7 +19,7 @@ namespace FootStone.Kitchen
             GameWorld world,ushort type)
         {
             var e = entityManager.Instantiate(playerPrefab);
-            var playerObj = Instantiate(Resources.Load("CharacterRobot1") as GameObject);
+            var playerObj = Instantiate(Resources.Load("Character/CharacterRobot1") as GameObject);
             
             FSLog.Info($" spawn character:{e}");
             var pos = new Vector3(0, -20, 9);

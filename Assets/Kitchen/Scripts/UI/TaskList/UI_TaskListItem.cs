@@ -35,7 +35,7 @@ public class UI_TaskListItem : MonoBehaviour
 	/// <param name="arrItems">素材</param>
 	public void InitItem(int nResultID, int[] arrItems)
 	{
-		m_picResult.sprite = Resources.Load("demo_icon_food_dishe" + nResultID, typeof(Sprite)) as Sprite;
+		m_picResult.sprite = Resources.Load("UI/Icon/demo_icon_food_dishe" + nResultID, typeof(Sprite)) as Sprite;
 
 		for (int i = 0; i < arrItems.Length; i++)
 		{
@@ -51,7 +51,7 @@ public class UI_TaskListItem : MonoBehaviour
 				m_listItems.Add(img);
 			}
 
-			img.sprite = Resources.Load("demo_icon_food_Ingredients" + arrItems[i], typeof(Sprite)) as Sprite; ;
+			img.sprite = Resources.Load("UI/Icon/demo_icon_food_Ingredients" + arrItems[i], typeof(Sprite)) as Sprite; ;
 			img.gameObject.SetActive(true);
 		}
 

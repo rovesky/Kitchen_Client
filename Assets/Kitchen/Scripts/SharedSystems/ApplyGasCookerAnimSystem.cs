@@ -35,7 +35,7 @@ namespace FootStone.Kitchen
                         if (potSlot.FilledIn != Entity.Null)
                         {
                             if (presentation.Object == null)
-                                presentation.Object = Object.Instantiate(Resources.Load("CookFire")) as GameObject;
+                                presentation.Object = Object.Instantiate(Resources.Load("Effect/CookFire")) as GameObject;
                             
                             presentation.Object.transform.position =
                                 localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0.79f,0.89f,-0.86f));
