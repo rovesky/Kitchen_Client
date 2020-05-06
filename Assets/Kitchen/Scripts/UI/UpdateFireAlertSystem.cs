@@ -61,7 +61,7 @@ namespace FootStone.Kitchen
         private void UpdateFireAlert(Entity entity, bool isVisible, Vector3 pos)
         {
             if (!alerts.ContainsKey(entity))
-                alerts.Add(entity, UIManager.Instance.CreateFireAlert());
+                alerts.Add(entity, UIManager.Instance.CreateUIFromPrefabs("FireAlert"));
 
 
             var sliceAlert = alerts[entity];

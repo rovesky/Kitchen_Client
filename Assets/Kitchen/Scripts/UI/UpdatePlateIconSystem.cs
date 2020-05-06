@@ -63,7 +63,7 @@ namespace FootStone.Kitchen
         {
 
             if (!icons.ContainsKey(entity))
-                icons.Add(entity, UIManager.Instance.CreatePlateIcon());
+                icons.Add(entity, UIManager.Instance.CreateUIFromPrefabs("PlateIcon"));
 
             var platePannel = icons[entity];
             var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0, 55, 0);

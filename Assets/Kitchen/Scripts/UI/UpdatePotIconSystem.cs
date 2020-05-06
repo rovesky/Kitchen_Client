@@ -70,7 +70,7 @@ namespace FootStone.Kitchen
         {
             
             if(!icons.ContainsKey(entity))
-                icons.Add(entity, UIManager.Instance.CreateIcon());
+                icons.Add(entity, UIManager.Instance.CreateUIFromPrefabs("ItemIcon"));
 
             var sliceIcon = icons[entity];
          
