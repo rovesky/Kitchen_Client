@@ -17,7 +17,7 @@ namespace FootStone.Kitchen
             GameWorld world, ushort type)
         {
             var e = ClientCharacterUtilities.CreateCharacter(entityManager, new float3 {x = 0, y = -20, z = 9});
-            entityManager.AddComponentData(e, new UpdateUI());
+        //    entityManager.AddComponentData(e, new UpdateUI());
             return e;
         }
     }

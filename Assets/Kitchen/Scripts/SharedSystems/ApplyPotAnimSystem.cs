@@ -69,6 +69,7 @@ namespace FootStone.Kitchen
 
                     }
 
+                    //被烧糊的锅
                     if (burntState.IsBurnt)
                     {
                         if (presentation.Steam != null)

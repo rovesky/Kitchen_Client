@@ -88,7 +88,7 @@ namespace FootStone.Kitchen
 
         public void RetrieveCommand(uint tick)
         {
-            var localEntity = GetSingleton<LocalPlayer>().PlayerEntity;
+            var localEntity = GetSingleton<LocalPlayer>().CharacterEntity;
             if (localEntity == Entity.Null)
                 return;
 

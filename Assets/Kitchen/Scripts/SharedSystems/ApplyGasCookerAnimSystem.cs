@@ -32,7 +32,7 @@ namespace FootStone.Kitchen
                     {
 
                         var potSlot = EntityManager.GetComponentData<SlotPredictedState>(slotState.FilledIn);
-                        if (potSlot.FilledIn != Entity.Null)
+                        if (potSlot.FilledIn != Entity.Null && !EntityManager.HasComponent<Burnt>(slotState.FilledIn))
                         {
                             if (presentation.Object == null)
                                 presentation.Object = Object.Instantiate(Resources.Load("Effect/CookFire")) as GameObject;

@@ -10,16 +10,16 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             EntityManager.CreateEntity(typeof(LocalPlayer));
-            SetSingleton(new LocalPlayer {PlayerId = -1, PlayerEntity = Entity.Null});
+            SetSingleton(new LocalPlayer {PlayerId = -1, CharacterEntity = Entity.Null});
         }
 
         protected override void OnUpdate()
         {
             var localPlayer = GetSingleton<LocalPlayer>();
-            if (localPlayer.PlayerEntity != Entity.Null)
+            if (localPlayer.CharacterEntity != Entity.Null)
                 return;
 
-            localPlayer.PlayerEntity = CreateCharacter(new float3 {x = 0, y = 1, z = -4}, true,0);
+            localPlayer.CharacterEntity = CreateCharacter(new float3 {x = 0, y = 1, z = -4}, true,0);
             SetSingleton(localPlayer);
           
             //var e = CreateCharacter(new float3 {x = -3, y = 1, z = -4}, false,1);

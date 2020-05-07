@@ -68,10 +68,12 @@ namespace FootStone.Kitchen
             var localPlayer = GetSingleton<LocalPlayer>();
 
             if (EntityManager.HasComponent<Character>(entity) &&
-                localPlayer.PlayerEntity == Entity.Null &&
+                localPlayer.CharacterEntity == Entity.Null &&
                 replicatedData.PredictingPlayerId == localPlayer.PlayerId)
             {
-                localPlayer.PlayerEntity = entity;
+                EntityManager.AddComponentData(entity, new LocalCharacter());
+                localPlayer.CharacterEntity = entity;
+              
                 SetSingleton(localPlayer);
             }
         }
@@ -79,7 +81,7 @@ namespace FootStone.Kitchen
         protected override void OnCreate()
         {
             EntityManager.CreateEntity(typeof(LocalPlayer));
-            SetSingleton(new LocalPlayer {PlayerId = -1, PlayerEntity = Entity.Null});
+            SetSingleton(new LocalPlayer {PlayerId = -1, CharacterEntity = Entity.Null});
 
             replicatedEntities = new ReplicatedEntityCollection(EntityManager);
             factoryManager = new ReplicatedEntityFactoryManager();
