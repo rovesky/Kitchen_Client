@@ -29,6 +29,7 @@ namespace FootStone.Kitchen
             UnityEngine.Time.fixedDeltaTime = gameTime.TickInterval;
             ConfigVar.Init();
             ItemCreateUtilities.Init();
+            ClientCharacterUtilities.Init();
 
             GameWorld.Active = new GameWorld();
 
