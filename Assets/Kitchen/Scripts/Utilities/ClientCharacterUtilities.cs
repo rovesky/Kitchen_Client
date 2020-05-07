@@ -1,5 +1,4 @@
-﻿using FootStone.ECS;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ namespace FootStone.Kitchen
             presentationPrefab = Resources.Load("Character/CharacterRobot") as GameObject;
         }
 
-        public static Entity CreateCharacter(EntityManager entityManager,float3 position, bool isLocal,int id)
+        public static Entity CreateCharacter(EntityManager entityManager,float3 position)
         {
             var e = entityManager.Instantiate(entityPrefab);
             var characterPresentation = Object.Instantiate(presentationPrefab);
@@ -38,19 +37,7 @@ namespace FootStone.Kitchen
                 PresentationEntity = presentationEntity
             });
             
-            entityManager.SetComponentData(e, new ReplicatedEntityData
-            {
-                Id =  id,
-                PredictingPlayerId = isLocal ? 0 : 1
-            });
-
-            if (!isLocal)
-                return e;
-
-
-            entityManager.AddComponentData(e, new ServerEntity());
-            entityManager.AddComponentData(e, new UpdateUI());
-            entityManager.AddComponentData(e, new Connection());
+         
 
             return e;
         }

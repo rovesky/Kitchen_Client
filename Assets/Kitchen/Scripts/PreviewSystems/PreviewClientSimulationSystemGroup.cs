@@ -1,12 +1,9 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
-using UnityEngine;
 
 namespace FootStone.Kitchen
 {
-
     [DisableAutoCreation]
-    //   [UpdateAfter(typeof(ExportPhysicsWorld)), UpdateBefore(typeof(EndFramePhysicsSystem))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private GameTick gameTime = GameTick.DefaultGameTick;
