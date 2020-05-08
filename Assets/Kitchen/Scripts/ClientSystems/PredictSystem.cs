@@ -3,6 +3,19 @@ using Unity.Entities;
 
 namespace FootStone.Kitchen
 {
+
+     
+    [DisableAutoCreation]
+    public class ClearSpawnRequestsSystem : SystemBase
+    {
+        protected override void OnUpdate()
+        {
+            var entity = GetSingletonEntity<SpawnItemArray>();
+            var requests = EntityManager.GetBuffer<SpawnItemRequest>(entity);
+            requests.Clear();
+        }
+    }
+
     [DisableAutoCreation]
     public class PredictSystem : NoSortComponentSystemGroup
     {
@@ -11,6 +24,7 @@ namespace FootStone.Kitchen
         private PredictUpdateSystemGroup predictUpdateSystemGroup;
         private ReplicateEntitySystemGroup replicateEntitySystemGroup;
         private ApplyPredictedStateSystemGroup applyPredictedStateSystemGroup;
+       
 
         protected override void OnCreate()
         {
@@ -80,6 +94,14 @@ namespace FootStone.Kitchen
           //  FSLog.Info($"PredictionRollback:{worldTime.Tick}");
             replicateEntitySystemGroup.Rollback();
             applyPredictedStateSystemGroup.Update();
+
+            var entity = GetSingletonEntity<SpawnItemArray>();
+            var requests = EntityManager.GetBuffer<SpawnItemRequest>(entity);
+           // if(requests.Length >0)
+               FSLog.Info($"PredictionRollback:{requests.Length}");
+            requests.Clear();
+
+         
         }
 
 

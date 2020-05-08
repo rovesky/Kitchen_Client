@@ -105,7 +105,7 @@ namespace FootStone.Kitchen
 
             predictSystem.Update();
 
-         //   spawnItemSystem.Update();
+            spawnItemSystem.Update();
 
             predictPresentationSystemGroup.Update();
 

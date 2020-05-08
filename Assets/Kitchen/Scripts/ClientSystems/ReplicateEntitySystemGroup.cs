@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FootStone.ECS;
 using Unity.Entities;
 using UnityEngine.Profiling;
@@ -20,6 +21,9 @@ namespace FootStone.Kitchen
             {
                 var entity = replicatedEntities.Unregister(id);
 
+                if(entity == Entity.Null || !EntityManager.Exists(entity))
+                    continue;
+
                 EntityManager.AddComponentData(entity, new Despawn() { Frame = 0 });
                 if (EntityManager.HasComponent<Character>(entity))
                 {
@@ -27,6 +31,12 @@ namespace FootStone.Kitchen
                     EntityManager.AddComponentData(animEntity, new Despawn() { Frame = 0 });
                 }
             }
+        }
+
+        public void Unregister(Entity entity)
+        {
+            var replicatedEntityData = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
+            replicatedEntities.Unregister(replicatedEntityData.Id);
         }
 
         public void ProcessEntitySpawn(int serverTick, int id, ushort typeId)
@@ -64,6 +74,8 @@ namespace FootStone.Kitchen
 
             //Update localPlayer
             var entity = replicatedEntities.GetEntity(id);
+            if(entity == Entity.Null)
+                return;
             var replicatedData = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
             var localPlayer = GetSingleton<LocalPlayer>();
 

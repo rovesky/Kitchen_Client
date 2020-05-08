@@ -16,7 +16,7 @@ namespace FootStone.Kitchen
                     in Presentation presentation,
                     in BoxOpenRequest request) =>
                 {
-                    FSLog.Info("animator open!");
+                   // FSLog.Info("animator open!");
                     var animator = EntityManager.GetComponentObject<Animator>(presentation.Value);
                     animator.SetBool("Opening", true);
                     EntityManager.RemoveComponent<BoxOpenRequest>(entity);
