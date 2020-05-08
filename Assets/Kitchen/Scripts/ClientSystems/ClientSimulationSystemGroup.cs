@@ -40,6 +40,7 @@ namespace FootStone.Kitchen
         private SetRenderTimeSystem setRenderTimeSystem;
         private WorldSceneEntitiesSystem worldSceneEntitiesSystem;
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
+        private SpawnItemsSystem spawnItemSystem;
 
         protected override void OnCreate()
         {
@@ -75,6 +76,9 @@ namespace FootStone.Kitchen
             predictSystem = World.GetOrCreateSystem<PredictSystem>();
             m_systemsToUpdate.Add(predictSystem);
 
+            spawnItemSystem = World.GetOrCreateSystem<SpawnItemsSystem>();
+            m_systemsToUpdate.Add(spawnItemSystem);
+
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
         
@@ -100,6 +104,8 @@ namespace FootStone.Kitchen
             setPredictTimeSystem.Update();
 
             predictSystem.Update();
+
+         //   spawnItemSystem.Update();
 
             predictPresentationSystemGroup.Update();
 

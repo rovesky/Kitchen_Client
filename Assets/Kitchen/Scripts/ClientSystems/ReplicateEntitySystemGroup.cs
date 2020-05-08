@@ -62,7 +62,7 @@ namespace FootStone.Kitchen
         {
             replicatedEntities.ProcessEntityUpdate(serverTick, id, ref reader);
 
-            //Update PlayerEntity
+            //Update localPlayer
             var entity = replicatedEntities.GetEntity(id);
             var replicatedData = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
             var localPlayer = GetSingleton<LocalPlayer>();

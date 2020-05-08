@@ -93,8 +93,7 @@ namespace FootStone.Kitchen
             initSystemGroup.Update();
 
             spawnCharacterSystem.Update();
-            spawnSystemGroup.Update();
-
+       
         
             updateReplicatedOwnerFlag.Update();
 
@@ -105,6 +104,9 @@ namespace FootStone.Kitchen
                 predictUpdateSystem.Update();
 
                 serverSystemGroup.Update();
+
+                spawnSystemGroup.Update();
+
             }
 
 
