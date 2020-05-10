@@ -2,7 +2,6 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Rendering;
 
 namespace FootStone.Kitchen
 {
@@ -12,7 +11,10 @@ namespace FootStone.Kitchen
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world, ushort type)
         {
-           var query =  entityManager.CreateEntityQuery(ComponentType.ReadOnly<GameEntity>(), ComponentType.ReadOnly<ReplicatedEntityData>());
+           var query =  entityManager.CreateEntityQuery(
+               ComponentType.ReadOnly<GameEntity>(),
+               ComponentType.ReadOnly<ReplicatedEntityData>(),
+               ComponentType.ReadOnly<PredictedItem>());
            var entities = query.ToEntityArray(Allocator.TempJob);
 
            foreach (var entity in entities)
@@ -22,9 +24,12 @@ namespace FootStone.Kitchen
 
                if ((ushort) gameEntity.Type != type || replicatedEntityData.Id != -1)
                    continue;
+              
+               entityManager.RemoveComponent<PredictedItem>(entity);
                entities.Dispose();
-               return entity;
 
+               FSLog.Info($"Attach Predict item:{entity}");
+               return entity;
            }
 
            entities.Dispose();

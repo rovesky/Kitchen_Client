@@ -20,7 +20,9 @@ namespace FootStone.Kitchen
             {
                 if (despawn.Frame <= 0)
                 {
-                    replicateEntitySystemGroup.Unregister(entity);
+                    if(!EntityManager.HasComponent<PredictedItem>(entity))
+                        replicateEntitySystemGroup.Unregister(entity);
+
                     if (EntityManager.HasComponent<Transform>(entity))
                     {
                         Object.Destroy(EntityManager.GetComponentObject<Transform>(entity).gameObject);

@@ -95,11 +95,11 @@ namespace FootStone.Kitchen
             replicateEntitySystemGroup.Rollback();
             applyPredictedStateSystemGroup.Update();
 
-            var entity = GetSingletonEntity<SpawnItemArray>();
-            var requests = EntityManager.GetBuffer<SpawnItemRequest>(entity);
-           // if(requests.Length >0)
-               FSLog.Info($"PredictionRollback:{requests.Length}");
-            requests.Clear();
+           // var entity = GetSingletonEntity<SpawnItemArray>();
+           // var requests = EntityManager.GetBuffer<SpawnItemRequest>(entity);
+           //// if(requests.Length >0)
+           //    FSLog.Info($"PredictionRollback:{requests.Length}");
+           // requests.Clear();
 
          
         }
