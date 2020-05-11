@@ -107,9 +107,7 @@ namespace FootStone.Kitchen
             predictSystem.Update();
 
             itemClientSystemGroup.Update();
-
-          //  updateCharPresentationClientSystem.Update();
-
+     
             predictPresentationSystemGroup.Update();
 
             setRenderTimeSystem.Update();

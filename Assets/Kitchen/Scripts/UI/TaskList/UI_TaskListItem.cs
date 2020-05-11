@@ -57,7 +57,7 @@ public class UI_TaskListItem : MonoBehaviour
 
 		for (int i = arrItems.Length; i < m_listItems.Count; i++)
 		{
-			m_listItems[i].gameObject.SetActive(true);
+			m_listItems[i].gameObject.SetActive(false);
 		}
 
 		ResizeBackGround(arrItems.Length);
