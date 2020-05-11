@@ -59,8 +59,8 @@ public class LoginWindow : PanelBase
         Debug.Log("Success");
    
         this.gameObject.SetActive(false);
-        PanelManager.Instance.ClosePanel("LoginWindow");
-        PanelManager.Instance.OpenPanel<MainWindow>("MainWindow");
+        PanelManager.Instance.ClosePanel(GameCommon.Instance.LoginWindow);
+        PanelManager.Instance.OpenPanel<MainWindow>(GameCommon.Instance.MainWindow);
     }
 
     public void LoginFail()

@@ -12,6 +12,8 @@ public class GameCommon : MonoBehaviour
     public string[] TestName = new string[6] {"德玛西亚","艾欧尼亚","诺克萨斯","祖安","均衡教派","恕瑞玛"};
 
     public string RoomSettingDialog = "RoomSettingDialog";
+    public string LoginWindow = "LoginWindow";
+    public string MainWindow = "MainWindow";
     public static GameCommon Instance
     {
         get
