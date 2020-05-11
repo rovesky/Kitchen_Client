@@ -15,7 +15,7 @@ public class PanelManager : BSingleton<PanelManager>
         {
             UIROOT = GameCommon.Instance.UIRoot;
         }
-        string name = typeof(T).ToString();
+        var name = typeof(T).ToString();
         
         if (mPanelDic.ContainsKey(name))
         {
