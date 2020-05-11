@@ -11,7 +11,7 @@ namespace FootStone.Kitchen
 
         protected override void OnCreate()
         {
-            replicateEntitySystemGroup = World.GetOrCreateSystem<ReplicateEntitySystemGroup>();
+            replicateEntitySystemGroup = World.GetExistingSystem<ReplicateEntitySystemGroup>();
         }
 
         protected override void OnUpdate()
@@ -20,7 +20,7 @@ namespace FootStone.Kitchen
             {
                 if (despawn.Frame <= 0)
                 {
-                    if(!EntityManager.HasComponent<PredictedItem>(entity))
+                    if(!EntityManager.HasComponent<PredictedItem>(entity) && replicateEntitySystemGroup != null)
                         replicateEntitySystemGroup.Unregister(entity);
 
                     if (EntityManager.HasComponent<Transform>(entity))

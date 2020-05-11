@@ -20,6 +20,7 @@ namespace FootStone.Kitchen
                 return;
 
             localPlayer.CharacterEntity = CreateCharacter(new float3 {x = 0, y = 1, z = -4}, true,0);
+            EntityManager.AddComponentData(localPlayer.CharacterEntity, new LocalCharacter());
             SetSingleton(localPlayer);
           
             //var e = CreateCharacter(new float3 {x = -3, y = 1, z = -4}, false,1);
