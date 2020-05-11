@@ -41,6 +41,7 @@ namespace FootStone.Kitchen
         private WorldSceneEntitiesSystem worldSceneEntitiesSystem;
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
         private ItemClientSystemGroup itemClientSystemGroup;
+        private UpdateCharPresentationClientSystem updateCharPresentationClientSystem;
 
         protected override void OnCreate()
         {
@@ -79,6 +80,11 @@ namespace FootStone.Kitchen
             itemClientSystemGroup = World.GetOrCreateSystem<ItemClientSystemGroup>();
             m_systemsToUpdate.Add(itemClientSystemGroup);
 
+
+            updateCharPresentationClientSystem = World.GetOrCreateSystem<UpdateCharPresentationClientSystem>();
+            m_systemsToUpdate.Add(updateCharPresentationClientSystem);
+
+
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
         
@@ -106,6 +112,8 @@ namespace FootStone.Kitchen
             predictSystem.Update();
 
             itemClientSystemGroup.Update();
+
+            updateCharPresentationClientSystem.Update();
 
             predictPresentationSystemGroup.Update();
 
