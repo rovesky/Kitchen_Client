@@ -18,7 +18,7 @@ namespace FootStone.Kitchen
         {
             Entities.ForEach((Entity entity, ref Despawn despawn) =>
             {
-                if (despawn.Frame <= 0)
+                if (despawn.Tick <= 0)
                 {
                     if(!EntityManager.HasComponent<PredictedItem>(entity) && replicateEntitySystemGroup != null)
                         replicateEntitySystemGroup.Unregister(entity);
@@ -32,7 +32,7 @@ namespace FootStone.Kitchen
                   
                 }
 
-                despawn.Frame--;
+                despawn.Tick--;
             });
         }
     }

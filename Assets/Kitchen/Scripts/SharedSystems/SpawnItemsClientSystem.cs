@@ -108,7 +108,7 @@ namespace FootStone.Kitchen
             array.Dispose();
         }
     }
-
+  
 
     [DisableAutoCreation]
     public class ItemClientSystemGroup : NoSortComponentSystemGroup
