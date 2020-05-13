@@ -19,15 +19,15 @@ namespace FootStone.Kitchen
                 .WithStructuralChanges()
                 .ForEach((Entity entity,
                     in PotPresentation presentation,
-                    in SlotPredictedState slotState,
+                 //   in SlotPredictedState slotState,
                     in ProgressSetting cookedSetting,
                     in ProgressPredictState cookedState,
-                    in BurntPredictedState burntState,
+                    in PotPredictedState potState,
                     in LocalToWorld localToWorld) =>
                 {
-                    if (slotState.FilledIn == Entity.Null)
+                    //空锅
+                    if (potState.State == PotState.Empty)
                     {
-                        //空锅
                         if (EntityManager.HasComponent<RenderMesh>(presentation.Full))
                         {
                             fullMesh = EntityManager.GetSharedComponentData<RenderMesh>(presentation.Full);
@@ -41,9 +41,21 @@ namespace FootStone.Kitchen
                             presentation.Steam.SetActive(false);
 
                     }
-                    else
+                    //满锅
+                    else if (potState.State == PotState.Full)
                     {
-                        //满锅
+                        if (EntityManager.HasComponent<RenderMesh>(presentation.Empty))
+                        {
+                            emptyMesh = EntityManager.GetSharedComponentData<RenderMesh>(presentation.Empty);
+                            EntityManager.RemoveComponent<RenderMesh>(presentation.Empty);
+                        }
+
+                        if (!EntityManager.HasComponent<RenderMesh>(presentation.Full))
+                            EntityManager.AddSharedComponentData(presentation.Full, fullMesh);
+                    }
+                    //饭已煮好的锅
+                    else if (potState.State == PotState.Cooked)
+                    {
                         if (EntityManager.HasComponent<RenderMesh>(presentation.Empty))
                         {
                             emptyMesh = EntityManager.GetSharedComponentData<RenderMesh>(presentation.Empty);
@@ -55,22 +67,13 @@ namespace FootStone.Kitchen
 
 
                         if (presentation.Steam == null)
-                        {
                             presentation.Steam = Object.Instantiate(Resources.Load("Effect/Steam")) as GameObject;
-                            presentation.Steam.SetActive(false);
-                        }
-
-                        if (cookedState.CurTick == cookedSetting.TotalTick)
-                        {
-                            presentation.Steam.SetActive(true);
-                            presentation.Steam.transform.position = localToWorld.Position + new float3(0, 1.5f, 0);
-                        }
-                        //     FSLog.Info($"stream active true,pos:{presentation.Steam.transform.position}");
-
+                       
+                        presentation.Steam.transform.position = localToWorld.Position + new float3(0, 1.5f, 0);
+                        presentation.Steam.SetActive(true);
                     }
-
                     //被烧糊的锅
-                    if (burntState.IsBurnt)
+                    else if (potState.State == PotState.Burnt)
                     {
                         if (presentation.Steam != null)
                             presentation.Steam.SetActive(false);

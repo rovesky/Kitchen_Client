@@ -24,7 +24,7 @@ namespace FootStone.Kitchen
                         in PredictedItem predictedItem) =>
                 {
                     if (predictedItem.StartTick < serverTick)
-                        EntityManager.AddComponentData(entity, new Despawn());
+                        EntityManager.AddComponentData(entity, new DespawnServer());
                 }).Run();
         }
     }

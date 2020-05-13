@@ -6,12 +6,7 @@ using UnityEngine.UI;
 
 namespace FootStone.Kitchen
 {
-    public enum PotState
-    {
-        Empty,
-        Full,
-        Burnt
-    }
+  
 
     [DisableAutoCreation]
     public class UpdatePotIconSystem :SystemBase
@@ -25,6 +20,7 @@ namespace FootStone.Kitchen
         {
             sprites[PotState.Empty] = Resources.Load<Sprite>("UI/Icon/demo_cookzone_btn_addition");
             sprites[PotState.Full] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
+            sprites[PotState.Cooked] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
             sprites[PotState.Burnt] = Resources.Load<Sprite>("UI/Icon/demo_cookzone_btn_fire");
 
         }
@@ -36,16 +32,12 @@ namespace FootStone.Kitchen
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in SlotPredictedState slotState,
-                    in BurntPredictedState burntState,
+                    in PotPredictedState burntState,
                     in LocalToWorld localToWorld,
                     in OffsetSetting offset) =>
                 {
-                 
                     var pos = localToWorld.Position;
-                    var type = slotState.FilledIn == Entity.Null?PotState.Empty:PotState.Full;
-                    if (burntState.IsBurnt)
-                        type = PotState.Burnt;
-                    UpdateIcon(entity, true, pos, type);
+                    UpdateIcon(entity, true, pos, burntState.State);
                 }).Run();
 
             var removes = new List<Entity>();

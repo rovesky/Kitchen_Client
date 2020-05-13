@@ -31,7 +31,7 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
-        private DespawnClientSystemGroup despawnSystemGroup;
+        private DespawnSystemGroup despawnSystemGroup;
         private HandleTimeSystem handleTimeSystem;
         private NetworkClientSystem networkSystem;
         private PredictSystem predictSystem;
@@ -83,7 +83,7 @@ namespace FootStone.Kitchen
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
         
-            despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
+            despawnSystemGroup = World.GetOrCreateSystem<DespawnSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
         }
 

@@ -24,11 +24,11 @@ namespace FootStone.Kitchen
                 if(entity == Entity.Null || !EntityManager.Exists(entity))
                     continue;
 
-                EntityManager.AddComponentData(entity, new Despawn() { Tick = 0 });
+                EntityManager.AddComponentData(entity, new DespawnServer());
                 if (EntityManager.HasComponent<Character>(entity))
                 {
                     var animEntity = EntityManager.GetComponentData<Character>(entity).PresentationEntity;
-                    EntityManager.AddComponentData(animEntity, new Despawn() { Tick = 0 });
+                    EntityManager.AddComponentData(animEntity, new DespawnServer());
                 }
             }
         }

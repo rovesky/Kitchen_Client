@@ -12,7 +12,7 @@ namespace FootStone.Kitchen
         private SpawnSystemGroup spawnSystemGroup;
         private PredictUpdateSystemGroup predictUpdateSystem;
         private PredictPresentationSystemGroup predictPresentationSystemGroup;
-        private DespawnClientSystemGroup despawnSystemGroup;
+        private DespawnSystemGroup despawnSystemGroup;
         private InputSystem inputSystem;
         private UpdateReplicatedOwnerFlag updateReplicatedOwnerFlag;
         private ServerSystemGroup serverSystemGroup;
@@ -56,7 +56,7 @@ namespace FootStone.Kitchen
             predictPresentationSystemGroup = World.GetOrCreateSystem<PredictPresentationSystemGroup>();
             m_systemsToUpdate.Add(predictPresentationSystemGroup);
           
-            despawnSystemGroup = World.GetOrCreateSystem<DespawnClientSystemGroup>();
+            despawnSystemGroup = World.GetOrCreateSystem<DespawnSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
 
             updateReplicatedOwnerFlag.SetLocalPlayerId(0);
