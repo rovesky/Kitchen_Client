@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using FootStone.ECS;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,13 +7,13 @@ using UnityEngine.UI;
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class UpdateSliceIconSystem :SystemBase
+    public class UpdateSliceIconSystem : SystemBase
     {
+        private readonly Dictionary<Entity, GameObject> icons = new Dictionary<Entity, GameObject>();
 
-        private Dictionary<Entity, GameObject> icons = new  Dictionary<Entity, GameObject>();
-    
 
-        private Dictionary<EntityType,Sprite>  sprites = new Dictionary<EntityType, Sprite>();
+        private readonly Dictionary<EntityType, Sprite> sprites = new Dictionary<EntityType, Sprite>();
+
         protected override void OnCreate()
         {
             sprites[EntityType.ShrimpSlice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients5");
@@ -23,13 +21,13 @@ namespace FootStone.Kitchen
             sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients7");
             sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
             sprites[EntityType.Rice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
-
         }
 
         protected override void OnUpdate()
         {
             Entities
-                .WithAny<Sliced,Uncooked>()
+                .WithAny<Sliced, Uncooked>()
+                .WithNone<NewClientEntity>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in GameEntity food,
@@ -37,12 +35,14 @@ namespace FootStone.Kitchen
                     in LocalToWorld localToWorld,
                     in OffsetSetting offset) =>
                 {
-                    if (itemState.Owner != Entity.Null && 
-                        (EntityManager.HasComponent<Plate>(itemState.Owner)||EntityManager.HasComponent<Pot>(itemState.Owner)))
+                    if (itemState.Owner != Entity.Null &&
+                        (EntityManager.HasComponent<Plate>(itemState.Owner) ||
+                         EntityManager.HasComponent<Pot>(itemState.Owner)))
                     {
-                        UpdateIcon(entity, false,localToWorld.Position, food.Type);
+                        UpdateIcon(entity, false, localToWorld.Position, food.Type);
                         return;
                     }
+
                     //   var pos = localToWorld.Position + math.mul(localToWorld.Rotation, new float3(0, 0.2f, 1.3f));
                     var pos = localToWorld.Position;
                     UpdateIcon(entity, true, pos, food.Type);
@@ -50,12 +50,8 @@ namespace FootStone.Kitchen
 
             var removes = new List<Entity>();
             foreach (var entity in icons.Keys)
-            {
                 if (!EntityManager.Exists(entity))
-                {
                     removes.Add(entity);
-                }
-            }
 
             foreach (var entity in removes)
             {
@@ -63,22 +59,20 @@ namespace FootStone.Kitchen
                 Object.Destroy(slider);
                 icons.Remove(entity);
             }
-
         }
 
         private void UpdateIcon(Entity entity, bool isVisible, Vector3 pos, EntityType type)
         {
-            
-            if(!icons.ContainsKey(entity))
+            if (!icons.ContainsKey(entity))
                 icons.Add(entity, UIManager.Instance.CreateUIFromPrefabs("ItemIcon"));
 
             var sliceIcon = icons[entity];
-         
-            var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0,50,0);
+
+            var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0, 50, 0);
 
             var rectTransform = sliceIcon.GetComponent<RectTransform>();
             rectTransform.position = screenPos;
-           // FSLog.Info($"UpdateIcon,rectTransform.position:{rectTransform.position}");
+            // FSLog.Info($"UpdateIcon,rectTransform.position:{rectTransform.position}");
             var image = sliceIcon.GetComponent<Image>();
             image.sprite = sprites[type];
 

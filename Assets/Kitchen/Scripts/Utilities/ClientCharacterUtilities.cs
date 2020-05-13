@@ -22,22 +22,23 @@ namespace FootStone.Kitchen
         public static Entity CreateCharacter(EntityManager entityManager,float3 position)
         {
             var e = entityManager.Instantiate(entityPrefab);
-            var characterPresentation = Object.Instantiate(presentationPrefab);
           
             var rotation = Quaternion.identity;
 
             CreateCharacterUtilities.CreateCharacterComponent(entityManager, e, position, rotation);
 
-            var presentationEntity = characterPresentation.GetComponentInChildren<GameObjectEntity>() == null
-                ? Entity.Null
-                : characterPresentation.GetComponentInChildren<GameObjectEntity>().Entity;
+            //var presentationEntity = characterPresentation.GetComponentInChildren<GameObjectEntity>() == null
+            //    ? Entity.Null
+            //    : characterPresentation.GetComponentInChildren<GameObjectEntity>().Entity;
 
-            entityManager.SetComponentData(e, new Character
+
+            var characterPresentation = Object.Instantiate(presentationPrefab);
+            characterPresentation.SetActive(false);
+
+            entityManager.AddComponentData(e, new  CharacterPresentation()
             {
-                PresentationEntity = presentationEntity
+                Object = characterPresentation
             });
-            
-         
 
             return e;
         }

@@ -11,32 +11,33 @@ namespace FootStone.Kitchen
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world, ushort type)
         {
-           var query =  entityManager.CreateEntityQuery(
-               ComponentType.ReadOnly<GameEntity>(),
-               ComponentType.ReadOnly<ReplicatedEntityData>(),
-               ComponentType.ReadOnly<PredictedItem>());
-           var entities = query.ToEntityArray(Allocator.TempJob);
+            var query = entityManager.CreateEntityQuery(
+                ComponentType.ReadOnly<GameEntity>(),
+                ComponentType.ReadOnly<ReplicatedEntityData>(),
+                ComponentType.ReadOnly<PredictedItem>());
+            var entities = query.ToEntityArray(Allocator.TempJob);
 
-           foreach (var entity in entities)
-           {
-               var replicatedEntityData = entityManager.GetComponentData<ReplicatedEntityData>(entity);
-               var gameEntity = entityManager.GetComponentData<GameEntity>(entity);
+            foreach (var entity in entities)
+            {
+                var replicatedEntityData = entityManager.GetComponentData<ReplicatedEntityData>(entity);
+                var gameEntity = entityManager.GetComponentData<GameEntity>(entity);
 
-               if ((ushort) gameEntity.Type != type || replicatedEntityData.Id != -1)
-                   continue;
-              
-               entityManager.RemoveComponent<PredictedItem>(entity);
-               entities.Dispose();
+                if ((ushort) gameEntity.Type != type || replicatedEntityData.Id != -1)
+                    continue;
 
-               FSLog.Info($"Attach Predict item:{entity}");
-               return entity;
-           }
+                entityManager.RemoveComponent<PredictedItem>(entity);
+                entities.Dispose();
 
-           entities.Dispose();
-           
-           var e =  ItemCreateUtilities.CreateItem(entityManager,
-                (EntityType) type, new float3 {x = 0.0f, y = -10f, z = 0.0f},Entity.Null);
-       
+                FSLog.Info($"Attach Predict item:{entity}");
+                return entity;
+            }
+
+            entities.Dispose();
+
+            var e = ItemCreateUtilities.CreateItem(entityManager,
+                (EntityType) type, new float3 {x = 0.0f, y = -30f, z = 0.0f}, Entity.Null);
+
+            entityManager.AddComponentData(e, new NewClientEntity());
             return e;
         }
     }

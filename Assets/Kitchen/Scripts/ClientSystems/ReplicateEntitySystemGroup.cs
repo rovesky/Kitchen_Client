@@ -25,11 +25,6 @@ namespace FootStone.Kitchen
                     continue;
 
                 EntityManager.AddComponentData(entity, new DespawnServer());
-                if (EntityManager.HasComponent<Character>(entity))
-                {
-                    var animEntity = EntityManager.GetComponentData<Character>(entity).PresentationEntity;
-                    EntityManager.AddComponentData(animEntity, new DespawnServer());
-                }
             }
         }
 
@@ -76,6 +71,10 @@ namespace FootStone.Kitchen
             var entity = replicatedEntities.GetEntity(id);
             if(entity == Entity.Null)
                 return;
+
+            if (EntityManager.HasComponent<NewClientEntity>(entity))
+                EntityManager.RemoveComponent<NewClientEntity>(entity);
+
             var replicatedData = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
             var localPlayer = GetSingleton<LocalPlayer>();
 

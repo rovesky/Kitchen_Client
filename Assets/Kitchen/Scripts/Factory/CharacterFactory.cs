@@ -16,7 +16,8 @@ namespace FootStone.Kitchen
         public override Entity Create(EntityManager entityManager, BundledResourceManager resourceManager,
             GameWorld world, ushort type)
         {
-            var e = ClientCharacterUtilities.CreateCharacter(entityManager, new float3 {x = 0, y = -20, z = 9});
+            var e = ClientCharacterUtilities.CreateCharacter(entityManager, float3.zero);
+            entityManager.AddComponentData(e, new NewClientEntity());
         //    entityManager.AddComponentData(e, new UpdateUI());
             return e;
         }

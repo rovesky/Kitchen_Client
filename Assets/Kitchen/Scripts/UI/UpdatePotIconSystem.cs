@@ -6,29 +6,25 @@ using UnityEngine.UI;
 
 namespace FootStone.Kitchen
 {
-  
-
     [DisableAutoCreation]
     public class UpdatePotIconSystem :SystemBase
     {
-
         private Dictionary<Entity, GameObject> icons = new  Dictionary<Entity, GameObject>();
-    
-
         private Dictionary<PotState,Sprite>  sprites = new Dictionary<PotState, Sprite>();
+
         protected override void OnCreate()
         {
             sprites[PotState.Empty] = Resources.Load<Sprite>("UI/Icon/demo_cookzone_btn_addition");
             sprites[PotState.Full] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
             sprites[PotState.Cooked] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
             sprites[PotState.Burnt] = Resources.Load<Sprite>("UI/Icon/demo_cookzone_btn_fire");
-
         }
 
         protected override void OnUpdate()
         {
             Entities
                 .WithAll<Pot>()
+                .WithNone<NewClientEntity>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in SlotPredictedState slotState,
