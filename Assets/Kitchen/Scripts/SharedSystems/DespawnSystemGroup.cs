@@ -25,6 +25,17 @@ namespace FootStone.Kitchen
 
                     if (EntityManager.HasComponent<PhysicsMass>(entity))
                         EntityManager.RemoveComponent<PhysicsMass>(entity);
+
+                    if (EntityManager.HasComponent<IconUI>(entity))
+                    {
+                        var obj = EntityManager.GetComponentData<IconUI>(entity).Icon;
+                        if (obj != null)
+                        {
+                            obj.SetActive(false);
+                            FSLog.Info($"icon hide,entity:{entity}");
+                        }
+
+                    }
                 }).Run();
         }
     }
@@ -46,6 +57,13 @@ namespace FootStone.Kitchen
                     if (EntityManager.HasComponent<CharacterPresentation>(entity))
                     {
                         var obj = EntityManager.GetComponentData<CharacterPresentation>(entity).Object;
+                        if (obj != null)
+                            Object.Destroy(obj);
+                    }
+
+                    if (EntityManager.HasComponent<IconUI>(entity))
+                    {
+                        var obj = EntityManager.GetComponentData<IconUI>(entity).Icon;
                         if (obj != null)
                             Object.Destroy(obj);
                     }

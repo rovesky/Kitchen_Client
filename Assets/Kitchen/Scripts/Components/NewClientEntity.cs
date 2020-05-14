@@ -2,9 +2,9 @@ using Unity.Entities;
 
 namespace FootStone.Kitchen
 {
-    public struct NewClientEntity : IComponentData
+    public struct NewServerEntity : IComponentData
     {
-     
+        public int Tick;
     }
 
 

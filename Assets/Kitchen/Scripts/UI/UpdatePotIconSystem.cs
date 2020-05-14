@@ -24,7 +24,7 @@ namespace FootStone.Kitchen
         {
             Entities
                 .WithAll<Pot>()
-                .WithNone<NewClientEntity>()
+                .WithNone<NewServerEntity>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
                     in SlotPredictedState slotState,

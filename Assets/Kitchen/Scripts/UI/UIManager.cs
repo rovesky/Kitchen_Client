@@ -97,6 +97,7 @@ namespace FootStone.Kitchen
             obj.transform.SetParent(m_canvas_main.transform);
          //   slider.transform.localScale = m_canvas_main.transform.localScale;
             obj.transform.SetAsFirstSibling();
+            obj.SetActive(false);
             return obj;
         }
 

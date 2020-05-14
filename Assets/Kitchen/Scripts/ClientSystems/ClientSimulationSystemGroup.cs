@@ -1,6 +1,8 @@
-﻿using FootStone.ECS;
+﻿using Assets.Kitchen.Scripts.UI;
+using FootStone.ECS;
 using Unity.Entities;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace FootStone.Kitchen
@@ -29,6 +31,7 @@ namespace FootStone.Kitchen
     }
 
     [DisableAutoCreation]
+    [UpdateBefore(typeof(TransformSystemGroup))]
     public class ClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private DespawnSystemGroup despawnSystemGroup;
@@ -51,6 +54,7 @@ namespace FootStone.Kitchen
             ItemCreateUtilities.Init();
             ClientCharacterUtilities.Init();
             MenuUtilities.Init();
+            IconUtilities.Init();
       //      Application.targetFrameRate = 30;
             UnityEngine.Time.fixedDeltaTime = GameTick.DefaultGameTick.TickInterval;
 

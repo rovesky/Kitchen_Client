@@ -96,7 +96,7 @@ namespace FootStone.Kitchen
                 {
                     StartTick = spawnItem.StartTick
                 });
-
+                EntityManager.AddComponentData(e, new IconUI());
                 if (spawnItem.Owner == Entity.Null)
                     continue;
 

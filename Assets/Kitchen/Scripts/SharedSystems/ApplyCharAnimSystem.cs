@@ -36,12 +36,15 @@ namespace FootStone.Kitchen
         {
 
             Entities.WithStructuralChanges()
-                .WithNone<NewClientEntity>()
+                .WithNone<NewServerEntity>()
                 .ForEach((Entity entity,
                     in CharacterInterpolatedState state,
                     in CharacterPresentation characterPresentation,
                     in LocalToWorld localToWorld) =>
                 {
+
+                    if(localToWorld.Position.Equals(float3.zero))
+                        return;
                     if (characterPresentation.Object == null)
                         return;
                     
@@ -54,6 +57,8 @@ namespace FootStone.Kitchen
                     cPos.y = cPos.y - 1.4f;
                     presentPos.position = cPos;
                     presentPos.rotation = state.Rotation;
+
+                 //   FSLog.Info($"characterPresentation pos:{ presentPos.position}");
 
                     //  if(state.SqrMagnitude > 0)
                     //   FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");

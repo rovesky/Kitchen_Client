@@ -1,9 +1,11 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
+using Unity.Transforms;
 
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
+    [UpdateBefore(typeof(TransformSystemGroup))]
     public class PreviewClientSimulationSystemGroup : NoSortComponentSystemGroup
     {
         private GameTick gameTime = GameTick.DefaultGameTick;

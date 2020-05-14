@@ -36,7 +36,7 @@ namespace FootStone.Kitchen
 
         public void ProcessEntitySpawn(int serverTick, int id, ushort typeId)
         {
-            FSLog.Info("ProcessEntitySpawns. Server tick:" + serverTick + " id:" + id + " typeid:" + typeId);
+            FSLog.Info("ProcessEntitySpawns. Server tick:" + serverTick + " id:" + id + " typeid:" + (EntityType)typeId);
 
             Profiler.BeginSample("ReplicatedEntitySystemClient.ProcessEntitySpawns()");
 
@@ -72,8 +72,19 @@ namespace FootStone.Kitchen
             if(entity == Entity.Null)
                 return;
 
-            if (EntityManager.HasComponent<NewClientEntity>(entity))
-                EntityManager.RemoveComponent<NewClientEntity>(entity);
+            if (EntityManager.HasComponent<NewServerEntity>(entity))
+            {
+                var newServerEntity = EntityManager.GetComponentData<NewServerEntity>(entity);
+                if (newServerEntity.Tick == 0)
+                {
+                    EntityManager.RemoveComponent<NewServerEntity>(entity);
+                }
+                else
+                {
+                    newServerEntity.Tick--;
+                    EntityManager.SetComponentData(entity,newServerEntity);
+                }
+            }
 
             var replicatedData = EntityManager.GetComponentData<ReplicatedEntityData>(entity);
             var localPlayer = GetSingleton<LocalPlayer>();
