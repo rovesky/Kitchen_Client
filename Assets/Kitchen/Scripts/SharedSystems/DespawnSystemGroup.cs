@@ -39,6 +39,20 @@ namespace FootStone.Kitchen
                         if (uiObject.Progress != null)
                             uiObject.Progress.SetActive(false);
                     }
+
+                    if (EntityManager.HasComponent<ExtinguisherPresentation>(entity))
+                    {
+                        var extinguisherPresentation = EntityManager.GetComponentData<ExtinguisherPresentation>(entity);
+                        extinguisherPresentation.Smog.SetActive(false);
+
+                    }
+
+                    if (EntityManager.HasComponent<PotPresentation>(entity))
+                    {
+                        var potPresentation = EntityManager.GetComponentData<PotPresentation>(entity);
+                        potPresentation.Steam.SetActive(false);
+
+                    }
                 }).Run();
         }
     }
@@ -76,6 +90,21 @@ namespace FootStone.Kitchen
 
                         if (uiObject.Progress != null)
                             Object.Destroy(uiObject.Progress);
+                    }
+
+
+                    if (EntityManager.HasComponent<ExtinguisherPresentation>(entity))
+                    {
+                        var extinguisherPresentation = EntityManager.GetComponentData<ExtinguisherPresentation>(entity);
+                        Object.Destroy(extinguisherPresentation.Smog);
+
+                    }
+
+                    if (EntityManager.HasComponent<PotPresentation>(entity))
+                    {
+                        var potPresentation = EntityManager.GetComponentData<PotPresentation>(entity);
+                        Object.Destroy(potPresentation.Steam);
+
                     }
 
                     EntityManager.DestroyEntity(entity);

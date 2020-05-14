@@ -1,4 +1,5 @@
 ﻿using Assets.Kitchen.Scripts.UI;
+using FootStone.ECS;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
@@ -44,6 +45,9 @@ namespace FootStone.Kitchen
                 SetImage(4, slotState.Value.FilledIn4, platePannel);
 
                 platePannel.SetActive(!slotState.Value.IsEmpty());
+
+             //   FSLog.Info($"UpdatePlateIconSystem:plateState.Product == Entity.Null");
+
             }
             else
             {
@@ -54,6 +58,8 @@ namespace FootStone.Kitchen
                 SetImage1(3, menuT.Material3, platePannel);
                 SetImage1(4, menuT.Material4, platePannel);
                 platePannel.SetActive(true);
+
+               // FSLog.Info($"UpdatePlateIconSystem:plateState.Product != Entity.Null");
             }
         }
 

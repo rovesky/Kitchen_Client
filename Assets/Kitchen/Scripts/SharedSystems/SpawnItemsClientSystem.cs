@@ -77,12 +77,19 @@ namespace FootStone.Kitchen
                     var predictedItem = EntityManager.GetComponentData<PredictedItem>(predictedItemEntity);
                     var ownerState = EntityManager.GetComponentData<OwnerPredictedState>(predictedItemEntity);
 
-                    if(predictedItem.StartTick == spawnItem.StartTick &&
-                       ownerState.Owner == spawnItem.Owner)
+                    if (predictedItem.StartTick == spawnItem.StartTick &&
+                        ownerState.Owner == spawnItem.Owner)
+                    {
                         isRepeatRequest = true;
+                        ItemAttachUtilities.ItemAttachToOwner(EntityManager,
+                            predictedItemEntity, spawnItem.Owner, Entity.Null);
+                        break;
+                    }
                 }
-                if(isRepeatRequest)
+                if(isRepeatRequest){
+                
                     continue;
+                }
       
                 FSLog.Info($"Spawn item:{spawnItem.Type}");
 
