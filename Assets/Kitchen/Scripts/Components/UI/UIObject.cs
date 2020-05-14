@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace FootStone.Kitchen
 {
-    public class IconUI : IComponentData
+    public class UIObject : IComponentData
     {
         public GameObject Icon;
+        public GameObject Progress;
+        public GameObject Info;
     }
 }

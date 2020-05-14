@@ -30,47 +30,30 @@ namespace FootStone.Kitchen
                     in SlotPredictedState slotState,
                     in PotPredictedState burntState,
                     in LocalToWorld localToWorld,
-                    in OffsetSetting offset) =>
+                    in UIObject uiObject) =>
                 {
-                    var pos = localToWorld.Position;
-                    UpdateIcon(entity, true, pos, burntState.State);
+                    UpdateIcon(uiObject, true, localToWorld.Position, burntState.State);
                 }).Run();
-
-            var removes = new List<Entity>();
-            foreach (var entity in icons.Keys)
-            {
-                if (!EntityManager.Exists(entity))
-                {
-                    removes.Add(entity);
-                }
-            }
-
-            foreach (var entity in removes)
-            {
-                var slider = icons[entity];
-                Object.Destroy(slider);
-                icons.Remove(entity);
-            }
+           
 
         }
 
-        private void UpdateIcon(Entity entity, bool isVisible, Vector3 pos, PotState type)
+        private void UpdateIcon(UIObject uiObject, bool isVisible, Vector3 pos, PotState type)
         {
-            
-            if(!icons.ContainsKey(entity))
-                icons.Add(entity, UIManager.Instance.CreateUIFromPrefabs("ItemIcon"));
-
-            var sliceIcon = icons[entity];
+            if (uiObject.Icon == null)
+                uiObject.Icon = UIManager.Instance.CreateUIFromPrefabs("ItemIcon");
+        
+            var potIcon = uiObject.Icon;
          
             var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0,50,0);
 
-            var rectTransform = sliceIcon.GetComponent<RectTransform>();
+            var rectTransform = potIcon.GetComponent<RectTransform>();
             rectTransform.position = screenPos;
            // FSLog.Info($"UpdateIcon,rectTransform.position:{rectTransform.position}");
-            var image = sliceIcon.GetComponent<Image>();
+            var image = potIcon.GetComponent<Image>();
             image.sprite = sprites[type];
 
-            sliceIcon.SetActive(isVisible);
+            potIcon.SetActive(isVisible);
         }
     }
 }

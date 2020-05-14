@@ -44,7 +44,7 @@ namespace FootStone.Kitchen
             if (!isLocal)
                 return e;
 
-            EntityManager.AddComponentData(e, new UpdateUI());
+          //  EntityManager.AddComponentData(e, new UpdateUI());
             EntityManager.AddComponentData(e, new ServerEntity());
             EntityManager.AddComponentData(e, new Connection());
 

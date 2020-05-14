@@ -20,38 +20,33 @@ namespace FootStone.Kitchen
                     in GameEntity food,
                     in OwnerPredictedState itemState,
                     in LocalToWorld localToWorld,
-                    in IconUI iconUI) =>
+                    in UIObject uiObject) =>
                 {
                     var isVisible = !(itemState.Owner != Entity.Null &&
                                      (EntityManager.HasComponent<Plate>(itemState.Owner) ||
                                       EntityManager.HasComponent<Pot>(itemState.Owner)));
 
-                //    if(!isVisible)
-                    //    FSLog.Info($"UpdateIcon,entity:{entity}");
-
                     //if(food.Type == EntityType.ShrimpSlice)
                        // FSLog.Info($"UpdateIcon,entity:{entity},isVisible:{isVisible},pos:{localToWorld.Position}");
-                    UpdateIcon(iconUI, isVisible, localToWorld.Position, food.Type);
+                    UpdateIcon(uiObject, isVisible, localToWorld.Position, food.Type);
                 }).Run();
         }
 
-        private void UpdateIcon(IconUI iconUI, bool isVisible, Vector3 pos, EntityType type)
+        private void UpdateIcon(UIObject uiObject, bool isVisible, Vector3 pos, EntityType type)
         {
-            if (iconUI.Icon == null)
-                iconUI.Icon = UIManager.Instance.CreateUIFromPrefabs("ItemIcon");
-
-
+            if (uiObject.Icon == null)
+                uiObject.Icon = UIManager.Instance.CreateUIFromPrefabs("ItemIcon");
         
-            var sliceIcon = iconUI.Icon;
+            var foodIcon = uiObject.Icon;
             var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0, 50, 0);
 
-            var rectTransform = sliceIcon.GetComponent<RectTransform>();
+            var rectTransform = foodIcon.GetComponent<RectTransform>();
             rectTransform.position = screenPos;
             // FSLog.Info($"UpdateIcon,rectTransform.position:{rectTransform.position}");
-            var image = sliceIcon.GetComponent<Image>();
+            var image = foodIcon.GetComponent<Image>();
             image.sprite = IconUtilities.GetIconSprite(type);
           
-            sliceIcon.SetActive(isVisible);
+            foodIcon.SetActive(isVisible);
         }
     }
 }

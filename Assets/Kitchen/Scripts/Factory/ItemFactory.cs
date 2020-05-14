@@ -24,7 +24,7 @@ namespace FootStone.Kitchen
             {
                 Tick = 1
             });
-            entityManager.AddComponentData(e, new IconUI());
+            entityManager.AddComponentData(e, new UIObject());
             return e;
         }
 

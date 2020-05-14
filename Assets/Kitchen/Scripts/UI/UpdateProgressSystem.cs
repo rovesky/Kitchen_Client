@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FootStone.ECS;
+﻿using FootStone.ECS;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -11,8 +10,6 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class UpdateProgressSystem : SystemBase
     {
-        private Dictionary<Entity, GameObject> sliders = new Dictionary<Entity, GameObject>();
-
         protected override void OnUpdate()
         {
             Entities
@@ -20,55 +17,39 @@ namespace FootStone.Kitchen
                 .ForEach((Entity entity,
                     ref ProgressPredictState sliceState,
                     in ProgressSetting sliceSetting,
-                    in LocalToWorld translation) =>
+                    in LocalToWorld translation,
+                    in UIObject uiObject) =>
                 {
                     if (sliceState.CurTick == 0
                         || sliceState.CurTick == sliceSetting.TotalTick
                         || EntityManager.HasComponent<Despawn>(entity))
                     {
-                        UpdateSlider(entity, false, float3.zero, 0);
+                        UpdateProgress(uiObject, false, float3.zero, 0);
                     }
                     else
                     {
                         var percentage = (float) sliceState.CurTick / sliceSetting.TotalTick;
-                        UpdateSlider(entity, true, translation.Position + sliceSetting.OffPos, percentage);
+                        UpdateProgress(uiObject, true, translation.Position + sliceSetting.OffPos, percentage);
                     }
 
                 }).Run();
-
-            var removes = new List<Entity>();
-            foreach (var entity in sliders.Keys)
-            {
-                if (!EntityManager.Exists(entity))
-                {
-                    removes.Add(entity);
-                }
-            }
-
-            foreach (var entity in removes)
-            {
-                var slider = sliders[entity];
-                Object.Destroy(slider);
-                sliders.Remove(entity);
-            }
-
         }
 
-        private void UpdateSlider(Entity entity, bool isVisible, Vector3 pos, float value)
+        private void UpdateProgress(UIObject uiObject, bool isVisible, Vector3 pos, float value)
         {
-            if (!sliders.ContainsKey(entity))
-                sliders.Add(entity, UIManager.Instance.CreateUIFromPrefabs("Progress"));
 
+            if (uiObject.Progress == null)
+                uiObject.Progress = UIManager.Instance.CreateUIFromPrefabs("Progress");
 
-            var sliceSlider = sliders[entity];
+            var progress = uiObject.Progress;
 
-            sliceSlider.SetActive(isVisible);
+            progress.SetActive(isVisible);
 
             var screenPos = Camera.main.WorldToScreenPoint(pos);
-            var rectTransform = sliceSlider.GetComponent<RectTransform>();
+            var rectTransform = progress.GetComponent<RectTransform>();
             rectTransform.position = screenPos;
 
-            var slider = sliceSlider.GetComponent<Slider>();
+            var slider = progress.GetComponent<Slider>();
             slider.value = value;
         }
     }
