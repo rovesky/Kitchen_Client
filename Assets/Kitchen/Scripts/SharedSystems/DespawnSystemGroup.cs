@@ -27,14 +27,17 @@ namespace FootStone.Kitchen
                         EntityManager.RemoveComponent<PhysicsMass>(entity);
 
                     if (EntityManager.HasComponent<UIObject>(entity))
-                    {
-                        var obj = EntityManager.GetComponentData<UIObject>(entity).Icon;
-                        if (obj != null)
-                        {
-                            obj.SetActive(false);
-                            FSLog.Info($"icon hide,entity:{entity}");
-                        }
+                    { 
+                        var uiObject = EntityManager.GetComponentData<UIObject>(entity);
+                        
+                        if (uiObject.Info != null)
+                            uiObject.Info.SetActive(false);
 
+                        if (uiObject.Icon != null)
+                            uiObject.Icon.SetActive(false);
+
+                        if (uiObject.Progress != null)
+                            uiObject.Progress.SetActive(false);
                     }
                 }).Run();
         }
@@ -63,9 +66,16 @@ namespace FootStone.Kitchen
 
                     if (EntityManager.HasComponent<UIObject>(entity))
                     {
-                        var obj = EntityManager.GetComponentData<UIObject>(entity).Icon;
-                        if (obj != null)
-                            Object.Destroy(obj);
+                        var uiObject = EntityManager.GetComponentData<UIObject>(entity);
+                        
+                        if (uiObject.Info != null)
+                            Object.Destroy(uiObject.Info);
+
+                        if (uiObject.Icon != null)
+                            Object.Destroy(uiObject.Icon);
+
+                        if (uiObject.Progress != null)
+                            Object.Destroy(uiObject.Progress);
                     }
 
                     EntityManager.DestroyEntity(entity);
