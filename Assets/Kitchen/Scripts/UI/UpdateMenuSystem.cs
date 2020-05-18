@@ -42,7 +42,7 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-
+            /*
             //   FSLog.Info($"UpdateMenuItemSystem OnUpdate1");
             var query = GetEntityQuery(new EntityQueryDesc
             {
@@ -103,7 +103,7 @@ namespace FootStone.Kitchen
             {
                 menus[key] = false;
             }
-
+            */
         }
     }
 }
