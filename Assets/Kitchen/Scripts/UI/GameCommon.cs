@@ -40,8 +40,8 @@ public class GameCommon : MonoBehaviour
             var uiRoot = Resources.Load<GameObject>("UI/UI_Root");
             if (uiRoot != null)
             {
-
-                UIRoot = GameObject.Instantiate(uiRoot).transform.Find("Canvas").gameObject ;
+                var obj = GameObject.Instantiate(uiRoot);
+                UIRoot = obj.transform.Find("Canvas").gameObject ;
             }           
         }
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);

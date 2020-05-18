@@ -78,13 +78,8 @@ public class RoomSettingDialog : PanelBase
 
                     });
                 }
-
             }
-
-
         }
-
-
     }
 
     public void RandomPwd()
@@ -96,23 +91,33 @@ public class RoomSettingDialog : PanelBase
         RequestName();
     }
 
+    public void SetRootName (string roomName)
+    {
+        if (RoomName_Text != null)
+        {
+            RoomName_Text.GetComponent<Text>().text = roomName;
+        }
+    }
     public void RequestName()
     {
         var index = Random.Range(0, 6);
         var roomName = GameCommon.Instance.TestName[index];
-        if (RoomName_Text != null)
+        SetRootName(roomName);
+    }
+
+    public void SetPwd(int Pwd)
+    {
+        if (RoomPwd_Text != null)
         {
-            RoomName_Text.GetComponent<Text>().text = roomName;
+            RoomPwd_Text.GetComponent<Text>().text = Pwd.ToString();
         }
     }
 
     public void RequsetPwd()
     {
         var Pwd = Random.Range(1000, 9999);
-        if (RoomPwd_Text != null)
-        {
-            RoomPwd_Text.GetComponent<Text>().text = Pwd.ToString();
-        }
+        SetPwd(Pwd);
+
     }
     public override void OnClosed()
     {
