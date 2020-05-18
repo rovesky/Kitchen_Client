@@ -54,7 +54,7 @@ namespace FootStone.Kitchen
                     var presentPos = characterPresentation.Object.transform;
                     //   var oy = presentPos.position.y;
                     var cPos = localToWorld.Position;
-                    cPos.y = cPos.y - 1.4f;
+                    cPos.y = cPos.y - 1.5f;
                     presentPos.position = cPos;
                     presentPos.rotation = state.Rotation;
 
@@ -63,16 +63,22 @@ namespace FootStone.Kitchen
                     //  if(state.SqrMagnitude > 0)
                     //   FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");
                     var anim = characterPresentation.Object.GetComponent<Animator>();
-                    anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f,
-                        Time.DeltaTime);
+                 //   anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f,
+                       // Time.DeltaTime);
 
-                    if (state.SqrMagnitude < 0.1f)
-                        SetAction(anim, state.ActionId);
+                     anim.SetFloat("Velocity", state.Velocity);
+                     anim.SetBool("IsTake", state.IsTake);
+                     anim.SetBool("IsSlice", state.IsSlice);
+                     anim.SetBool("IsClean", state.IsClean);
+                     anim.SetBool("IsThrow", state.IsThrow);
 
-                    var skinController = characterPresentation.Object.GetComponent<CharacterSkinController>();
-                    //    EntityManager.GetComponentObject<CharacterSkinController>(character.PresentationEntity);
-                    if (skinController != null)
-                        skinController.ChangeMaterialSettings(state.MaterialId);
+                    //if (state.SqrMagnitude < 0.1f)
+                    //    SetAction(anim, state.ActionId);
+
+                    //var skinController = characterPresentation.Object.GetComponent<CharacterSkinController>();
+                    ////    EntityManager.GetComponentObject<CharacterSkinController>(character.PresentationEntity);
+                    //if (skinController != null)
+                    //    skinController.ChangeMaterialSettings(state.MaterialId);
 
                     //anim.SetFloat("Blend", speed, 0.3f, Time.deltaTime);
                     //   EntityManager.SetComponentData(character.PresentationEntity, presentPos);

@@ -16,7 +16,7 @@ namespace FootStone.Kitchen
                 GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld,
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
 
-            presentationPrefab = Resources.Load("Character/CharacterRobot") as GameObject;
+            presentationPrefab = Resources.Load("Character/Character1") as GameObject;
         }
 
         public static Entity CreateCharacter(EntityManager entityManager,float3 position)

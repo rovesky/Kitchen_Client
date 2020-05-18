@@ -1,4 +1,5 @@
-﻿using FootStone.ECS;
+﻿using Assets.Kitchen.Scripts.UI;
+using FootStone.ECS;
 using Unity.Entities;
 using Unity.Transforms;
 
@@ -20,6 +21,8 @@ namespace FootStone.Kitchen
         private ServerSystemGroup serverSystemGroup;
         private InitSystemGroup initSystemGroup;
         private SpawnCharactersSystem spawnCharacterSystem;
+        private AddItemComponentSystem addItemComponentSystem;
+        private AddDespawnServerSystem addDespawnServerSystem;
 
         protected override void OnCreate()
         {
@@ -29,7 +32,7 @@ namespace FootStone.Kitchen
             ConfigVar.Init();
             ItemCreateUtilities.Init();
             ClientCharacterUtilities.Init();
-
+            IconUtilities.Init();
             GameWorld.Active = new GameWorld();
 
             //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());
@@ -60,6 +63,13 @@ namespace FootStone.Kitchen
           
             despawnSystemGroup = World.GetOrCreateSystem<DespawnSystemGroup>();
             m_systemsToUpdate.Add(despawnSystemGroup);
+
+            addItemComponentSystem = World.GetOrCreateSystem<AddItemComponentSystem>();
+            m_systemsToUpdate.Add(addItemComponentSystem);
+
+            addDespawnServerSystem = World.GetOrCreateSystem<AddDespawnServerSystem>();
+            m_systemsToUpdate.Add(addDespawnServerSystem);
+
 
             updateReplicatedOwnerFlag.SetLocalPlayerId(0);
         }
@@ -108,12 +118,13 @@ namespace FootStone.Kitchen
                 serverSystemGroup.Update();
 
                 spawnSystemGroup.Update();
-
+                addItemComponentSystem.Update();
             }
 
 
             predictPresentationSystemGroup.Update();
 
+            addDespawnServerSystem.Update();
             despawnSystemGroup.Update();
 
             SetSingleton(worldTime);
