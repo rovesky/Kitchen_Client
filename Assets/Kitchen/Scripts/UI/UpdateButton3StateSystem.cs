@@ -16,12 +16,15 @@ namespace FootStone.Kitchen
                     in RushPredictState rushState,
                     in RushSetting rushSetting) =>
                 {
-                    if (!rushState.IsRushed) 
+                    if (rushState.CurCooldownTick == 0) 
                         return;
                     
-                 //   FSLog.Info($"UpdateButton3StateSystem,rushState.CurCooldownTick:{rushState.CurCooldownTick} ");
+                   
                     var worldTime = GetSingleton<WorldTime>();
-                    UIManager.Instance.PlayCD("Button3", rushSetting.CooldownTick * worldTime.TickDuration);
+                    var time = rushSetting.CooldownTick * worldTime.GameTick.TickInterval;
+
+                    //FSLog.Info($"UpdateButton3StateSystem,rushState.CurCooldownTick:{rushState.CurCooldownTick},time:{time} ");
+                    UIManager.Instance.PlayCD("Button3", time);
                 }).Run();
         }
 

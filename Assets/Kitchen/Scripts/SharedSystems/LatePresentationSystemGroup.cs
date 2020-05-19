@@ -25,9 +25,10 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePotIconSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateMenuItemSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdatePotInfoSystem>());
+           // m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateButton1StateSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateButton2StateSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateButton3StateSystem>());
-
+          
             
             m_systemsToUpdate.Add(World.GetOrCreateSystem<RemoveNewServerEntitySystem>());
         }

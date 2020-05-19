@@ -33,9 +33,9 @@ namespace FootStone.Kitchen
             var v3 = new Vector3(h, 0, v);
             userCommand.TargetDir = Vector3.SqrMagnitude(v3) < 0.00001f ? Vector3.zero : v3.normalized;
 
-            userCommand.Buttons.Set(UserCommand.Button.Pickup, UIInput.GetButtonClick("pickup"));
-            userCommand.Buttons.Set(UserCommand.Button.Throw, UIInput.GetButtonClick("throw"));
-            userCommand.Buttons.Set(UserCommand.Button.Rush, UIInput.GetButtonClick("rush"));
+            userCommand.Buttons.Set(UserCommand.Button.Button1, UIInput.GetButtonClick("pickup"));
+            userCommand.Buttons.Set(UserCommand.Button.Button2, UIInput.GetButtonClick("throw"));
+            userCommand.Buttons.Set(UserCommand.Button.Button3, UIInput.GetButtonClick("rush"));
             userCommand.Buttons.Set(UserCommand.Button.Jump, Input.GetKey(KeyCode.J));
         }
 

@@ -1,5 +1,4 @@
-﻿using FootStone.ECS;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
@@ -9,32 +8,8 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class ApplyCharAnimSystem : SystemBase
     {
-        private void SetAction(UnityEngine.Animator anim, byte ActionId)
-        {
-            switch (ActionId)
-            {
-                case 0:
-                    anim.SetTrigger("normal");
-                    break;
-                case 1:
-                    anim.SetTrigger("angry");
-                    break;
-                case 2:
-                    anim.SetTrigger("happy");
-                    break;
-                case 3:
-                    anim.SetTrigger("dead");
-                    break;
-                default:
-                    anim.SetTrigger("normal");
-                    break;
-            }
-
-        }
-
         protected override void OnUpdate()
         {
-
             Entities.WithStructuralChanges()
                 .WithNone<NewServerEntity>()
                 .ForEach((Entity entity,
@@ -43,11 +18,11 @@ namespace FootStone.Kitchen
                     in LocalToWorld localToWorld) =>
                 {
 
-                    if(localToWorld.Position.Equals(float3.zero))
+                    if (localToWorld.Position.Equals(float3.zero))
                         return;
                     if (characterPresentation.Object == null)
                         return;
-                    
+
                     characterPresentation.Object.SetActive(true);
 
                     //显示动作
@@ -57,35 +32,22 @@ namespace FootStone.Kitchen
                     cPos.y = cPos.y - 1.5f;
                     presentPos.position = cPos;
                     presentPos.rotation = state.Rotation;
-
-                 //   FSLog.Info($"characterPresentation pos:{ presentPos.position}");
-
-                    //  if(state.SqrMagnitude > 0)
-                    //   FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");
                     var anim = characterPresentation.Object.GetComponent<Animator>();
-                 //   anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f,
-                       // Time.DeltaTime);
 
-                     anim.SetFloat("Velocity", state.Velocity);
-                     anim.SetBool("IsTake", state.IsTake);
-                     anim.SetBool("IsSlice", state.IsSlice);
-                     anim.SetBool("IsClean", state.IsClean);
-                     anim.SetBool("IsThrow", state.IsThrow);
+                    anim.SetFloat("Velocity", state.Velocity);
+                    anim.SetBool("IsTake", state.IsTake);
+                    anim.SetBool("IsSlice", state.IsSlice);
+                    anim.SetBool("IsClean", state.IsClean);
+                    anim.SetBool("IsThrow", state.IsThrow);
 
-                    //if (state.SqrMagnitude < 0.1f)
-                    //    SetAction(anim, state.ActionId);
+                    var knife1 = SearchChild.FindChildFast(characterPresentation.Object.transform,"Knife1");
+                    if (knife1 != null)
+                        knife1.gameObject.SetActive(state.IsSlice);
+                    var knife2 = SearchChild.FindChildFast(characterPresentation.Object.transform,"Knife2");
+                    if (knife2 != null)
+                        knife2.gameObject.SetActive(state.IsSlice);
 
-                    //var skinController = characterPresentation.Object.GetComponent<CharacterSkinController>();
-                    ////    EntityManager.GetComponentObject<CharacterSkinController>(character.PresentationEntity);
-                    //if (skinController != null)
-                    //    skinController.ChangeMaterialSettings(state.MaterialId);
-
-                    //anim.SetFloat("Blend", speed, 0.3f, Time.deltaTime);
-                    //   EntityManager.SetComponentData(character.PresentationEntity, presentPos);
-                    //  FSLog.Info($"ApplyCharPresentationSystem,x:{predictData.Position.x},z:{predictData.Position.z}," +
-                    //       $"translation.Value.x:{ translation.Value.x},translation.Value.z:{ translation.Value.z}");
                 }).Run();
         }
     }
-
 }

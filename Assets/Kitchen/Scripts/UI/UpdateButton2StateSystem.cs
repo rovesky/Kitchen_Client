@@ -1,9 +1,5 @@
-﻿using Assets.Kitchen.Scripts.UI;
-using FootStone.ECS;
-using Unity.Entities;
-using Unity.Transforms;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using Unity.Entities;
+
 
 namespace FootStone.Kitchen
 {
@@ -16,18 +12,54 @@ namespace FootStone.Kitchen
                 .WithAll<LocalCharacter>()
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    in SlotPredictedState slotState) =>
+                    in SlotPredictedState slotState,
+                    in TriggerPredictedState triggerState) =>
                 {
+
                     UIManager.Instance.ButtonEnable("Button2", false);
+                    UIManager.Instance.UpdateButtonIcon("Button2", "demo_cookzone_btn_throw");
+
                     var pickupedEntity = slotState.FilledIn;
-                    if (pickupedEntity == Entity.Null)
-                        return;
+                    var triggeredEntity = triggerState.TriggeredEntity;
 
-                    //非食物返回
-                    if (!EntityManager.HasComponent<Food>(pickupedEntity))
-                        return;
+                    //图标变为cut
+                    if (pickupedEntity == Entity.Null 
+                        && triggeredEntity != Entity.Null 
+                        && EntityManager.HasComponent<TableSlice>(triggeredEntity))
+                    {
 
-                    UIManager.Instance.ButtonEnable("Button2", true);
+                        var slot = EntityManager.GetComponentData<SlotPredictedState>(triggerState.TriggeredEntity);
+                        if (slot.FilledIn != Entity.Null && EntityManager.HasComponent<Unsliced>(slot.FilledIn))
+                        {
+                            UIManager.Instance.ButtonEnable("Button2", true);
+                            UIManager.Instance.UpdateButtonIcon("Button2", "demo_cookzone_btn_cut");
+                        }
+                    }
+                    else if (pickupedEntity == Entity.Null 
+                             && triggeredEntity != Entity.Null
+                             && EntityManager.HasComponent<TableSink>(triggeredEntity))
+                    {
+                        var sink = EntityManager.GetComponentData<SinkPredictedState>(triggeredEntity);
+                        if (!sink.Value.IsEmpty())
+                        {
+                            UIManager.Instance.ButtonEnable("Button2", true);
+                            UIManager.Instance.UpdateButtonIcon("Button2", "demo_cookzone_btn_wash");
+                        }
+                    }
+                    else if (pickupedEntity != Entity.Null && EntityManager.HasComponent<Food>(pickupedEntity))
+                    {
+                        UIManager.Instance.ButtonEnable("Button2", true);
+                        UIManager.Instance.UpdateButtonIcon("Button2", "demo_cookzone_btn_throw");
+                    }
+                    else if (pickupedEntity != Entity.Null && EntityManager.HasComponent<Extinguisher>(pickupedEntity))
+                    {
+                        var extinguisherState = EntityManager.GetComponentData<ExtinguisherPredictedState>(pickupedEntity);
+                        UIManager.Instance.ButtonEnable("Button2", true);
+                        var icon = extinguisherState.Distance == 0
+                            ? "demo_cookzone_btn_extinguisher"
+                            : "demo_cookzone_btn_unextinguisher";
+                        UIManager.Instance.UpdateButtonIcon("Button2", icon);
+                    }
 
                 }).Run();
         }

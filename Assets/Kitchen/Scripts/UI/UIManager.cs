@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.Remoting.Channels;
+using System.Collections.Generic;
 using FootStone.ECS;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +27,7 @@ namespace FootStone.Kitchen
         private Text m_text_rtt;
         private Text m_text_fps;
 
+        private Dictionary<string,Sprite>  buttonIcons = new Dictionary<string, Sprite>();
 
         private void Start()
         {
@@ -77,6 +78,18 @@ namespace FootStone.Kitchen
                 FSLog.Info("m_button3.onClick!");
                 UIInput.AddButtonClickEvent("rush");
             });
+        }
+
+        public void UpdateButtonIcon(string buttonName, string icon)
+        {
+            if (buttonName == "Button2")
+            {
+               var image =  m_button2.transform.GetComponent<Image>();
+               var key = "UI/" + icon;
+               if(!buttonIcons.ContainsKey(key))
+                   buttonIcons.Add(key,Resources.Load<Sprite>(key));
+               image.sprite = buttonIcons[key];
+            }
         }
 
         public void ButtonEnable(string buttonName, bool enable)
