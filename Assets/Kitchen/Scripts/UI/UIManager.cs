@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Channels;
 using FootStone.ECS;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,9 +37,10 @@ namespace FootStone.Kitchen
             m_text_rtt = pannelInfo.Find("text_rtt").GetComponent<Text>();
             m_text_fps = pannelInfo.Find("text_fps").GetComponent<Text>();
 
-            m_button1 = m_canvas_main.transform.Find("PannelButton/button1").GetComponent<Button>();
-            m_button2 = m_canvas_main.transform.Find("PannelButton/Btn_Drop/Btn_Main").GetComponent<Button>();
-            m_button3 = m_canvas_main.transform.Find("PannelButton/Btn_Pick/Btn_Main").GetComponent<Button>();
+            m_button1 = m_canvas_main.transform.Find("PannelButton/Button1").GetComponent<Button>();
+            m_button2 = m_canvas_main.transform.Find("PannelButton/Button2").GetComponent<Button>();
+         //   m_button2.interactable = false;
+            m_button3 = m_canvas_main.transform.Find("PannelButton/Button3/Btn_Main").GetComponent<Button>();
 
 
             textTimePlaying = m_canvas_main.transform.Find("PannelMain/TextTime").GetComponent<UI_SpriteText>();
@@ -77,7 +79,26 @@ namespace FootStone.Kitchen
             });
         }
 
-      
+        public void ButtonEnable(string buttonName, bool enable)
+        {
+            if (buttonName == "Button1")
+                m_button1.interactable = enable;
+            else if (buttonName == "Button2")
+                m_button2.interactable = enable;
+            else if (buttonName == "Button3")
+                m_button3.interactable = enable;
+        }
+
+        public void PlayCD(string buttonName, float time)
+        {
+            if (buttonName == "Button3")
+            {
+               var countDown =  m_button3.transform.parent.GetComponent<UI_CountDown>();
+               countDown.PlayCDView(time);
+            }
+        }
+
+
 
         // 改变RTT UI显示
         public void UpdateRtt(double rtt)

@@ -18,6 +18,9 @@ public class UI_CountDown : MonoBehaviour
 
 	public void PlayCDView(float nCDTime)
 	{
+        if(m_isPlaying)
+            return;
+
 		m_btnCtrl.enabled = false;
 
 		m_nMaxTime = nCDTime;
@@ -25,11 +28,19 @@ public class UI_CountDown : MonoBehaviour
 		m_isPlaying = true;
 	}
 
+    public void Clear()
+    {
+        m_nRunTime = 0;
+        m_isPlaying = false;
+        m_nTemp = 1;
+        m_btnCtrl.enabled = true;
+    }
+
 	void Start()
 	{
 		m_btnCtrl = m_picFrontGround.GetComponent<Button>();
 
-		PlayCDView(5);
+		PlayCDView(0);
 	}
 
 	void Update()
