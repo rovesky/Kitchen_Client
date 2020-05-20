@@ -14,6 +14,7 @@ namespace FootStone.Kitchen
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyGasCookerAnimSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyExtinguisherAnimSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyCatchFireAnimSystem>());
+            m_systemsToUpdate.Add(World.GetOrCreateSystem<ApplyTableKnifeAnimSystem>());
             
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateGameStateSystem>());
             m_systemsToUpdate.Add(World.GetOrCreateSystem<UpdateTimeSystem>());

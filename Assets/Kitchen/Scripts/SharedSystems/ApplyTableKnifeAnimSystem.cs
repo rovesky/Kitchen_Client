@@ -1,48 +1,37 @@
 ﻿using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Transforms;
-using UnityEngine;
+using Unity.Rendering;
 
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
-    public class ApplyTableKnifeAnimSystem: SystemBase
+    public class ApplyTableKnifeAnimSystem : SystemBase
     {
-     
+        private RenderMesh knifeMesh;
+
         protected override void OnUpdate()
         {
 
             Entities
                 .WithStructuralChanges()
                 .ForEach((Entity entity,
-                   in CatchFirePresentation presentation,
-                   in CatchFirePredictedState state,
-                   in SlotSetting slotSetting,
-                   in LocalToWorld localToWorld) =>
-               {
+                    in TableSlice tableSlice,
+                    in SlotPredictedState slotState) =>
+                {
+                    if (slotState.FilledIn != Entity.Null)
+                    {
+                        if (EntityManager.HasComponent<RenderMesh>(tableSlice.Knife))
+                        {
+                            knifeMesh = EntityManager.GetSharedComponentData<RenderMesh>(tableSlice.Knife);
+                            EntityManager.RemoveComponent<RenderMesh>(tableSlice.Knife);
+                        }
+                    }
+                    else
+                    {
+                        if (!EntityManager.HasComponent<RenderMesh>(tableSlice.Knife))
+                            EntityManager.AddSharedComponentData(tableSlice.Knife, knifeMesh);
+                    }
 
-                   if (state.IsCatchFire)
-                   {
-                       if (presentation.Object == null)
-                           presentation.Object = Object.Instantiate(Resources.Load("Effect/CatchFire")) as GameObject;
-
-                       presentation.Object.SetActive(true);
-                       presentation.Object.transform.position =
-                           localToWorld.Position + math.mul(localToWorld.Rotation, slotSetting.Pos);
-
-                       var pos = presentation.Object.transform.position;
-                       pos.y = 1.02f;
-                       presentation.Object.transform.position = pos;
-                    //   presentation.Object.transform.rotation = localToWorld.Rotation;
-                   }
-                   else
-                   {
-                       if (presentation.Object != null)
-
-                           presentation.Object.SetActive(false);
-                   }
-
-               }).Run();
+                }).Run();
         }
     }
 }
