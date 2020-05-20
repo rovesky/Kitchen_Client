@@ -75,7 +75,7 @@ namespace FootStone.Kitchen
                 {
                     if (EntityManager.HasComponent<CharacterPresentation>(entity))
                     {
-                        var obj = EntityManager.GetComponentData<CharacterPresentation>(entity).Object;
+                        var obj = EntityManager.GetComponentData<CharacterPresentation>(entity).CharacterObject;
                         if (obj != null)
                             Object.Destroy(obj);
                     }

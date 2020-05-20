@@ -7,7 +7,7 @@ namespace FootStone.Kitchen
     {
         static Dictionary<string, Transform> buffer = new Dictionary<string, Transform>();
 
-        private static Transform FindChild(Transform FatherTrans, string childName)
+        public static Transform FindChild(Transform FatherTrans, string childName)
         {
             if (childName == "")
                 return null;
