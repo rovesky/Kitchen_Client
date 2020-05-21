@@ -34,4 +34,8 @@ public class PanelBase : MonoBehaviour
     {
 
     }
+
+    public virtual void Refresh()
+    {
+    }
 }

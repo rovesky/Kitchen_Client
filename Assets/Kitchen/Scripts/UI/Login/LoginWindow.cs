@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using SampleClient;
 
 public class LoginWindow : PanelBase
 {
@@ -13,6 +14,7 @@ public class LoginWindow : PanelBase
 
     public override void Init(params object[] args)
     {
+        //Messenger<Kitchen.PocoInterfaces.LoginInfo>.AddListener(MessengerEventDef.GET_USER_DATA, LoginResponse);
         Login_Btn = transform.Find("Main/Login_Btn").GetComponent<Button>();
         Notice_Btn = transform.Find("Main/Notice_Btn").GetComponent<Button>();
         Version_Text = transform.Find("Main/Notice_Btn").GetComponent<Text>();
@@ -26,7 +28,8 @@ public class LoginWindow : PanelBase
             EventTriggerListener.Get(Login_Btn.gameObject).onPointerClick = o =>
             {
                 Debug.Log("登录");
-                LoginSuccess();
+                //LoginSuccess();
+                NetworkNew.Instance.LoginRequest("11111", "22222");
             };
         }
         if(Notice_Btn)
@@ -39,6 +42,7 @@ public class LoginWindow : PanelBase
     }
 
 
+
     public override void OnShowing()
     {
         base.OnShowing();
@@ -49,7 +53,7 @@ public class LoginWindow : PanelBase
         base.OnClosed();
     }
 
-    public void LoginReqest()
+    public void LoginResponse(Kitchen.PocoInterfaces.LoginInfo info)
     {
 
     }
@@ -66,5 +70,16 @@ public class LoginWindow : PanelBase
     public void LoginFail()
     {
 
+    }
+
+    public override void Refresh()
+    {
+        base.Refresh();
+
+        Debug.Log(DataManager.Instance.UserData.Token + "<<<<<<<<<<<<<<<<<");
+        if (DataManager.Instance.UserData.Token != null || DataManager.Instance.UserData.Token != "")
+        {
+            LoginSuccess();
+        }
     }
 }
