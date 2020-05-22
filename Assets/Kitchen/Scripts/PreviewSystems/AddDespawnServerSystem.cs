@@ -9,7 +9,6 @@ namespace FootStone.Kitchen
 
         protected override void OnUpdate()
         {
-            
             Entities
                 .WithAll<Despawn>()
                 .WithStructuralChanges()
@@ -19,7 +18,6 @@ namespace FootStone.Kitchen
                     EntityManager.AddComponentData(entity, new DespawnServer());
                 }).Run();
         }
-
       
     }
 }

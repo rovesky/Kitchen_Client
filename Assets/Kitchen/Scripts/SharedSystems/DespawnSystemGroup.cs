@@ -43,15 +43,17 @@ namespace FootStone.Kitchen
                     if (EntityManager.HasComponent<ExtinguisherPresentation>(entity))
                     {
                         var extinguisherPresentation = EntityManager.GetComponentData<ExtinguisherPresentation>(entity);
-                        extinguisherPresentation.Smog.SetActive(false);
+                 
+                        if(extinguisherPresentation.Smog != null)
+                            extinguisherPresentation.Smog.SetActive(false);
 
                     }
 
                     if (EntityManager.HasComponent<PotPresentation>(entity))
                     {
                         var potPresentation = EntityManager.GetComponentData<PotPresentation>(entity);
-                        potPresentation.Steam.SetActive(false);
-
+                        if(potPresentation.Steam != null)
+                            potPresentation.Steam.SetActive(false);
                     }
                 }).Run();
         }
@@ -73,7 +75,7 @@ namespace FootStone.Kitchen
                 {
                     if (EntityManager.HasComponent<CharacterPresentation>(entity))
                     {
-                        var obj = EntityManager.GetComponentData<CharacterPresentation>(entity).Object;
+                        var obj = EntityManager.GetComponentData<CharacterPresentation>(entity).CharacterObject;
                         if (obj != null)
                             Object.Destroy(obj);
                     }

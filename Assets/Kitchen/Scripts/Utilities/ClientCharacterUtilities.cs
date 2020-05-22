@@ -37,7 +37,7 @@ namespace FootStone.Kitchen
 
             entityManager.AddComponentData(e, new  CharacterPresentation()
             {
-                Object = characterPresentation
+                CharacterObject = characterPresentation
             });
 
             return e;

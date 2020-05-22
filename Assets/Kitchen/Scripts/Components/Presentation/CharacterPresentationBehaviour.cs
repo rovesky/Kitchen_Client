@@ -11,7 +11,7 @@ namespace FootStone.Kitchen
         {
             dstManager.AddComponentData(entity, new CharacterPresentation
             {
-                Object = null
+                CharacterObject = null
             });
         }
     }

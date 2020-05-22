@@ -9,32 +9,8 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class ApplyCharAnimSystem : SystemBase
     {
-        private void SetAction(UnityEngine.Animator anim, byte ActionId)
-        {
-            switch (ActionId)
-            {
-                case 0:
-                    anim.SetTrigger("normal");
-                    break;
-                case 1:
-                    anim.SetTrigger("angry");
-                    break;
-                case 2:
-                    anim.SetTrigger("happy");
-                    break;
-                case 3:
-                    anim.SetTrigger("dead");
-                    break;
-                default:
-                    anim.SetTrigger("normal");
-                    break;
-            }
-
-        }
-
         protected override void OnUpdate()
         {
-
             Entities.WithStructuralChanges()
                 .WithNone<NewServerEntity>()
                 .ForEach((Entity entity,
@@ -43,49 +19,39 @@ namespace FootStone.Kitchen
                     in LocalToWorld localToWorld) =>
                 {
 
-                    if(localToWorld.Position.Equals(float3.zero))
+                    if (localToWorld.Position.Equals(float3.zero))
                         return;
-                    if (characterPresentation.Object == null)
+                    if (characterPresentation.CharacterObject == null)
                         return;
-                    
-                    characterPresentation.Object.SetActive(true);
+
+                    characterPresentation.CharacterObject.SetActive(true);
 
                     //显示动作
-                    var presentPos = characterPresentation.Object.transform;
+                    var presentPos = characterPresentation.CharacterObject.transform;
                     //   var oy = presentPos.position.y;
                     var cPos = localToWorld.Position;
                     cPos.y = cPos.y - 1.5f;
                     presentPos.position = cPos;
                     presentPos.rotation = state.Rotation;
+                    var anim = characterPresentation.CharacterObject.GetComponent<Animator>();
 
-                 //   FSLog.Info($"characterPresentation pos:{ presentPos.position}");
+                    anim.SetFloat("Velocity", state.Velocity);
+                    anim.SetBool("IsTake", state.IsTake);
+                    anim.SetBool("IsSlice", state.IsSlice);
+                    anim.SetBool("IsClean", state.IsClean);
+                    anim.SetBool("IsThrow", state.IsThrow);
 
-                    //  if(state.SqrMagnitude > 0)
-                    //   FSLog.Info($"ApplyCharAnimSystem,entity:{entity},state.SqrMagnitude:{state.SqrMagnitude}");
-                    var anim = characterPresentation.Object.GetComponent<Animator>();
-                 //   anim.SetFloat("Blend", state.SqrMagnitude, state.SqrMagnitude > 0.1f ? 0.3f : 0.15f,
-                       // Time.DeltaTime);
+                  
+                    if(characterPresentation.KnifeObject1 == null)
+                        characterPresentation.KnifeObject1 = SearchChild.FindChild(characterPresentation.CharacterObject.transform,"Knife1").gameObject;
+                    characterPresentation.KnifeObject1.SetActive(state.IsSlice);
+                   
+                    if(characterPresentation.KnifeObject2 == null)
+                        characterPresentation.KnifeObject2 = SearchChild.FindChild(characterPresentation.CharacterObject.transform,"Knife2").gameObject;
+                    characterPresentation.KnifeObject2.SetActive(state.IsSlice);
 
-                     anim.SetFloat("Velocity", state.Velocity);
-                     anim.SetBool("IsTake", state.IsTake);
-                     anim.SetBool("IsSlice", state.IsSlice);
-                     anim.SetBool("IsClean", state.IsClean);
-                     anim.SetBool("IsThrow", state.IsThrow);
 
-                    //if (state.SqrMagnitude < 0.1f)
-                    //    SetAction(anim, state.ActionId);
-
-                    //var skinController = characterPresentation.Object.GetComponent<CharacterSkinController>();
-                    ////    EntityManager.GetComponentObject<CharacterSkinController>(character.PresentationEntity);
-                    //if (skinController != null)
-                    //    skinController.ChangeMaterialSettings(state.MaterialId);
-
-                    //anim.SetFloat("Blend", speed, 0.3f, Time.deltaTime);
-                    //   EntityManager.SetComponentData(character.PresentationEntity, presentPos);
-                    //  FSLog.Info($"ApplyCharPresentationSystem,x:{predictData.Position.x},z:{predictData.Position.z}," +
-                    //       $"translation.Value.x:{ translation.Value.x},translation.Value.z:{ translation.Value.z}");
                 }).Run();
         }
     }
-
 }

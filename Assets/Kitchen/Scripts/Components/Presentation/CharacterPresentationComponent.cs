@@ -7,8 +7,9 @@ namespace FootStone.Kitchen
   
     public class CharacterPresentation : IComponentData
     {
-        public GameObject Object;
-
+        public GameObject CharacterObject;
+        public GameObject KnifeObject1;
+        public GameObject KnifeObject2;
     }
 
 }

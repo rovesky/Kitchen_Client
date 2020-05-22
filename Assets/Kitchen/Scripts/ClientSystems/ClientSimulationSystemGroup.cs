@@ -55,7 +55,7 @@ namespace FootStone.Kitchen
             ClientCharacterUtilities.Init();
             MenuUtilities.Init();
             IconUtilities.Init();
-      //      Application.targetFrameRate = 30;
+            Application.targetFrameRate = 60;
             UnityEngine.Time.fixedDeltaTime = GameTick.DefaultGameTick.TickInterval;
 
             worldSceneEntitiesSystem = World.GetOrCreateSystem<WorldSceneEntitiesSystem>();

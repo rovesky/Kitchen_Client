@@ -25,7 +25,7 @@ namespace FootStone.Kitchen
                     var isVisible = !(itemState.Owner != Entity.Null &&
                                      (EntityManager.HasComponent<Plate>(itemState.Owner) ||
                                       EntityManager.HasComponent<Pot>(itemState.Owner)));
-                    FSLog.Info($"UpdateFoodIconSystem,isVisible:{isVisible}");
+                  //  FSLog.Info($"UpdateFoodIconSystem,isVisible:{isVisible}");
 
                     //if(food.Type == EntityType.ShrimpSlice)
                        // FSLog.Info($"UpdateIcon,entity:{entity},isVisible:{isVisible},pos:{localToWorld.Position}");
