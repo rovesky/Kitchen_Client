@@ -40,6 +40,14 @@ public class PanelManager : BSingleton<PanelManager>
      
         }  
     }
+
+    public void MsgRequestRef(string panelName)
+    {
+        PanelBase panel = (PanelBase)mPanelDic[panelName];
+        if (panel == null)
+            return;
+        panel.Refresh();
+    }
     public void ClosePanel(string name)
     {
         PanelBase panel = (PanelBase)mPanelDic[name];

@@ -18,7 +18,12 @@ public class MainWindow : PanelBase
 
     public Transform Head;
     public Transform Model_Img;
+    public Transform GameSelectRoot;
     public Transform CreatRoom_Btn;
+    public Transform RoomListPanel;
+    public Transform CreatRoomList_Btn;
+    public Transform EnterRoom_Btn;
+    public Transform RoomListGameMode_Group;
     public override void Init(params object[] args)
     {
         InitGameObject();
@@ -31,7 +36,17 @@ public class MainWindow : PanelBase
     {
         Head = transform.Find("Main/Head");
         Model_Img = transform.Find("Main/Model_Img");
-        CreatRoom_Btn = transform.Find("Main/GameSelectRoot/CreatRoom_Btn");
+        CreatRoomList_Btn = transform.Find("Main/GameSelectRoot/CreatRoomList_Btn");
+        RoomListPanel = transform.Find("Main/RoomListPanel");
+        GameSelectRoot = transform.Find("Main/GameSelectRoot");
+        if (RoomListPanel)
+        {
+            RoomListGameMode_Group = RoomListPanel.Find("RoomListGameMode_Group");
+            CreatRoom_Btn = RoomListPanel.Find("CreatRoom_Btn");
+            EnterRoom_Btn = RoomListPanel.Find("EnterRoom_Btn");
+            RoomListPanel.gameObject.SetActive(false);
+        }
+        
     }
 
 
@@ -42,8 +57,30 @@ public class MainWindow : PanelBase
             EventTriggerListener.Get(CreatRoom_Btn.gameObject).onPointerClick = o =>
             {
                 Debug.Log("创建房间");
-
                 PanelManager.Instance.OpenPanel<RoomSettingDialog>(GameCommon.Instance.RoomSettingDialog);
+            };
+        }
+        if (CreatRoomList_Btn != null)
+        {
+            EventTriggerListener.Get(CreatRoomList_Btn.gameObject).onPointerClick = o =>
+            {
+                if (RoomListPanel != null)
+                {
+                    RoomListPanel.gameObject.SetActive(true);
+                    
+                }
+                if (GameSelectRoot != null)
+                {
+                    GameSelectRoot.gameObject.SetActive(false);
+                }
+            };
+        }
+
+        if (EnterRoom_Btn != null)
+        {
+            EventTriggerListener.Get(EnterRoom_Btn.gameObject).onPointerClick = o =>
+            {
+
             };
         }
     }

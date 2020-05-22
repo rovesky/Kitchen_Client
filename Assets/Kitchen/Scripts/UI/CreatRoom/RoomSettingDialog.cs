@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using SampleClient;
 public class RoomSettingDialog : PanelBase
 {
     public Transform RoomName_Text;
@@ -18,10 +18,52 @@ public class RoomSettingDialog : PanelBase
 
         InitGameObject();
         SetListener();
+        InitMessager();
         RequsetPwd();
         RequestName();
     }
 
+    public void InitMessager()
+    {
+        Messenger<string>.AddListener(MessengerEventDef.REMOVE_ROOM, (o) =>
+        {
+           
+        });
+
+        Messenger<List<Kitchen.PocoInterfaces.RoomInfoP>>.AddListener(MessengerEventDef.ROOM_LIST_REFRESH, (o)=>
+        {
+            if (o.Count == 0)
+            {
+                return;
+            }
+           //NetworkNew.Instance.ReadyGameRequest(o[o.Count -1].rmid);
+        });
+        Messenger<Kitchen.PocoInterfaces.RoomInfoP>.AddListener(MessengerEventDef.CUR_ROOM, (o) =>
+        {
+            Debug.Log(o.name + "Name<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            NetworkNew.Instance.EnterRoomRequest(o.rmid, "");
+        });
+    }
+
+    public void RemoveMessager()
+    {
+        Messenger<List<Kitchen.PocoInterfaces.RoomInfoP>>.RemoveListener(MessengerEventDef.ROOM_LIST_REFRESH, (o) =>
+        {
+            if (o.Count == 0)
+            {
+                return;
+            }
+            //NetworkNew.Instance.ReadyGameRequest(o[o.Count - 1].rmid);
+        });
+        Messenger<Kitchen.PocoInterfaces.RoomInfoP>.RemoveListener(MessengerEventDef.CUR_ROOM, (o) =>
+        {
+
+        });
+        Messenger<string>.RemoveListener(MessengerEventDef.REMOVE_ROOM, (o) =>
+        {
+         
+        });
+    }
     public void InitGameObject()
     {
         RoomName_Text = transform.Find("Main/RoomName_Text");
@@ -29,8 +71,14 @@ public class RoomSettingDialog : PanelBase
         Random_Btn = transform.Find("Main/Random_Btn");
         GameMode_Group = transform.Find("Main/GameMode_Group");
         Close_Btn = transform.Find("Main/Close_Btn");
-        Cnfirm_Btn = transform.Find("Main/Cnfirm_Btn");
+        Cnfirm_Btn = transform.Find("Main/Confirm_Btn");
+        
+  
 
+        if (GameMode_Group)
+        {
+            GameMode_Group.gameObject.SetActive(true);
+        }
     }
     public void SetListener()
     {
@@ -45,9 +93,13 @@ public class RoomSettingDialog : PanelBase
 
         if (Cnfirm_Btn != null)
         {
-            Debug.Log("EnterRoom");
+            EventTriggerListener.Get(Cnfirm_Btn.gameObject).onPointerClick = o =>
+            {
+                CreatRoom();
+                Debug.Log("EnterRoom");
+            };
         }
-
+        
         if (Random_Btn != null)
         {
             EventTriggerListener.Get(Random_Btn.gameObject).onPointerClick = o =>
@@ -75,11 +127,17 @@ public class RoomSettingDialog : PanelBase
                     {
                         var obj = target.transform.Find("Background/Image");
                         obj.gameObject.SetActive(o);
-
                     });
                 }
             }
         }
+    }
+
+    public void CreatRoom()
+    {
+
+        NetworkNew.Instance.CreatRoomRequest(DataManager.Instance.RoomDataManager.CurRoomName, "", (byte)1);
+        
     }
 
     public void RandomPwd()
@@ -102,15 +160,19 @@ public class RoomSettingDialog : PanelBase
     {
         var index = Random.Range(0, 6);
         var roomName = GameCommon.Instance.TestName[index];
+        DataManager.Instance.RoomDataManager.SetCurRoomName(roomName);
         SetRootName(roomName);
     }
 
     public void SetPwd(int Pwd)
     {
+        DataManager.Instance.RoomDataManager.SetCurPwd(Pwd.ToString());
         if (RoomPwd_Text != null)
         {
             RoomPwd_Text.GetComponent<Text>().text = Pwd.ToString();
+            
         }
+       
     }
 
     public void RequsetPwd()
