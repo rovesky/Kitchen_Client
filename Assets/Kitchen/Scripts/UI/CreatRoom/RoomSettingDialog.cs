@@ -12,6 +12,7 @@ public class RoomSettingDialog : PanelBase
     public Transform GameMode_Group;
     public Transform Close_Btn;
     public Transform Cnfirm_Btn;
+
     public override void Init(params object[] args)
     {
         base.Init(args);
@@ -30,31 +31,16 @@ public class RoomSettingDialog : PanelBase
            
         });
 
-        Messenger<List<Kitchen.PocoInterfaces.RoomInfoP>>.AddListener(MessengerEventDef.ROOM_LIST_REFRESH, (o)=>
-        {
-            if (o.Count == 0)
-            {
-                return;
-            }
-           //NetworkNew.Instance.ReadyGameRequest(o[o.Count -1].rmid);
-        });
         Messenger<Kitchen.PocoInterfaces.RoomInfoP>.AddListener(MessengerEventDef.CUR_ROOM, (o) =>
         {
             Debug.Log(o.name + "Name<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-            NetworkNew.Instance.EnterRoomRequest(o.rmid, "");
+            NetworkNew.Instance.EnterRoomRequest(o.rmid, DataManager.Instance.RoomDataManager.CurPwd);
         });
     }
 
     public void RemoveMessager()
     {
-        Messenger<List<Kitchen.PocoInterfaces.RoomInfoP>>.RemoveListener(MessengerEventDef.ROOM_LIST_REFRESH, (o) =>
-        {
-            if (o.Count == 0)
-            {
-                return;
-            }
-            //NetworkNew.Instance.ReadyGameRequest(o[o.Count - 1].rmid);
-        });
+
         Messenger<Kitchen.PocoInterfaces.RoomInfoP>.RemoveListener(MessengerEventDef.CUR_ROOM, (o) =>
         {
 
@@ -135,8 +121,8 @@ public class RoomSettingDialog : PanelBase
 
     public void CreatRoom()
     {
-
-        NetworkNew.Instance.CreatRoomRequest(DataManager.Instance.RoomDataManager.CurRoomName, "", (byte)1);
+        
+        NetworkNew.Instance.CreatRoomRequest(DataManager.Instance.RoomDataManager.CurRoomName, DataManager.Instance.RoomDataManager.CurPwd, (byte)2);
         
     }
 

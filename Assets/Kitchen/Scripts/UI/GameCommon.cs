@@ -13,6 +13,10 @@ public class GameCommon : MonoBehaviour
     public string RoomSettingDialog = "RoomSettingDialog";
     public string LoginWindow = "LoginWindow";
     public string MainWindow = "MainWindow";
+    public string EnterRoomDialog = "EnterRoomDialog"; 
+    public List<Sprite> CellBgList = new List<Sprite>();
+
+    //public string 
     public static GameCommon Instance
     {
         get
