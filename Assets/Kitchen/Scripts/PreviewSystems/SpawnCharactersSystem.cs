@@ -32,7 +32,7 @@ namespace FootStone.Kitchen
         private Entity CreateCharacter(float3 position, bool isLocal,int id)
         {
             var e = ClientCharacterUtilities.
-                CreateCharacter(EntityManager,new float3 {x = 0, y = 1, z = -4});
+                CreateCharacter(EntityManager,new float3 {x = 0, y = 1.92f, z = -4});
 
 
             EntityManager.SetComponentData(e, new ReplicatedEntityData
