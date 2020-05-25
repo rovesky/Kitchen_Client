@@ -6,14 +6,14 @@ using UnityEngine;
 public class PanelManager : BSingleton<PanelManager>
 {
 
-    public GameObject UIROOT;
+    //public GameObject UIROOT;
     private Dictionary<string, PanelBase> mPanelDic = new Dictionary<string, PanelBase>();
     public void OpenPanel<T>(string panelName, params object[] args) where T : PanelBase
     {
 
-        if (UIROOT == null)
+        if (GameCommon.Instance.UIRoot == null)
         {
-            UIROOT = GameCommon.Instance.UIRoot;
+            GameCommon.Instance.InitUiRoot();
         }
         var name = typeof(T).ToString();
         
@@ -27,7 +27,7 @@ public class PanelManager : BSingleton<PanelManager>
             if (mWndObject != null)
             {
                 
-                mWndObject.transform.SetParent(UIROOT.transform, false);
+                mWndObject.transform.SetParent(GameCommon.Instance.UIRoot.transform, false);
                 var value = mWndObject.AddComponent<T>();
                 mPanelDic.Add(name,value);
                 mWndObject.GetComponent<T>().Init(args);

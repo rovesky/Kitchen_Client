@@ -169,8 +169,8 @@ namespace SampleClient
             var isReady = await roomPrx.ReadyRoomAsync(roomId);
             if (isReady)
             {
-                Globe.nextSceneName = "kitchen_01";//目标场景名称
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Loading");//加载进度条场景
+                Globe.nextSceneName = "TempScene";//目标场景名称
+                UnityEngine.SceneManagement.SceneManager.LoadScene("kitchen_01");//加载进度条场景
             }
             Debug.Log("Is Ready <<<<<<<<<<<<<<<<<<<<<" + isReady);
         }
