@@ -23,6 +23,14 @@ namespace FootStone.Kitchen
             else
                 simulationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
                     .CreateSystem<ClientSimulationSystemGroup>());
+
+            //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());
+            var presentationSystemGroup =
+                World.DefaultGameObjectInjectionWorld.GetExistingSystem<PresentationSystemGroup>();
+            presentationSystemGroup.AddSystemToUpdateList(World.DefaultGameObjectInjectionWorld
+                .CreateSystem<LatePresentationSystemGroup>());
+
+
         }
 
         // Update is called once per frame

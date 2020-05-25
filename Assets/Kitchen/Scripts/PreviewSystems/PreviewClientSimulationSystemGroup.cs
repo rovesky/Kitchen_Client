@@ -35,8 +35,6 @@ namespace FootStone.Kitchen
             IconUtilities.Init();
             GameWorld.Active = new GameWorld();
 
-            //  World.DestroySystem(World.GetExistingSystem<ExportPhysicsWorld>());
-
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);
 

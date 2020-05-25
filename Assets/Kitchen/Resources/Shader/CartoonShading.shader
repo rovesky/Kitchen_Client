@@ -10,6 +10,7 @@
 		_OutlineColor("Outline Color",Color) = (0,0,0,1)
 		_Specular("Specular",Color) = (1,1,1,1)
 		_SpecularScale("Specular Scale",Range(0,0.1)) = 0.01
+		_Brightness("Brightness", Float) = 1	//调整亮度
 	}
 		SubShader
 		{
@@ -32,7 +33,7 @@
 			float _Outline;
 			float _Factor;
 			fixed4 _OutlineColor;
-
+			half _Brightness;
 			struct appdata
 			{
 				float4 vertex : POSITION;
@@ -129,8 +130,9 @@
 					fixed3 worldHalfDir = normalize(worldLightDir + worldViewDir);
 
 					//计算材质反射率
-					fixed4 c = tex2D(_MainTex,i.uv);
+					fixed4 c = tex2D(_MainTex,i.uv);					
 					fixed3 albedo = c.rgb*_Color.rgb;
+					//fixed3 albedo = c.rgb*_Color.rgb *_Brightness;
 
 					//计算环境光
 					fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz*albedo;
