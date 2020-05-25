@@ -11,6 +11,37 @@ using UnityEngine;
 namespace SampleClient
 {
 
+    internal class RoomPushI : IRoomPushDisp_, IServerPush
+    {
+        private string account;
+        private SessionPushI sessionPushI;
+
+        public override void EnterMessage(List<string> playids, Current current = null)
+        {
+            Debug.Log(playids.Count + "<<<<<<<<<<");
+        }
+
+        public string GetFacet()
+        {
+            return typeof(IRoomPushPrx).Name;
+        }
+
+        public override void ReadyMessage(List<string> playids, Current current = null)
+        {
+            Debug.Log(playids.Count + "<<<<<<<<<<");
+        }
+
+        public void setAccount(string account)
+        {
+            this.account = account;
+        }
+
+        public void setSessionPushI(SessionPushI sessionPushI)
+        {
+            this.sessionPushI = sessionPushI;
+        }
+
+    }
     public class NetworkNew : BSingleton<NetworkNew>
     {
         public IFSSession Session { get; private set; }
@@ -21,6 +52,7 @@ namespace SampleClient
             {
                 iceOptions.EnableDispatcher = false;
                 iceOptions.PushObjects = new List<Ice.Object>();
+                iceOptions.PushObjects.Add(new RoomPushI());
             }).NettyOptions(nettyOptions =>
             {
                 nettyOptions.Port = 8007;
@@ -29,14 +61,14 @@ namespace SampleClient
 
             var sessionId = "session" + 1;
             Session = await client.CreateSession(ip, port, sessionId);
-            
+
         }
 
         public async void LoginRequest(string account, string password)
         {
             await LoginTask(account, password);
         }
-        private async Task LoginTask(string  account , string password)
+        private async Task LoginTask(string account, string password)
         {
             try
             {
@@ -111,6 +143,36 @@ namespace SampleClient
             {
                 DataManager.Instance.RoomDataManager.RemoveRoom(roomId);
             }
+        }
+
+        public async void EnterRoomRequest(string roomId, string pwd)
+        {
+            await EnterRoom(roomId, pwd);
+        }
+        private async Task EnterRoom(string roomId, string pwd)
+        {
+            var roomPrx = Session.UncheckedCast(IRoomPrxHelper.uncheckedCast);
+            var isEnter = await roomPrx.EnterRoomAsync(roomId, pwd);
+
+            Debug.Log(isEnter + "<<<<<<<<<<<<<<<<<<<<<<<<<进入房间");
+            await ReadyGame(roomId);
+        }
+
+        public async void ReadyGameRequest(string roomId)
+        {
+            await ReadyGame(roomId);
+        }
+
+        private async Task ReadyGame(string roomId)
+        {
+            var roomPrx = Session.UncheckedCast(IRoomPrxHelper.uncheckedCast);
+            var isReady = await roomPrx.ReadyRoomAsync(roomId);
+            if (isReady)
+            {
+                Globe.nextSceneName = "TempScene";//目标场景名称
+                UnityEngine.SceneManagement.SceneManager.LoadScene("kitchen_01");//加载进度条场景
+            }
+            Debug.Log("Is Ready <<<<<<<<<<<<<<<<<<<<<" + isReady);
         }
 
 

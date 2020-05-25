@@ -13,6 +13,11 @@ public class GameCommon : MonoBehaviour
     public string RoomSettingDialog = "RoomSettingDialog";
     public string LoginWindow = "LoginWindow";
     public string MainWindow = "MainWindow";
+    public string EnterRoomDialog = "EnterRoomDialog";
+    public string RoomWindow = "RoomWindow";
+    public List<Sprite> CellBgList = new List<Sprite>();
+
+    //public string 
     public static GameCommon Instance
     {
         get
@@ -31,18 +36,23 @@ public class GameCommon : MonoBehaviour
     private void Init()
     {
         Messenger<string>.AddListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
-        NetworkNew.Instance.Init("192.168.0.115", 4061);
+        NetworkNew.Instance.Init("192.168.0.183", 4061);
         DataManager.Instance.Init();
+        InitUiRoot();
+        PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
+    }
+
+    public void InitUiRoot()
+    {
         if (UIRoot == null)
         {
             var uiRoot = Resources.Load<GameObject>("UI/UI_Root");
             if (uiRoot != null)
             {
                 var obj = GameObject.Instantiate(uiRoot);
-                UIRoot = obj.transform.Find("Canvas").gameObject ;
-            }           
+                UIRoot = obj.transform.Find("Canvas").gameObject;
+            }
         }
-        PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
     }
 
     private void OnDestroy()

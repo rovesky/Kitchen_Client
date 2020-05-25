@@ -252,6 +252,21 @@ namespace Kitchen
         public partial interface IRoom : Ice.Object, IRoomOperations_
         {
         }
+
+        [_System.Runtime.InteropServices.ComVisible(false)]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1715")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1722")]
+        [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1724")]
+        public partial interface IRoomPush : Ice.Object, IRoomPushOperations_
+        {
+        }
     }
 }
 
@@ -273,6 +288,15 @@ namespace Kitchen
 
         [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
         public delegate void Callback_IRoom_EnterRoom(bool ret);
+
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public delegate void Callback_IRoom_ReadyRoom(bool ret);
+
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public delegate void Callback_IRoomPush_ReadyMessage();
+
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public delegate void Callback_IRoomPush_EnterMessage();
     }
 }
 
@@ -342,6 +366,46 @@ namespace Kitchen
             Ice.AsyncResult begin_EnterRoom(string roomid, string pwd, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie);
 
             bool end_EnterRoom(Ice.AsyncResult asyncResult);
+
+            bool ReadyRoom(string roomid, Ice.OptionalContext context = new Ice.OptionalContext());
+
+            _System.Threading.Tasks.Task<bool> ReadyRoomAsync(string roomid, Ice.OptionalContext context = new Ice.OptionalContext(), _System.IProgress<bool> progress = null, _System.Threading.CancellationToken cancel = new _System.Threading.CancellationToken());
+
+            Ice.AsyncResult<Callback_IRoom_ReadyRoom> begin_ReadyRoom(string roomid, Ice.OptionalContext context = new Ice.OptionalContext());
+
+            Ice.AsyncResult begin_ReadyRoom(string roomid, Ice.AsyncCallback callback, object cookie);
+
+            Ice.AsyncResult begin_ReadyRoom(string roomid, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie);
+
+            bool end_ReadyRoom(Ice.AsyncResult asyncResult);
+        }
+
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public interface IRoomPushPrx : Ice.ObjectPrx
+        {
+            void ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext());
+
+            _System.Threading.Tasks.Task ReadyMessageAsync(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext(), _System.IProgress<bool> progress = null, _System.Threading.CancellationToken cancel = new _System.Threading.CancellationToken());
+
+            Ice.AsyncResult<Callback_IRoomPush_ReadyMessage> begin_ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext());
+
+            Ice.AsyncResult begin_ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.AsyncCallback callback, object cookie);
+
+            Ice.AsyncResult begin_ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie);
+
+            void end_ReadyMessage(Ice.AsyncResult asyncResult);
+
+            void EnterMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext());
+
+            _System.Threading.Tasks.Task EnterMessageAsync(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext(), _System.IProgress<bool> progress = null, _System.Threading.CancellationToken cancel = new _System.Threading.CancellationToken());
+
+            Ice.AsyncResult<Callback_IRoomPush_EnterMessage> begin_EnterMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext());
+
+            Ice.AsyncResult begin_EnterMessage(_System.Collections.Generic.List<string> playids, Ice.AsyncCallback callback, object cookie);
+
+            Ice.AsyncResult begin_EnterMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie);
+
+            void end_EnterMessage(Ice.AsyncResult asyncResult);
         }
     }
 }
@@ -367,6 +431,19 @@ namespace Kitchen
 
             [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
             _System.Threading.Tasks.Task<bool> EnterRoomAsync(string roomid, string pwd, Ice.Current current = null);
+
+            [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+            _System.Threading.Tasks.Task<bool> ReadyRoomAsync(string roomid, Ice.Current current = null);
+        }
+
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public interface IRoomPushOperations_
+        {
+            [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+            void ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.Current current = null);
+
+            [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+            void EnterMessage(_System.Collections.Generic.List<string> playids, Ice.Current current = null);
         }
     }
 }
@@ -467,6 +544,18 @@ namespace Kitchen
                 try
                 {
                     return _iceI_GetRoomListAsync(type, context, null, _System.Threading.CancellationToken.None, true).Result;
+                }
+                catch(_System.AggregateException ex_)
+                {
+                    throw ex_.InnerException;
+                }
+            }
+
+            public bool ReadyRoom(string roomid, Ice.OptionalContext context = new Ice.OptionalContext())
+            {
+                try
+                {
+                    return _iceI_ReadyRoomAsync(roomid, context, null, _System.Threading.CancellationToken.None, true).Result;
                 }
                 catch(_System.AggregateException ex_)
                 {
@@ -633,6 +722,42 @@ namespace Kitchen
                     {
                         _System.Collections.Generic.List<RoomInfoP> ret;
                         ret = RoomInfoListHelper.read(istr);
+                        return ret;
+                    });
+            }
+
+            public _System.Threading.Tasks.Task<bool> ReadyRoomAsync(string roomid, Ice.OptionalContext context = new Ice.OptionalContext(), _System.IProgress<bool> progress = null, _System.Threading.CancellationToken cancel = new _System.Threading.CancellationToken())
+            {
+                return _iceI_ReadyRoomAsync(roomid, context, progress, cancel, false);
+            }
+
+            private _System.Threading.Tasks.Task<bool> _iceI_ReadyRoomAsync(string iceP_roomid, Ice.OptionalContext context, _System.IProgress<bool> progress, _System.Threading.CancellationToken cancel, bool synchronous)
+            {
+                iceCheckTwowayOnly(_ReadyRoom_name);
+                var completed = new IceInternal.OperationTaskCompletionCallback<bool>(progress, cancel);
+                _iceI_ReadyRoom(iceP_roomid, context, synchronous, completed);
+                return completed.Task;
+            }
+
+            private const string _ReadyRoom_name = "ReadyRoom";
+
+            private void _iceI_ReadyRoom(string iceP_roomid, _System.Collections.Generic.Dictionary<string, string> context, bool synchronous, IceInternal.OutgoingAsyncCompletionCallback completed)
+            {
+                var outAsync = getOutgoingAsync<bool>(completed);
+                outAsync.invoke(
+                    _ReadyRoom_name,
+                    Ice.OperationMode.Normal,
+                    Ice.FormatType.DefaultFormat,
+                    context,
+                    synchronous,
+                    write: (Ice.OutputStream ostr) =>
+                    {
+                        ostr.writeString(iceP_roomid);
+                    },
+                    read: (Ice.InputStream istr) =>
+                    {
+                        bool ret;
+                        ret = istr.readBool();
                         return ret;
                     });
             }
@@ -829,6 +954,44 @@ namespace Kitchen
                 return completed;
             }
 
+            public Ice.AsyncResult<Callback_IRoom_ReadyRoom> begin_ReadyRoom(string roomid, Ice.OptionalContext context = new Ice.OptionalContext())
+            {
+                return begin_ReadyRoom(roomid, context, null, null, false);
+            }
+
+            public Ice.AsyncResult begin_ReadyRoom(string roomid, Ice.AsyncCallback callback, object cookie)
+            {
+                return begin_ReadyRoom(roomid, new Ice.OptionalContext(), callback, cookie, false);
+            }
+
+            public Ice.AsyncResult begin_ReadyRoom(string roomid, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie)
+            {
+                return begin_ReadyRoom(roomid, context, callback, cookie, false);
+            }
+
+            public bool end_ReadyRoom(Ice.AsyncResult asyncResult)
+            {
+                var resultI_ = IceInternal.AsyncResultI.check(asyncResult, this, _ReadyRoom_name);
+                var outgoing_ = (IceInternal.OutgoingAsyncT<bool>)resultI_.OutgoingAsync;
+                return outgoing_.getResult(resultI_.wait());
+            }
+
+            private Ice.AsyncResult<Callback_IRoom_ReadyRoom> begin_ReadyRoom(string iceP_roomid, _System.Collections.Generic.Dictionary<string, string> context, Ice.AsyncCallback completedCallback, object cookie, bool synchronous)
+            {
+                iceCheckAsyncTwowayOnly(_ReadyRoom_name);
+                var completed = new IceInternal.OperationAsyncResultCompletionCallback<Callback_IRoom_ReadyRoom, bool>(
+                    (Callback_IRoom_ReadyRoom cb, bool ret) =>
+                    {
+                        if(cb != null)
+                        {
+                            cb.Invoke(ret);
+                        }
+                    },
+                    this, _ReadyRoom_name, cookie, completedCallback);
+                _iceI_ReadyRoom(iceP_roomid, context, synchronous, completed);
+                return completed;
+            }
+
             public Ice.AsyncResult<Callback_IRoom_RemoveRoom> begin_RemoveRoom(string roomid, Ice.OptionalContext context = new Ice.OptionalContext())
             {
                 return begin_RemoveRoom(roomid, context, null, null, false);
@@ -1009,6 +1172,342 @@ namespace Kitchen
 
             #endregion
         }
+
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public sealed class PlayIdListHelper
+        {
+            public static void write(Ice.OutputStream ostr, _System.Collections.Generic.List<string> v)
+            {
+                ostr.writeStringSeq(v == null ? 0 : v.Count, v);
+            }
+
+            public static _System.Collections.Generic.List<string> read(Ice.InputStream istr)
+            {
+                _System.Collections.Generic.List<string> v;
+                istr.readStringSeq(out v);
+                return v;
+            }
+        }
+
+        [_System.Runtime.InteropServices.ComVisible(false)]
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        [_System.Serializable]
+        public sealed class IRoomPushPrxHelper : Ice.ObjectPrxHelperBase, IRoomPushPrx
+        {
+            public IRoomPushPrxHelper()
+            {
+            }
+
+            public IRoomPushPrxHelper(_System.Runtime.Serialization.SerializationInfo info, _System.Runtime.Serialization.StreamingContext context) : base(info, context)
+            {
+            }
+
+            #region Synchronous operations
+
+            public void EnterMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext())
+            {
+                try
+                {
+                    _iceI_EnterMessageAsync(playids, context, null, _System.Threading.CancellationToken.None, true).Wait();
+                }
+                catch(_System.AggregateException ex_)
+                {
+                    throw ex_.InnerException;
+                }
+            }
+
+            public void ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext())
+            {
+                try
+                {
+                    _iceI_ReadyMessageAsync(playids, context, null, _System.Threading.CancellationToken.None, true).Wait();
+                }
+                catch(_System.AggregateException ex_)
+                {
+                    throw ex_.InnerException;
+                }
+            }
+
+            #endregion
+
+            #region Async Task operations
+
+            public _System.Threading.Tasks.Task EnterMessageAsync(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext(), _System.IProgress<bool> progress = null, _System.Threading.CancellationToken cancel = new _System.Threading.CancellationToken())
+            {
+                return _iceI_EnterMessageAsync(playids, context, progress, cancel, false);
+            }
+
+            private _System.Threading.Tasks.Task _iceI_EnterMessageAsync(_System.Collections.Generic.List<string> iceP_playids, Ice.OptionalContext context, _System.IProgress<bool> progress, _System.Threading.CancellationToken cancel, bool synchronous)
+            {
+                var completed = new IceInternal.OperationTaskCompletionCallback<object>(progress, cancel);
+                _iceI_EnterMessage(iceP_playids, context, synchronous, completed);
+                return completed.Task;
+            }
+
+            private const string _EnterMessage_name = "EnterMessage";
+
+            private void _iceI_EnterMessage(_System.Collections.Generic.List<string> iceP_playids, _System.Collections.Generic.Dictionary<string, string> context, bool synchronous, IceInternal.OutgoingAsyncCompletionCallback completed)
+            {
+                var outAsync = getOutgoingAsync<object>(completed);
+                outAsync.invoke(
+                    _EnterMessage_name,
+                    Ice.OperationMode.Normal,
+                    Ice.FormatType.DefaultFormat,
+                    context,
+                    synchronous,
+                    write: (Ice.OutputStream ostr) =>
+                    {
+                        PlayIdListHelper.write(ostr, iceP_playids);
+                    });
+            }
+
+            public _System.Threading.Tasks.Task ReadyMessageAsync(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext(), _System.IProgress<bool> progress = null, _System.Threading.CancellationToken cancel = new _System.Threading.CancellationToken())
+            {
+                return _iceI_ReadyMessageAsync(playids, context, progress, cancel, false);
+            }
+
+            private _System.Threading.Tasks.Task _iceI_ReadyMessageAsync(_System.Collections.Generic.List<string> iceP_playids, Ice.OptionalContext context, _System.IProgress<bool> progress, _System.Threading.CancellationToken cancel, bool synchronous)
+            {
+                var completed = new IceInternal.OperationTaskCompletionCallback<object>(progress, cancel);
+                _iceI_ReadyMessage(iceP_playids, context, synchronous, completed);
+                return completed.Task;
+            }
+
+            private const string _ReadyMessage_name = "ReadyMessage";
+
+            private void _iceI_ReadyMessage(_System.Collections.Generic.List<string> iceP_playids, _System.Collections.Generic.Dictionary<string, string> context, bool synchronous, IceInternal.OutgoingAsyncCompletionCallback completed)
+            {
+                var outAsync = getOutgoingAsync<object>(completed);
+                outAsync.invoke(
+                    _ReadyMessage_name,
+                    Ice.OperationMode.Normal,
+                    Ice.FormatType.DefaultFormat,
+                    context,
+                    synchronous,
+                    write: (Ice.OutputStream ostr) =>
+                    {
+                        PlayIdListHelper.write(ostr, iceP_playids);
+                    });
+            }
+
+            #endregion
+
+            #region Asynchronous operations
+
+            public Ice.AsyncResult<Callback_IRoomPush_EnterMessage> begin_EnterMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext())
+            {
+                return begin_EnterMessage(playids, context, null, null, false);
+            }
+
+            public Ice.AsyncResult begin_EnterMessage(_System.Collections.Generic.List<string> playids, Ice.AsyncCallback callback, object cookie)
+            {
+                return begin_EnterMessage(playids, new Ice.OptionalContext(), callback, cookie, false);
+            }
+
+            public Ice.AsyncResult begin_EnterMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie)
+            {
+                return begin_EnterMessage(playids, context, callback, cookie, false);
+            }
+
+            public void end_EnterMessage(Ice.AsyncResult asyncResult)
+            {
+                var resultI_ = IceInternal.AsyncResultI.check(asyncResult, this, _EnterMessage_name);
+                ((IceInternal.OutgoingAsyncT<object>)resultI_.OutgoingAsync).getResult(resultI_.wait());
+            }
+
+            private Ice.AsyncResult<Callback_IRoomPush_EnterMessage> begin_EnterMessage(_System.Collections.Generic.List<string> iceP_playids, _System.Collections.Generic.Dictionary<string, string> context, Ice.AsyncCallback completedCallback, object cookie, bool synchronous)
+            {
+                var completed = new IceInternal.OperationAsyncResultCompletionCallback<Callback_IRoomPush_EnterMessage, object>(
+                    (Callback_IRoomPush_EnterMessage cb, object ret) =>
+                    {
+                        if(cb != null)
+                        {
+                            cb.Invoke();
+                        }
+                    },
+                    this, _EnterMessage_name, cookie, completedCallback);
+                _iceI_EnterMessage(iceP_playids, context, synchronous, completed);
+                return completed;
+            }
+
+            public Ice.AsyncResult<Callback_IRoomPush_ReadyMessage> begin_ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context = new Ice.OptionalContext())
+            {
+                return begin_ReadyMessage(playids, context, null, null, false);
+            }
+
+            public Ice.AsyncResult begin_ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.AsyncCallback callback, object cookie)
+            {
+                return begin_ReadyMessage(playids, new Ice.OptionalContext(), callback, cookie, false);
+            }
+
+            public Ice.AsyncResult begin_ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.OptionalContext context, Ice.AsyncCallback callback, object cookie)
+            {
+                return begin_ReadyMessage(playids, context, callback, cookie, false);
+            }
+
+            public void end_ReadyMessage(Ice.AsyncResult asyncResult)
+            {
+                var resultI_ = IceInternal.AsyncResultI.check(asyncResult, this, _ReadyMessage_name);
+                ((IceInternal.OutgoingAsyncT<object>)resultI_.OutgoingAsync).getResult(resultI_.wait());
+            }
+
+            private Ice.AsyncResult<Callback_IRoomPush_ReadyMessage> begin_ReadyMessage(_System.Collections.Generic.List<string> iceP_playids, _System.Collections.Generic.Dictionary<string, string> context, Ice.AsyncCallback completedCallback, object cookie, bool synchronous)
+            {
+                var completed = new IceInternal.OperationAsyncResultCompletionCallback<Callback_IRoomPush_ReadyMessage, object>(
+                    (Callback_IRoomPush_ReadyMessage cb, object ret) =>
+                    {
+                        if(cb != null)
+                        {
+                            cb.Invoke();
+                        }
+                    },
+                    this, _ReadyMessage_name, cookie, completedCallback);
+                _iceI_ReadyMessage(iceP_playids, context, synchronous, completed);
+                return completed;
+            }
+
+            #endregion
+
+            #region Checked and unchecked cast operations
+
+            public static IRoomPushPrx checkedCast(Ice.ObjectPrx b)
+            {
+                if(b == null)
+                {
+                    return null;
+                }
+                IRoomPushPrx r = b as IRoomPushPrx;
+                if((r == null) && b.ice_isA(ice_staticId()))
+                {
+                    IRoomPushPrxHelper h = new IRoomPushPrxHelper();
+                    h.iceCopyFrom(b);
+                    r = h;
+                }
+                return r;
+            }
+
+            public static IRoomPushPrx checkedCast(Ice.ObjectPrx b, _System.Collections.Generic.Dictionary<string, string> ctx)
+            {
+                if(b == null)
+                {
+                    return null;
+                }
+                IRoomPushPrx r = b as IRoomPushPrx;
+                if((r == null) && b.ice_isA(ice_staticId(), ctx))
+                {
+                    IRoomPushPrxHelper h = new IRoomPushPrxHelper();
+                    h.iceCopyFrom(b);
+                    r = h;
+                }
+                return r;
+            }
+
+            public static IRoomPushPrx checkedCast(Ice.ObjectPrx b, string f)
+            {
+                if(b == null)
+                {
+                    return null;
+                }
+                Ice.ObjectPrx bb = b.ice_facet(f);
+                try
+                {
+                    if(bb.ice_isA(ice_staticId()))
+                    {
+                        IRoomPushPrxHelper h = new IRoomPushPrxHelper();
+                        h.iceCopyFrom(bb);
+                        return h;
+                    }
+                }
+                catch(Ice.FacetNotExistException)
+                {
+                }
+                return null;
+            }
+
+            public static IRoomPushPrx checkedCast(Ice.ObjectPrx b, string f, _System.Collections.Generic.Dictionary<string, string> ctx)
+            {
+                if(b == null)
+                {
+                    return null;
+                }
+                Ice.ObjectPrx bb = b.ice_facet(f);
+                try
+                {
+                    if(bb.ice_isA(ice_staticId(), ctx))
+                    {
+                        IRoomPushPrxHelper h = new IRoomPushPrxHelper();
+                        h.iceCopyFrom(bb);
+                        return h;
+                    }
+                }
+                catch(Ice.FacetNotExistException)
+                {
+                }
+                return null;
+            }
+
+            public static IRoomPushPrx uncheckedCast(Ice.ObjectPrx b)
+            {
+                if(b == null)
+                {
+                    return null;
+                }
+                IRoomPushPrx r = b as IRoomPushPrx;
+                if(r == null)
+                {
+                    IRoomPushPrxHelper h = new IRoomPushPrxHelper();
+                    h.iceCopyFrom(b);
+                    r = h;
+                }
+                return r;
+            }
+
+            public static IRoomPushPrx uncheckedCast(Ice.ObjectPrx b, string f)
+            {
+                if(b == null)
+                {
+                    return null;
+                }
+                Ice.ObjectPrx bb = b.ice_facet(f);
+                IRoomPushPrxHelper h = new IRoomPushPrxHelper();
+                h.iceCopyFrom(bb);
+                return h;
+            }
+
+            private static readonly string[] _ids =
+            {
+                "::Ice::Object",
+                "::Kitchen::PocoInterfaces::IRoomPush"
+            };
+
+            public static string ice_staticId()
+            {
+                return _ids[1];
+            }
+
+            #endregion
+
+            #region Marshaling support
+
+            public static void write(Ice.OutputStream ostr, IRoomPushPrx v)
+            {
+                ostr.writeProxy(v);
+            }
+
+            public static IRoomPushPrx read(Ice.InputStream istr)
+            {
+                Ice.ObjectPrx proxy = istr.readProxy();
+                if(proxy != null)
+                {
+                    IRoomPushPrxHelper result = new IRoomPushPrxHelper();
+                    result.iceCopyFrom(proxy);
+                    return result;
+                }
+                return null;
+            }
+
+            #endregion
+        }
     }
 }
 
@@ -1031,6 +1530,8 @@ namespace Kitchen
             public abstract _System.Threading.Tasks.Task<RoomInfoP> GetRoomAsync(string roomid, Ice.Current current = null);
 
             public abstract _System.Threading.Tasks.Task<bool> EnterRoomAsync(string roomid, string pwd, Ice.Current current = null);
+
+            public abstract _System.Threading.Tasks.Task<bool> ReadyRoomAsync(string roomid, Ice.Current current = null);
 
             #endregion
 
@@ -1152,12 +1653,29 @@ namespace Kitchen
                     });
             }
 
+            [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011")]
+            public static _System.Threading.Tasks.Task<Ice.OutputStream>
+            iceD_ReadyRoom(IRoom obj, IceInternal.Incoming inS, Ice.Current current)
+            {
+                Ice.ObjectImpl.iceCheckMode(Ice.OperationMode.Normal, current.mode);
+                var istr = inS.startReadParams();
+                string iceP_roomid;
+                iceP_roomid = istr.readString();
+                inS.endReadParams();
+                return inS.setResultTask<bool>(obj.ReadyRoomAsync(iceP_roomid, current),
+                    (ostr, ret) =>
+                    {
+                        ostr.writeBool(ret);
+                    });
+            }
+
             private static readonly string[] _all =
             {
                 "CreateRoom",
                 "EnterRoom",
                 "GetRoom",
                 "GetRoomList",
+                "ReadyRoom",
                 "RemoveRoom",
                 "ice_id",
                 "ice_ids",
@@ -1194,21 +1712,149 @@ namespace Kitchen
                     }
                     case 4:
                     {
-                        return iceD_RemoveRoom(this, inS, current);
+                        return iceD_ReadyRoom(this, inS, current);
                     }
                     case 5:
                     {
-                        return Ice.ObjectImpl.iceD_ice_id(this, inS, current);
+                        return iceD_RemoveRoom(this, inS, current);
                     }
                     case 6:
                     {
-                        return Ice.ObjectImpl.iceD_ice_ids(this, inS, current);
+                        return Ice.ObjectImpl.iceD_ice_id(this, inS, current);
                     }
                     case 7:
                     {
-                        return Ice.ObjectImpl.iceD_ice_isA(this, inS, current);
+                        return Ice.ObjectImpl.iceD_ice_ids(this, inS, current);
                     }
                     case 8:
+                    {
+                        return Ice.ObjectImpl.iceD_ice_isA(this, inS, current);
+                    }
+                    case 9:
+                    {
+                        return Ice.ObjectImpl.iceD_ice_ping(this, inS, current);
+                    }
+                }
+
+                _System.Diagnostics.Debug.Assert(false);
+                throw new Ice.OperationNotExistException(current.id, current.facet, current.operation);
+            }
+
+            #endregion
+        }
+
+        [_System.Runtime.InteropServices.ComVisible(false)]
+        [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+        public abstract class IRoomPushDisp_ : Ice.ObjectImpl, IRoomPush
+        {
+            #region Slice operations
+
+            public abstract void ReadyMessage(_System.Collections.Generic.List<string> playids, Ice.Current current = null);
+
+            public abstract void EnterMessage(_System.Collections.Generic.List<string> playids, Ice.Current current = null);
+
+            #endregion
+
+            #region Slice type-related members
+
+            private static readonly string[] _ids =
+            {
+                "::Ice::Object",
+                "::Kitchen::PocoInterfaces::IRoomPush"
+            };
+
+            public override bool ice_isA(string s, Ice.Current current = null)
+            {
+                return _System.Array.BinarySearch(_ids, s, IceUtilInternal.StringUtil.OrdinalStringComparer) >= 0;
+            }
+
+            public override string[] ice_ids(Ice.Current current = null)
+            {
+                return _ids;
+            }
+
+            public override string ice_id(Ice.Current current = null)
+            {
+                return _ids[1];
+            }
+
+            public static new string ice_staticId()
+            {
+                return _ids[1];
+            }
+
+            #endregion
+
+            #region Operation dispatch
+
+            [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011")]
+            public static _System.Threading.Tasks.Task<Ice.OutputStream>
+            iceD_ReadyMessage(IRoomPush obj, IceInternal.Incoming inS, Ice.Current current)
+            {
+                Ice.ObjectImpl.iceCheckMode(Ice.OperationMode.Normal, current.mode);
+                var istr = inS.startReadParams();
+                _System.Collections.Generic.List<string> iceP_playids;
+                iceP_playids = PlayIdListHelper.read(istr);
+                inS.endReadParams();
+                obj.ReadyMessage(iceP_playids, current);
+                return inS.setResult(inS.writeEmptyParams());
+            }
+
+            [_System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011")]
+            public static _System.Threading.Tasks.Task<Ice.OutputStream>
+            iceD_EnterMessage(IRoomPush obj, IceInternal.Incoming inS, Ice.Current current)
+            {
+                Ice.ObjectImpl.iceCheckMode(Ice.OperationMode.Normal, current.mode);
+                var istr = inS.startReadParams();
+                _System.Collections.Generic.List<string> iceP_playids;
+                iceP_playids = PlayIdListHelper.read(istr);
+                inS.endReadParams();
+                obj.EnterMessage(iceP_playids, current);
+                return inS.setResult(inS.writeEmptyParams());
+            }
+
+            private static readonly string[] _all =
+            {
+                "EnterMessage",
+                "ReadyMessage",
+                "ice_id",
+                "ice_ids",
+                "ice_isA",
+                "ice_ping"
+            };
+
+            public override _System.Threading.Tasks.Task<Ice.OutputStream>
+            iceDispatch(IceInternal.Incoming inS, Ice.Current current)
+            {
+                int pos = _System.Array.BinarySearch(_all, current.operation, IceUtilInternal.StringUtil.OrdinalStringComparer);
+                if(pos < 0)
+                {
+                    throw new Ice.OperationNotExistException(current.id, current.facet, current.operation);
+                }
+
+                switch(pos)
+                {
+                    case 0:
+                    {
+                        return iceD_EnterMessage(this, inS, current);
+                    }
+                    case 1:
+                    {
+                        return iceD_ReadyMessage(this, inS, current);
+                    }
+                    case 2:
+                    {
+                        return Ice.ObjectImpl.iceD_ice_id(this, inS, current);
+                    }
+                    case 3:
+                    {
+                        return Ice.ObjectImpl.iceD_ice_ids(this, inS, current);
+                    }
+                    case 4:
+                    {
+                        return Ice.ObjectImpl.iceD_ice_isA(this, inS, current);
+                    }
+                    case 5:
                     {
                         return Ice.ObjectImpl.iceD_ice_ping(this, inS, current);
                     }
