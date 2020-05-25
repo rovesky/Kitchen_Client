@@ -10,7 +10,7 @@ namespace FootStone.Kitchen
         //private Quaternion targetRotation;
         //private float smoothRotation = 1.5f;
         private Vector3 targetPosition;
-        private float smoothPosition = 1.25f;
+        private float smoothPosition = 1.5f;
         protected override void OnUpdate()
         {
             Entities
