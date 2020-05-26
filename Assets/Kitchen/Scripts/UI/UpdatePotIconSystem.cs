@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,9 +31,11 @@ namespace FootStone.Kitchen
                     in SlotPredictedState slotState,
                     in PotPredictedState burntState,
                     in LocalToWorld localToWorld,
+                    in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
-                    UpdateIcon(uiObject, true, localToWorld.Position, burntState.State);
+                    var pos = localToWorld.Position+ new float3(0,1.5f,0) +offsetting.Pos;
+                    UpdateIcon(uiObject, true, pos, burntState.State);
                 }).Run();
            
 
@@ -45,7 +48,7 @@ namespace FootStone.Kitchen
         
             var potIcon = uiObject.Icon;
          
-            var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0,50,0);
+            var screenPos = Camera.main.WorldToScreenPoint(pos) ;
 
             var rectTransform = potIcon.GetComponent<RectTransform>();
             rectTransform.position = screenPos;

@@ -15,21 +15,21 @@ namespace FootStone.Kitchen
             Entities
                 .WithoutBurst()
                 .ForEach((Entity entity,
-                    ref ProgressPredictState sliceState,
-                    in ProgressSetting sliceSetting,
+                    ref ProgressPredictState progressState,
+                    in ProgressSetting progressSetting,
                     in LocalToWorld translation,
                     in UIObject uiObject) =>
                 {
-                    if (sliceState.CurTick == 0
-                        || sliceState.CurTick == sliceSetting.TotalTick
+                    if (progressState.CurTick == 0
+                        || progressState.CurTick == progressSetting.TotalTick
                         || EntityManager.HasComponent<Despawn>(entity))
                     {
                         UpdateProgress(uiObject, false, float3.zero, 0);
                     }
                     else
                     {
-                        var percentage = (float) sliceState.CurTick / sliceSetting.TotalTick;
-                        UpdateProgress(uiObject, true, translation.Position + sliceSetting.OffPos, percentage);
+                        var percentage = (float) progressState.CurTick / progressSetting.TotalTick;
+                        UpdateProgress(uiObject, true, translation.Position + progressSetting.OffPos, percentage);
                     }
 
                 }).Run();

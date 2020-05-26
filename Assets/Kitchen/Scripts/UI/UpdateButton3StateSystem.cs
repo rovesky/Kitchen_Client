@@ -1,7 +1,6 @@
 ﻿using FootStone.ECS;
 using Unity.Entities;
 
-
 namespace FootStone.Kitchen
 {
     [DisableAutoCreation]
@@ -18,7 +17,6 @@ namespace FootStone.Kitchen
                 {
                     if (rushState.CurCooldownTick == 0) 
                         return;
-                    
                    
                     var worldTime = GetSingleton<WorldTime>();
                     var time = rushSetting.CooldownTick * worldTime.GameTick.TickInterval;

@@ -1,6 +1,6 @@
 ﻿using Assets.Kitchen.Scripts.UI;
-using FootStone.ECS;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,9 +19,12 @@ namespace FootStone.Kitchen
                     in PlatePredictedState plateState,
                     in MultiSlotPredictedState slotState,
                     in LocalToWorld localToWorld,
+                    in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
-                    UpdateIcon(uiObject, localToWorld.Position, plateState, slotState);
+                    var pos = localToWorld.Position+ new float3(0,2.0f,0) +offsetting.Pos;
+
+                    UpdateIcon(uiObject, pos, plateState, slotState);
                 }).Run();
         }
 
@@ -32,7 +35,7 @@ namespace FootStone.Kitchen
                 uiObject.Icon = UIManager.Instance.CreateUIFromPrefabs("PlateIcon");
 
             var platePannel = uiObject.Icon;
-            var screenPos = Camera.main.WorldToScreenPoint(pos) + new Vector3(0, 55, 0);
+            var screenPos = Camera.main.WorldToScreenPoint(pos);
 
             var rectTransform = platePannel.GetComponent<RectTransform>();
             rectTransform.position = screenPos;
@@ -43,11 +46,9 @@ namespace FootStone.Kitchen
                 SetImage(2, slotState.Value.FilledIn2, platePannel);
                 SetImage(3, slotState.Value.FilledIn3, platePannel);
                 SetImage(4, slotState.Value.FilledIn4, platePannel);
-
                 platePannel.SetActive(!slotState.Value.IsEmpty());
-
-             //   FSLog.Info($"UpdatePlateIconSystem:plateState.Product == Entity.Null");
-
+             //   if(!slotState.Value.IsEmpty())
+                //    FSLog.Info($"UpdatePlateIconSystem:plateState.Product == Entity.Null");
             }
             else
             {
@@ -58,37 +59,36 @@ namespace FootStone.Kitchen
                 SetImage1(3, menuT.Material3, platePannel);
                 SetImage1(4, menuT.Material4, platePannel);
                 platePannel.SetActive(true);
-
-               // FSLog.Info($"UpdatePlateIconSystem:plateState.Product != Entity.Null");
+             //   FSLog.Info($"UpdatePlateIconSystem:plateState.Product = {plateState.Product}");
             }
         }
 
         private void SetImage(int index, Entity entity, GameObject platePannel)
         {
-            var icon1 = platePannel.transform.Find("Image" + index).GetComponent<Image>();
+            var icon = platePannel.transform.Find("Image" + index).GetComponent<Image>();
             if (entity == Entity.Null)
             {
-                icon1.gameObject.SetActive(false);
+                icon.gameObject.SetActive(false);
             }
             else
             {
                 var food = EntityManager.GetComponentData<GameEntity>(entity);
-                icon1.sprite = IconUtilities.GetIconSprite(food.Type);
-                icon1.gameObject.SetActive(true);
+                icon.sprite = IconUtilities.GetIconSprite(food.Type);
+                icon.gameObject.SetActive(true);
             }
         }
 
         private void SetImage1(int index, EntityType type, GameObject platePannel)
         {
-            var icon1 = platePannel.transform.Find("Image" + index).GetComponent<Image>();
+            var icon = platePannel.transform.Find("Image" + index).GetComponent<Image>();
             if (type == EntityType.None)
             {
-                icon1.gameObject.SetActive(false);
+                icon.gameObject.SetActive(false);
             }
             else
             {
-                icon1.sprite = IconUtilities.GetIconSprite(type);
-                icon1.gameObject.SetActive(true);
+                icon.sprite = IconUtilities.GetIconSprite(type);
+                icon.gameObject.SetActive(true);
             }
         }
     }
