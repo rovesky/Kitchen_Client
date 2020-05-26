@@ -44,7 +44,7 @@ namespace FootStone.Kitchen
 
                     var type = percentage < 0.2f ? UIInfoType.Cooked : UIInfoType.FireAlert;
 
-                    UpdateInfo(uiObject, visible, translation.Position + new float3(0.5f, -1.5f, 0),type);
+                    UpdateInfo(uiObject, visible, translation.Position + new float3(0.2f, -1.2f, 0),type);
 
                 }).Run();
         }
@@ -63,14 +63,13 @@ namespace FootStone.Kitchen
             var image = info.GetComponent<Image>();
             if (type == UIInfoType.FireAlert)
             {
-                rectTransform.sizeDelta = new Vector2(60, 60);
+                rectTransform.sizeDelta = new Vector2(120, 120);
                 image.sprite = Resources.Load<Sprite>("UI/demo_cookzone_btn_warning");
             }
             else if (type == UIInfoType.Cooked)
             {
-                rectTransform.sizeDelta = new Vector2(20, 20);
+                rectTransform.sizeDelta = new Vector2(40, 40);
                 image.sprite = Resources.Load<Sprite>("UI/demo_cookzone_state_get");
-
             }
         }
     }
