@@ -33,7 +33,7 @@ public class EnterRoomDialog : PanelBase
                 RoomName_Text.GetComponent<Text>().text = info.name;
             }
         }
- 
+
     }
 
 
@@ -57,7 +57,7 @@ public class EnterRoomDialog : PanelBase
 
         if (InputPwd)
         {
-            InputPwd.GetComponent<InputField>().onEndEdit.AddListener((o)=> 
+            InputPwd.GetComponent<InputField>().onEndEdit.AddListener((o) =>
             {
                 Pwd = o.ToString();
                 Debug.Log(o.ToString());
@@ -78,7 +78,7 @@ public class EnterRoomDialog : PanelBase
     {
 
     }
-    
+
 
     public override void OnClosed()
     {
