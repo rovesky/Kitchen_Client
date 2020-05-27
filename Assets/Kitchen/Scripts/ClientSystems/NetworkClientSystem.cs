@@ -65,7 +65,13 @@ namespace FootStone.Kitchen
         {
             if (network.connectionState == NetworkClient.ConnectionState.Disconnected)
             {
-                var ip = "58.247.94.202:7923";
+
+                var ip = "192.168.0.115:29180";
+                if (DataManager.Instance.RoomDataManager != null)
+                {
+                    ip = DataManager.Instance.RoomDataManager.CurRoomInfo.host + ":" + DataManager.Instance.RoomDataManager.CurRoomInfo.port;
+                }
+                
                // var ip = "220.229.229.91";
                 FSLog.Info($"network.Connect:{ip}");
                 network.Connect(ip);

@@ -6,6 +6,8 @@ using UnityEngine;
 public class RoomDataManager
 {
 
+
+    public Dictionary<string, RoomInfoP> RoomDic { get; private set; }
     public string CurRoomName { get; private set; }
     public string CurPwd { get; private set; }
     public RoomInfoP CurRoomInfo { get; private set; }
@@ -46,15 +48,24 @@ public class RoomDataManager
     public void GetRoomInfoList(List<RoomInfoP> roomInfoList)
     {
         RoomInfoList = roomInfoList;
+        RoomDic = new Dictionary<string, RoomInfoP>();
+        for (var i = 0; i < roomInfoList.Count; i ++)
+        {
+            RoomDic.Add(roomInfoList[i].rmid, roomInfoList[i]);
+        }
         Messenger<List<RoomInfoP>>.Broadcast(MessengerEventDef.ROOM_LIST_REFRESH, RoomInfoList);
+        
     }
 
-    public void GetCurRoomInfo(RoomInfoP roomInfo)
+    public void SetCurRoomInfo(RoomInfoP roomInfo)
     {
         CurRoomInfo = roomInfo;
         Messenger<RoomInfoP>.Broadcast(MessengerEventDef.CUR_ROOM, CurRoomInfo);
     }
-
+    public void SetEnterRoomInfo(RoomInfoP roomInfo)
+    {
+        CurRoomInfo = roomInfo;
+    }
     public void RemoveRoom(string id)
     {
         var count = RoomInfoList.Count;

@@ -30,6 +30,7 @@ public class AsyncLoadScene : MonoBehaviour
 
     IEnumerator AsyncLoading()
     {
+        yield return new WaitForSeconds(5.0f);
         operation = SceneManager.LoadSceneAsync(Globe.nextSceneName);
         //阻止当加载完成自动切换
         //operation.allowSceneActivation = false;

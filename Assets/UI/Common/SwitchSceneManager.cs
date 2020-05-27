@@ -12,6 +12,11 @@ public class SwitchSceneManager : BSingleton<SwitchSceneManager>
             PanelManager.Instance.OpenPanel<RoomWindow>("RoomWindow");
         }
 
+        if (scene.name == CommonDef.kitchen_01)
+        {
+
+        }
+
 
 
     }

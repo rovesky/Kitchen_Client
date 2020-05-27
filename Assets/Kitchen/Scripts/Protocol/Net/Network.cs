@@ -74,7 +74,6 @@ namespace SampleClient
         {
             try
             {
-
                 var accountPrx = Session.UncheckedCast(IAccountPrxHelper.uncheckedCast);
                 try
                 {
@@ -124,7 +123,7 @@ namespace SampleClient
                 var roomPrx = Session.UncheckedCast(IRoomPrxHelper.uncheckedCast);
                 RoomInfoP roomInfo = await roomPrx.CreateRoomAsync(name, ciph, tp);
                 DataManager.Instance.RoomDataManager.SetOwner(true);
-                DataManager.Instance.RoomDataManager.GetCurRoomInfo(roomInfo);
+                DataManager.Instance.RoomDataManager.SetCurRoomInfo(roomInfo);
             }
             catch (Ice.Exception ex)
             {

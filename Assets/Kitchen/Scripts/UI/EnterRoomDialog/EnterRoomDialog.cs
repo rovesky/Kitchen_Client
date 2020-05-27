@@ -32,6 +32,7 @@ public class EnterRoomDialog : PanelBase
             {
                 RoomName_Text.GetComponent<Text>().text = info.name;
             }
+            DataManager.Instance.RoomDataManager.SetEnterRoomInfo(info);
         }
 
     }
