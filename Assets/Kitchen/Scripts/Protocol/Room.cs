@@ -58,6 +58,12 @@ namespace Kitchen
             [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
             public byte type;
 
+            [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+            public string host;
+
+            [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
+            public string port;
+
             #endregion
 
             partial void ice_initialize();
@@ -70,16 +76,20 @@ namespace Kitchen
                 this.rmid = "";
                 this.name = "";
                 this.ciph = "";
+                this.host = "";
+                this.port = "";
                 ice_initialize();
             }
 
             [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
-            public RoomInfoP(string rmid, string name, string ciph, byte type)
+            public RoomInfoP(string rmid, string name, string ciph, byte type, string host, string port)
             {
                 this.rmid = rmid;
                 this.name = name;
                 this.ciph = ciph;
                 this.type = type;
+                this.host = host;
+                this.port = port;
                 ice_initialize();
             }
 
@@ -106,6 +116,8 @@ namespace Kitchen
                 IceInternal.HashUtil.hashAdd(ref h_, name);
                 IceInternal.HashUtil.hashAdd(ref h_, ciph);
                 IceInternal.HashUtil.hashAdd(ref h_, type);
+                IceInternal.HashUtil.hashAdd(ref h_, host);
+                IceInternal.HashUtil.hashAdd(ref h_, port);
                 return h_;
             }
 
@@ -171,6 +183,34 @@ namespace Kitchen
                 {
                     return false;
                 }
+                if(this.host == null)
+                {
+                    if(o.host != null)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if(!this.host.Equals(o.host))
+                    {
+                        return false;
+                    }
+                }
+                if(this.port == null)
+                {
+                    if(o.port != null)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if(!this.port.Equals(o.port))
+                    {
+                        return false;
+                    }
+                }
                 return true;
             }
 
@@ -201,6 +241,8 @@ namespace Kitchen
                 ostr.writeString(this.name);
                 ostr.writeString(this.ciph);
                 ostr.writeByte(this.type);
+                ostr.writeString(this.host);
+                ostr.writeString(this.port);
             }
 
             [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
@@ -210,6 +252,8 @@ namespace Kitchen
                 this.name = istr.readString();
                 this.ciph = istr.readString();
                 this.type = istr.readByte();
+                this.host = istr.readString();
+                this.port = istr.readString();
             }
 
             [_System.CodeDom.Compiler.GeneratedCodeAttribute("slice2cs", "3.7.1")]
@@ -475,7 +519,7 @@ namespace Kitchen
             {
                 _System.Collections.Generic.List<RoomInfoP> v;
                 {
-                    int szx = istr.readAndCheckSeqSize(4);
+                    int szx = istr.readAndCheckSeqSize(6);
                     v = new _System.Collections.Generic.List<RoomInfoP>(szx);
                     for(int ix = 0; ix < szx; ++ix)
                     {

@@ -184,10 +184,5 @@ namespace SampleClient
             Globe.nextSceneName = CommonDef.kitchen_01;//目标场景名称
             UnityEngine.SceneManagement.SceneManager.LoadScene(CommonDef.Loading);//加载进度条场景
         }
-
-
-
-
-
     }
 }

@@ -74,13 +74,19 @@ public class RoomWindow : PanelBase
         }
         if (PlayerList)
         {
+            if (count > PlayerList.childCount)
+            {
+                Debug.Log("超员了");
+                    
+            }
             for (var i = 0; i < count; i++)
             {
+
                 var cell = PlayerList.GetChild(i);
                 var target = cell.Find("RoomKing");
                 if (i == 0)
                 {  
-                    if (target && DataManager.Instance.RoomDataManager.IsRoomOwner)
+                    if (target && !DataManager.Instance.RoomDataManager.IsRoomOwner)
                     {
                         target.gameObject.SetActive(true);
                     }                 

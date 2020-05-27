@@ -57,7 +57,7 @@ public class GameCommon : MonoBehaviour
 
     private void OnDestroy()
     {
-        Messenger<string>.RemoveListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
+        //Messenger<string>.RemoveListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
     }
 
 
