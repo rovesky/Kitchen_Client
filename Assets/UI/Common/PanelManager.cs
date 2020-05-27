@@ -23,7 +23,7 @@ public class PanelManager : BSingleton<PanelManager>
         }
         else
         {
-           var mWndObject = GameObject.Instantiate(Resources.Load(GameCommon.Instance.UIRootPath + panelName)) as GameObject;
+           var mWndObject = GameObject.Instantiate(Resources.Load(CommonDef.UIRootPath + panelName)) as GameObject;
             if (mWndObject != null)
             {
                 
@@ -62,7 +62,16 @@ public class PanelManager : BSingleton<PanelManager>
 
     public void CloseAllWindow()
     {
-
+        using (var e = mPanelDic.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                e.Current.Value.OnClosed();
+                GameObject.Destroy(e.Current.Value.gameObject);
+                Component.Destroy(e.Current.Value);
+            }
+        }
+        mPanelDic.Clear();
     }
 }
 

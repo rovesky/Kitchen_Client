@@ -29,7 +29,7 @@ public class LoginWindow : PanelBase
             {
                 Debug.Log("登录");
                 //LoginSuccess();
-                NetworkNew.Instance.LoginRequest("11111", "22222");
+                NetworkNew.Instance.LoginRequest("22222222222222222", "22222");
             };
         }
         if(Notice_Btn)
@@ -63,8 +63,8 @@ public class LoginWindow : PanelBase
         Debug.Log("Success");
    
         this.gameObject.SetActive(false);
-        PanelManager.Instance.ClosePanel(GameCommon.Instance.LoginWindow);
-        PanelManager.Instance.OpenPanel<MainWindow>(GameCommon.Instance.MainWindow);
+        PanelManager.Instance.ClosePanel(CommonDef.LoginWindow);
+        PanelManager.Instance.OpenPanel<MainWindow>(CommonDef.MainWindow);
     }
 
     public void LoginFail()

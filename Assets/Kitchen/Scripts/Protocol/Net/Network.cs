@@ -19,6 +19,7 @@ namespace SampleClient
         public override void EnterMessage(List<string> playids, Current current = null)
         {
             Debug.Log(playids.Count + "<<<<<<<<<<");
+            DataManager.Instance.RoomDataManager.SetEnterList(playids);
         }
 
         public string GetFacet()
@@ -29,6 +30,7 @@ namespace SampleClient
         public override void ReadyMessage(List<string> playids, Current current = null)
         {
             Debug.Log(playids.Count + "<<<<<<<<<<");
+            DataManager.Instance.RoomDataManager.SetReadyList(playids);
         }
 
         public void setAccount(string account)
@@ -121,6 +123,7 @@ namespace SampleClient
             {
                 var roomPrx = Session.UncheckedCast(IRoomPrxHelper.uncheckedCast);
                 RoomInfoP roomInfo = await roomPrx.CreateRoomAsync(name, ciph, tp);
+                DataManager.Instance.RoomDataManager.SetOwner(true);
                 DataManager.Instance.RoomDataManager.GetCurRoomInfo(roomInfo);
             }
             catch (Ice.Exception ex)
@@ -155,7 +158,15 @@ namespace SampleClient
             var isEnter = await roomPrx.EnterRoomAsync(roomId, pwd);
 
             Debug.Log(isEnter + "<<<<<<<<<<<<<<<<<<<<<<<<<进入房间");
-            await ReadyGame(roomId);
+            if (isEnter)
+            {
+                DataManager.Instance.RoomDataManager.SetIsReady(false);
+                DataManager.Instance.RoomDataManager.SetCurRoomID(roomId);
+                PanelManager.Instance.CloseAllWindow();
+                Globe.nextSceneName = CommonDef.TempScene;//目标场景名称
+                UnityEngine.SceneManagement.SceneManager.LoadScene(CommonDef.Loading);//加载进度条场景
+            }
+            //await ReadyGame(roomId);
         }
 
         public async void ReadyGameRequest(string roomId)
@@ -167,12 +178,11 @@ namespace SampleClient
         {
             var roomPrx = Session.UncheckedCast(IRoomPrxHelper.uncheckedCast);
             var isReady = await roomPrx.ReadyRoomAsync(roomId);
-            if (isReady)
-            {
-                Globe.nextSceneName = "TempScene";//目标场景名称
-                UnityEngine.SceneManagement.SceneManager.LoadScene("kitchen_01");//加载进度条场景
-            }
+            DataManager.Instance.RoomDataManager.SetIsReady(true);
             Debug.Log("Is Ready <<<<<<<<<<<<<<<<<<<<<" + isReady);
+            PanelManager.Instance.CloseAllWindow();
+            Globe.nextSceneName = CommonDef.kitchen_01;//目标场景名称
+            UnityEngine.SceneManagement.SceneManager.LoadScene(CommonDef.Loading);//加载进度条场景
         }
 
 

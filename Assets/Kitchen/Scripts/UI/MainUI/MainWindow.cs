@@ -37,6 +37,7 @@ public class MainWindow : PanelBase
         InitGameObject();
         SetListener();
         SetMessager();
+        DataManager.Instance.RoomDataManager.SetOwner(false);
         base.Init(args);
 
     }
@@ -65,7 +66,6 @@ public class MainWindow : PanelBase
             }
 
             InitRoomList();
-            //NetworkNew.Instance.ReadyGameRequest(o[o.Count -1].rmid);
         });
         Messenger.RemoveListener(MessengerEventDef.TWEENER_COMPLETE, MoveEnd);
     }
@@ -96,7 +96,6 @@ public class MainWindow : PanelBase
 
     public void MoveEnd()
     {
-
         RoomListPanel.gameObject.SetActive(true);
         RoomListCellRoot.localPosition = new Vector3(0, -8000, 0);
     }
@@ -107,7 +106,7 @@ public class MainWindow : PanelBase
             EventTriggerListener.Get(CreatRoom_Btn.gameObject).onPointerClick = o =>
             {
                 Debug.Log("创建房间");
-                PanelManager.Instance.OpenPanel<RoomSettingDialog>(GameCommon.Instance.RoomSettingDialog);
+                PanelManager.Instance.OpenPanel<RoomSettingDialog>(CommonDef.RoomSettingDialog);
             };
         }
         if (EnterRoom_Btn != null)
@@ -210,7 +209,7 @@ public class MainWindow : PanelBase
                 target.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     Debug.Log(obj.name);
-                    PanelManager.Instance.OpenPanel<EnterRoomDialog>(GameCommon.Instance.EnterRoomDialog, info);
+                    PanelManager.Instance.OpenPanel<EnterRoomDialog>(CommonDef.EnterRoomDialog, info);
                 });
             }
         }
