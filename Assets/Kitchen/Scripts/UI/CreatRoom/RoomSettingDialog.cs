@@ -9,6 +9,7 @@ public class RoomSettingDialog : PanelBase
     public Transform RoomName_Text;
     public Transform RoomPwd_Text;
     public Transform Random_Btn;
+    public Transform RandomName_Btn;
     public Transform GameMode_Group;
     public Transform Close_Btn;
     public Transform Cnfirm_Btn;
@@ -55,9 +56,11 @@ public class RoomSettingDialog : PanelBase
         RoomName_Text = transform.Find("Main/RoomName_Text");
         RoomPwd_Text = transform.Find("Main/RoomPwd_Text");
         Random_Btn = transform.Find("Main/Random_Btn");
+        RandomName_Btn = transform.Find("Main/RandomName_Btn");
         GameMode_Group = transform.Find("Main/GameMode_Group");
         Close_Btn = transform.Find("Main/Close_Btn");
         Cnfirm_Btn = transform.Find("Main/Confirm_Btn");
+
 
 
 
@@ -94,9 +97,9 @@ public class RoomSettingDialog : PanelBase
             };
         }
 
-        if (RoomName_Text != null)
+        if (RandomName_Btn != null)
         {
-            EventTriggerListener.Get(RoomName_Text.gameObject).onPointerClick = o =>
+            EventTriggerListener.Get(RandomName_Btn.gameObject).onPointerClick = o =>
             {
                 RandomName();
             };

@@ -17,6 +17,9 @@ public class GameCommon : MonoBehaviour
     public string RoomWindow = "RoomWindow";
     public List<Sprite> CellBgList = new List<Sprite>();
 
+
+    public string CurIp = "58.247.94.202";
+
     //public string 
     public static GameCommon Instance
     {
@@ -36,7 +39,7 @@ public class GameCommon : MonoBehaviour
     private void Init()
     {
         Messenger<string>.AddListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
-        NetworkNew.Instance.Init("192.168.0.115", 4061);
+        NetworkNew.Instance.Init(CurIp, 4061);
         DataManager.Instance.Init();
         InitUiRoot();
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
