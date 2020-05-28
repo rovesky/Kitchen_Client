@@ -19,7 +19,6 @@ namespace FootStone.Kitchen
                 .WithStructuralChanges()
                 .ForEach((Entity entity,
                     in PotPresentation presentation,
-                 //   in SlotPredictedState slotState,
                     in ProgressSetting cookedSetting,
                     in ProgressPredictState cookedState,
                     in PotPredictedState potState,
