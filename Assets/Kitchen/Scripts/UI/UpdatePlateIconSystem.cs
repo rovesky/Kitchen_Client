@@ -22,7 +22,7 @@ namespace FootStone.Kitchen
                   //  in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
-                    var pos = localToWorld.Position+ new float3(0,2.0f,0) ;
+                    var pos = localToWorld.Position + new float3(0,2f,0) ;
 
                     UpdateIcon(uiObject, pos, plateState, slotState);
                 }).Run();
@@ -42,10 +42,11 @@ namespace FootStone.Kitchen
 
             if (plateState.Product == Entity.Null)
             {
-                SetImage(1, slotState.Value.FilledIn1, platePannel);
-                SetImage(2, slotState.Value.FilledIn2, platePannel);
-                SetImage(3, slotState.Value.FilledIn3, platePannel);
-                SetImage(4, slotState.Value.FilledIn4, platePannel);
+                var isOne = slotState.Value.Count() == 1;
+                SetImage(1, slotState.Value.FilledIn1, platePannel,isOne);
+                SetImage(2, slotState.Value.FilledIn2, platePannel,isOne);
+                SetImage(3, slotState.Value.FilledIn3, platePannel,isOne);
+                SetImage(4, slotState.Value.FilledIn4, platePannel,isOne);
                 platePannel.SetActive(!slotState.Value.IsEmpty());
              //   if(!slotState.Value.IsEmpty())
                 //    FSLog.Info($"UpdatePlateIconSystem:plateState.Product == Entity.Null");
@@ -54,16 +55,17 @@ namespace FootStone.Kitchen
             {
                 var gameEntity = EntityManager.GetComponentData<GameEntity>(plateState.Product);
                 var menuT = MenuUtilities.GetMenuTemplate(gameEntity.Type);
-                SetImage1(1, menuT.Material1, platePannel);
-                SetImage1(2, menuT.Material2, platePannel);
-                SetImage1(3, menuT.Material3, platePannel);
-                SetImage1(4, menuT.Material4, platePannel);
+                var isOne = menuT.MaterialCount() == 1;
+                SetImage1(1, menuT.Material1, platePannel,isOne);
+                SetImage1(2, menuT.Material2, platePannel,isOne);
+                SetImage1(3, menuT.Material3, platePannel,isOne);
+                SetImage1(4, menuT.Material4, platePannel,isOne);
                 platePannel.SetActive(true);
              //   FSLog.Info($"UpdatePlateIconSystem:plateState.Product = {plateState.Product}");
             }
         }
 
-        private void SetImage(int index, Entity entity, GameObject platePannel)
+        private void SetImage(int index, Entity entity, GameObject platePannel,bool isOne)
         {
             var icon = platePannel.transform.Find("Image" + index).GetComponent<Image>();
             if (entity == Entity.Null)
@@ -75,10 +77,13 @@ namespace FootStone.Kitchen
                 var food = EntityManager.GetComponentData<GameEntity>(entity);
                 icon.sprite = IconUtilities.GetIconSprite(food.Type);
                 icon.gameObject.SetActive(true);
+                if (index == 1)
+                    icon.rectTransform.localPosition =
+                        isOne ? new Vector3(0, -40) : new Vector3(-40, -40);
             }
         }
 
-        private void SetImage1(int index, EntityType type, GameObject platePannel)
+        private void SetImage1(int index, EntityType type, GameObject platePannel,bool isOne)
         {
             var icon = platePannel.transform.Find("Image" + index).GetComponent<Image>();
             if (type == EntityType.None)
@@ -89,6 +94,10 @@ namespace FootStone.Kitchen
             {
                 icon.sprite = IconUtilities.GetIconSprite(type);
                 icon.gameObject.SetActive(true);
+                if (index == 1)
+                    icon.rectTransform.localPosition =
+                        isOne ? new Vector3(0, -40) : new Vector3(-40, -40);
+
             }
         }
     }

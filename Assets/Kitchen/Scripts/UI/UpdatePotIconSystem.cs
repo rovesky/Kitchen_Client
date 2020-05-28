@@ -34,7 +34,7 @@ namespace FootStone.Kitchen
                  //   in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
-                    var pos = localToWorld.Position+ new float3(0,1.5f,0) ;
+                    var pos = localToWorld.Position+ new float3(0,2.0f,0) ;
                     UpdateIcon(uiObject, true, pos, burntState.State);
                 }).Run();
            

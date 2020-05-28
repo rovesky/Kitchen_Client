@@ -29,7 +29,7 @@ namespace FootStone.Kitchen
                                        EntityManager.HasComponent<Pot>(itemState.Owner)));
                     //  FSLog.Info($"UpdateFoodIconSystem,isVisible:{isVisible}");
 
-                    var pos = localToWorld.Position + new float3(0, 1.3f, 0);
+                    var pos = localToWorld.Position + new float3(0, 1.5f, 0);
                                                    // + math.mul(offsetting.Rot, offsetting.Pos);
                     UpdateIcon(uiObject, isVisible, pos, food.Type);
                 }).Run();
