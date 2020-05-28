@@ -21,7 +21,7 @@ namespace FootStone.Kitchen
                     in GameEntity food,
                     in OwnerPredictedState itemState,
                     in LocalToWorld localToWorld,
-                    in OffsetSetting offsetting,
+                    //in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
                     var isVisible = !(itemState.Owner != Entity.Null &&
@@ -29,7 +29,7 @@ namespace FootStone.Kitchen
                                        EntityManager.HasComponent<Pot>(itemState.Owner)));
                     //  FSLog.Info($"UpdateFoodIconSystem,isVisible:{isVisible}");
 
-                    var pos = localToWorld.Position + new float3(0, 1, 0);
+                    var pos = localToWorld.Position + new float3(0, 1.3f, 0);
                                                    // + math.mul(offsetting.Rot, offsetting.Pos);
                     UpdateIcon(uiObject, isVisible, pos, food.Type);
                 }).Run();

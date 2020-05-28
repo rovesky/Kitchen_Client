@@ -36,7 +36,8 @@ public class GameCommon : MonoBehaviour
     private void Init()
     {
         Messenger<string>.AddListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
-        NetworkNew.Instance.Init("192.168.0.115", 4061);
+        NetworkNew.Instance.Init("192.168.0.183", 4061);
+        // NetworkNew.Instance.Init("192.168.0.115", 4061);
         DataManager.Instance.Init();
         InitUiRoot();
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);

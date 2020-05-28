@@ -31,10 +31,10 @@ namespace FootStone.Kitchen
                     in SlotPredictedState slotState,
                     in PotPredictedState burntState,
                     in LocalToWorld localToWorld,
-                    in OffsetSetting offsetting,
+                 //   in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
-                    var pos = localToWorld.Position+ new float3(0,1.5f,0) +offsetting.Pos;
+                    var pos = localToWorld.Position+ new float3(0,1.5f,0) ;
                     UpdateIcon(uiObject, true, pos, burntState.State);
                 }).Run();
            

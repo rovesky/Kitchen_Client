@@ -19,10 +19,10 @@ namespace FootStone.Kitchen
                     in PlatePredictedState plateState,
                     in MultiSlotPredictedState slotState,
                     in LocalToWorld localToWorld,
-                    in OffsetSetting offsetting,
+                  //  in OffsetSetting offsetting,
                     in UIObject uiObject) =>
                 {
-                    var pos = localToWorld.Position+ new float3(0,2.0f,0) +offsetting.Pos;
+                    var pos = localToWorld.Position+ new float3(0,2.0f,0) ;
 
                     UpdateIcon(uiObject, pos, plateState, slotState);
                 }).Run();
