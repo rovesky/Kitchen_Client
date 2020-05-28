@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using SampleClient;
+using UnityEngine.UI;
 public class RoomWindow : PanelBase
 {
     public GameObject Ready_Btn;
@@ -15,6 +16,7 @@ public class RoomWindow : PanelBase
     public Transform RoomKing;
     //room info
     public Transform RoomID_Text;
+    public Transform RoomName_Text;
 
     public override void Init(params object[] args)
     {
@@ -32,6 +34,7 @@ public class RoomWindow : PanelBase
         RoomInfo = transform.Find("Main/RoomInfo");
         RightConner = transform.Find("Main/RightConner");
         Head = transform.Find("Main/Head");
+
         if (Head)
         {
             RoomKing = Head.Find("Mask/RoomKing");
@@ -40,8 +43,9 @@ public class RoomWindow : PanelBase
         if (RoomInfo)
         {
             RoomID_Text = RoomInfo.Find("RoomID_Text");
+            RoomName_Text = RoomInfo.Find("RoomName_Text");
         }
- 
+
     }
 
 
@@ -50,6 +54,18 @@ public class RoomWindow : PanelBase
         if (RoomKing)
         {
             RoomKing.gameObject.SetActive(DataManager.Instance.RoomDataManager.IsRoomOwner);
+        }
+        if (RoomID_Text)
+        {
+            RoomID_Text.GetComponent<Text>().text = string.Format("ID: {0}", DataManager.Instance.RoomDataManager.CurRoomInfo.rmid);
+        }
+        if (RoomName_Text)
+        {
+            RoomName_Text.GetComponent<Text>().text = DataManager.Instance.RoomDataManager.CurRoomInfo.name;
+        }
+        if (Name_Text)
+        {
+            Name_Text.GetComponent<Text>().text = DataManager.Instance.UserData.Token;
         }
         SetPlayerList(DataManager.Instance.RoomDataManager.EnterList);
     }
@@ -77,7 +93,7 @@ public class RoomWindow : PanelBase
             if (count > PlayerList.childCount)
             {
                 Debug.Log("超员了");
-                    
+
             }
             for (var i = 0; i < count; i++)
             {
@@ -85,11 +101,11 @@ public class RoomWindow : PanelBase
                 var cell = PlayerList.GetChild(i);
                 var target = cell.Find("RoomKing");
                 if (i == 0)
-                {  
+                {
                     if (target && !DataManager.Instance.RoomDataManager.IsRoomOwner)
                     {
                         target.gameObject.SetActive(true);
-                    }                 
+                    }
                 }
                 target = cell.Find("HeadIcon_Img");
                 if (target)
@@ -103,7 +119,7 @@ public class RoomWindow : PanelBase
 
     public void SetListener()
     {
-        EventTriggerListener.Get(Ready_Btn).onPointerClick = o => 
+        EventTriggerListener.Get(Ready_Btn).onPointerClick = o =>
         {
             NetworkNew.Instance.ReadyGameRequest(DataManager.Instance.RoomDataManager.CurRoomId);
         };
@@ -119,7 +135,7 @@ public class RoomWindow : PanelBase
     {
         Messenger<List<string>>.RemoveListener(MessengerEventDef.UPDATE_ENTER_PLAYER_LIST, UpdateEnterRoomInfo);
         Messenger<List<string>>.RemoveListener(MessengerEventDef.UPDATE_READY_PLAYER_LIST, UpdateReadyRoomInfo);
-    } 
+    }
 
     public void UpdateEnterRoomInfo(List<string> playerList)
     {
@@ -140,7 +156,7 @@ public class RoomWindow : PanelBase
 
     private void OnDestroy()
     {
-        
+
     }
 
 }

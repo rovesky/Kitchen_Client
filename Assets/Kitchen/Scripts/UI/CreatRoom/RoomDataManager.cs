@@ -16,6 +16,7 @@ public class RoomDataManager
     public List<string> ReadyList { get; private set; }
     public bool IsRoomOwner { get; private set; }
 
+    public GameMod SelectGameType { get; private set; }
     public bool IsReady { get; private set; }
 
     public void SetCurRoomName(string name)
@@ -49,12 +50,12 @@ public class RoomDataManager
     {
         RoomInfoList = roomInfoList;
         RoomDic = new Dictionary<string, RoomInfoP>();
-        for (var i = 0; i < roomInfoList.Count; i ++)
+        for (var i = 0; i < roomInfoList.Count; i++)
         {
             RoomDic.Add(roomInfoList[i].rmid, roomInfoList[i]);
         }
         Messenger<List<RoomInfoP>>.Broadcast(MessengerEventDef.ROOM_LIST_REFRESH, RoomInfoList);
-        
+
     }
 
     public void SetCurRoomInfo(RoomInfoP roomInfo)
@@ -83,7 +84,7 @@ public class RoomDataManager
     {
         if (readyNameList != null)
         {
-            if(readyNameList == ReadyList)
+            if (readyNameList == ReadyList)
             {
                 Debug.Log("readyNameList 数据一致");
                 return;
@@ -106,6 +107,11 @@ public class RoomDataManager
             Messenger<List<string>>.Broadcast(MessengerEventDef.UPDATE_ENTER_PLAYER_LIST, enterNameList);
 
         }
+    }
+
+    public void SetSelectGameType(GameMod selectType)
+    {
+        SelectGameType = selectType;
     }
 
 

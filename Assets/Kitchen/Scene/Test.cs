@@ -16,7 +16,7 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Globe.nextSceneName = "kitchen_01";//目标场景名称
+            SceneDataManager.nextSceneName = "kitchen_01";//目标场景名称
             SceneManager.LoadScene("Loading");//加载进度条场景
         }
     }

@@ -162,7 +162,8 @@ namespace SampleClient
                 DataManager.Instance.RoomDataManager.SetIsReady(false);
                 DataManager.Instance.RoomDataManager.SetCurRoomID(roomId);
                 PanelManager.Instance.CloseAllWindow();
-                Globe.nextSceneName = CommonDef.TempScene;//目标场景名称
+                SceneDataManager.Instance.SetDalyTime(0);
+                SceneDataManager.nextSceneName = CommonDef.TempScene;//目标场景名称
                 UnityEngine.SceneManagement.SceneManager.LoadScene(CommonDef.Loading);//加载进度条场景
             }
             //await ReadyGame(roomId);
@@ -180,7 +181,8 @@ namespace SampleClient
             DataManager.Instance.RoomDataManager.SetIsReady(true);
             Debug.Log("Is Ready <<<<<<<<<<<<<<<<<<<<<" + isReady);
             PanelManager.Instance.CloseAllWindow();
-            Globe.nextSceneName = CommonDef.kitchen_01;//目标场景名称
+            SceneDataManager.Instance.SetDalyTime(5.0f);
+            SceneDataManager.nextSceneName = CommonDef.kitchen_01;//目标场景名称
             UnityEngine.SceneManagement.SceneManager.LoadScene(CommonDef.Loading);//加载进度条场景
         }
     }

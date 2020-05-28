@@ -216,7 +216,7 @@ public class MainWindow : PanelBase
         target = obj.transform.Find("RoomID_Text");
         if (target)
         {
-            target.GetComponent<Text>().text = string.Format("房号：{0}", info.rmid) ;
+            target.GetComponent<Text>().text = string.Format("房号：{0}", info.rmid);
         }
         target = obj.transform.Find("RoomName_Text");
         if (target)
@@ -233,8 +233,8 @@ public class MainWindow : PanelBase
     }
 
 
-    
-    
+
+
     public override void OnShowing()
     {
         base.OnShowing();
@@ -247,5 +247,5 @@ public class MainWindow : PanelBase
 
     }
 
-   
+
 }

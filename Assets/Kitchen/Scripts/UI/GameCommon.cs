@@ -5,17 +5,20 @@ using SampleClient;
 
 public class GameCommon : MonoBehaviour
 {
-    public GameObject UIRoot; 
+    public GameObject UIRoot;
     public string HeadIconPath = "UI/HeadIcon";
     public string UIRootPath = "UI/";
     private static GameCommon m_this = null;
-    public string[] TestName = new string[6] {"德玛西亚","艾欧尼亚","诺克萨斯","祖安","均衡教派","恕瑞玛"};
+    public string[] TestName = new string[6] { "德玛西亚", "艾欧尼亚", "诺克萨斯", "祖安", "均衡教派", "恕瑞玛" };
     public string RoomSettingDialog = "RoomSettingDialog";
     public string LoginWindow = "LoginWindow";
     public string MainWindow = "MainWindow";
     public string EnterRoomDialog = "EnterRoomDialog";
     public string RoomWindow = "RoomWindow";
     public List<Sprite> CellBgList = new List<Sprite>();
+
+
+    public string CurIp;
 
     //public string 
     public static GameCommon Instance
@@ -36,10 +39,10 @@ public class GameCommon : MonoBehaviour
     private void Init()
     {
         Messenger<string>.AddListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
-        NetworkNew.Instance.Init("192.168.0.183", 4061);
-        // NetworkNew.Instance.Init("192.168.0.115", 4061);
+        NetworkNew.Instance.Init(CurIp, 4061);
         DataManager.Instance.Init();
         InitUiRoot();
+        SceneDataManager.Instance.SetDalyTime(0);
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
     }
 
