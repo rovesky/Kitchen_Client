@@ -16,6 +16,7 @@ public class RoomDataManager
     public List<string> ReadyList { get; private set; }
     public bool IsRoomOwner { get; private set; }
 
+    public GameMod SelectGameType { get; private set; }
     public bool IsReady { get; private set; }
 
     public void SetCurRoomName(string name)
@@ -106,6 +107,11 @@ public class RoomDataManager
             Messenger<List<string>>.Broadcast(MessengerEventDef.UPDATE_ENTER_PLAYER_LIST, enterNameList);
 
         }
+    }
+
+    public void SetSelectGameType(GameMod selectType)
+    {
+        SelectGameType = selectType;
     }
 
 

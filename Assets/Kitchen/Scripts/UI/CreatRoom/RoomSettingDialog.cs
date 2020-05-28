@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SampleClient;
+public enum GameMod
+{
+    noraml = 0,
+    life,
+    active,
+}
 public class RoomSettingDialog : PanelBase
 {
     public Transform RoomName_Text;
@@ -23,6 +29,7 @@ public class RoomSettingDialog : PanelBase
         InitMessager();
         RequsetPwd();
         RequestName();
+        DataManager.Instance.RoomDataManager.SetSelectGameType(GameMod.noraml);
     }
 
     public void InitMessager()
@@ -116,6 +123,24 @@ public class RoomSettingDialog : PanelBase
                     {
                         var obj = target.transform.Find("Background/Image");
                         obj.gameObject.SetActive(o);
+                        if (o)
+                        {
+                            switch (target.name)
+                            {
+                                case "Type_1":
+                                    Debug.Log("Type_1");
+                                    DataManager.Instance.RoomDataManager.SetSelectGameType(GameMod.noraml);
+                                    break;
+                                case "Type_2":
+                                    Debug.Log("Type_2");
+                                    DataManager.Instance.RoomDataManager.SetSelectGameType(GameMod.life);
+                                    break;
+                                case "Type_3":
+                                    Debug.Log("Type_3");
+                                    DataManager.Instance.RoomDataManager.SetSelectGameType(GameMod.active);
+                                    break;
+                            }
+                        }
                     });
                 }
             }
@@ -125,7 +150,7 @@ public class RoomSettingDialog : PanelBase
     public void CreatRoom()
     {
 
-        NetworkNew.Instance.CreatRoomRequest(DataManager.Instance.RoomDataManager.CurRoomName, "", (byte)2);
+        NetworkNew.Instance.CreatRoomRequest(DataManager.Instance.RoomDataManager.CurRoomName, "", (byte)(int)DataManager.Instance.RoomDataManager.SelectGameType);
 
     }
 

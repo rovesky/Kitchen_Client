@@ -18,7 +18,7 @@ public class GameCommon : MonoBehaviour
     public List<Sprite> CellBgList = new List<Sprite>();
 
 
-    public string CurIp = "58.247.94.202";
+    public string CurIp;
 
     //public string 
     public static GameCommon Instance
