@@ -3,9 +3,16 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Globe
+public class SceneDataManager : BSingleton<SceneDataManager>
 {
     public static string nextSceneName;
+
+    public float DelayTime { get; private set; }
+
+    public void SetDalyTime(float delayTime)
+    {
+        DelayTime = delayTime;
+    }
 }
 
 public class AsyncLoadScene : MonoBehaviour
@@ -30,14 +37,14 @@ public class AsyncLoadScene : MonoBehaviour
 
     IEnumerator AsyncLoading()
     {
-        yield return new WaitForSeconds(5.0f);
-        operation = SceneManager.LoadSceneAsync(Globe.nextSceneName);
+        yield return new WaitForSeconds(SceneDataManager.Instance.DelayTime);
+        operation = SceneManager.LoadSceneAsync(SceneDataManager.nextSceneName);
         //阻止当加载完成自动切换
         //operation.allowSceneActivation = false;
         while (operation.isDone == false)
         {
             Debug.Log(operation.progress + "<<<<<<<<<<<<<<<<<<<");
-            curProgressValue = Mathf.Clamp01(operation.progress / 0.9f );
+            curProgressValue = Mathf.Clamp01(operation.progress / 0.9f);
             progressBar.fillAmount = curProgressValue;
             loadingText.text = curProgressValue * 100 + "%";
             if (curProgressValue * 100 == 100)
@@ -46,8 +53,8 @@ public class AsyncLoadScene : MonoBehaviour
                 loadingText.text = "OK";//文本显示完成OK  
 
             }
-            yield return new WaitForSeconds(0.2f);
-        }    
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     public void CallBack(Scene scene, LoadSceneMode sceneType)

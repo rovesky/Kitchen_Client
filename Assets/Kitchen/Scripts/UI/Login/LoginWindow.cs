@@ -32,7 +32,7 @@ public class LoginWindow : PanelBase
                 NetworkNew.Instance.LoginRequest("11111", "22222");
             };
         }
-        if(Notice_Btn)
+        if (Notice_Btn)
         {
             EventTriggerListener.Get(Notice_Btn.gameObject).onPointerClick = o =>
             {
@@ -61,7 +61,7 @@ public class LoginWindow : PanelBase
     public void LoginSuccess()
     {
         Debug.Log("Success");
-   
+
         this.gameObject.SetActive(false);
         PanelManager.Instance.ClosePanel(CommonDef.LoginWindow);
         PanelManager.Instance.OpenPanel<MainWindow>(CommonDef.MainWindow);
