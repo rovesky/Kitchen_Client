@@ -10,6 +10,7 @@ public class GameCommon : MonoBehaviour
     public string UIRootPath = "UI/";
     private static GameCommon m_this = null;
     public string[] TestName = new string[6] { "德玛西亚", "艾欧尼亚", "诺克萨斯", "祖安", "均衡教派", "恕瑞玛" };
+    public AudioManager AudioManager;
     public string RoomSettingDialog = "RoomSettingDialog";
     public string LoginWindow = "LoginWindow";
     public string MainWindow = "MainWindow";
@@ -42,6 +43,7 @@ public class GameCommon : MonoBehaviour
         NetworkNew.Instance.Init(CurIp, 4061);
         DataManager.Instance.Init();
         InitUiRoot();
+        AudioManager.GetComponent<AudioManager>().Init();
         SceneDataManager.Instance.SetDalyTime(0);
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
     }
