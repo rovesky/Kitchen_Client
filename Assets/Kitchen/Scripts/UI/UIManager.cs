@@ -80,6 +80,11 @@ namespace FootStone.Kitchen
             });
         }
 
+        public void StartUI()
+        {
+
+        }
+
         public void UpdateButtonIcon(string buttonName, string icon)
         {
             if (buttonName == "Button2")

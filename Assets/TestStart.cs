@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using FootStone.Kitchen;
 public class TestStart : MonoBehaviour
 {
     public GameObject Main;
@@ -13,8 +13,8 @@ public class TestStart : MonoBehaviour
 
     IEnumerator StartMain()
     {
-        yield return new WaitForSeconds(0.5f);
-        Main.gameObject.SetActive(true);
+        yield return new WaitForEndOfFrame();
+        Main.GetComponent<MainBehaviour>().StartGame();
     }
     // Update is called once per frame
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using FootStone.Kitchen;
 public class SceneDataManager : BSingleton<SceneDataManager>
 {
     public static string nextSceneName;
