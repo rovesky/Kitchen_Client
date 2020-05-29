@@ -143,10 +143,12 @@ namespace FootStone.Kitchen
 
         public void UpdateTime(GameState state, ushort timeSecond)
         {
+          
             var timeSpan = new TimeSpan(0, 0, seconds: timeSecond);
 
             if (state == GameState.Playing)
             {
+                pannelMain.SetActive(true);
                 var str = timeSpan.ToString(@"mm\:ss");
                 //  FSLog.Info($"UpdateTime:{str}");
                 textTimePlaying.SetText(str);
@@ -161,7 +163,9 @@ namespace FootStone.Kitchen
 
         public void UpdateScore(ushort score)
         {
-
+            if(!pannelMain.activeSelf)
+                return;
+          
             var str = score.ToString();
             //  FSLog.Info($"UpdateTime:{str}");
             textScore.SetText(str);

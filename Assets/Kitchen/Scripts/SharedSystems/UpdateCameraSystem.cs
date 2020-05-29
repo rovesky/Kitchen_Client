@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -9,8 +10,16 @@ namespace FootStone.Kitchen
     {
         private Vector3 targetPosition;
         private float smoothPosition = 1.5f;
+        private EntityQuery gameQuery;
+
+        protected override void OnCreate()
+        {
+            gameQuery = GetEntityQuery(typeof(GameStateComponent));
+            RequireForUpdate(gameQuery);
+        }
         protected override void OnUpdate()
         {
+            
             //跟随主角
             Entities
                 .WithAll<LocalCharacter>()
@@ -18,6 +27,17 @@ namespace FootStone.Kitchen
                 .ForEach((Entity entity,
                     in LocalToWorld localToWorld) =>
                 {
+                    //  pannelMain.SetActive(true);
+                    var gameStates = gameQuery.ToComponentDataArray<GameStateComponent>(Allocator.TempJob);
+
+                    if (gameStates[0].State != GameState.Playing)
+                    {
+                        gameStates.Dispose();
+                        return;
+                    }
+                        
+                    gameStates.Dispose();
+
                     var camera = CameraManager.Instance.CameraMain;
                     // setting the target position to be the correct offset from the 
 
@@ -34,7 +54,7 @@ namespace FootStone.Kitchen
                     else if (localToWorld.Position.z < CameraManager.Instance.BottomEdge.position.z)
                         targetZ = (localToWorld.Position.z - CameraManager.Instance.LeftEdge.position.z) / 5;
 
-                    targetPosition = new Vector3(targetX,camera.transform.position.y,targetZ - 24.2f);
+                    targetPosition = new Vector3(targetX, camera.transform.position.y, targetZ - 24.2f);
                     // making a smooth transition between it's current position and the position it wants to be in
                     camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition,
                         UnityEngine.Time.deltaTime * smoothPosition);
