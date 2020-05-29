@@ -86,6 +86,12 @@ public class RoomWindow : PanelBase
         if (count == 0)
         {
             Debug.Log("没其他人");
+            for (var i = 0; i < PlayerList.childCount; i++)
+            {
+                var cell = PlayerList.GetChild(i);
+                var target = cell.Find("HeadIcon_Img");
+                target.gameObject.SetActive(false);
+            }
             return;
         }
         if (PlayerList)
@@ -93,25 +99,30 @@ public class RoomWindow : PanelBase
             if (count > PlayerList.childCount)
             {
                 Debug.Log("超员了");
-
             }
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < PlayerList.childCount; i++)
             {
-
                 var cell = PlayerList.GetChild(i);
-                var target = cell.Find("RoomKing");
-                if (i == 0)
-                {
-                    if (target && !DataManager.Instance.RoomDataManager.IsRoomOwner)
+                var target = cell.Find("HeadIcon_Img");
+                target.gameObject.SetActive(i <= count - 1);
+
+
+                /*
+                    var cell = PlayerList.GetChild(i);
+                    var target = cell.Find("RoomKing");
+                    if (i == 0)
+                    {
+                        if (target && !DataManager.Instance.RoomDataManager.IsRoomOwner)
+                        {
+                            target.gameObject.SetActive(true);
+                        }
+                    }
+                    target = cell.Find("HeadIcon_Img");
+                    if (target)
                     {
                         target.gameObject.SetActive(true);
                     }
-                }
-                target = cell.Find("HeadIcon_Img");
-                if (target)
-                {
-                    target.gameObject.SetActive(true);
-                }
+                    */
             }
         }
 

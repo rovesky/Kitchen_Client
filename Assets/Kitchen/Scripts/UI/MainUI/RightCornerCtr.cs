@@ -38,7 +38,7 @@ public class RightCornerCtr : MonoBehaviour
             PingLabel.text = sb.ToString();
             ping.DestroyPing();
             ping = null;
-            Invoke("SendPing", 1);//每秒Ping一次
+            Invoke("SendPing", 5);//每秒Ping一次
         }
     }
 
