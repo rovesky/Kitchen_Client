@@ -27,6 +27,7 @@ public class AsyncLoadScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        GameCommon.Instance.AudioManager.Stop();
         if (SceneManager.GetActiveScene().name == "Loading")
         {
             //启动协程
@@ -61,9 +62,14 @@ public class AsyncLoadScene : MonoBehaviour
     {
         Debug.Log(scene.name + "is load complete!");
 
-        if (scene.name == "TempScene")
+        if (scene.name == CommonDef.TempScene)
         {
             PanelManager.Instance.OpenPanel<RoomWindow>("RoomWindow");
+            GameCommon.Instance.AudioManager.PlayBackground(GameCommon.Instance.AudioManager.ClipArray[1]);         
+        }
+        if (scene.name == CommonDef.kitchen_01)
+        {
+            GameCommon.Instance.AudioManager.PlayBackground(GameCommon.Instance.AudioManager.ClipArray[2]);
         }
     }
 
