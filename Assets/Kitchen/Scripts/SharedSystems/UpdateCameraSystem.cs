@@ -33,7 +33,7 @@ namespace FootStone.Kitchen
                         in OwnerPredictedState ownerState,
                         in LocalToWorld localToWorld) =>
                     {
-                        FSLog.Info($"Flying Camera,entity:{entity}");
+                       // FSLog.Info($"Flying Camera,entity:{entity}");
                         if(ownerState.PreOwner == Entity.Null)
                             return;
 
