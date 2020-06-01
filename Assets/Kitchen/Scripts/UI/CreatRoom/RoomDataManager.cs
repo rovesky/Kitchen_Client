@@ -16,6 +16,7 @@ public class RoomDataManager
     public List<string> ReadyList { get; private set; }
     public bool IsRoomOwner { get; private set; }
 
+    public bool IsTestMod { get; private set; }
     public GameMod SelectGameType { get; private set; }
     public bool IsReady { get; private set; }
 
@@ -114,6 +115,11 @@ public class RoomDataManager
         SelectGameType = selectType;
     }
 
+
+    public void SetMod(bool curMod)
+    {
+        IsTestMod = curMod;
+    }
 
 }
 

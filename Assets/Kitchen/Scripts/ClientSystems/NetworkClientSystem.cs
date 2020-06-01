@@ -69,7 +69,10 @@ namespace FootStone.Kitchen
                // var ip = "192.168.0.115:29180";
                 if (DataManager.Instance.RoomDataManager != null)
                 {
-                    ip = DataManager.Instance.RoomDataManager.CurRoomInfo.host + ":" + DataManager.Instance.RoomDataManager.CurRoomInfo.port;
+                    if (!DataManager.Instance.RoomDataManager.IsTestMod)
+                    {
+                        ip = DataManager.Instance.RoomDataManager.CurRoomInfo.host + ":" + DataManager.Instance.RoomDataManager.CurRoomInfo.port;
+                    }                 
                 }
                 
                // var ip = "220.229.229.91";
