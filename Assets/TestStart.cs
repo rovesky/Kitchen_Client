@@ -15,7 +15,7 @@ public class TestStart : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         Main.GetComponent<MainBehaviour>().StartGame();
-        GameCommon.Instance.AudioManager.PlayBackground(GameCommon.Instance.AudioManager.ClipArray[2]);
+       // GameCommon.Instance.AudioManager.PlayBackground(GameCommon.Instance.AudioManager.ClipArray[2]);
     }
     // Update is called once per frame
 

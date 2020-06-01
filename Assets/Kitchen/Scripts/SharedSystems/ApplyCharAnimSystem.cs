@@ -41,15 +41,40 @@ namespace FootStone.Kitchen
                     anim.SetBool("IsClean", state.IsClean);
                     anim.SetBool("IsThrow", state.IsThrow);
 
-                  
-                    if(characterPresentation.KnifeObject1 == null)
-                        characterPresentation.KnifeObject1 = SearchChild.FindChild(characterPresentation.CharacterObject.transform,"Knife1").gameObject;
+
+                    //显示菜刀
+                    if (characterPresentation.KnifeObject1 == null)
+                        characterPresentation.KnifeObject1 = SearchChild
+                            .FindChild(characterPresentation.CharacterObject.transform, "Knife1").gameObject;
                     characterPresentation.KnifeObject1.SetActive(state.IsSlice);
-                   
-                    if(characterPresentation.KnifeObject2 == null)
-                        characterPresentation.KnifeObject2 = SearchChild.FindChild(characterPresentation.CharacterObject.transform,"Knife2").gameObject;
+
+                    if (characterPresentation.KnifeObject2 == null)
+                        characterPresentation.KnifeObject2 = SearchChild
+                            .FindChild(characterPresentation.CharacterObject.transform, "Knife2").gameObject;
                     characterPresentation.KnifeObject2.SetActive(state.IsSlice);
 
+                    var effectPos = presentPos.position;
+                    effectPos.y = 0.39f;
+
+                    //走路的时候冒烟
+                    if (characterPresentation.FootSmoke == null)
+                        characterPresentation.FootSmoke =
+                            Object.Instantiate(Resources.Load("Effect/FootSmoke") as GameObject);
+                    characterPresentation.FootSmoke.transform.position =
+                        effectPos;//+ ((Vector3)math.mul(presentPos.rotation,Vector3.back)).normalized;
+                    characterPresentation.FootSmoke.SetActive(state.Velocity > 0);
+
+                    //主角的脚下光圈
+                    if (!HasComponent<LocalCharacter>(entity))
+                        return;
+
+                    if (characterPresentation.ChooseEffect == null)
+                        characterPresentation.ChooseEffect =
+                            Object.Instantiate(Resources.Load("Effect/ChooseEffect") as GameObject);
+
+                 //   characterPresentation.ChooseEffect.SetActive(true);
+                    characterPresentation.ChooseEffect.transform.position = effectPos;
+                    //  FSLog.Info($"ChooseEffect poisiton:{ characterPresentation.ChooseEffect.transform.position}");
 
                 }).Run();
         }

@@ -8,6 +8,7 @@ namespace FootStone.Kitchen
     {
         private static Entity entityPrefab;
         private static GameObject presentationPrefab;
+     //   private static GameObject chooseEffectPrefab;
 
         public static void Init()
         {
@@ -17,6 +18,7 @@ namespace FootStone.Kitchen
                     World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<ConvertToEntitySystem>().BlobAssetStore));
 
             presentationPrefab = Resources.Load("Character/Character1") as GameObject;
+       //     chooseEffectPrefab = Resources.Load("Effect/ChooseEffect") as GameObject;
         }
 
         public static Entity CreateCharacter(EntityManager entityManager,float3 position)
@@ -26,18 +28,20 @@ namespace FootStone.Kitchen
             var rotation = Quaternion.identity;
 
             CreateCharacterUtilities.CreateCharacterComponent(entityManager, e, position, rotation);
-
-            //var presentationEntity = characterPresentation.GetComponentInChildren<GameObjectEntity>() == null
-            //    ? Entity.Null
-            //    : characterPresentation.GetComponentInChildren<GameObjectEntity>().Entity;
-
+            
 
             var characterPresentation = Object.Instantiate(presentationPrefab);
             characterPresentation.SetActive(false);
 
+            
+         //   var chooseEffect= Object.Instantiate(chooseEffectPrefab);
+         //   chooseEffect.SetActive(false);
+            
+
             entityManager.AddComponentData(e, new  CharacterPresentation()
             {
-                CharacterObject = characterPresentation
+                CharacterObject = characterPresentation,
+                ChooseEffect = null
             });
 
             return e;
