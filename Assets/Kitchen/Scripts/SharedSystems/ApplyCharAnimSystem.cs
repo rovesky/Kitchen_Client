@@ -61,7 +61,7 @@ namespace FootStone.Kitchen
                         characterPresentation.FootSmoke =
                             Object.Instantiate(Resources.Load("Effect/FootSmoke") as GameObject);
                     characterPresentation.FootSmoke.transform.position =
-                        effectPos;//+ ((Vector3)math.mul(presentPos.rotation,Vector3.back)).normalized;
+                        effectPos; //+ ((Vector3)math.mul(presentPos.rotation,Vector3.back)).normalized;
                     characterPresentation.FootSmoke.SetActive(state.Velocity > 0);
 
                     //主角的脚下光圈
@@ -71,11 +71,8 @@ namespace FootStone.Kitchen
                     if (characterPresentation.ChooseEffect == null)
                         characterPresentation.ChooseEffect =
                             Object.Instantiate(Resources.Load("Effect/ChooseEffect") as GameObject);
-
-                 //   characterPresentation.ChooseEffect.SetActive(true);
                     characterPresentation.ChooseEffect.transform.position = effectPos;
-                    //  FSLog.Info($"ChooseEffect poisiton:{ characterPresentation.ChooseEffect.transform.position}");
-
+            
                 }).Run();
         }
     }
