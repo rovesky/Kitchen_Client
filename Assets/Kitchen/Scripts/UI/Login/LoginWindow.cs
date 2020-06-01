@@ -28,6 +28,7 @@ public class LoginWindow : PanelBase
             EventTriggerListener.Get(Login_Btn.gameObject).onPointerClick = o =>
             {
                 Debug.Log("登录");
+                DataManager.Instance.RoomDataManager.SetMod(false);
                 //LoginSuccess();
                 NetworkNew.Instance.LoginRequest(SystemInfo.deviceUniqueIdentifier + 1, "22222");
             };
@@ -36,7 +37,9 @@ public class LoginWindow : PanelBase
         {
             EventTriggerListener.Get(Notice_Btn.gameObject).onPointerClick = o =>
             {
-                Debug.Log("公告");
+                DataManager.Instance.RoomDataManager.SetMod(true);
+                SceneDataManager.nextSceneName = CommonDef.kitchen_01;//目标场景名称
+                UnityEngine.SceneManagement.SceneManager.LoadScene(CommonDef.Loading);//加载进度条场景
             };
         }
     }
