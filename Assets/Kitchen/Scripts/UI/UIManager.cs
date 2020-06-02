@@ -14,9 +14,9 @@ namespace FootStone.Kitchen
         private Button m_button1;
         private Button m_button2;
         private Button m_button3;
-        private UI_SpriteText textTimePlaying;
+        private Text textTimePlaying;
         private UI_SpriteText textTimePreparing;
-        private UI_SpriteText textScore;
+        private Text textScore;
         private UI_TaskListCtrl taskList;
         private CanvasGroup canvasGroup;
         private GameObject pannelButton;
@@ -44,11 +44,11 @@ namespace FootStone.Kitchen
             m_button3 = m_canvas_main.transform.Find("PannelButton/Button3/Btn_Main").GetComponent<Button>();
 
 
-            textTimePlaying = m_canvas_main.transform.Find("PannelMain/TextTime").GetComponent<UI_SpriteText>();
+            textTimePlaying = m_canvas_main.transform.Find("PannelMain/CurTime_Txt").GetComponent<Text>();
 
             textTimePreparing = m_canvas_main.transform.Find("PannelStart/TextTime").GetComponent<UI_SpriteText>();
 
-            textScore = m_canvas_main.transform.Find("PannelMain/TextScore").GetComponent<UI_SpriteText>();
+            textScore = m_canvas_main.transform.Find("PannelMain/CurScore_Txt").GetComponent<Text>();
 
             taskList = m_canvas_main.transform.Find("UI_TaskListCtrl").GetComponent<UI_TaskListCtrl>();
 
@@ -151,7 +151,7 @@ namespace FootStone.Kitchen
                 pannelMain.SetActive(true);
                 var str = timeSpan.ToString(@"mm\:ss");
                 //  FSLog.Info($"UpdateTime:{str}");
-                textTimePlaying.SetText(str);
+                textTimePlaying.text = str;
             }
             else if (state == GameState.Preparing)
             {
@@ -168,7 +168,7 @@ namespace FootStone.Kitchen
           
             var str = score.ToString();
             //  FSLog.Info($"UpdateTime:{str}");
-            textScore.SetText(str);
+            textScore.text = str;
         }
 
         public void AddMenu(int index, int productId, int material1, int material2, int material3, int material4)
