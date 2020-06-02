@@ -6,8 +6,8 @@ using SampleClient;
 public class GameCommon : MonoBehaviour
 {
     public GameObject UIRoot;
-    public string HeadIconPath = "UI/HeadIcon";
-    public string UIRootPath = "UI/";
+    private string HeadIconPath = "UI/HeadIcon";
+    private string UIRootPath = "UI/Prefab";
     private static GameCommon m_this = null;
     public string[] TestName = new string[6] { "德玛西亚", "艾欧尼亚", "诺克萨斯", "祖安", "均衡教派", "恕瑞玛" };
     public AudioManager AudioManager;
@@ -52,7 +52,7 @@ public class GameCommon : MonoBehaviour
     {
         if (UIRoot == null)
         {
-            var uiRoot = Resources.Load<GameObject>("UI/UI_Root");
+            var uiRoot = Resources.Load<GameObject>("UI/Prefab/UI_Root");
             if (uiRoot != null)
             {
                 var obj = GameObject.Instantiate(uiRoot);

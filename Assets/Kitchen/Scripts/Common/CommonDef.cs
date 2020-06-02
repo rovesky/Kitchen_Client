@@ -6,7 +6,7 @@ public class CommonDef
 {
     //path
     public const string HeadIconPath = "UI/HeadIcon";
-    public const string UIRootPath = "UI/";
+    public const string UIRootPath = "UI/Prefab/";
     /// <summary>
     /// Config
     /// </summary>
