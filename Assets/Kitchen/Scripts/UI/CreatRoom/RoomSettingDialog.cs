@@ -122,7 +122,15 @@ public class RoomSettingDialog : PanelBase
                     target.onValueChanged.AddListener((o) =>
                     {
                         var obj = target.transform.Find("Background/Image");
+                        var text = target.transform.Find("Label");
                         obj.gameObject.SetActive(o);
+
+                        if (text)
+                        {
+                            target.transform.localScale = o ? new Vector3(1f, 1.2f, 0) : Vector3.one;
+                            text.GetComponent<Text>().color = o ? new Color(255, 216, 0, 255) : Color.white;
+                        }
+
                         if (o)
                         {
                             switch (target.name)

@@ -17,7 +17,7 @@ public class GameCommon : MonoBehaviour
     public string EnterRoomDialog = "EnterRoomDialog";
     public string RoomWindow = "RoomWindow";
     public List<Sprite> CellBgList = new List<Sprite>();
-
+    public bool MusicOn;
 
     public string CurIp;
 

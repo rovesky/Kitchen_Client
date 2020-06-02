@@ -19,6 +19,7 @@ public class LoginWindow : PanelBase
         Notice_Btn = transform.Find("Main/Notice_Btn").GetComponent<Button>();
         Version_Text = transform.Find("Main/Notice_Btn").GetComponent<Text>();
         SetListener();
+        GameCommon.Instance.AudioManager.PlayBackground(GameCommon.Instance.AudioManager.ClipArray[0]);
     }
 
     private void SetListener()
