@@ -57,7 +57,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 0
       firstFrame: 0
-      lastFrame: 32
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -85,8 +85,8 @@ ModelImporter:
       name: move_01
       takeName: Take 001
       internalID: 0
-      firstFrame: 40
-      lastFrame: 56
+      firstFrame: 50
+      lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -114,8 +114,8 @@ ModelImporter:
       name: idle_take_01
       takeName: Take 001
       internalID: 0
-      firstFrame: 66
-      lastFrame: 92
+      firstFrame: 82
+      lastFrame: 115
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -143,8 +143,8 @@ ModelImporter:
       name: move_take_01
       takeName: Take 001
       internalID: 0
-      firstFrame: 100
-      lastFrame: 116
+      firstFrame: 126
+      lastFrame: 145
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -172,8 +172,8 @@ ModelImporter:
       name: drop_01
       takeName: Take 001
       internalID: 0
-      firstFrame: 125
-      lastFrame: 135
+      firstFrame: 156
+      lastFrame: 169
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -201,8 +201,8 @@ ModelImporter:
       name: clean_01
       takeName: Take 001
       internalID: 0
-      firstFrame: 137
-      lastFrame: 150
+      firstFrame: 171
+      lastFrame: 188
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -230,8 +230,8 @@ ModelImporter:
       name: cut_01
       takeName: Take 001
       internalID: 0
-      firstFrame: 151
-      lastFrame: 163
+      firstFrame: 189
+      lastFrame: 200
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -258,7 +258,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.7
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -304,7 +304,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.7
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

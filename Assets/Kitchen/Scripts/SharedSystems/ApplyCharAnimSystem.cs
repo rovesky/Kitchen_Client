@@ -41,7 +41,7 @@ namespace FootStone.Kitchen
                     anim.SetBool("IsClean", state.IsClean);
                     anim.SetBool("IsThrow", state.IsThrow);
 
-
+                    
                     //显示菜刀
                     if (characterPresentation.KnifeObject1 == null)
                         characterPresentation.KnifeObject1 = SearchChild
@@ -53,10 +53,10 @@ namespace FootStone.Kitchen
                             .FindChild(characterPresentation.CharacterObject.transform, "Knife2").gameObject;
                     characterPresentation.KnifeObject2.SetActive(state.IsSlice);
 
+                    //走路的时候冒烟
                     var effectPos = presentPos.position;
                     effectPos.y = 0.39f;
-
-                    //走路的时候冒烟
+               
                     if (characterPresentation.FootSmoke == null)
                         characterPresentation.FootSmoke =
                             Object.Instantiate(Resources.Load("Effect/FootSmoke") as GameObject);
