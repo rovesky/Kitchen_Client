@@ -16,6 +16,11 @@ public class AudioManager : MonoBehaviour
 
     public void PlayBackground(AudioClip audioClip)
     {
+        if (!GameCommon.Instance.MusicOn)
+        {
+            AudioSource.Stop();
+            return;
+        }
         if (AudioSource == null)
         {
             return;

@@ -69,7 +69,7 @@ public class AsyncLoadScene : MonoBehaviour
         }
         if (scene.name == CommonDef.kitchen_01)
         {
-            
+            GameCommon.Instance.AudioManager.PlayBackground(GameCommon.Instance.AudioManager.ClipArray[2]);
         }
     }
 
