@@ -45,14 +45,7 @@ public class GameCommon : MonoBehaviour
         DataManager.Instance.Init();
         InitUiRoot();
         AudioManager.GetComponent<AudioManager>().Init();
-        if (PlayerPrefsCtrl.Instance.GetBoolValue(CommonDef.IsQuiet))
-        {
-            AudioManager.GetComponent<AudioManager>().OnVolumeChange(0.0f);
-        }
-        else
-        {
-            AudioManager.GetComponent<AudioManager>().OnVolumeChange(PlayerPrefsCtrl.Instance.GetFloatValue(CommonDef.MusicValue));
-        }
+        AudioManager.GetComponent<AudioManager>().SetQuiet(PlayerPrefsCtrl.Instance.GetBoolValue(CommonDef.IsQuiet));
 
         SceneDataManager.Instance.SetDalyTime(0);
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
@@ -71,7 +64,7 @@ public class GameCommon : MonoBehaviour
         }
         if (!PlayerPrefs.HasKey(CommonDef.IsQuiet))
         {
-            PlayerPrefs.SetInt(CommonDef.SoundEffectValue, 1);
+            PlayerPrefs.SetInt(CommonDef.SoundEffectValue, 0);
         }
         PlayerPrefs.Save();
     }

@@ -18,6 +18,7 @@ public class RoomWindow : PanelBase
     public Transform RoomID_Text;
     public Transform RoomName_Text;
 
+    public Transform Setting_Btn;
     public override void Init(params object[] args)
     {
         base.Init(args);
@@ -33,6 +34,7 @@ public class RoomWindow : PanelBase
         PlayerList = transform.Find("Main/PlayerList");
         RoomInfo = transform.Find("Main/RoomInfo");
         RightConner = transform.Find("Main/RightConner");
+        Setting_Btn = transform.Find("Main/Setting_Btn");
         Head = transform.Find("Main/Head");
 
         if (Head)
@@ -130,10 +132,21 @@ public class RoomWindow : PanelBase
 
     public void SetListener()
     {
-        EventTriggerListener.Get(Ready_Btn).onPointerClick = o =>
+        if (Ready_Btn)
         {
-            NetworkNew.Instance.ReadyGameRequest(DataManager.Instance.RoomDataManager.CurRoomId);
-        };
+            EventTriggerListener.Get(Ready_Btn).onPointerClick = o =>
+            {
+                NetworkNew.Instance.ReadyGameRequest(DataManager.Instance.RoomDataManager.CurRoomId);
+            };
+        }
+
+        if (Setting_Btn)
+        {
+            EventTriggerListener.Get(Setting_Btn.gameObject).onPointerClick = o =>
+            {
+                PanelManager.Instance.OpenPanel<SettingDialog>(CommonDef.SettingDialog);
+            };
+        }
     }
 
     public void InitMessenger()

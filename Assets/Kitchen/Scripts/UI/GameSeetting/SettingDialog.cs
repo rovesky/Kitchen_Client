@@ -77,7 +77,7 @@ public class SettingDialog : PanelBase
             Quiet_Tog.GetComponent<Toggle>().onValueChanged.AddListener((o)=> 
             {
                 GameCommon.Instance.AudioManager.SetQuiet(o);
-                PlayerPrefs.SetInt(CommonDef.IsQuiet, o? 1 : 0);
+                PlayerPrefs.SetInt(CommonDef.IsQuiet, o ? 1 : 0);
                 PlayerPrefs.Save();
                
             });

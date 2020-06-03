@@ -16,6 +16,17 @@ public class AudioManager : MonoBehaviour
 
     public void PlayBackground(AudioClip audioClip)
     {
+        if (audioClip)
+        {
+            AudioSource.loop = true;
+            AudioSource.clip = audioClip;
+        }
+        if (PlayerPrefsCtrl.Instance.GetBoolValue(CommonDef.IsQuiet))
+        {
+
+            AudioSource.Stop();
+            return;
+        }
         if (!GameCommon.Instance.MusicOn)
         {
             AudioSource.Stop();
@@ -32,8 +43,6 @@ public class AudioManager : MonoBehaviour
         }
         if (audioClip)
         {
-            AudioSource.loop = true;                      //背景音乐是循环播放的
-            AudioSource.clip = audioClip;
             AudioSource.Play();
         }
         else
