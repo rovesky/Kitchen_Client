@@ -22,7 +22,8 @@ namespace FootStone.Kitchen
             icons[EntityType.KelpSlice] = 7;
             icons[EntityType.RiceCooked] = 1;
 
-            productIcons[EntityType.ShrimpProduct] = 1;
+         //   productIcons[EntityType.ShrimpProduct] = 1;
+            productIcons[EntityType.ShrimpSlice] = 1;
             productIcons[EntityType.Sushi] = 2;
         }
 

@@ -16,7 +16,7 @@ namespace Assets.Kitchen.Scripts.UI
             sprites[EntityType.KelpSlice] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients7");
             sprites[EntityType.RiceCooked] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
             sprites[EntityType.Sushi] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients1");
-            sprites[EntityType.ShrimpProduct] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients5");
+        //    sprites[EntityType.ShrimpProduct] = Resources.Load<Sprite>("UI/Icon/demo_icon_food_Ingredients5");
         }
        
 
