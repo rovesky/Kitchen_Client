@@ -1,4 +1,5 @@
-﻿using FootStone.ECS;
+﻿using System.Collections.Generic;
+using FootStone.ECS;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -9,6 +10,13 @@ namespace FootStone.Kitchen
     [DisableAutoCreation]
     public class ApplyCharAnimSystem : SystemBase
     {
+        private Dictionary<int,Material> materials = new Dictionary<int, Material>();
+        protected override void OnCreate()
+        {
+            materials.Add(0,Resources.Load("Model/char/char_01") as Material);
+            materials.Add(1,Resources.Load("Model/char/char_02") as Material);
+            materials.Add(2,Resources.Load("Model/char/char_03") as Material);
+        }
         protected override void OnUpdate()
         {
             Entities.WithStructuralChanges()
@@ -41,7 +49,10 @@ namespace FootStone.Kitchen
                     anim.SetBool("IsClean", state.IsClean);
                     anim.SetBool("IsThrow", state.IsThrow);
 
-                    
+                    //设置贴图
+                    characterPresentation.CharacterObject.GetComponentInChildren<SkinnedMeshRenderer>()
+                        .material = materials[state.MaterialId % materials.Count];
+
                     //显示菜刀
                     if (characterPresentation.KnifeObject1 == null)
                         characterPresentation.KnifeObject1 = SearchChild
@@ -56,7 +67,7 @@ namespace FootStone.Kitchen
                     //走路的时候冒烟
                     var effectPos = presentPos.position;
                     effectPos.y = 0.39f;
-               
+
                     if (characterPresentation.FootSmoke == null)
                         characterPresentation.FootSmoke =
                             Object.Instantiate(Resources.Load("Effect/FootSmoke") as GameObject);
@@ -72,7 +83,7 @@ namespace FootStone.Kitchen
                         characterPresentation.ChooseEffect =
                             Object.Instantiate(Resources.Load("Effect/ChooseEffect") as GameObject);
                     characterPresentation.ChooseEffect.transform.position = effectPos;
-            
+
                 }).Run();
         }
     }

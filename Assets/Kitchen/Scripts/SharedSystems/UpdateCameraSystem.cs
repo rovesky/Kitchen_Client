@@ -11,7 +11,7 @@ namespace FootStone.Kitchen
     public class UpdateCameraSystem : SystemBase
     {
         private Vector3 targetPosition;
-        private float smoothPosition = 1.5f;
+        private float smoothPosition = 2.5f;
         private EntityQuery gameQuery;
         private EntityQuery flyingQuery;
 
@@ -73,9 +73,9 @@ namespace FootStone.Kitchen
 
             var targetX = 0.0f;
             if (localToWorld.Position.x > CameraManager.Instance.RightEdge.position.x)
-                targetX = (localToWorld.Position.x - CameraManager.Instance.RightEdge.position.x) * 0.5f;
+                targetX = (localToWorld.Position.x - CameraManager.Instance.RightEdge.position.x) * 0.6f;
             else if (localToWorld.Position.x < CameraManager.Instance.LeftEdge.position.x)
-                targetX = (localToWorld.Position.x - CameraManager.Instance.LeftEdge.position.x) * 0.5f;
+                targetX = (localToWorld.Position.x - CameraManager.Instance.LeftEdge.position.x) * 0.6f;
 
 
             var targetZ = 0.0f;
