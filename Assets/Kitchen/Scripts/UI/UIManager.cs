@@ -15,7 +15,7 @@ namespace FootStone.Kitchen
         private Button m_button2;
         private Button m_button3;
         private Text textTimePlaying;
-        private UI_SpriteText textTimePreparing;
+        private SimpleImgCountDown textTimePreparing;
         private Text textScore;
         private UI_TaskListCtrl taskList;
         private CanvasGroup canvasGroup;
@@ -24,9 +24,11 @@ namespace FootStone.Kitchen
         private GameObject pannelStart;
         private GameObject pannelEnd;
         private GameObject joystick;
-        private Text m_text_rtt;
         private Text m_text_fps;
-
+        private GameObject RightCorner;
+        private Text PingTxt;
+        public Transform NetStates;
+        //private GameObject RightCorner;
         private Dictionary<string,Sprite>  buttonIcons = new Dictionary<string, Sprite>();
 
         private void Start()
@@ -34,33 +36,43 @@ namespace FootStone.Kitchen
             Debug.Log("GameManager Start!");
 
             Instance = this;
-            var pannelInfo = m_canvas_main.transform.Find("PannelInfo");
-            m_text_rtt = pannelInfo.Find("text_rtt").GetComponent<Text>();
-            m_text_fps = pannelInfo.Find("text_fps").GetComponent<Text>();
+            pannelButton = m_canvas_main.transform.Find("FightUI/PannelButton").gameObject;
+            pannelMain = m_canvas_main.transform.Find("FightUI/PannelMain").gameObject;
+            pannelStart = m_canvas_main.transform.Find("FightUI/PannelStart").gameObject;
+            pannelEnd = m_canvas_main.transform.Find("FightUI/PannelEnd").gameObject;
+            RightCorner = m_canvas_main.transform.Find("FightUI/RightCorner").gameObject;
+            if (RightCorner)
+            {
+                m_text_fps = RightCorner.transform.Find("text_fps").GetComponent<Text>();
+                PingTxt = RightCorner.transform.Find("Ping").GetComponent<Text>();
+                NetStates = RightCorner.transform.Find("NetState");
+            }
+            if (pannelButton)
+            {
+                m_button1 = pannelButton.transform.Find("Button1").GetComponent<Button>();
+                m_button2 = pannelButton.transform.Find("Button2").GetComponent<Button>();
+                m_button3 = pannelButton.transform.Find("Button3/Btn_Main").GetComponent<Button>();
+            }
 
-            m_button1 = m_canvas_main.transform.Find("PannelButton/Button1").GetComponent<Button>();
-            m_button2 = m_canvas_main.transform.Find("PannelButton/Button2").GetComponent<Button>();
-         //   m_button2.interactable = false;
-            m_button3 = m_canvas_main.transform.Find("PannelButton/Button3/Btn_Main").GetComponent<Button>();
+            if (pannelMain)
+            {
+                textScore = pannelMain.transform.Find("CurScore_Txt").GetComponent<Text>();
+                textTimePlaying = pannelMain.transform.Find("CurTime_Txt").GetComponent<Text>();
+            }
+            if (pannelStart)
+            {
+                textTimePreparing = pannelStart.transform.Find("TimeCountDown").GetComponent<SimpleImgCountDown>();
 
-
-            textTimePlaying = m_canvas_main.transform.Find("PannelMain/CurTime_Txt").GetComponent<Text>();
-
-            textTimePreparing = m_canvas_main.transform.Find("PannelStart/TextTime").GetComponent<UI_SpriteText>();
-
-            textScore = m_canvas_main.transform.Find("PannelMain/CurScore_Txt").GetComponent<Text>();
-
-            taskList = m_canvas_main.transform.Find("UI_TaskListCtrl").GetComponent<UI_TaskListCtrl>();
-
+            }          
+            taskList = m_canvas_main.transform.Find("FightUI/UI_TaskListCtrl").GetComponent<UI_TaskListCtrl>();
             canvasGroup = m_canvas_main.GetComponent<CanvasGroup>();
-
-            pannelButton = m_canvas_main.transform.Find("PannelButton").gameObject;
-            pannelMain = m_canvas_main.transform.Find("PannelMain").gameObject;
-            pannelStart = m_canvas_main.transform.Find("PannelStart").gameObject;
-            pannelEnd = m_canvas_main.transform.Find("PannelEnd").gameObject;
-
             joystick = m_canvas_main.transform.Find("Joystick").gameObject;
+            SetListener();
+        }
 
+
+        public void SetListener()
+        {
             m_button1.onClick.AddListener(() =>
             {
                 FSLog.Info("pickup.onClick!");
@@ -79,7 +91,6 @@ namespace FootStone.Kitchen
                 UIInput.AddButtonClickEvent("rush");
             });
         }
-
         public void StartUI()
         {
 
@@ -119,9 +130,50 @@ namespace FootStone.Kitchen
 
 
         // 改变RTT UI显示
+        private float refreshInterval = 3.0f;
+        private float curTime = 3.0f;
         public void UpdateRtt(double rtt)
         {
-            m_text_rtt.text = rtt.ToString("#.00");
+            if (curTime < refreshInterval)
+            {
+                curTime += Time.deltaTime;
+            }
+            else
+            {
+                curTime = 0.0f;
+                PingTxt.text = string.Format("{0}MS", rtt.ToString("#"));
+                SetPingImg(rtt);
+            }
+        }
+        NetState netState;
+        public void SetPingImg(double rtt)
+        {
+            if (rtt < 80)
+            {
+                netState = NetState.veryGood;
+            }
+            else if (rtt < 250)
+            {
+                netState = NetState.good;
+            }
+            else
+            {
+                netState = NetState.bad;
+            }
+
+
+            if (NetStates.Find("Full_Img"))
+            {
+                NetStates.Find("Full_Img").gameObject.SetActive(netState == NetState.veryGood);
+            }
+            if (NetStates.Find("Half_Img"))
+            {
+                NetStates.Find("Half_Img").gameObject.SetActive(netState == NetState.good);
+            }
+            if (NetStates.Find("None_Img"))
+            {
+                NetStates.Find("None_Img").gameObject.SetActive(netState == NetState.bad);
+            }
         }
 
         public void UpdateFps(double fps)
@@ -156,8 +208,8 @@ namespace FootStone.Kitchen
             else if (state == GameState.Preparing)
             {
                 var str = timeSpan.ToString(@"ss");
-              // FSLog.Info($"UpdateTime textTimePreparing:{str}");
-                textTimePreparing.SetText(str);
+                // FSLog.Info($"UpdateTime textTimePreparing:{str}");
+                textTimePreparing.SetNum(int.Parse(str));
             }
         }
 

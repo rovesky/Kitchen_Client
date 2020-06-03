@@ -50,8 +50,14 @@ public class UI_TaskListItem : MonoBehaviour
 				img = newObj.GetComponent<Image>();
 				m_listItems.Add(img);
 			}
-
-			img.sprite = Resources.Load("UI/Icon/demo_icon_food_Ingredients" + arrItems[i], typeof(Sprite)) as Sprite; ;
+            if (arrItems[i] == 1)
+            {
+                img.sprite = Resources.Load("UI/Icon/demo_icon_food_Ingredients" + arrItems[i] + "b", typeof(Sprite)) as Sprite;
+            }
+            else
+            {
+                img.sprite = Resources.Load("UI/Icon/demo_icon_food_Ingredients" + arrItems[i], typeof(Sprite)) as Sprite;
+            }
 			img.gameObject.SetActive(true);
 		}
 
