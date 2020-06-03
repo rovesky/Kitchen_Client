@@ -18,9 +18,15 @@ public class CommonDef
     public const string MainWindow = "MainWindow";
     public const string EnterRoomDialog = "EnterRoomDialog";
     public const string RoomWindow = "RoomWindow";
+    public const string SettingDialog = "SettingDialog";
 
     //Scene
     public const string TempScene = "TempScene";
     public const string kitchen_01 = "kitchen_01";
     public const string Loading = "Loading";
+
+
+    public const string MusicValue = "MusicValue";
+    public const string SoundEffectValue = "SoundEffectValue";
+    public const string IsQuiet = "IsQuiet";
 }

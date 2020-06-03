@@ -30,10 +30,6 @@ public class AudioManager : MonoBehaviour
         {
             return;
         }
-
-        //处理全局背景音乐音量
-        AudioSource.volume = 1;
-        AudioSource.pitch = 1;
         if (audioClip)
         {
             AudioSource.loop = true;                      //背景音乐是循环播放的
@@ -50,4 +46,25 @@ public class AudioManager : MonoBehaviour
     {
         AudioSource.Stop();
     }
+
+    public void OnVolumeChange(float curVolume)
+    {
+
+         AudioSource.volume = curVolume;
+
+    }
+
+    public void SetQuiet(bool isQuiet)
+    {
+        if (isQuiet)
+        {
+            AudioSource.Stop();
+        }
+        else
+        {
+            AudioSource.Play();
+        }
+    }
+
+
 }

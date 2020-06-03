@@ -28,6 +28,7 @@ public class MainWindow : PanelBase
     public Transform EnterRoom_Btn;
     public Transform RoomListGameMode_Group;
     public Transform BG_Img;
+    public Transform Setting_Btn;
     //-----------------------------------------------
     public Transform RoomListCellRoot;
     public Transform CellItemDemo;
@@ -78,6 +79,7 @@ public class MainWindow : PanelBase
         RoomListPanel = transform.Find("Main/RoomListPanel");
         GameSelectRoot = transform.Find("Main/GameSelectRoot");
         BG_Img = transform.Find("Main/RoomListBg_Img");
+        Setting_Btn = transform.Find("Main/Setting_Btn");
         if (BG_Img != null)
         {
             BG_Img.gameObject.SetActive(false);
@@ -132,6 +134,13 @@ public class MainWindow : PanelBase
                 {
                     GameSelectRoot.gameObject.SetActive(false);
                 }
+            };
+        }
+        if (Setting_Btn)
+        {
+            EventTriggerListener.Get(Setting_Btn.gameObject).onPointerClick = o =>
+            {
+                PanelManager.Instance.OpenPanel<SettingDialog>(CommonDef.SettingDialog);
             };
         }
 

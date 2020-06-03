@@ -39,13 +39,41 @@ public class GameCommon : MonoBehaviour
 
     private void Init()
     {
+        InitPlayerPrefs();
         Messenger<string>.AddListener(MessengerEventDef.REFRESH_UI, PanelManager.Instance.MsgRequestRef);
         NetworkNew.Instance.Init(CurIp, 4061);
         DataManager.Instance.Init();
         InitUiRoot();
         AudioManager.GetComponent<AudioManager>().Init();
+        if (PlayerPrefsCtrl.Instance.GetBoolValue(CommonDef.IsQuiet))
+        {
+            AudioManager.GetComponent<AudioManager>().OnVolumeChange(0.0f);
+        }
+        else
+        {
+            AudioManager.GetComponent<AudioManager>().OnVolumeChange(PlayerPrefsCtrl.Instance.GetFloatValue(CommonDef.MusicValue));
+        }
+
         SceneDataManager.Instance.SetDalyTime(0);
         PanelManager.Instance.OpenPanel<LoginWindow>("LoginWindow", null);
+    }
+    
+
+    public void InitPlayerPrefs()
+    {
+        if (!PlayerPrefs.HasKey(CommonDef.MusicValue))
+        {
+            PlayerPrefs.SetFloat(CommonDef.MusicValue, 0.5f);
+        }
+        if (!PlayerPrefs.HasKey(CommonDef.SoundEffectValue))
+        {
+            PlayerPrefs.SetFloat(CommonDef.SoundEffectValue, 0.5f);
+        }
+        if (!PlayerPrefs.HasKey(CommonDef.IsQuiet))
+        {
+            PlayerPrefs.SetInt(CommonDef.SoundEffectValue, 1);
+        }
+        PlayerPrefs.Save();
     }
 
     public void InitUiRoot()
