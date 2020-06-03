@@ -26,8 +26,9 @@ namespace FootStone.Kitchen
         private GameObject joystick;
         private Text m_text_fps;
         private GameObject RightCorner;
-        private Text PingTxt;
-        public Transform NetStates;
+        private Text pingTxt;
+        private Transform netStates;
+        private Transform Setting;
         //private GameObject RightCorner;
         private Dictionary<string,Sprite>  buttonIcons = new Dictionary<string, Sprite>();
 
@@ -41,11 +42,12 @@ namespace FootStone.Kitchen
             pannelStart = m_canvas_main.transform.Find("FightUI/PannelStart").gameObject;
             pannelEnd = m_canvas_main.transform.Find("FightUI/PannelEnd").gameObject;
             RightCorner = m_canvas_main.transform.Find("FightUI/RightCorner").gameObject;
+            Setting = m_canvas_main.transform.Find("FightUI/Setting");
             if (RightCorner)
             {
                 m_text_fps = RightCorner.transform.Find("text_fps").GetComponent<Text>();
-                PingTxt = RightCorner.transform.Find("Ping").GetComponent<Text>();
-                NetStates = RightCorner.transform.Find("NetState");
+                pingTxt = RightCorner.transform.Find("Ping").GetComponent<Text>();
+                netStates = RightCorner.transform.Find("NetState");
             }
             if (pannelButton)
             {
@@ -89,6 +91,10 @@ namespace FootStone.Kitchen
             {
                 FSLog.Info("m_button3.onClick!");
                 UIInput.AddButtonClickEvent("rush");
+            });
+            Setting.GetComponent<Button>().onClick.AddListener(() => 
+            {
+                PanelManager.Instance.OpenPanel<SettingDialog>(CommonDef.SettingDialog);
             });
         }
         public void StartUI()
@@ -141,7 +147,7 @@ namespace FootStone.Kitchen
             else
             {
                 curTime = 0.0f;
-                PingTxt.text = string.Format("{0}MS", rtt.ToString("#"));
+                pingTxt.text = string.Format("{0}MS", rtt.ToString("#"));
                 SetPingImg(rtt);
             }
         }
@@ -162,17 +168,17 @@ namespace FootStone.Kitchen
             }
 
 
-            if (NetStates.Find("Full_Img"))
+            if (netStates.Find("Full_Img"))
             {
-                NetStates.Find("Full_Img").gameObject.SetActive(netState == NetState.veryGood);
+                netStates.Find("Full_Img").gameObject.SetActive(netState == NetState.veryGood);
             }
-            if (NetStates.Find("Half_Img"))
+            if (netStates.Find("Half_Img"))
             {
-                NetStates.Find("Half_Img").gameObject.SetActive(netState == NetState.good);
+                netStates.Find("Half_Img").gameObject.SetActive(netState == NetState.good);
             }
-            if (NetStates.Find("None_Img"))
+            if (netStates.Find("None_Img"))
             {
-                NetStates.Find("None_Img").gameObject.SetActive(netState == NetState.bad);
+                netStates.Find("None_Img").gameObject.SetActive(netState == NetState.bad);
             }
         }
 
