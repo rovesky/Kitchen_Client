@@ -17,6 +17,7 @@ public class SettingDialog : PanelBase
     {
         
         base.Init(args);
+        transform.SetAsFirstSibling();
         InitGameObject();
         SetInfo();
         SetListener();

@@ -31,7 +31,7 @@ public class LoginWindow : PanelBase
                 Debug.Log("登录");
                 DataManager.Instance.RoomDataManager.SetMod(false);
                 //LoginSuccess();
-                NetworkNew.Instance.LoginRequest(SystemInfo.deviceUniqueIdentifier, "22222");
+                NetworkNew.Instance.LoginRequest(SystemInfo.deviceUniqueIdentifier + 1, "22222");
             };
         }
         if (Notice_Btn)
