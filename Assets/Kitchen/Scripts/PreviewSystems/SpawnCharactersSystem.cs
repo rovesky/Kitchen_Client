@@ -52,6 +52,7 @@ namespace FootStone.Kitchen
 
             EntityManager.SetComponentData(e, new ReplicatedEntityData
             {
+                // 玩家信息
                 Id = id,
                 PredictingPlayerId = isLocal ? 0 : id
             });
