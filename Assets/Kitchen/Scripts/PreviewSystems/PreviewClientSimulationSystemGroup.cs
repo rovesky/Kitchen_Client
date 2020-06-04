@@ -34,6 +34,8 @@ namespace FootStone.Kitchen
             ClientCharacterUtilities.Init();
             IconUtilities.Init();
             GameWorld.Active = new GameWorld();
+            EntityManager.CreateEntity(typeof(Server));
+            SetSingleton(new Server());
 
             inputSystem = World.GetOrCreateSystem<InputSystem>();
             m_systemsToUpdate.Add(inputSystem);

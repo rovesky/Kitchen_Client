@@ -32,12 +32,15 @@ namespace FootStone.Kitchen
 
             var pos0 = EntityManager.GetComponentData<LocalToWorld>(spawnPoints[0]).Position;
 
-            localPlayer.CharacterEntity = CreateCharacter(pos0, true,0);
-          //  EntityManager.AddComponentData(localPlayer.CharacterEntity, new LocalCharacter());
+            localPlayer.CharacterEntity = CreateCharacter(pos0, true, 0);
+            //  EntityManager.AddComponentData(localPlayer.CharacterEntity, new LocalCharacter());
             SetSingleton(localPlayer);
-          
-          //  var pos1 = EntityManager.GetComponentData<LocalToWorld>(spawnPoints[1]).Position;
-          //  var e = CreateCharacter(pos1, false,1);
+
+            var pos1 = EntityManager.GetComponentData<LocalToWorld>(spawnPoints[1]).Position;
+            CreateCharacter(pos1, false, 1);
+
+            var pos2 = EntityManager.GetComponentData<LocalToWorld>(spawnPoints[2]).Position;
+            CreateCharacter(pos2, false, 2);
 
             spawnPoints.Dispose();
 
@@ -50,7 +53,7 @@ namespace FootStone.Kitchen
             EntityManager.SetComponentData(e, new ReplicatedEntityData
             {
                 Id = id,
-                PredictingPlayerId = isLocal ? 0 : -1
+                PredictingPlayerId = isLocal ? 0 : id
             });
             EntityManager.AddComponentData(e, new ServerEntity());
 
